@@ -1,21 +1,86 @@
 /**
  * Created by fgran on 27/12/2017.
  */
-define([
-    ], function() {
+define(["analisi/riepilogoData"
+], function(dataService) {
 
     var exports = {};
 
     
     var Pivot = function(urlDatasource){
         this.urlDataSource = urlDatasource;
+
+        this.currentYear = null;
+        this.anni = [];
+        //campo per indicare visione globale o lacale
+        this.viewType = "global";
+
+        this.moreTime = false;
     }
-    
+
     Pivot.prototype.init = function(){
-        
         var self = this;
+
+        var iscrittiCheckBox = $("#iscrittiCheckBox").dxCheckBox({
+            text: "Iscritti presi una sola volta.",
+            value: false,
+            onValueChanged: function (isChecked) {
+                if (isChecked) {
+                    self.moreTime = true;
+                }
+                else {
+                    self.moreTime = false;
+                }
+                self.loadData(self.currentYear, self.moreTime);
+            }
+        });
+
+        dataService.getAnniIscrizioni().done(function (arrayAnni) {
+
+            if (arrayAnni.length == 0){
+                alert("Nessun anno trovato per le iscrizioni!!!");
+                return;
+            }
+
+            self.currentYear = arrayAnni[0];
+
+            // Call horizontalNav on the navigations wrapping element
+            self.disposeTabs(arrayAnni);
+            self.loadData(arrayAnni[0], self.moreTime);
+            self.anni = arrayAnni;
+        });
+
+    };
+
+    Pivot.prototype.loadData = function(anno, moreTime){
+
+        var self = this;
+
+        var fields = [
+            {dataField: "Anno", area: "column", sortByPath: []},
+            {dataField: "Settore", area: "row", sortOrder: "desc"},
+            {dataField: "Regione", area: "filter", sortOrder: "desc"},
+            {dataField: "Provincia", area: "filter", sortOrder: "desc"},
+
+            {dataField: "Nazionalita", area: "filter", sortOrder: "desc"},
+
+
+            {dataField: "Id_Lavoratore", caption: "Num. Lavoratori", summaryType: "count", area: "data"}
+        ];
+        if (moreTime)
+            fields = [
+                    {dataField: "Anno", area: "column", sortByPath: []},
+                    // { dataField: "Settore", area: "row",  sortOrder: "desc" },
+                    {dataField: "Regione", area: "row", sortOrder: "desc"},
+                    {dataField: "Provincia", area: "filter", sortOrder: "desc"},
+
+                    {dataField: "Nazionalita", area: "filter", sortOrder: "desc"},
+
+
+                    {dataField: "Id_Lavoratore", caption: "Num. Lavoratori", summaryType: "count", area: "data"}
+                ];
         
-        
+
         var pivotGridChart = $("#pivotgrid-chart").dxChart({
             commonSeriesSettings: {
                 type: "bar"
@@ -72,21 +137,11 @@ define([
                 }
             },
             dataSource: {
-                fields: [
-                    { dataField: "Anno", area: "column", sortByPath: [] },
-                    { dataField: "Settore", area: "row",  sortOrder: "desc" },
-                    { dataField: "Regione", area: "filter",  sortOrder: "desc" },
-                    { dataField: "Provincia", area: "filter",  sortOrder: "desc" },
-                    //{ dataField: "Territorio", area: "filter",  sortOrder: "desc" },
-                    { dataField: "Nazionalita", area: "filter",  sortOrder: "desc" },
-
-
-                    { dataField: "Id_Lavoratore", caption: "Num. Lavoratori", summaryType: "count", area: "data" }
-                ],
+                fields: fields,
                 remoteOperations: true,
                 store: DevExpress.data.AspNet.createStore({
                     key: "ID",
-                    loadUrl: generateUrl()
+                    loadUrl: self.generateUrl(anno, moreTime)
                 })
             }
         }).dxPivotGrid("instance");
@@ -97,14 +152,44 @@ define([
             alternateDataFields: false
         });
 
-        function generateUrl(){
 
-            var baseurl = self.urlDataSource + "?anno=2017";
+    };
+    Pivot.prototype.generateUrl = function(anno, moreTime){
+        var self = this;
 
+        if (!anno)
+            anno = 2017;
 
-            return baseurl;
+        var baseurl = self.urlDataSource + "?anno=" + anno;
+
+        if (moreTime) {
+            baseurl += "&moreTime=true";
         }
-    }
+
+
+        return baseurl;
+    };
+    Pivot.prototype.disposeTabs = function (years) {
+        var self = this;
+        var tabs = [];
+        $.each(years, function (index, year) {
+            tabs.push({
+                text: year
+            });
+        });
+
+        $("#longtabs > .tabs-container").dxTabs({
+            dataSource: tabs,
+            selectedIndex: 0,
+            onItemClick: function (e) {
+                var index = e.itemIndex;
+                self.currentYear = self.anni[index];
+                self.loadData(self.anni[index]);
+                $('.mapContainer').show();
+            }
+        });
+
+    };
     
     
     exports.Pivot = Pivot;

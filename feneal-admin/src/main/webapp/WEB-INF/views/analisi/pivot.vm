@@ -1,3 +1,14 @@
+
+
+<div id="iscrittiCheckBox"></div>
+
+<div id="longtabs">
+    <div class="caption"></div>
+    <div class="tabs-container">
+
+    </div>
+</div>
+
 <div style="margin:20px;">
     <div id="pivotgrid-chart" style="margin-top: 20px;"></div>
     <div id="grid"></div>
