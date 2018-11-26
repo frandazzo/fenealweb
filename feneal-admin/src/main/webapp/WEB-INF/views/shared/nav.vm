@@ -103,6 +103,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="#/analisiiscritticompleti" class="framework-navigation">
+                        <span class="glyphicon glyphicon-th-list"></span>
+                        <span class="sidebar-title">Analisi iscritti completi</span>
+                    </a>
+                </li>
+
 
             #end
 

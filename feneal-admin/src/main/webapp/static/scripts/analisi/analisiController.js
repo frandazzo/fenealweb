@@ -48,11 +48,29 @@ define([
 
         }
     });
-   
+
+    var AnalisiIscrittiCompletiController = fcontrollers.Controller.extend({
+        ctor: function(){
+            AnalisiIscrittiCompletiController.super.ctor.call(this);
+        },
+        index: function(params) {
+
+
+            var url = BASE + "analisi/analisiiscritticompleti";
+            var service = new fmodel.AjaxService();
+            service.set({
+                url: url
+            });
+            return new views.AnalisiIscrittiCompletiRemoteView(service);
+
+        }
+    });
+
 
   
     exports.RiepilogoController = RiepilogoController;
     exports.PivotController = PivotController;
-   
+    exports.AnalisiIscrittiCompletiController = AnalisiIscrittiCompletiController;
+
     return exports;
 });

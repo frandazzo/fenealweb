@@ -89,6 +89,31 @@ public class AnalisiController {
     }
 
 
+    @RequestMapping(value = "/analisi/analisiiscritticompleti",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse analisiIscrittiCompleti(HttpServletRequest request) {
+
+        try {
+
+            String urlAnalisiIscritti = optMan.get("data.analisiiscritti.url");
+
+            HashMap<String, Object> model = new HashMap<String, Object>();
+            model.put("datasource", urlAnalisiIscritti);
+
+            manageActivity();
+
+            PartialViewRenderer renderer = new PartialViewRenderer();
+            String content = renderer.render(viewResolver, "analisi/analisiiscritticompleti", model, LocaleContextHolder.getLocale(), request);
+            return new ValueResponse(content);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+
     @RequestMapping(value="/analisi/riepilogo/categoria", method= RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody SimpleResponse getIscrittiPerCategoria(@RequestParam(value="year", required=true) int year,

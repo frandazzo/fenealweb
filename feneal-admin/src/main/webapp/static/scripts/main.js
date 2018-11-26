@@ -166,6 +166,7 @@ require([
 
         ui.Navigation.instance().registerController("riepilogo", function() { return new analisiController.RiepilogoController(); }, "singleton");
         ui.Navigation.instance().registerController("pivot", function() { return new analisiController.PivotController(); }, "singleton");
+        ui.Navigation.instance().registerController("analisiiscritticompleti", function() { return new analisiController.AnalisiIscrittiCompletiController(); }, "singleton");
 
 
 
