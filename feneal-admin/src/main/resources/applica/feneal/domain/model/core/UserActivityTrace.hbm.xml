@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.core.UserActivityTrace" table="fenealweb_userActivityTraces" >
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        <many-to-one name="user" class="applica.feneal.domain.model.User" column="userId" lazy="false" />
+        <property name="operationDate" />
+        <property name="operationMonth" />
+        <property name="operationYear"  />
+        <property name="activity" />
+        <property name="activityParams" type="text" length="10000000" />
+        <property name="activityDetail" type="text" length="10000000" />
+    </class>
+</hibernate-mapping>

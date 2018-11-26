@@ -1,0 +1,8 @@
+java -classpath "C:\Users\fgran\Documents\javaprojects\feneal\feneal-admin\target\feneal-admin-1.0-SNAPSHOT\WEB-INF\lib\*; C:\Users\fgran\Documents\javaprojects\framework1.6-release\scripts\target\lib\*;C:\Users\fgran\Documents\javaprojects\framework1.6-release\scripts\target\scripts-1.6-RELEASE.jar" applica.framework.Applica hibernate:generate -Dno-rebuild=1
+
+
+https://onedrive.live.com/?authkey=%21AHhfeq5yy6XeCsg&cid=BE8F6B49A865F67B&id=BE8F6B49A865F67B%2169160&parId=BE8F6B49A865F67B%21126247&action=locate
+
+
+
+java -classpath "C:\Users\fgran\Documents\javaprojects\commt\trunk\commt\commt-admin\target\commt-admin-1.0-SNAPSHOT\WEB-INF\lib\*; C:\Users\fgran\Documents\javaprojects\framework1.6-release\scripts\target\lib\*;C:\Users\fgran\Documents\javaprojects\framework1.6-release\scripts\target\scripts-1.6-RELEASE.jar" applica.framework.Applica hibernate:generate -Dno-rebuild=1

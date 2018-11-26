@@ -1,0 +1,89 @@
+#parse("/shared/framework.vm")
+
+
+<div class="p10 framework-form traceLogins">
+
+    <div class="col-md-11 col-sm-12 col-xs-12 report-style">
+
+        <div id="reportContainer">
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-1 toolbox-seach-report" style="display: nodne">
+
+        <div class="col-md-12 col-xs-12 back-white">
+
+            <div class="col-md-12 col-xs-12 toolbox-buttons-cnt margin-top-20 margin-bottom-20 zero-padding">
+
+                <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Esporta in Excel">
+
+                    <button type="button" class="btn btn-primary full-width excel-export">
+                        <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+                    </button>
+
+                </div>
+                <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Raggruppa">
+
+                    <button type="button" class="btn btn-warning full-width group-report-data">
+                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                    </button>
+
+                </div>
+                <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Ricerca generale">
+
+                    <button type="button" class="btn btn-warning full-width search-report-data">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+
+                </div>
+                <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Ricerca contestuale">
+
+                    <button type="button" class="btn btn-warning full-width search-report-columns">
+                        <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                    </button>
+
+                </div>
+                <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Filtra">
+
+                    <button type="button" class="btn btn-warning full-width filter-report-data">
+                        <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                    </button>
+
+                </div>
+                <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Seleziona colonne">
+
+                    <button type="button" class="btn btn-warning full-width select-report-columns">
+                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <div style="position: fixed;right: 20px;bottom: 17px;">
+        <img src="" class="buttonScrollTop" style="width: 60px;display: none;z-index:999;cursor: pointer">
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+    })
+
+
+</script>

@@ -1,0 +1,83 @@
+#parse("/shared/framework.vm")
+
+
+<div class="listalavoro-summary-header col-md-12" data-id="$listaId">
+
+    <div class="col-md-12">
+
+        <div class="col-md-12 p20 fs22" style="background-color: white; border-bottom: 1px solid #DDD; margin-top:10px">
+            <div class="text-center col-md-12 media clearfix">
+                $listaDescr_aMinusB
+            </div>
+
+
+            <div class="col-md-12 col-sm-12 col-xs-12 mt20 report-style">
+
+                <div id="reportContainer_aMinusB">
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="listalavoro-summary-header mt20 col-md-12" data-id="$listaId">
+
+    <div class="col-md-12">
+
+        <div class="col-md-12 p20 fs22" style="background-color: white; border-bottom: 1px solid #DDD; margin-top:10px">
+            <div class="text-center col-md-12 media clearfix">
+                $listaDescr_bMinusA
+            </div>
+
+
+            <div class="col-md-12 col-sm-12 col-xs-12 mt20 report-style">
+
+                <div id="reportContainer_bMinusA">
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="listalavoro-summary-header mt20 col-md-12" data-id="$listaId">
+
+    <div class="col-md-12">
+
+        <div class="col-md-12 p20 fs22" style="background-color: white; border-bottom: 1px solid #DDD; margin-top:10px">
+            <div class="text-center col-md-12 media clearfix">
+                $listaDescr_intersection
+            </div>
+
+
+            <div class="col-md-12 col-sm-12 col-xs-12 mt20 report-style">
+
+                <div id="reportContainer_intersection">
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+    })
+
+
+</script>

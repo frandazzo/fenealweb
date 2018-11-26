@@ -1,0 +1,30 @@
+<script type="text/javascript">
+
+    require(["widget/widgetManager"], function(manager){
+
+        var managerInit = new manager.managerInit();
+        managerInit.init();
+
+    });
+
+</script>
+
+
+<div role="tabpanel" class="tab-pane active" id="toolbox-widgets">
+    <form id="toolbox-widgets-skin">
+        <div class="skin-toolbox-swatches chooseWidgetContainer">
+            Header <input type="checkbox" class="chooseWidget" data-name="header" #if($widgetsActiveUser.header==true) checked #end> <br>
+            Data Panel <input type="checkbox" class="chooseWidget" data-name="dataPanel" #if($widgetsActiveUser.dataPanel==true) checked #end> <br>
+            Column Graph <input type="checkbox" class="chooseWidget" data-name="columnGraph" #if($widgetsActiveUser.columnGraph==true) checked #end> <br>
+            Area Graph <input type="checkbox" class="chooseWidget" data-name="areaGraph" #if($widgetsActiveUser.areaGraph==true) checked #end> <br>
+            Pie Charts <input type="checkbox" class="chooseWidget" data-name="pieCharts" #if($widgetsActiveUser.pieCharts==true) checked #end> <br>
+            Response Time <input type="checkbox" class="chooseWidget" data-name="responseTime" #if($widgetsActiveUser.responseTime==true) checked #end> <br>
+            Bar Graph <input type="checkbox" class="chooseWidget" data-name="barGraph" #if($widgetsActiveUser.barGraph==true) checked #end> <br>
+            Spark Lines <input type="checkbox" class="chooseWidget" data-name="sparkLines" #if($widgetsActiveUser.sparkLines==true) checked #end> <br>
+            Area Graph <input type="checkbox" class="chooseWidget" data-name="areaGraphOnlyCurve" #if($widgetsActiveUser.areaGraphOnlyCurve==true) checked #end> <br>
+            Dot List <input type="checkbox" class="chooseWidget" data-name="dotList" #if($widgetsActiveUser.dotList==true) checked #end> <br>
+            Text List <input type="checkbox" class="chooseWidget" data-name="textList" #if($widgetsActiveUser.textList==true) checked #end> <br>
+            Circulars <input type="checkbox" class="chooseWidget" data-name="circulars" #if($widgetsActiveUser.circulars==true) checked #end> <br>
+        </div>
+    </form>
+</div>

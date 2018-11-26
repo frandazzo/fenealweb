@@ -1,0 +1,22 @@
+#parse("/shared/framework.vm")
+
+<div class="page-title mb25 mt15">
+    <span class="text-primary">Lista ristorni inps</span>
+</div>
+
+<div id="lista">
+
+</div>
+
+<script type="text/javascript">
+
+    require([ "inps/ristornoInps"], function( manager){
+
+
+        var dashboard = new manager.ListaRistorni();
+        dashboard.init();
+
+
+    });
+
+</script>

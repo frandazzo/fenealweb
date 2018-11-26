@@ -1,0 +1,89 @@
+#parse("/shared/framework.vm")
+
+<div class="panel">
+    <div class="panel-menu admin-form theme-primary">
+
+    </div>
+    <div class="panel-body pn">
+        <div class="table-responsive">
+            #if($deleghe.size() > 0)
+                <table class="table admin-form theme-warning tc-checkbox-1 fs13">
+                    <thead>
+                    <tr class="bg-light">
+                        <th>Provincia</th>
+                        <th class="">Data documento</th>
+                        <th class="">Settore</th>
+                        <th>Ente inoltro</th>
+                        <th>Stato</th>
+                        <th>Collaboratore</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    #foreach($delega in $deleghe)
+                    <tr data-delega-id="$delega.id">
+                        <td class="">
+                            $delega.province
+                        </td>
+                        <td class="">
+                            $delega.documentDate
+                        </td>
+                        <td class="">
+                            $delega.sector
+                        </td>
+                        <td class="">
+                             #if ($delega.paritethic)
+                                $delega.paritethic
+                             #else
+                                 $delega.workerCompany
+                            #end
+                        </td>
+                        <td class="">
+                            <div class="btn-group text-right">
+
+                                #if($delega.state == 1)
+                                    #set($buttonStateClass="btn-system")
+                                #elseif($delega.state ==2)
+                                    #set($buttonStateClass="btn-info")
+                                #elseif($delega.state ==3)
+                                    #set($buttonStateClass="btn-alert")
+                                #elseif($delega.state ==4)
+                                    #set($buttonStateClass="btn-success")
+                                #elseif($delega.state ==5)
+                                    #set($buttonStateClass="btn-warning")
+                                #elseif($delega.state ==6)
+                                    #set($buttonStateClass="btn-danger")
+                                #end
+                                <button type="button" class="btn $buttonStateClass br2 btn-xs fs12 dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> $delega.getStateDescription()
+                                    <span class="caret ml5"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#/editdelega?id=$delega.id&workerId=$delega.workerId"><i class="glyphicon glyphicon-pencil"></i>  #if($delega.state ==5 || $delega.state ==6) Visualizza #else Modifica #end</a>
+                                    </li>
+                                    <li>
+                                        <a href="#/deletedelega?id=$delega.id&workerId=$delega.workerId""><i class="glyphicon glyphicon-trash"></i> Elimina</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    #parse("/deleghe/stateActions.vm")
+
+                                </ul>
+                            </div>
+                        </td>
+                        <td class="">
+                            $delega.collaborator
+                        </td>
+                    </tr>
+                    #end
+
+                    </tbody>
+                </table>
+                #else
+                    <div class="alert alert-system alert-border-left alert-dismissable mv30">
+                        <b>Nessuna delega presente:</b>
+                    </div>
+
+            #end
+
+        </div>
+    </div>
+</div>

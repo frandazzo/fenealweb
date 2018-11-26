@@ -1,0 +1,1165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.fenealgestweb.it/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s1="www.fenealgestweb.it" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.fenealgestweb.it/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.fenealgestweb.it/">
+      <s:import namespace="www.fenealgestweb.it" />
+      <s:element name="ImportData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:ExportTrace" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportDataResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ExportWorker">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="fiscalCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="regionName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ExportWorkerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ExportWorkerResult" type="tns:QueryResultDTO" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="QueryResultDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Error" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WorkerDTO" type="tns:WorkerDTO" />
+          <s:element minOccurs="0" maxOccurs="1" name="Workers" type="tns:ArrayOfWorkerDTO" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsResultValid" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="WorkerDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Subscription" type="tns:SubscriptionDTO" />
+          <s:element minOccurs="0" maxOccurs="1" name="Subscriptions" type="tns:ArrayOfSubscriptionDTO" />
+          <s:element minOccurs="0" maxOccurs="1" name="Documents" type="tns:ArrayOfDocumentDTO" />
+        </s:sequence>
+        <s:attribute name="RowNumber" type="s:int" use="required" />
+        <s:attribute name="IsValid" type="s:boolean" use="required" />
+        <s:attribute name="ExistBirthPlace" type="s:boolean" use="required" />
+        <s:attribute name="ExistLivingPlace" type="s:boolean" use="required" />
+        <s:attribute name="Nationality" type="s:string" />
+        <s:attribute name="LastModifer" type="s:string" />
+        <s:attribute name="Errors" type="s:string" />
+        <s:attribute name="Name" type="s:string" />
+        <s:attribute name="Surname" type="s:string" />
+        <s:attribute name="Fiscalcode" type="s:string" />
+        <s:attribute name="BirthDate" type="s:dateTime" use="required" />
+        <s:attribute name="LastUpdate" type="s:dateTime" use="required" />
+        <s:attribute name="BirthPlace" type="s:string" />
+        <s:attribute name="CurrentAzienda" type="s:string" />
+        <s:attribute name="IscrittoA" type="s:string" />
+        <s:attribute name="LiberoAl" type="s:dateTime" use="required" />
+        <s:attribute name="LivingPlace" type="s:string" />
+        <s:attribute name="Address" type="s:string" />
+        <s:attribute name="Cap" type="s:string" />
+        <s:attribute name="Phone" type="s:string" />
+      </s:complexType>
+      <s:complexType name="SubscriptionDTO">
+        <s:attribute name="Struttura" type="s:string" />
+        <s:attribute name="Area" type="s:string" />
+        <s:attribute name="Sector" type="s:string" />
+        <s:attribute name="Contract" type="s:string" />
+        <s:attribute name="Region" type="s:string" />
+        <s:attribute name="Entity" type="s:string" />
+        <s:attribute name="EmployCompany" type="s:string" />
+        <s:attribute name="FiscalCode" type="s:string" />
+        <s:attribute name="Quota" type="s:double" use="required" />
+        <s:attribute name="InitialDate" type="s:dateTime" use="required" />
+        <s:attribute name="EndDate" type="s:dateTime" use="required" />
+        <s:attribute name="Year" type="s:int" use="required" />
+        <s:attribute name="Semester" type="s:int" use="required" />
+        <s:attribute name="PeriodType" type="tns:PeriodType" use="required" />
+        <s:attribute name="Level" type="s:string" />
+        <s:attribute name="Province" type="s:string" />
+      </s:complexType>
+      <s:simpleType name="PeriodType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Month" />
+          <s:enumeration value="Semester" />
+          <s:enumeration value="Interval" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfSubscriptionDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Subscription" nillable="true" type="tns:SubscriptionDTO" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDocumentDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Document" nillable="true" type="tns:DocumentDTO" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DocumentDTO">
+        <s:attribute name="DocumentDate" type="s:dateTime" use="required" />
+        <s:attribute name="DocumentType" type="s:string" />
+        <s:attribute name="Struttura" type="s:string" />
+        <s:attribute name="Area" type="s:string" />
+        <s:attribute name="Province" type="s:string" />
+        <s:attribute name="City" type="s:string" />
+        <s:attribute name="Region" type="s:string" />
+        <s:attribute name="State" type="s:string" />
+        <s:attribute name="Notes" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfWorkerDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="WorkerDTO" nillable="true" type="tns:WorkerDTO" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Credenziali" type="tns:Credenziali" />
+      <s:complexType name="Credenziali">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="ImportRendicontoRlst">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:DTORendiconto" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportRendicontoRlstResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportRendicontoRlstResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportRendiconto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:DTORendiconto" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportRendicontoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportRendicontoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TraceUsage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="province" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="app" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="region" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TraceUsageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TraceUsageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportRendicontoNew">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:DTORendiconto" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportRendicontoNewResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportRendicontoNewResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportRendicontoRlstNew">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:DTORendiconto" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportRendicontoRlstNewResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportRendicontoRlstNewResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendMailForLiberiSearch">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="fiscalCodes" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="mailto" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="searchSubject" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SendMailForLiberiSearchResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendMailForLiberiSearchResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendMailFromFenealgest">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="maildata" type="tns:MailData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="MailData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="tos" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="body" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="sender" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="subject" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SendMailFromFenealgestResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="ExportWorkers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="fiscalCodes" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="regionName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ExportWorkersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ExportWorkersResult" type="tns:QueryResultDTO" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UserIsValid">
+        <s:complexType />
+      </s:element>
+      <s:element name="UserIsValidResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UserIsValidResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchWorkersByAzienda">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="azienda" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchWorkersByAziendaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchWorkersByAziendaResult" type="tns:QueryResultDTO" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchWorkers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parameters" type="tns:QueryParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="QueryParameters">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Surname" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LivingPlace" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Nationality" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BirthDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="CheckDate" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Region" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="MaxResult" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyFiscalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyDescription" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SearchWorkersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchWorkersResult" type="tns:QueryResultDTO" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentLen">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentLenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetDocumentLenResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentResult" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListOfFileToDownload">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="type" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListOfFileToDownloadResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetListOfFileToDownloadResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RenameImportExportFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RenameImportExportFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RenameImportExportFileResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveImportExportFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docbinaryarray" type="s:base64Binary" />
+            <s:element minOccurs="1" maxOccurs="1" name="isIqa" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveImportExportFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SaveImportExportFileResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveImportExportFileInps">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docbinaryarray" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveImportExportFileInpsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SaveImportExportFileInpsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="www.fenealgestweb.it">
+      <s:element name="ExportTrace" type="s1:ExportTrace" />
+      <s:complexType name="ExportTrace">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Workers" type="s1:ArrayOfWorkerDTO" />
+          <s:element minOccurs="0" maxOccurs="1" name="Errore" type="s:string" />
+        </s:sequence>
+        <s:attribute name="ExportDate" type="s:dateTime" use="required" />
+        <s:attribute name="Province" type="s:string" />
+        <s:attribute name="ExporterMail" type="s:string" />
+        <s:attribute name="ExportNumber" type="s:int" use="required" />
+        <s:attribute name="UserName" type="s:string" />
+        <s:attribute name="Sector" type="s:string" />
+        <s:attribute name="ExporterName" type="s:string" />
+        <s:attribute name="Password" type="s:string" />
+        <s:attribute name="ExportType" type="s1:ExprtType" use="required" />
+        <s:attribute name="PeriodType" type="s1:PeriodType" use="required" />
+        <s:attribute name="InitialDate" type="s:dateTime" use="required" />
+        <s:attribute name="EndDate" type="s:dateTime" use="required" />
+        <s:attribute name="Year" type="s:int" use="required" />
+        <s:attribute name="Period" type="s:int" use="required" />
+        <s:attribute name="Transacted" type="s:boolean" use="required" />
+        <s:attribute name="Struttura" type="s:string" />
+        <s:attribute name="Area" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfWorkerDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Worker" nillable="true" type="s1:WorkerDTO" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="WorkerDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Subscription" type="s1:SubscriptionDTO" />
+          <s:element minOccurs="0" maxOccurs="1" name="Subscriptions" type="s1:ArrayOfSubscriptionDTO" />
+          <s:element minOccurs="0" maxOccurs="1" name="Documents" type="s1:ArrayOfDocumentDTO" />
+        </s:sequence>
+        <s:attribute name="RowNumber" type="s:int" use="required" />
+        <s:attribute name="IsValid" type="s:boolean" use="required" />
+        <s:attribute name="ExistBirthPlace" type="s:boolean" use="required" />
+        <s:attribute name="ExistLivingPlace" type="s:boolean" use="required" />
+        <s:attribute name="Nationality" type="s:string" />
+        <s:attribute name="LastModifer" type="s:string" />
+        <s:attribute name="Errors" type="s:string" />
+        <s:attribute name="Name" type="s:string" />
+        <s:attribute name="Surname" type="s:string" />
+        <s:attribute name="Fiscalcode" type="s:string" />
+        <s:attribute name="BirthDate" type="s:dateTime" use="required" />
+        <s:attribute name="LastUpdate" type="s:dateTime" use="required" />
+        <s:attribute name="BirthPlace" type="s:string" />
+        <s:attribute name="CurrentAzienda" type="s:string" />
+        <s:attribute name="IscrittoA" type="s:string" />
+        <s:attribute name="LiberoAl" type="s:dateTime" use="required" />
+        <s:attribute name="LivingPlace" type="s:string" />
+        <s:attribute name="Address" type="s:string" />
+        <s:attribute name="Cap" type="s:string" />
+        <s:attribute name="Phone" type="s:string" />
+      </s:complexType>
+      <s:complexType name="SubscriptionDTO">
+        <s:attribute name="Struttura" type="s:string" />
+        <s:attribute name="Area" type="s:string" />
+        <s:attribute name="Sector" type="s:string" />
+        <s:attribute name="Contract" type="s:string" />
+        <s:attribute name="Region" type="s:string" />
+        <s:attribute name="Entity" type="s:string" />
+        <s:attribute name="EmployCompany" type="s:string" />
+        <s:attribute name="FiscalCode" type="s:string" />
+        <s:attribute name="Quota" type="s:double" use="required" />
+        <s:attribute name="InitialDate" type="s:dateTime" use="required" />
+        <s:attribute name="EndDate" type="s:dateTime" use="required" />
+        <s:attribute name="Year" type="s:int" use="required" />
+        <s:attribute name="Semester" type="s:int" use="required" />
+        <s:attribute name="PeriodType" type="s1:PeriodType" use="required" />
+        <s:attribute name="Level" type="s:string" />
+        <s:attribute name="Province" type="s:string" />
+      </s:complexType>
+      <s:simpleType name="PeriodType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Month" />
+          <s:enumeration value="Semester" />
+          <s:enumeration value="Interval" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfSubscriptionDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Subscription" nillable="true" type="s1:SubscriptionDTO" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDocumentDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Document" nillable="true" type="s1:DocumentDTO" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DocumentDTO">
+        <s:attribute name="DocumentDate" type="s:dateTime" use="required" />
+        <s:attribute name="DocumentType" type="s:string" />
+        <s:attribute name="Struttura" type="s:string" />
+        <s:attribute name="Area" type="s:string" />
+        <s:attribute name="Province" type="s:string" />
+        <s:attribute name="City" type="s:string" />
+        <s:attribute name="Region" type="s:string" />
+        <s:attribute name="State" type="s:string" />
+        <s:attribute name="Notes" type="s:string" />
+      </s:complexType>
+      <s:simpleType name="ExprtType">
+        <s:restriction base="s:string">
+          <s:enumeration value="SimpleExport" />
+          <s:enumeration value="ProgramExport" />
+          <s:enumeration value="LiberiExport" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="DTORendiconto" type="s1:DTORendiconto" />
+      <s:complexType name="DTORendiconto">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Items" type="s1:ArrayOfDTORendicontoItem" />
+        </s:sequence>
+        <s:attribute name="Regione" type="s:string" />
+        <s:attribute name="Proprietario" type="s:string" />
+        <s:attribute name="Provincia" type="s:string" />
+        <s:attribute name="Anno" type="s:int" use="required" />
+        <s:attribute name="IsRegionale" type="s:boolean" use="required" />
+        <s:attribute name="IsBilancioQuadrato" type="s:boolean" use="required" />
+        <s:attribute name="IsPreventivoQuadrato" type="s:boolean" use="required" />
+        <s:attribute name="StatoPatrimoniale" type="s:string" />
+        <s:attribute name="ContoRLST" type="s:double" use="required" />
+        <s:attribute name="Versione" type="s:int" use="required" />
+      </s:complexType>
+      <s:complexType name="ArrayOfDTORendicontoItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Item" nillable="true" type="s1:DTORendicontoItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DTORendicontoItem">
+        <s:attribute name="IdNodo" type="s:string" />
+        <s:attribute name="IdNodoPadre" type="s:string" />
+        <s:attribute name="Livello" type="s:int" use="required" />
+        <s:attribute name="DescrizioneNodo" type="s:string" />
+        <s:attribute name="ImportoNodoBilancio" type="s:double" use="required" />
+        <s:attribute name="ImportoNodoPreventivo" type="s:double" use="required" />
+        <s:attribute name="IsLeaf" type="s:boolean" use="required" />
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ImportDataSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportData" />
+  </wsdl:message>
+  <wsdl:message name="ImportDataSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="ExportWorkerSoapIn">
+    <wsdl:part name="parameters" element="tns:ExportWorker" />
+  </wsdl:message>
+  <wsdl:message name="ExportWorkerSoapOut">
+    <wsdl:part name="parameters" element="tns:ExportWorkerResponse" />
+  </wsdl:message>
+  <wsdl:message name="ExportWorkerCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoRlstSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportRendicontoRlst" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoRlstSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportRendicontoRlstResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoRlstCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportRendiconto" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportRendicontoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="TraceUsageSoapIn">
+    <wsdl:part name="parameters" element="tns:TraceUsage" />
+  </wsdl:message>
+  <wsdl:message name="TraceUsageSoapOut">
+    <wsdl:part name="parameters" element="tns:TraceUsageResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoNewSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportRendicontoNew" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoNewSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportRendicontoNewResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoNewCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoRlstNewSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportRendicontoRlstNew" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoRlstNewSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportRendicontoRlstNewResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportRendicontoRlstNewCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="SendMailForLiberiSearchSoapIn">
+    <wsdl:part name="parameters" element="tns:SendMailForLiberiSearch" />
+  </wsdl:message>
+  <wsdl:message name="SendMailForLiberiSearchSoapOut">
+    <wsdl:part name="parameters" element="tns:SendMailForLiberiSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendMailForLiberiSearchCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="SendMailFromFenealgestSoapIn">
+    <wsdl:part name="parameters" element="tns:SendMailFromFenealgest" />
+  </wsdl:message>
+  <wsdl:message name="SendMailFromFenealgestSoapOut">
+    <wsdl:part name="parameters" element="tns:SendMailFromFenealgestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ExportWorkersSoapIn">
+    <wsdl:part name="parameters" element="tns:ExportWorkers" />
+  </wsdl:message>
+  <wsdl:message name="ExportWorkersSoapOut">
+    <wsdl:part name="parameters" element="tns:ExportWorkersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ExportWorkersCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="UserIsValidSoapIn">
+    <wsdl:part name="parameters" element="tns:UserIsValid" />
+  </wsdl:message>
+  <wsdl:message name="UserIsValidSoapOut">
+    <wsdl:part name="parameters" element="tns:UserIsValidResponse" />
+  </wsdl:message>
+  <wsdl:message name="UserIsValidCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="SearchWorkersByAziendaSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchWorkersByAzienda" />
+  </wsdl:message>
+  <wsdl:message name="SearchWorkersByAziendaSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchWorkersByAziendaResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchWorkersByAziendaCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="SearchWorkersSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchWorkers" />
+  </wsdl:message>
+  <wsdl:message name="SearchWorkersSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchWorkersResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchWorkersCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentLenSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentLen" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentLenSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentLenResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentLenCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocument" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="GetListOfFileToDownloadSoapIn">
+    <wsdl:part name="parameters" element="tns:GetListOfFileToDownload" />
+  </wsdl:message>
+  <wsdl:message name="GetListOfFileToDownloadSoapOut">
+    <wsdl:part name="parameters" element="tns:GetListOfFileToDownloadResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetListOfFileToDownloadCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="RenameImportExportFileSoapIn">
+    <wsdl:part name="parameters" element="tns:RenameImportExportFile" />
+  </wsdl:message>
+  <wsdl:message name="RenameImportExportFileSoapOut">
+    <wsdl:part name="parameters" element="tns:RenameImportExportFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="RenameImportExportFileCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="SaveImportExportFileSoapIn">
+    <wsdl:part name="parameters" element="tns:SaveImportExportFile" />
+  </wsdl:message>
+  <wsdl:message name="SaveImportExportFileSoapOut">
+    <wsdl:part name="parameters" element="tns:SaveImportExportFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="SaveImportExportFileCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:message name="SaveImportExportFileInpsSoapIn">
+    <wsdl:part name="parameters" element="tns:SaveImportExportFileInps" />
+  </wsdl:message>
+  <wsdl:message name="SaveImportExportFileInpsSoapOut">
+    <wsdl:part name="parameters" element="tns:SaveImportExportFileInpsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SaveImportExportFileInpsCredenziali">
+    <wsdl:part name="Credenziali" element="tns:Credenziali" />
+  </wsdl:message>
+  <wsdl:portType name="FenealgestwebServicesSoap">
+    <wsdl:operation name="ImportData">
+      <wsdl:input message="tns:ImportDataSoapIn" />
+      <wsdl:output message="tns:ImportDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ExportWorker">
+      <wsdl:input message="tns:ExportWorkerSoapIn" />
+      <wsdl:output message="tns:ExportWorkerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendicontoRlst">
+      <wsdl:input message="tns:ImportRendicontoRlstSoapIn" />
+      <wsdl:output message="tns:ImportRendicontoRlstSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendiconto">
+      <wsdl:input message="tns:ImportRendicontoSoapIn" />
+      <wsdl:output message="tns:ImportRendicontoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraceUsage">
+      <wsdl:input message="tns:TraceUsageSoapIn" />
+      <wsdl:output message="tns:TraceUsageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendicontoNew">
+      <wsdl:input message="tns:ImportRendicontoNewSoapIn" />
+      <wsdl:output message="tns:ImportRendicontoNewSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendicontoRlstNew">
+      <wsdl:input message="tns:ImportRendicontoRlstNewSoapIn" />
+      <wsdl:output message="tns:ImportRendicontoRlstNewSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendMailForLiberiSearch">
+      <wsdl:input message="tns:SendMailForLiberiSearchSoapIn" />
+      <wsdl:output message="tns:SendMailForLiberiSearchSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendMailFromFenealgest">
+      <wsdl:input message="tns:SendMailFromFenealgestSoapIn" />
+      <wsdl:output message="tns:SendMailFromFenealgestSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ExportWorkers">
+      <wsdl:input message="tns:ExportWorkersSoapIn" />
+      <wsdl:output message="tns:ExportWorkersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UserIsValid">
+      <wsdl:input message="tns:UserIsValidSoapIn" />
+      <wsdl:output message="tns:UserIsValidSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchWorkersByAzienda">
+      <wsdl:input message="tns:SearchWorkersByAziendaSoapIn" />
+      <wsdl:output message="tns:SearchWorkersByAziendaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchWorkers">
+      <wsdl:input message="tns:SearchWorkersSoapIn" />
+      <wsdl:output message="tns:SearchWorkersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentLen">
+      <wsdl:input message="tns:GetDocumentLenSoapIn" />
+      <wsdl:output message="tns:GetDocumentLenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocument">
+      <wsdl:input message="tns:GetDocumentSoapIn" />
+      <wsdl:output message="tns:GetDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListOfFileToDownload">
+      <wsdl:input message="tns:GetListOfFileToDownloadSoapIn" />
+      <wsdl:output message="tns:GetListOfFileToDownloadSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RenameImportExportFile">
+      <wsdl:input message="tns:RenameImportExportFileSoapIn" />
+      <wsdl:output message="tns:RenameImportExportFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveImportExportFile">
+      <wsdl:input message="tns:SaveImportExportFileSoapIn" />
+      <wsdl:output message="tns:SaveImportExportFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveImportExportFileInps">
+      <wsdl:input message="tns:SaveImportExportFileInpsSoapIn" />
+      <wsdl:output message="tns:SaveImportExportFileInpsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FenealgestwebServicesSoap" type="tns:FenealgestwebServicesSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ImportData">
+      <soap:operation soapAction="http://www.fenealgestweb.it/ImportData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExportWorker">
+      <soap:operation soapAction="http://www.fenealgestweb.it/ExportWorker" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ExportWorkerCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendicontoRlst">
+      <soap:operation soapAction="http://www.fenealgestweb.it/ImportRendicontoRlst" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ImportRendicontoRlstCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendiconto">
+      <soap:operation soapAction="http://www.fenealgestweb.it/ImportRendiconto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ImportRendicontoCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraceUsage">
+      <soap:operation soapAction="http://www.fenealgestweb.it/TraceUsage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendicontoNew">
+      <soap:operation soapAction="http://www.fenealgestweb.it/ImportRendicontoNew" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ImportRendicontoNewCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendicontoRlstNew">
+      <soap:operation soapAction="http://www.fenealgestweb.it/ImportRendicontoRlstNew" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ImportRendicontoRlstNewCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendMailForLiberiSearch">
+      <soap:operation soapAction="http://www.fenealgestweb.it/SendMailForLiberiSearch" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SendMailForLiberiSearchCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendMailFromFenealgest">
+      <soap:operation soapAction="http://www.fenealgestweb.it/SendMailFromFenealgest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExportWorkers">
+      <soap:operation soapAction="http://www.fenealgestweb.it/ExportWorkers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ExportWorkersCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserIsValid">
+      <soap:operation soapAction="http://www.fenealgestweb.it/UserIsValid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:UserIsValidCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchWorkersByAzienda">
+      <soap:operation soapAction="http://www.fenealgestweb.it/SearchWorkersByAzienda" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SearchWorkersByAziendaCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchWorkers">
+      <soap:operation soapAction="http://www.fenealgestweb.it/SearchWorkers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SearchWorkersCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentLen">
+      <soap:operation soapAction="http://www.fenealgestweb.it/GetDocumentLen" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetDocumentLenCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocument">
+      <soap:operation soapAction="http://www.fenealgestweb.it/GetDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetDocumentCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListOfFileToDownload">
+      <soap:operation soapAction="http://www.fenealgestweb.it/GetListOfFileToDownload" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetListOfFileToDownloadCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RenameImportExportFile">
+      <soap:operation soapAction="http://www.fenealgestweb.it/RenameImportExportFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:RenameImportExportFileCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveImportExportFile">
+      <soap:operation soapAction="http://www.fenealgestweb.it/SaveImportExportFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SaveImportExportFileCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveImportExportFileInps">
+      <soap:operation soapAction="http://www.fenealgestweb.it/SaveImportExportFileInps" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SaveImportExportFileInpsCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="FenealgestwebServicesSoap12" type="tns:FenealgestwebServicesSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ImportData">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/ImportData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExportWorker">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/ExportWorker" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ExportWorkerCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendicontoRlst">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/ImportRendicontoRlst" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ImportRendicontoRlstCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendiconto">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/ImportRendiconto" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ImportRendicontoCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraceUsage">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/TraceUsage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendicontoNew">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/ImportRendicontoNew" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ImportRendicontoNewCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportRendicontoRlstNew">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/ImportRendicontoRlstNew" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ImportRendicontoRlstNewCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendMailForLiberiSearch">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/SendMailForLiberiSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SendMailForLiberiSearchCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendMailFromFenealgest">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/SendMailFromFenealgest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExportWorkers">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/ExportWorkers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ExportWorkersCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserIsValid">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/UserIsValid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:UserIsValidCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchWorkersByAzienda">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/SearchWorkersByAzienda" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SearchWorkersByAziendaCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchWorkers">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/SearchWorkers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SearchWorkersCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentLen">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/GetDocumentLen" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetDocumentLenCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocument">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/GetDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetDocumentCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListOfFileToDownload">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/GetListOfFileToDownload" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetListOfFileToDownloadCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RenameImportExportFile">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/RenameImportExportFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:RenameImportExportFileCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveImportExportFile">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/SaveImportExportFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SaveImportExportFileCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveImportExportFileInps">
+      <soap12:operation soapAction="http://www.fenealgestweb.it/SaveImportExportFileInps" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SaveImportExportFileInpsCredenziali" part="Credenziali" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FenealgestwebServices">
+    <wsdl:port name="FenealgestwebServicesSoap" binding="tns:FenealgestwebServicesSoap">
+      <soap:address location="https://www.fenealgest.it/servizi/WebServices/FenealgestWebServices.asmx" />
+    </wsdl:port>
+    <wsdl:port name="FenealgestwebServicesSoap12" binding="tns:FenealgestwebServicesSoap12">
+      <soap12:address location="https://www.fenealgest.it/servizi/WebServices/FenealgestWebServices.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

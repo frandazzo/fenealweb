@@ -1,0 +1,166 @@
+#set($ru = $framework.renderUtils)
+#set($hasTabs = $ru.hasTabs($form))
+#set($tabs = $ru.getTabs($form))
+##specifico le proprietà delle colonne in cui sara suddiviso l'intero form
+##poichè bootstrap ne gestisce 12 il numero di colonne che mi posso aspettare sarà:
+##12 colonne (classe css col-md-1),6 (classe css col-md-2),4 (classe css col-md-3). 3 (classe css col-md-1),
+## 2 colonne (classe css col-md-2); se è una colonna rimando al layout standard
+#set($hasColumns = $ru.hasColumns($form)) ##******************************da creare
+#set($colNumber = $ru.colNumber($form))##******************************da creare
+#set($cols = $ru.getCols($form))##******************************da creare
+##imposto una variabile per il check della correttezza dei dati delle colonne
+##ossia che il numero specificato di colonne sia congruo con bootstrap
+#set($colCheck = true)
+##calcolo la classe css da applicare al form nel caso abbia molteplici colonne
+#if ($hasColumns == true)
+    #if($colNumber == 12)
+        #set($colClass = "col-md-1")
+    #elseif($colNumber == 6)
+        #set($colClass = "col-md-2")
+    #elseif($colNumber == 4)
+        #set($colClass = "col-md-3")
+    #elseif($colNumber == 3)
+        #set($colClass = "col-md-4")
+    #elseif($colNumber == 2)
+        #set($colClass = "col-md-6")
+    #else
+        #set($colCheck = false)
+    #end
+#end
+
+<div class="p10 framework-form">
+    <form action="$form.action" method="$form.method" data-component="form">
+
+        #if($form.editMode)
+            <input type="hidden" name="id" value="$data.get('id')" data-component="entity_id"/>
+            <input type="hidden" name="mode" value="edit"/>
+        #else
+            <input type="hidden" name="mode" value="create"/>
+        #end
+
+    ##se ci sono colonne e il numero è congruente  utilizzo il layout delle colonne altrimenti
+    ##utilizzo il form standard
+
+        <div class="panel-heading">
+            <span class="panel-icon"><span class="fa fa-edit"></span></span>
+            <span class="panel-title" data-component="title">$form.title</span>
+
+            #if ($hasTabs)
+                <ul class="nav panel-tabs-border panel-tabs">
+                    #foreach($tab in $tabs)
+                        <li #if($foreach.first)class="active"#end>
+                            <a href="#$ru.tabId($tab)" data-toggle="tab">$localization.m($tab)</a>
+                        </li>
+                    #end
+                </ul>
+            #end
+        </div>
+
+        <div class="panel panel-body p20">
+            #if($hasTabs)
+                <div class="tab-content admin-form">
+                    #foreach($tab in $tabs)
+                        <div id="$ru.tabId($tab)" class="tab-pane #if($foreach.first)active#end">
+                            #foreach($fieldSetName in $ru.getFieldSetsInTab($form, $tab))
+                                #set($fieldSet = $form.getFieldSet($fieldSetName))
+                                #set($fields = $ru.getFieldsForSetInTab($form, $fieldSetName, $tab))
+                                #parse("/templates/forms/form_fieldSet.inc1.vm")
+                            #end
+                        </div>
+                    #end
+                </div>
+            #end
+        </div>
+
+
+        <div class="panel-footer">
+            <div class="section align-right text-right">
+                <button class="btn btn-primary mrn" type="submit" data-component="submit_button"><i class="glyphicon glyphicon-save pr5"></i> Esegui la ricerca</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div class="col-md-12">
+
+    <div id="resultsContainer">
+
+    </div>
+
+</div>
+
+
+##<div class="p10 framework-grid">
+##
+##    <div class="panel panel-default">
+##        <div class="panel-heading">
+##            <span class="panel-icon"><span class="glyphicons glyphicons-table"></span></span>
+##            <span class="panel-title" data-component="title">Lista dei lavoratori</span>
+##        </div>
+##        <div class="panel-body pn">
+##            <table class="table table-hover table-striped admin-form">
+##                <thead>
+##                <tr>
+##                    <th style="width: 1%;"><!--input type="checkbox" data-component="select_all_checkbox" /--></th>
+##
+##                    <th class="">
+##                        <a href="javascript:;" class="grid-sort-button" data-property="surname">
+##                            Nome
+##                        </a>
+##                    </th>
+##                    <th class="">
+##                        Data di nascita
+##                    </th>
+##                    <th class="">
+##                        Nazionalità
+##                    </th>
+##                    <th class="">
+##                        Telefono
+##                    </th>
+##                    <th class="">
+##                        Provincia residenza
+##                    </th>
+##                    <th class="">
+##                        Comune residenza
+##                    </th>
+##                    <th class="">
+##                        Indirizzo
+##                    </th>
+##                </tr>
+##                </thead>
+##
+##                <tbody class="tbody-workers">
+##                <tr data-component="row" class="row-worker" data-entity-id="" style="display: none;">
+##
+##                    <td class="text-center">
+##                        <label class="option block mn" data-component="select_checkbox_label">
+##                            <input type="checkbox" data-component="select_checkbox" data-entity-id="">
+##                            <span class="checkbox mn"></span>
+##                        </label>
+##                    </td>
+##
+##                    <td class="dbClickSensitive"><a href="javascript:;" data-property="surname" data-property-value="" data-component="linked_cell" class="linked"><span class="namesurname"></span></a>
+##                    </td>
+##                    <td class="dbClickSensitive"><span class="birthDate"></span>
+##                    </td>
+##                    <td class="dbClickSensitive"><span class="nationality"></span>
+##                    </td>
+##                    <td class="dbClickSensitive"><span class="phone"></span>
+##                    </td>
+##                    <td class="dbClickSensitive"><span class="livingProvince"></span>
+##                    </td>
+##                    <td class="dbClickSensitive"><span class="livingCity"></span>
+##                    </td>
+##                    <td class="dbClickSensitive"><span class="address"></span>
+##                    </td>
+##                </tr>
+##
+##                </tbody>
+##            </table>
+##        </div>
+##    ## In caso di risultato vuoto nella ricerca
+##        <div class="alert alert-info no-results">Nessun risultato con i parametri specificati</div>
+##    </div>
+##
+##</div>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.geo.Country" table="tb_nazioni" >
+		<id name="id" type="int" column="ID">
+			<!--<generator class="native" />-->
+		</id>
+		<property name="description"  column="DESCRIZIONE"/>
+		<property name="idRace"  column="ID_TB_RAZZE"/>
+		<property name="fiscalCode"  column="CODICE_CF"/>
+		<property name="issCode"  column="CODICE_ISS"/>
+		<property name="continent"  column="continent"/>
+	</class>
+</hibernate-mapping>

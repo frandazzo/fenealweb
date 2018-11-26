@@ -1,0 +1,38 @@
+#parse("/shared/framework.vm")
+
+
+<script type="text/javascript">
+
+    require(["notifications"], function(notifications){
+
+        var notifManager = new notifications.NewImportNotification();
+        notifManager.init();
+
+    });
+
+</script>
+
+$notification.description <br/>
+
+## //La provincia di Trento ha inviato i dati al db nazionale:
+##//ci sono 150 lavoratori che risiedono nella tua provincia
+##//di cui 50 non sono anagrafati <a href="javascript:createListaLavoro()">Crea lista lavoro</a>
+##//di cui 85 non hanno mai avuto una delega con te <a href="javascript:createListaLavoro()">Crea lista lavoro</a>
+##//i restanti sono conosciuti in qualche modo (crea lista lavoro)
+
+<p>Ci sono $all lavoratori che risiedono nella tua provincia</p>
+
+#if($unknown > 0)
+    <p>di cui $unknown lavoratore/i non sono anagrafati (<a data-id="$notification.id" class="unknownusers" href="javascript:;">Crea lista lavoro</a>) </p>
+
+#end
+
+#if($withoutDelega > 0)
+<p>di cui $withoutDelega lavoratore/i sono anagrafati ma non hanno mai posseduto una delega (<a data-id="$notification.id" class="withoutdelega" href="javascript:;">Crea lista lavoro</a>)</p>
+
+#end
+
+#if($known > 0)
+<p>i restanti ($known lavoratori) sono conosciuti poichè hanno, o hanno avuto una delega  (<a data-id="$notification.id" class="knownusers" href="javascript:;">Crea lista lavoro</a>)</p>
+
+#end

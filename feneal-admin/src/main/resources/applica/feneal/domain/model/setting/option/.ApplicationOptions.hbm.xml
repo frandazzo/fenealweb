@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.setting.option.ApplicationOptions" table="fenealweb_applicationOptions" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="createDelegaAsAccettata" />
+		<property name="companyId" type="long" />
+		<property name="updateFirmasDuringImport" />
+		<property name="updateWorkersDuringImport" />
+		<property name="creaDelegaIfNotExistDuringImport" />
+		<property name="associaDelegaDuringImport" />
+
+	</class>
+</hibernate-mapping>

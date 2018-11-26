@@ -1,0 +1,46 @@
+<script type="text/javascript">
+
+    require(["widget/real/andamentoIscrittiPerSettoreEdile"], function(manager){
+
+        var name = '$widgetName';
+        var params = '$widgetParams';
+        var andamento = new manager.andamento(name, params);
+        andamento.init();
+
+    });
+
+</script>
+
+<div class="panel-heading">
+    <span class="panel-title">Andamento iscritti settore edile</span>
+    <span class="panel-controls">
+        <a class="panel-control-loader" href="#"></a>
+        <a class="panel-control-remove" href="#"></a>
+        <a class="panel-control-title" href="#"></a>
+        <a class="panel-control-color" href="#"></a>
+        <a class="panel-control-collapse" href="#"></a>
+        <a class="panel-control-fullscreen" href="#"></a>
+    </span>
+</div>
+
+<div class="panel-body andamento-iscritti-settore-edile-container">
+
+    <div id="container-highcharts" class="chToResize" style="height: 400px;width: 100%">
+
+    </div>
+
+    ##davide lascia in ogni vista di widget questo codice che
+    ##mi consentirà in ogni cotroller di valorizzare la lista dei territori
+    ##guarda il controller
+    <div class="param-fields-container" style="display: none">
+        <input type="hidden" name="hidden-province" value="$provincia">
+        <input type="hidden" name="hidden-year" value="$anno">
+        <input type="hidden" name="hidden-ente" value="$ente">
+        <select name="province">
+            #foreach ($province in $provinces)
+                <option value="$province" >$province</option>
+            #end
+        </select>
+    </div>
+
+</div>

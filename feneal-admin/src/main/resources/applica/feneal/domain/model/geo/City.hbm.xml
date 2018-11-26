@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.geo.City" table="tb_comuni" >
+		<id name="id" type="int" column="ID">
+			<!--<generator class="native" />-->
+		</id>
+		<property name="description"  column="DESCRIZIONE"/>
+		<property name="idProvince"  column="ID_TB_PROVINCIE"/>
+		<property name="idRegion"  column="ID_TB_REGIONI"/>
+		<property name="cap"  column="CAP"/>
+		<property name="fiscalcode"  column="CODICE_FISCALE"/>
+		<property name="istatcode"  column="CODICE_ISTAT"/>
+	</class>
+</hibernate-mapping>

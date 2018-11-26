@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.core.lavoratori.Lavoratore" table="fenealweb_lavoratore" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="name" />
+		<property name="surname" />
+		<property name="sex" />
+		<property name="image" />
+		<property name="fiscalcode" />
+		<property name="birthDate" />
+		<property name="nationality" />
+		<property name="birthProvince" />
+		<property name="birthPlace" />
+		<property name="livingProvince" />
+		<property name="livingCity" />
+		<property name="address" />
+		<property name="cap" />
+		<property name="phone" />
+		<property name="cellphone" />
+		<property name="mail" />
+		<property name="ce" />
+		<property name="ec" />
+		<many-to-one name="fund" class="applica.feneal.domain.model.setting.Fondo" column="fundId" lazy="false" />
+		<property name="notes" />
+		<property name="namesurname" />
+		<property name="surnamename" />
+		<property name="companyId" type="long" />
+	</class>
+</hibernate-mapping>

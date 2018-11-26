@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+                                 http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                                 http://www.springframework.org/schema/security
+                                 http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+    <global-method-security pre-post-annotations="enabled" />
+
+    <http use-expressions="true">
+        <intercept-url pattern="/values/**" access="permitAll" />
+        <intercept-url pattern="/widget/real/**" access="permitAll" />
+        <intercept-url pattern="/static/**" access="permitAll" />
+        <intercept-url pattern="/fonts/**" access="permitAll" />
+        <intercept-url pattern="/setup/**" access="permitAll" />
+        <intercept-url pattern="/auth/**" access="permitAll" />
+        <intercept-url pattern="/notify/import/dbnazionale/**" access="permitAll" />
+        <intercept-url pattern="/account/register" access="permitAll" />
+        <intercept-url pattern="/account/resetPassword" access="permitAll" />
+        <intercept-url pattern="/account/activate" access="permitAll" />
+        <intercept-url pattern="/framework-resources/**" access="permitAll" />
+        <intercept-url pattern="/framework-dynamic-resources/**" access="permitAll" />
+        <intercept-url pattern="/files/**" access="permitAll" />
+        <intercept-url pattern="/images/**" access="permitAll" />
+        <intercept-url pattern="/**" access="permitAll" />
+
+        <logout logout-url="/auth/logout" logout-success-url="/" />
+        <form-login
+                username-parameter="j_username"
+                password-parameter="j_password"
+                login-page="/auth/login"
+                login-processing-url="/auth/process"
+                authentication-success-handler-ref="authSuccessHandler"
+                authentication-failure-url="/auth/fail" />
+        <remember-me/>
+        <csrf disabled="true" />
+    </http>
+
+    <beans:bean id="userService" class="applica.framework.security.UserService" />
+    <beans:bean id="tokenauthProvider" class="applica.framework.security.token.TokenAuthenticationProvider"/>
+    <beans:bean id="clientauthProvider"  class="applica.feneal.admin.controllers.base.security.ClientAuthenticationProvider" />
+    <beans:bean id="authSuccessHandler" class="applica.feneal.admin.controllers.base.security.AuthSuccessHandler"></beans:bean>
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider ref="tokenauthProvider" />
+        <authentication-provider user-service-ref="userService">
+            <password-encoder hash="md5" />
+        </authentication-provider>
+
+        <authentication-provider ref="clientauthProvider" />
+
+    </authentication-manager>
+
+    <beans:bean class="applica.framework.security.Security" />
+    <beans:bean id="remoteAuthenticationEntryPoint"  class="applica.feneal.admin.controllers.base.security.RemoteAuthenticationEntryPoint" />
+
+
+    <beans:bean class="applica.framework.security.authorization.BaseAuthorizationService" />
+
+</beans:beans>

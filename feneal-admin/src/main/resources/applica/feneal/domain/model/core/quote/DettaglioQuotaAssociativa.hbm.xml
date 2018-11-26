@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa" table="fenealweb_dettaglioquote" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="idRiepilogoQuotaAssociativa" />
+		<property name="provincia" />
+		<property name="dataRegistrazione" />
+		<property name="dataDocumento" />
+		<property name="tipoDocumento" />
+		<property name="settore" />
+		<property name="ente" />
+		<property name="dataInizio" />
+		<property name="dataFine" />
+		<property name="quota" />
+		<property name="livello" />
+
+		<property name="tipoPrestazione" />
+		<property name="note" />
+
+		<property name="contratto" />
+		<property name="idAzienda" />
+		<property name="idLavoratore" />
+		<property name="companyId" type="long" />
+	</class>
+</hibernate-mapping>

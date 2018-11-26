@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.dbnazionale.LiberoDbNazionaleSecondary" table="lavoratori_liberi_copy" >
+        <id name="id" type="int" column="ID">
+            <generator class="native" />
+        </id>
+        <property name="codiceFiscale" column="codiceFiscale"/>
+        <property name="nome" column="nome"/>
+        <property name="cognome" column="cognome"/>
+        <property name="nomeCompleto" column="nomeCompleto"/>
+        <property name="dataNascita" column="dataNascita"/>
+        <property name="sesso" column="sesso"/>
+        <property name="id_Nazione" column="id_Nazione"/>
+        <property name="nomeNazione" column="nomeNazione"/>
+        <property name="id_Provincia" column="id_Provincia"/>
+        <property name="nomeProvincia" column="nomeProvincia"/>
+        <property name="id_Comune" column="id_Comune"/>
+        <property name="nomeComune" column="nomeComune"/>
+        <property name="id_Provincia_Residenza" column="id_Provincia_Residenza"/>
+        <property name="nomeProvinciaResidenza" column="nomeProvinciaResidenza"/>
+        <property name="id_Comune_Residenza" column="id_Comune_Residenza"/>
+        <property name="nomeComuneResidenza" column="nomeComuneResidenza"/>
+        <property name="indirizzo" column="indirizzo"/>
+        <property name="cap" column="cap"/>
+        <property name="telefono" column="telefono"/>
+        <property name="ultimaModifica" column="ultimaModifica"/>
+        <property name="ultimaProvinciaAdAggiornare" column="ultimaProvinciaAdAggiornare"/>
+        <property name="currentAzienda" column="currentAzienda"/>
+        <property name="iscrittoA" column="iscrittoA"/>
+        <property name="nomeProvinciaFeneal" column="nomeProvinciaFeneal"/>
+        <property name="id_ProvinciaFeneal" column="id_ProvinciaFeneal"/>
+        <property name="liberoAl" column="liberoAl"/>
+        <property name="ente" column="ente"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.core.inps.QuotaInps" table="fenealweb_quoteinps" >
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        <property name="companyId" type="long" />
+
+        <property name="importo" />
+        <property name="dataValuta" />
+        <property name="numDomanda" />
+        <property name="patronato" />
+        <property name="lavoratoreEdile" />
+        <property name="importRistornato" />
+        <property name="referente" />
+        <property name="dataDomanda" />
+        <property name="cscFilepath" />
+        <property name="cscFilename" />
+
+
+        <many-to-one name="ristorno" class="applica.feneal.domain.model.core.inps.RistornoInps" column="ristornoId" lazy="false" />
+        <many-to-one name="lavoratore" class="applica.feneal.domain.model.core.lavoratori.Lavoratore" column="lavoratoreId" lazy="false" />
+
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,128 @@
+#set($ru = $framework.renderUtils)
+#set($hasTabs = $ru.hasTabs($form))
+#set($tabs = $ru.getTabs($form))
+##specifico le proprietà delle colonne in cui sara suddiviso l'intero form
+##poichè bootstrap ne gestisce 12 il numero di colonne che mi posso aspettare sarà:
+##12 colonne (classe css col-md-1),6 (classe css col-md-2),4 (classe css col-md-3). 3 (classe css col-md-1),
+## 2 colonne (classe css col-md-2); se è una colonna rimando al layout standard
+#set($hasColumns = $ru.hasColumns($form)) ##******************************da creare
+#set($colNumber = $ru.colNumber($form))##******************************da creare
+#set($cols = $ru.getCols($form))##******************************da creare
+##imposto una variabile per il check della correttezza dei dati delle colonne
+##ossia che il numero specificato di colonne sia congruo con bootstrap
+#set($colCheck = true)
+##calcolo la classe css da applicare al form nel caso abbia molteplici colonne
+#if ($hasColumns == true)
+    #if($colNumber == 12)
+        #set($colClass = "col-md-1")
+    #elseif($colNumber == 6)
+        #set($colClass = "col-md-2")
+    #elseif($colNumber == 4)
+        #set($colClass = "col-md-3")
+    #elseif($colNumber == 3)
+        #set($colClass = "col-md-4")
+    #elseif($colNumber == 2)
+        #set($colClass = "col-md-6")
+    #else
+        #set($colCheck = false)
+    #end
+#end
+
+<div class="p10 framework-form">
+<form action="$form.action" method="$form.method" data-component="form">
+
+    <div class="content-header pb20">
+        <h2 style="text-align: center; font-size: 24px; font-weight: 600;">
+            <span class="text-primary" data-component="title">$form.title</span>
+        </h2>
+    </div>
+
+
+
+
+    #if($form.editMode)
+        <input type="hidden" name="id" value="$data.get('id')" data-component="entity_id"/>
+        <input type="hidden" name="mode" value="edit"/>
+    #else
+        <input type="hidden" name="mode" value="create"/>
+    #end
+
+    ##se ci sono colonne e il numero è congruente  utilizzo il layout delle colonne altrimenti
+    ##utilizzo il form standard
+
+
+        #foreach($col in $cols)
+
+        ##corpo dell'intera colonna
+
+            <div class="panel panel-default $colClass col-div">
+
+            ## ul dei tab eventualment eesistenti
+            ##verifico se ci sono tab nella colonna e creo l'ul appropriato
+                #if ($ru.getTabsInColumn($form,$col).size() > 0)##******************************da creare
+                    <ul class="nav panel-tabs-border panel-tabs" style="position: relative;">
+                        #foreach($tab in $ru.getTabsInColumn($form,$col))
+                            <li #if($foreach.first)class="active"#end style="width: 150px;">
+                            ##******************************da creare
+                                <a href="#$ru.tabId($tab)" data-toggle="tab" style="height: 56px;">$localization.m($tab)</a>
+                            </li>
+                        #end
+                    </ul>
+                #end
+
+
+                <div class="panel panel-primary">
+                    <div class="heading-border ">
+                        <div class="content-header pb20">
+                            <h2 style="font-size: 18px; font-weight: 500;">
+
+                                <span class="text-primary" >$localization.m($col)</span>
+
+                            </h2>
+                        </div>
+
+                    </div>
+                </div>
+
+            ##contenuti della colonna
+                <div class="panel-body p20 #if(!$foreach.last)border-black-right#end" style="height: 90%;">
+                    #if($ru.getTabsInColumn($form,$col).size() > 0)
+                        <div class="tab-content admin-form">
+                            #foreach($tab in $ru.getTabsInColumn($form,$col))
+                                <div id="$ru.tabId($tab)" class="tab-pane #if($foreach.first)active#end">
+                                ##******************************da creare
+                                        #foreach($fieldSetName in $ru.getFieldSetsInTabForColumn($form, $tab, $col))
+
+                                    #set($fieldSet = $form.getFieldSet($fieldSetName))
+                                ##******************************da creare
+                                    #set($fields = $ru.getFieldsForSetInTabForCol($form, $fieldSetName, $tab, $col))
+                                    #parse("/templates/forms/form_fieldSet.inc1.vm")
+                                #end
+                                </div>
+                            #end
+                        </div>
+                    #else
+                        <div class="tab-content admin-form">
+                            #foreach ($fieldSet in $form.visibleFieldSetsForCol($col))
+                                    #set($fields = $fieldSet.fields)
+                                    #parse("/templates/forms/form_fieldSet.inc1.vm")
+                                #end
+                        </div>
+                    #end
+                </div>
+
+            ##mancano i pulsati ... vedi in fondo...
+
+            </div>
+
+        #end
+
+    <div class="panel-footer">
+        <div class="section align-right text-right">
+            <button class="btn btn-default mr5" type="button" data-component="cancel_button"><i class="glyphicon glyphicon-arrow-left pr5"></i>$localization.m("label.cancel")</button>
+            <button class="btn btn-primary mrn" type="submit" data-component="submit_button"><i class="glyphicon glyphicon-save pr5"></i> $localization.m("label.save")</button>
+        </div>
+    </div>
+
+</form>
+</div>

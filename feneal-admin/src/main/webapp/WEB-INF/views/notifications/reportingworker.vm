@@ -1,0 +1,27 @@
+#parse("/shared/framework.vm")
+
+<script type="text/javascript">
+
+    require(["notifications"], function(notifications){
+
+        var notifManager = new notifications.ReportingWorkerNotification();
+        notifManager.init();
+
+    });
+
+</script>
+
+#if($worker)
+    <p><b>$notification.sender.name $notification.sender.surname</b> della
+    <b>$notification.sender.company.description</b> ti ha indicato di dare una occhiata al lavoratore
+    <a data-id="$worker.id" class="worker-link" href="javascript:;")>$worker.namesurname</a></p>
+    <div class="reporting-worker-descr">
+        $notification.description
+    </div>
+#else
+
+    <p>Lavoratore rimosso dalla $notification.sender.company.description</p>
+
+#end
+
+

@@ -1,0 +1,25 @@
+<script type="text/javascript">
+
+    require(["widget/responseTime"], function(manager){
+
+        var responseTime = new manager.responseTime();
+        responseTime.init($dataJSON);
+
+    });
+
+</script>
+
+<div class="panel-heading">
+    <span class="panel-title">Response Time</span>
+    <span class="panel-controls">
+        <a class="panel-control-loader" href="#"></a>
+        <a class="panel-control-remove" href="#"></a>
+        <a class="panel-control-title" href="#"></a>
+        <a class="panel-control-color" href="#"></a>
+        <a class="panel-control-collapse" href="#"></a>
+        <a class="panel-control-fullscreen" href="#"></a>
+    </span>
+</div>
+<div class="panel-body pbn">
+    <div id="high-column3" style="width: 100%; height: 400px; margin: 0 auto"></div>
+</div>

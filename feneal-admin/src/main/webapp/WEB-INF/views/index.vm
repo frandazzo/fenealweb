@@ -1,0 +1,728 @@
+#parse("shared/framework.vm")
+#parse("shared/header.vm")
+
+<!-- Start: Content-Wrapper -->
+<section id="content_wrapper">
+
+    <!-- Start: Topbar -->
+    <header id="topbar" #if ($roleid == 3 || $roleid == 4 || $roleid == 5)class="padding-right-80"#end>
+        <div class="topbar-left">
+            <ol class="breadcrumb framework-breadcrumbs" id="breadcrumbs">
+                <li class="crumb-active">
+                    <a href="${wwwBase}">Fenealweb</a>
+                </li>
+                <li class="crumb-icon">
+                    <a href="${wwwBase}">
+                        <span class="glyphicon glyphicon-home"></span>
+                    </a>
+                </li>
+                <li class="crumb-link">
+                    <a href="${wwwBase}">Home</a>
+                </li>
+                <li class="crumb-trail">Benvenuto</li>
+            </ol>
+        </div>
+        <div class="topbar-right framework-toolbar" id="toolbar"></div>
+        <div class="ml15 ib va-m" id="toggle_sidemenu_r">
+            <a href="#" class="pl5">
+                <i class="fa fa-sign-in fs22 text-primary"></i>
+##                <span class="badge badge-danger badge-hero">3</span>
+            </a>
+        </div>
+    </header>
+    <!-- End: Topbar -->
+
+    <!-- Begin: Content -->
+    <section id="spa-container" class="animated fadeIn">
+
+        <div class="col-md-12 margin-top-20">
+
+            <div class="panel">
+                <div class="panel-heading ui-sortable-handle">
+                    <span class="panel-title">Benvenuto</span>
+                </div>
+                <div class="panel-body pn" style="border-right: 0px">
+                    <div class="col-md-1" style="margin-top: 37px">
+                        #set($userImg = "dynaimg/" + $userInitials + "?size=60x60")
+                        <img src="${wwwBase}$userImg" alt="avatar" class="br64 img-center" style="max-width: 60px !important;">
+                    </div>
+
+                    <div class="col-md-11" style="margin-top: 15px">
+
+                        <div class="col-md-12">
+                            <p class="text-left"><b>Utente: </b> $user</p>
+                            <p class="text-left"><b>Ruolo: </b> $rolename</p>
+                        </div>
+
+
+                        <div class="col-md-12" style="margin-top: 5px">
+
+                            <div class="alert alert-system alert-dismissable welcome-ok">
+
+                                <i class="fa fa-cubes pr10"></i>
+                                <span class="welcome-ok-str"></span>
+                                <strong>Benvenuto:</strong>
+
+                                #if($notifications.unread == 0)Non hai nessuna nuova notifica da visualizzare
+
+                                #else
+
+                                    Hai $notifications.unread nuove notifiche da visualizzare
+
+                                #end
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Div per sezione risorse -->
+        <div class="col-md-12 margin-top-10">
+
+            <div class="panel">
+                <div class="panel-heading ui-sortable-handle">
+                    <span class="panel-title">Download risorse</span>
+                </div>
+                <div class="panel-body pn" style="border-right: 0px">
+
+                    <div class="col-md-12" style="margin-top: 15px">
+
+                        <div class="col-md-12">
+                            <p class="text-left"><b><i class="fa fa-arrow-circle-o-down"></i> Scarica <a href="${staticBase}resources/TeamViewerQS.exe">qui</a> il software per la teleassistenza.</b></p>
+                            <p class="text-left"><b><i class="fa fa-arrow-circle-o-down"></i> Scarica <a href="downloadconnector">qui</a> il connettore Fenealgest</b></p>
+                            <p class="text-left"><b><i class="fa fa-arrow-circle-o-down"></i> Scarica <a href="downloadtestermail">qui</a> il software per testare le mail automatiche</b></p>
+##                            <p class="text-left"><b><i class="fa fa-arrow-circle-o-down"></i> Scarica <a href="downloadconnector">qui</a> il software per ....</b></p>
+##                            <p class="text-left"><b><i class="fa fa-arrow-circle-o-down"></i> Scarica <a href="downloadconnector">qui</a> il software per ....</b></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    ##utente amministratore
+        #if($roleid==1 || $roleid== 2)
+
+            <p class="text-center">Benvenuto utente amministratore</p>
+
+        ##altro tipo di utente
+        #else
+
+
+
+        <div class="admin-panels-dashboard ui-sortable animated fadeIn">
+
+            ##creo il profilo di layout
+
+            <div id="grid-0" class="$widgets.calculateBootstrapClassForFirstQuadrante()  admin-grid">
+                #foreach($elem in $widgets.calculateWidgetsListForQuadrante(1))
+
+                    <div
+                        class="widget panel #if($elem.present)visible#end"
+                        id="p$elem.id"
+                        style="display: none;"
+                        data-webpart-url="${wwwBase}$elem.url"
+                        data-container-widget="$elem.widgetName"
+                        data-params="$elem.params">
+
+                    </div>
+
+                #end
+            </div>
+            <div id="grid-1" class="$widgets.calculateBootstrapClassForSecondQuadrante()  admin-grid">
+                #foreach($elem in $widgets.calculateWidgetsListForQuadrante(2))
+
+                    <div
+                            class="widget panel #if($elem.present)visible#end"
+                            id="p$elem.id"
+                            style="display: none;"
+                            data-webpart-url="${wwwBase}$elem.url"
+                            data-container-widget="$elem.widgetName"
+                            data-params="$elem.params">
+
+                    </div>
+
+                #end
+            </div>
+            <div id="grid-2" class="$widgets.calculateBootstrapClassForThirdQuadrante()  admin-grid">
+                #foreach($elem in $widgets.calculateWidgetsListForQuadrante(3))
+
+                    <div
+                            class="widget panel #if($elem.present)visible#end"
+                            id="p$elem.id"
+                            style="display: none;"
+                            data-webpart-url="${wwwBase}$elem.url"
+                            data-container-widget="$elem.widgetName"
+                            data-params="$elem.params">
+
+                    </div>
+
+                #end
+            </div>
+
+##            <div id="grid-0" class="col-md-6  admin-grid">
+####                <div
+####                        ##aggiungi la classe "sort-disable" per disabilitare il riordinamento
+####                        class=" widget panel  #if($widgetsActiveUser.dataPanel)visible#end"
+####                        id="p0"
+####                        style=""
+####                        data-webpart-url="${wwwBase}widget/dataPanel"
+####                        data-container-widget="dataPanel">
+####                </div>
+##            </div>
+##            <div id="grid-1" class="col-md-6  admin-grid">
+##
+##                <!-- Column Graph -->
+
+##
+##                <!-- Stats Top Graph Bot -->
+####                <div
+####                        class=" widget tdtj panel #if($widgetsActiveUser.areaGraph)visible#end"
+####                        id="p7"
+####                        style="display: none"
+####                        data-webpart-url="${wwwBase}widget/areaGraph"
+####                        data-container-widget="areaGraph">
+####
+####                </div>
+##
+##                <!-- Pie Chart -->
+####                <div
+####                        class="widget panel #if($widgetsActiveUser.pieCharts)visible#end"
+####                        id="p10"
+####                        style=""
+####                        data-webpart-url="${wwwBase}widget/pieCharts"
+####                        data-container-widget="pieCharts">
+####
+####                </div>
+##
+##
+##                <!-- Column Graph -->
+####                <div
+####                        class="widget panel #if($widgetsActiveUser.responseTime)visible#end"
+####                        id="p11"
+####                        style="display: none"
+####                        data-webpart-url="${wwwBase}widget/responseTime"
+####                        data-container-widget="responseTime">
+####
+####
+####                </div>
+##
+##
+##                <!-- Circulars -->
+####                <div
+####                        class="widget panel #if($widgetsActiveUser.circulars)visible#end"
+####                        id="p5"
+####                        style="display: none"
+####                        data-webpart-url="${wwwBase}widget/circulars"
+####                        data-container-widget="circulars">
+####
+####                </div>
+##
+##                <!-- Bar Graph -->
+####                <div
+####                        class="widget panel #if($widgetsActiveUser.barGraph)visible#end"
+####                        id="p12"
+####                        style="display: none"
+####                        data-webpart-url="${wwwBase}widget/barGraph"
+####                        data-container-widget="barGraph">
+####
+####                </div>
+##
+##                <!-- Sparklines -->
+####                <div
+####                        class="widget panel #if($widgetsActiveUser.sparkLines)visible#end"
+####                        id="p13"
+####                        style="display: none"
+####                        data-webpart-url="${wwwBase}widget/sparkLines"
+####                        data-container-widget="sparkLines">
+####
+####
+####                </div>
+##
+##                <!-- Area Graph -->
+####                <div
+####                        class="widget panel #if($widgetsActiveUser.areaGraphOnlyCurve)visible#end"
+####                        id="p14"
+####                        style="display: none"
+####                        data-webpart-url="${wwwBase}widget/areaGraphOnlyCurve"
+####                        data-container-widget="areaGraphOnlyCurve">
+####
+####
+####                </div>
+##
+##
+##                <!-- Dot List -->
+####                <div
+####                        class="widget panel #if($widgetsActiveUser.dotList)visible#end"
+####                        id="p15"
+####                        style="display: none"
+####                        data-webpart-url="${wwwBase}widget/dotList"
+####                        data-container-widget="dotList">
+####
+####                </div>
+##
+##                <!-- Text List -->
+####                <div
+####                        class="widget panel #if($widgetsActiveUser.textList)visible#end"
+####                        id="p21"
+####                        style="display: none; "
+####                        data-webpart-url="${wwwBase}widget/textList"
+####                        data-container-widget="textList">
+####
+####
+####                </div>
+##
+##            </div>
+
+        </div>
+
+
+        #end
+    </section>
+
+</section>
+
+
+
+
+
+
+<aside id="sidebar_right" class="nano">
+
+    <!-- Start: Sidebar Right Content -->
+    <div class="sidebar-right-content nano-content">
+
+        <div class="panel back-light-gray">
+
+            <p class="text-center" style="margin-top: 12px;font-size: 17px;margin-bottom: 13px;">Opzioni</p>
+
+            <div class="panel-body pn zero-border-bottom">
+
+                <ul class="nav nav-list nav-list-sm pl15 pt10 contextChoose" role="tablist">
+                    <li class="active">
+                        <a href="#toolbox-header" role="tab" data-toggle="tab">Menu</a>
+                    </li>
+                    <li>
+                        <a href="#toolbox-sidebar" role="tab" data-toggle="tab">Barra laterale</a>
+                    </li>
+                    <li>
+                        <a href="#toolbox-settings" role="tab" data-toggle="tab">Varie</a>
+                    </li>
+                    <br>
+                    <li>
+                        <a href="#toolbox-dashboard" role="tab" data-toggle="tab">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#toolbox-worker" role="tab" data-toggle="tab">Lavoratore</a>
+                    </li>
+                    <li>
+                        <a href="#toolbox-firm" role="tab" data-toggle="tab">Azienda</a>
+                    </li>
+                </ul>
+
+
+
+                <div class="tab-content p20 ptn pb15 containerWidgetInputSelect">
+
+                    #foreach($url in $manager.urls)
+
+                        <div role="tabpanel" class="tab-pane active tab-pane-style" id="toolbox-$foreach.index" data-url="$url"></div>
+
+                    #end
+
+                    <div role="tabpanel" class="tab-pane active tab-pane-style" id="toolbox-header">
+                        <form id="toolbox-header-skin">
+                            <h4 class="mv20">Colore</h4>
+
+                            <div class="skin-toolbox-swatches">
+                                <div class="checkbox-custom checkbox-disabled fill mb5">
+                                    <input type="radio" name="headerSkin" id="headerSkin8" checked value="bg-light">
+                                    <label for="headerSkin8">Light</label>
+                                </div>
+                                <div class="checkbox-custom fill checkbox-primary mb5">
+                                    <input type="radio" name="headerSkin" id="headerSkin1" value="bg-primary">
+                                    <label for="headerSkin1">Primary</label>
+                                </div>
+                                <div class="checkbox-custom fill checkbox-info mb5">
+                                    <input type="radio" name="headerSkin" id="headerSkin3" value="bg-info">
+                                    <label for="headerSkin3">Info</label>
+                                </div>
+                                <div class="checkbox-custom fill checkbox-warning mb5">
+                                    <input type="radio" name="headerSkin" id="headerSkin4" value="bg-warning">
+                                    <label for="headerSkin4">Warning</label>
+                                </div>
+                                <div class="checkbox-custom fill checkbox-danger mb5">
+                                    <input type="radio" name="headerSkin" id="headerSkin5" value="bg-danger">
+                                    <label for="headerSkin5">Danger</label>
+                                </div>
+                                <div class="checkbox-custom fill checkbox-alert mb5">
+                                    <input type="radio" name="headerSkin" id="headerSkin6" value="bg-alert">
+                                    <label for="headerSkin6">Alert</label>
+                                </div>
+                                <div class="checkbox-custom fill checkbox-system mb5">
+                                    <input type="radio" name="headerSkin" id="headerSkin7" value="bg-system">
+                                    <label for="headerSkin7">System</label>
+                                </div>
+                                <div class="checkbox-custom fill checkbox-success mb5">
+                                    <input type="radio" name="headerSkin" id="headerSkin2" value="bg-success">
+                                    <label for="headerSkin2">Success</label>
+                                </div>
+                                <div class="checkbox-custom fill mb5">
+                                    <input type="radio" name="headerSkin" id="headerSkin9" value="bg-dark">
+                                    <label for="headerSkin9">Dark</label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div role="tabpanel" class="tab-pane tab-pane-style" id="toolbox-sidebar">
+                        <form id="toolbox-sidebar-skin">
+
+                            <h4 class="mv20">Colore</h4>
+                            <div class="skin-toolbox-swatches">
+                                <div class="checkbox-custom fill mb5">
+                                    <input type="radio" name="sidebarSkin" checked id="sidebarSkin3" value="">
+                                    <label for="sidebarSkin3">Dark</label>
+                                </div>
+                                <div class="checkbox-custom fill checkbox-disabled mb5">
+                                    <input type="radio" name="sidebarSkin" id="sidebarSkin1" value="sidebar-light">
+                                    <label for="sidebarSkin1">Light</label>
+                                </div>
+                                <div class="checkbox-custom fill checkbox-light mb5">
+                                    <input type="radio" name="sidebarSkin" id="sidebarSkin2" value="sidebar-light light">
+                                    <label for="sidebarSkin2">Lighter</label>
+                                </div>
+
+                            </div>
+
+                        </form>
+                    </div>
+                    <div role="tabpanel" class="tab-pane tab-pane-style" id="toolbox-settings">
+                        <form id="toolbox-settings-misc">
+                            <h4 class="mv20 mtn">Opzioni Layout</h4>
+                            <div class="form-group">
+                                <div class="checkbox-custom fill mb5">
+                                    <input type="checkbox" checked="" id="header-option">
+                                    <label for="header-option">Men&ugrave; bloccato</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-custom fill mb5">
+                                    <input type="checkbox" id="sidebar-option">
+                                    <label for="sidebar-option">Barra laterale bloccata</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-custom fill mb5">
+                                    <input type="checkbox" id="breadcrumb-option">
+                                    <label for="breadcrumb-option">Top bar bloccata</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-custom fill mb5">
+                                    <input type="checkbox" id="breadcrumb-hidden">
+                                    <label for="breadcrumb-hidden">Nascondi top bar</label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div role="tabpanel" class="tab-pane dashboard-user-options tab-pane-style" id="toolbox-dashboard" data-url="options/dashboard">
+
+                    </div>
+                    <div role="tabpanel" class="tab-pane worker-user-options tab-pane-style" id="toolbox-worker" data-url="options/worker">
+
+                    </div>
+                    <div role="tabpanel" class="tab-pane firm-user-options tab-pane-style" id="toolbox-firm" data-url="options/firm">
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group mn br-t p15">
+                <a href="#" id="clearLocalStorage" class="btn btn-primary btn-block pb10 pt10">Reset impostazioni</a>
+            </div>
+        </div>
+
+    </div>
+</aside>
+
+#parse("/shared/footer.vm")
+
+
+<script type="text/javascript">
+
+    window.appcontext = {};
+    window.appcontext.loggeduser = "$user";
+    window.appcontext.roleid = "$roleid";
+    window.appcontext.rolename = "$rolename";
+    window.appcontext.provinces = "$provinces";
+    require(["index", "dashboard", "notifications","framework/core",
+        "framework/model",
+        "framework/views"], function(indexPageManager, dashboardManager, notificationsManager,core, fmodel, fviews){
+
+
+        $.when(
+                $.getJSON("${wwwBase}static/scripts/plugins/js/cldr/supplemental/ca-gregorian.json"),
+                $.getJSON("${wwwBase}static/scripts/plugins/js/cldr/supplemental/likelySubtags.json"),
+                $.getJSON("${wwwBase}static/scripts/plugins/js/cldr/supplemental/timeData.json"),
+                $.getJSON("${wwwBase}static/scripts/plugins/js/cldr/supplemental/weekData.json"),
+                $.getJSON("${wwwBase}static/scripts/plugins/js/cldr/supplemental/currencyData.json"),
+                $.getJSON("${wwwBase}static/scripts/plugins/js/cldr/supplemental/numbers.json"),
+                $.getJSON("${wwwBase}static/scripts/plugins/js/cldr/supplemental/numberingSystems.json")
+        ).then(function () {
+            // Normalize $.get results, we only need the JSON, not the request statuses.
+            return [].slice.apply(arguments, [0]).map(function (result) {
+                return result[0];
+            });
+        }).then(Globalize.load).then(function () {
+            $.get("${wwwBase}static/scripts/plugins/js/localization/dx.all.it.json").done(function (data) {
+
+                Globalize.loadMessages(data)
+                Globalize.locale('it');
+                Globalize.dateFormatter({ skeleton: "yMd" });
+
+
+
+                var index = new indexPageManager.Index();
+                index.init();
+
+                var dashboard = new dashboardManager.Dashboard("dashboard");
+                dashboard.init();
+
+                var notifManager = new notificationsManager.NotificationManager();
+                notifManager.init();
+
+                if (window.appcontext.provinces.includes("bari"))
+                        $("li.importa-deleghe").show();
+                if (window.appcontext.provinces.includes("bari"))
+                    $("li.report-deleghe-bari").show();
+                if (window.appcontext.provinces.includes("bari"))
+                    $("li.proietta-deleghe").show();
+
+
+                if (window.appcontext.provinces.includes("lecce"))
+                    $("li.genera-deleghe").show();
+
+                if (window.appcontext.provinces.includes("lecce") ||
+                        window.appcontext.provinces.includes("bari"))
+                    $("li.inps-puglia").show();
+
+
+
+                if (window.appcontext.provinces.indexOf("chieti") > -1 ||
+                        window.appcontext.provinces.indexOf("teramo") > -1 ||
+                        window.appcontext.provinces.indexOf("aquila") > -1 ||
+                        window.appcontext.provinces.indexOf("pescara") > -1 ){
+
+                    $("li.magazzinodelegheabruzzo").show();
+                }
+
+
+
+
+
+
+
+                $(".rappresentanza").click(function () {
+
+                        var formService = new fmodel.FormService();
+                        formService.set("method", "GET");
+                        formService.set("data", {});
+                        formService.set("url", BASE + "iscritti/stats");
+
+                        var container = $('<div class="calculate-stats-container"></div>');
+
+                        var formView = new fviews.FormView(formService);
+                        formView.container = container;
+
+                        formView.on("render", function() {
+                            $(".calculate-stats-container").find(".panel-footer, .panel-heading").hide();
+                            $(".panel-body").css("overflow", "hidden");
+                        });
+
+                        formView.show();
+
+                        var dialog = container.modalDialog({
+                            autoOpen: true,
+                            title: "Calcola statistiche iscritti",
+                            destroyOnClose: true,
+                            height: 200,
+                            width: 600,
+                            buttons: {
+                                OK: {
+                                    primary: true,
+                                    command: function() {
+                                        var province = $(".calculate-stats-container").find("select[name=province]").val();
+
+                                        $.loader.show({parent:'body'});
+
+                                        var svc = new  fmodel.AjaxService();
+
+                                        svc.set("url", BASE + "iscritti/stats/getdataexport");
+                                        svc.set("data", { province: province });
+                                        svc.set("method", "GET");
+
+                                        svc.on("load", function(response) {
+                                            // response è un array di filenames
+                                            $.loader.hide({parent:'body'});
+
+                                            if (response) {
+                                                var formService = new fmodel.FormService();
+                                                formService.set("url", BASE + "iscritti/stats/selectdata");
+                                                formService.set("contentType", "application/json");
+                                                formService.set("method", "POST");
+                                                formService.set("data", JSON.stringify({filenames: response}));
+
+                                                var container = $('<div class="calculate-stats-selectdata-container"></div>');
+
+                                                var formView = new fviews.FormView(formService);
+                                                formView.container = container;
+
+                                                formView.on("render", function() {
+                                                    $(".calculate-stats-selectdata-container").find(".panel-footer, .panel-heading").hide();
+                                                    $(".panel-body").css("overflow", "hidden");
+                                                });
+
+                                                formView.show();
+
+                                                var dialog = container.modalDialog({
+                                                    autoOpen: true,
+                                                    title: "Calcola statistiche iscritti",
+                                                    destroyOnClose: true,
+                                                    height: 400,
+                                                    width: 600,
+                                                    buttons: {
+                                                        Calcola: {
+                                                            primary: true,
+                                                            command: function() {
+                                                                $.loader.show({parent:'body'});
+
+                                                                var calculateStatStr = "";
+                                                                $.each($("input[name=dataexport]"), function(i,o) {
+                                                                    calculateStatStr += ($(o).val() + ";");
+                                                                });
+
+                                                                var svc = new  fmodel.AjaxService();
+
+                                                                svc.set("url", BASE + "iscritti/stats/getstatisticsresult");
+                                                                svc.set("data", { province: province, filenames: calculateStatStr });
+                                                                svc.set("method", "GET");
+
+                                                                svc.on("load", function(response) {
+                                                                    $.loader.hide({parent:'body'});
+
+                                                                    //$(dialog).modalDialog("close");
+
+                                                                    // Apertura modale che mostra risultati statistiche
+                                                                    var statsContainer = $('<div class="stats-container"></div>');
+                                                                    var resultContent = "<div class='col-md-12 col-xs-12 p5 border-bottom-light-gray'>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class='text-bold'>Num. Feneal: </span></div>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class=''>" + response.numFeneal + "</span></div></div>" +
+                                                                            "<div class='col-md-12 col-xs-12 p5 border-bottom-light-gray'>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class='text-bold'>Num. Filca: </span></div>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class=''>" + response.numFilca + "</span></div></div>" +
+                                                                            "<div class='col-md-12 col-xs-12 p5 border-bottom-light-gray'>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class='text-bold'>Num. Fillea: </span></div>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class=''>" + response.numFillea + "</span></div></div>" +
+                                                                            "<div class='col-md-12 col-xs-12 p5 border-bottom-light-gray'>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class='text-bold'>Num. Liberi: </span></div>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class=''>" + response.numLiberi + "</span></div></div>" +
+                                                                            "<div class='col-md-12 col-xs-12 p5 border-bottom-light-gray'>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class='text-bold'>Totale lavoratori: </span></div>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class=''>" + response.totLavoratori + "</span></div></div>" +
+                                                                            "<div class='col-md-12 col-xs-12 p5 border-bottom-light-gray'>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class='text-bold'>Totale sindacalizzati: </span></div>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class=''>" + response.totSindacalizzati + "</span></div></div>" +
+                                                                            "<div class='col-md-12 col-xs-12 p5 border-bottom-light-gray'>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class='text-bold'>Rappresentatività Feneal: </span></div>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class=''>" + response.rappresentativitaFeneal + "%</span></div></div>" +
+                                                                            "<div class='col-md-12 col-xs-12 p5 border-bottom-light-gray'>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class='text-bold'>Rappresentatività Filca: </span></div>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class=''>" + response.rappresentativitaFilca + "%</span></div></div>" +
+                                                                            "<div class='col-md-12 col-xs-12 p5 border-bottom-light-gray'>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class='text-bold'>Rappresentatività Fillea: </span></div>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class=''>" + response.rappresentativitaFillea + "%</span></div></div>" +
+                                                                            "<div class='col-md-12 col-xs-12 p5 border-bottom-light-gray'>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class='text-bold'>Sindacalizzazione: </span></div>" +
+                                                                            "<div class='col-md-6 col-xs-6 zero-padding'><span class=''>" + response.sindacalizzazione + "%</span></div></div>";
+
+                                                                    statsContainer.append($(resultContent));
+                                                                    var statsDialog = statsContainer.modalDialog({
+                                                                        autoOpen: true,
+                                                                        title: "Risultati statistiche iscritti",
+                                                                        destroyOnClose: true,
+                                                                        height: 350,
+                                                                        width: 600,
+                                                                        buttons: {}
+                                                                    });
+                                                                });
+                                                                svc.on("error", function(error){
+                                                                    $.loader.hide({parent:'body'});
+                                                                    $.notify.error(error);
+                                                                });
+
+                                                                svc.load();
+
+                                                            }
+                                                        }
+                                                    }
+                                                });
+
+                                            } else {
+                                                $.notify.warn("Non ci sono risultati utili");
+                                            }
+
+                                        });
+                                        svc.on("error", function(error){
+                                            $.loader.hide({parent:'body'});
+                                            $.notify.error(error);
+                                        });
+
+                                        svc.load();
+                                    }
+                                }
+                            }
+                        });
+
+                    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            });
+        });
+
+
+
+
+
+
+
+
+
+    });
+
+</script>

@@ -1,0 +1,47 @@
+#parse("/shared/framework.vm")
+
+<div style="text-align: center">
+    <h1 style="color: #4a89dc">Proietta deleghe Bari</h1>
+</div>
+
+
+
+<div class="dx-fieldset">
+    <div class="panel form-blue">
+        <div class="panel-body p20">
+            <div id="form-container" class="mb30">
+                <div id="form"></div>
+            </div>
+            <div class="checkbox-container">
+                <div class="dx-field checkbox">
+                    <div id="delRev"></div>
+                </div>
+                <div class="dx-field checkbox">
+                    <div id="delBia"></div>
+                </div>
+                <div class="dx-field checkbox">
+                    <div id="iscIn"></div>
+                </div>
+                <div class="dx-field checkbox">
+                    <div id="iscCon"></div>
+                </div>
+                <div class="dx-field checkbox">
+                    <div id="iscRic"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section align-right text-right mb15">
+        <button id="elabora" class="btn btn-primary">
+            <i class="glyphicon glyphicon-share"></i>
+            Elabora
+        </button>
+    </div>
+    <div id="tableContainer" class="hidden mb15">
+        <div id="gridContainer"></div>
+        <div id="pieChartContainer" class="panel panel-body">
+            <div id="pie"></div>
+        </div>
+    </div>
+
+</div>

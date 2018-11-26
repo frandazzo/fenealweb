@@ -1,0 +1,68 @@
+<script type="text/javascript">
+
+    require(["widget/dataPanel"], function(manager){
+
+        var dataPanel = new manager.dataPanel();
+        dataPanel.init($data.values);
+
+    });
+
+</script>
+
+<div class="panel-heading">
+    <span class="panel-title">Data Panel Widget</span>
+    <span class="panel-controls">
+        <a class="panel-control-loader" href="#"></a>
+        <a class="panel-control-remove" href="#"></a>
+        <a class="panel-control-title" href="#"></a>
+        <a class="panel-control-color" href="#"></a>
+        <a class="panel-control-collapse" href="#"></a>
+        <a class="panel-control-fullscreen" href="#"></a>
+    </span>
+</div>
+<div class="panel-body mnw700 of-a">
+    <div class="row">
+
+        <!-- Chart Column -->
+        <div class="col-md-8 pln br-r mvn15">
+            <h5 class="ml5 mt20 ph10 pb5 br-b fw600">Testo di prova
+                <small class="pull-right fw600">$data.firstNumberHeader
+                    <span class="text-primary">($data.secondNumberHeader)</span>
+                </small>
+            </h5>
+            <div id="high-column2" style="width: 100%; height: 255px; margin: 0 auto"></div>
+        </div>
+
+        <!-- Multi Text Column -->
+        <div class="col-md-4 br-r">
+            <h5 class="mt5 mbn ph10 pb5 br-b fw600">Testo di prova</h5>
+            <table class="table mbn tc-med-1 tc-bold-last tc-fs13-last">
+                <thead>
+                <tr class="hidden">
+                    <th>Source</th>
+                    <th>Count</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                    #set($text = ["text-warning","text-info","text-primary","text-alert"])
+
+                    #foreach($row in $data.rowDatas)
+
+                        <tr>
+                            <td>
+                                <i class="fa fa-circle $text[$foreach.index] fs8 pr15"></i>
+                                <span>$row.name</span>
+                            </td>
+                            <td>$row.data</td>
+                        </tr>
+
+                    #end
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</div>

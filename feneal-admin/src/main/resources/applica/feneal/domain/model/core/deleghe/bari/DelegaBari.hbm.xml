@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.core.deleghe.bari.DelegaBari" table="fenealweb_delegabari" >
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        <property name="protocolDate" />
+        <property name="effectDate" />
+        <property name="protocolNumber" />
+        <property name="signup" />
+        <property name="revocation" />
+        <property name="duplicate" />
+        <property name="lastMovement"/>
+         <many-to-one name="workerCompany" class="applica.feneal.domain.model.core.aziende.Azienda" column="workerCompanyId" lazy="false" />
+        <many-to-one name="worker" class="applica.feneal.domain.model.core.lavoratori.Lavoratore" column="workerId" lazy="false" />
+        <property name="anomaly" />
+        <property name="companyId" type="long" />
+
+    </class>
+</hibernate-mapping>

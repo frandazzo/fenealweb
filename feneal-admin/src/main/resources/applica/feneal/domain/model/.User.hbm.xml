@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.User" table="fenealweb_users" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="username" />
+		<property name="mail" />
+		<property name="password" />
+		<property name="active" />
+		<property name="registrationDate" />
+		<property name="activationCode" />
+		<property name="image" />
+		<property name="name" />
+		<property name="surname" />
+		<property name="decPass"/>
+		<many-to-one name="defaultProvince" class="applica.feneal.domain.model.geo.Province" column="defaultProvinceId" lazy="false" />
+		<many-to-one name="company" class="applica.feneal.domain.model.core.Company" column="companyId" lazy="false" />
+		<list name="roles" table="fenealweb_users_roles" lazy="false" >
+			<key column="userId" />
+			<list-index column="idx" />
+			<many-to-many class="applica.feneal.domain.model.Role" column="roleId" />
+		</list>
+	</class>
+</hibernate-mapping>

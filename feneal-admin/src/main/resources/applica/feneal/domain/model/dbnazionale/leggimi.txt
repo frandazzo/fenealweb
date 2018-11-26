@@ -1,0 +1,2 @@
+-- nella integrazione della tabella importazioni ricordarsi che il campo synched deve avere come valore di default
+   uguale a 0

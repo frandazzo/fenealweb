@@ -1,0 +1,148 @@
+#parse("/shared/framework.vm")
+
+
+<div class="listalavoro-summary-header" data-id="$listaId">
+
+    <div class="col-md-12">
+
+        <div class="col-md-12 p20 fs22" style="background-color: white; border-bottom: 1px solid #DDD; margin-top:10px">
+            <div class="text-center col-md-12 media clearfix">
+                $listaDescr
+            </div>
+
+
+            <div class="col-md-11 col-sm-12 col-xs-12 mt20 report-style">
+
+                <div id="reportContainer">
+
+                </div>
+
+            </div>
+
+            <div class="col-md-1 toolbox-seach-report" style="display: none">
+
+                <div class="col-md-12 col-xs-12 back-white">
+
+                    <div class="col-md-12 col-xs-12 toolbox-buttons-cnt margin-top-20 margin-bottom-20 zero-padding">
+
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Esporta in Excel">
+
+                            <button type="button" class="btn btn-primary full-width excel-export">
+                                <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Raggruppa">
+
+                            <button type="button" class="btn btn-warning full-width group-report-data">
+                                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Ricerca generale">
+
+                            <button type="button" class="btn btn-warning full-width search-report-data">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Ricerca contestuale">
+
+                            <button type="button" class="btn btn-warning full-width search-report-columns">
+                                <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Filtra">
+
+                            <button type="button" class="btn btn-warning full-width filter-report-data">
+                                <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Seleziona colonne">
+
+                            <button type="button" class="btn btn-warning full-width select-report-columns">
+                                <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Aggiungi lavoratore">
+
+                            <button type="button" class="btn btn-primary full-width add-worker">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Rimuovi lavoratore">
+
+                            <button type="button" class="btn btn-primary full-width remove-worker">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Unisci con lista">
+
+                            <button type="button" class="btn btn-primary full-width lista-merge">
+                                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Escludi con lista">
+
+                            <button type="button" class="btn btn-primary full-width lista-exclude">
+                                <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Interseca con lista">
+
+                            <button type="button" class="btn btn-primary full-width lista-intersect">
+                                <span class="glyphicon glyphicon-random" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Confronta con lista">
+
+                            <button type="button" class="btn btn-primary full-width lista-compare">
+                                <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Invia SMS">
+
+                            <button type="button" class="btn btn-primary full-width lista-send-sms">
+                                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+    })
+
+
+</script>

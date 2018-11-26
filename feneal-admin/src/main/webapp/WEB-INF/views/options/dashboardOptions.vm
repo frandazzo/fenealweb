@@ -1,0 +1,52 @@
+<script type="text/javascript">
+
+    require(["widgetManager"], function(manager){
+
+        var managerInit = new manager.WidgetManager("dashboard");
+        managerInit.init();
+
+    });
+
+</script>
+
+
+
+
+    <div class="skin-toolbox-swatches dashboardWidgetContainer">
+
+        #foreach($w in $widgets.widgets)
+
+            <div class="form-group">
+                <div class="checkbox-custom fill mb5">
+                    <input type="checkbox" class="chooseWidget" data-url="$w.url" data-name="$w.widgetName" #if($w.present==true) checked #end id="breadcrumb-option$foreach.index">
+                    <label for="breadcrumb-option$foreach.index">$w.widgetName</label>
+                </div>
+            </div>
+
+        #end
+
+        </br>
+
+        ##imposto il layoout
+        <select>
+            <option value="v" #if($w.layout == "v") selected="selected" #end>Verticale</option>
+            <option value="h" #if($w.layout == "h") selected="selected" #end>Orizzontale</option>
+            <option value="hu" #if($w.layout == "hu") selected="selected" #end>Orizz. superiores</option>
+            <option value="hd" #if($w.layout == "hd") selected="selected" #end>Orizz. inferiore</option>
+        </select>
+
+    </div>
+##
+##        Data Panel <input type="checkbox" class="chooseWidget" data-name="dataPanel" #if($widgetsActiveUser.dataPanel==true) checked #end> <br>
+##        Column Graph <input type="checkbox" class="chooseWidget" data-name="columnGraph" #if($widgetsActiveUser.columnGraph==true) checked #end> <br>
+##        Area Graph <input type="checkbox" class="chooseWidget" data-name="areaGraph" #if($widgetsActiveUser.areaGraph==true) checked #end> <br>
+##        Pie Charts <input type="checkbox" class="chooseWidget" data-name="pieCharts" #if($widgetsActiveUser.pieCharts==true) checked #end> <br>
+##        Response Time <input type="checkbox" class="chooseWidget" data-name="responseTime" #if($widgetsActiveUser.responseTime==true) checked #end> <br>
+##        Bar Graph <input type="checkbox" class="chooseWidget" data-name="barGraph" #if($widgetsActiveUser.barGraph==true) checked #end> <br>
+##        Spark Lines <input type="checkbox" class="chooseWidget" data-name="sparkLines" #if($widgetsActiveUser.sparkLines==true) checked #end> <br>
+##        Area Graph <input type="checkbox" class="chooseWidget" data-name="areaGraphOnlyCurve" #if($widgetsActiveUser.areaGraphOnlyCurve==true) checked #end> <br>
+##        Dot List <input type="checkbox" class="chooseWidget" data-name="dotList" #if($widgetsActiveUser.dotList==true) checked #end> <br>
+##        Text List <input type="checkbox" class="chooseWidget" data-name="textList" #if($widgetsActiveUser.textList==true) checked #end> <br>
+##        Circulars <input type="checkbox" class="chooseWidget" data-name="circulars" #if($widgetsActiveUser.circulars==true) checked #end> <br>
+
+

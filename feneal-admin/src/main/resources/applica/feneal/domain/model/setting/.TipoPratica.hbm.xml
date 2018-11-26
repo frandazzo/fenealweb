@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.setting.TipoPratica" table="fenealweb_tipoPratica" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="description" />
+		<property name="restricted" />
+		<many-to-one name="jollyUser" class="applica.feneal.domain.model.User" column="jollyUserId" lazy="false" />
+		<many-to-one name="controlPraticaUser" class="applica.feneal.domain.model.User" column="controlPraticaUserId" lazy="false" />
+		<many-to-one name="integrationPraticaUser" class="applica.feneal.domain.model.User" column="integrationPraticaUserId" lazy="false" />
+		<many-to-one name="confirmPraticaUser" class="applica.feneal.domain.model.User" column="confirmPraticaUserId" lazy="false" />
+		<many-to-one name="rejectedPraticaUser" class="applica.feneal.domain.model.User" column="rejectedPraticaUserId" lazy="false" />
+		<many-to-one name="closedPraticaUser" class="applica.feneal.domain.model.User" column="closedPraticaUserId" lazy="false" />
+		<property name="companyId" type="long" />
+	</class>
+</hibernate-mapping>

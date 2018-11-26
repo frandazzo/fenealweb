@@ -1,0 +1,141 @@
+
+.demo-container{
+    margin-bottom: 48px;
+    margin-top: 8px;
+}
+#container1 {
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    position: relative;
+}
+
+#map-container {
+    width: 50%;
+!important;
+    position: absolute;
+}
+
+#pie {
+    width: 40%;
+!important;
+    float: right;
+}
+
+#chart {
+    width: 100%;
+}
+
+.content {
+    text-align: justify;
+    margin-top: 25px;
+}
+
+#longtabs {
+    margin-top: 20px;
+}
+
+#scrolledtabs {
+    margin-top: 20px;
+}
+
+#tabs {
+    margin-top: 60px;
+}
+
+.caption {
+    font-size: 16px;
+    padding-bottom: 3px;
+    padding-left: 10px;
+}
+
+.left-aligned {
+    text-align: left;
+}
+
+.mapContainer {
+    width: 100%;
+    min-height: 420px;
+}
+
+.map {
+    width: 100%;
+    height: 520px;
+}
+
+.chartsContainer {
+    width: 100%;
+    min-height: 420px;
+    margin-bottom: 18px;
+
+}
+.chartsContainerCategory {
+    width: 100%;
+    min-height: 420px;
+    margin-bottom: 18px;
+}
+@media screen and (min-width: 1024px)  {
+    .donught1 {
+        width: 50%;
+        height: 400px;
+        float: left;
+    }
+
+    .lines1 {
+        width: 50%;
+        height: 400px;
+        float: left;
+    }
+    .donught2{
+        width: 50%;
+        height: 400px;
+        float: left;
+    }
+
+    .lines2{
+        width: 50%;
+        height: 400px;
+        float: left;
+    }
+}
+@media screen and (min-width: 0px) and (max-width: 1024px) {
+    .donught1 {
+        width: 100%;
+        height: 400px;
+
+    }
+
+    .lines1 {
+        width: 100%;
+        height: 400px;
+
+    }
+    .donught2{
+        width: 100%;
+        height: 400px;
+
+    }
+
+    .lines2{
+        width: 100%;
+        height: 400px;
+
+    }
+}
+
+.button-xsmall {
+    font-size: 70%;
+}
+
+.button-small {
+    font-size: 85%;
+}
+
+.button-large {
+    font-size: 110%;
+}
+
+.button-xlarge {
+    font-size: 125%;
+}
+.js div#preloader { position: fixed; left: 0; top: 0; z-index: 999; width: 100%; height: 100%; overflow: visible; background: #FFFFFF url('../images/loading.gif') no-repeat center center; }

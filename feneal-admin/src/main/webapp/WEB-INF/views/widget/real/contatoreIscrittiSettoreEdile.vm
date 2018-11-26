@@ -1,0 +1,62 @@
+<script type="text/javascript">
+
+    require(["widget/real/contatoreIscrittiSettoreEdile"], function(manager){
+
+        var name = '$widgetName';
+        var params = '$widgetParams';
+        var contatore = new manager.contatore(name, params);
+        contatore.init();
+
+    });
+
+</script>
+
+<div class="panel-heading">
+    <span class="panel-title">Contatori iscritti edili</span>
+    <span class="panel-controls">
+        <a class="panel-control-loader" href="#"></a>
+        <a class="panel-control-remove" href="#"></a>
+        <a class="panel-control-title" href="#"></a>
+        <a class="panel-control-color" href="#"></a>
+        <a class="panel-control-collapse" href="#"></a>
+        <a class="panel-control-fullscreen" href="#"></a>
+    </span>
+</div>
+<div class="panel-body containerValuesTile">
+
+
+    <div class="param-fields-container-cise" style="display: none">
+        <input type="hidden" name="hidden-province" value="$provincia">
+        <input type="hidden" name="hidden-year" value="$anno">
+        <input type="hidden" name="hidden-ente" value="$ente">
+        <select name="province">
+            #foreach ($province in $provinces)
+                <option value="$province" >$province</option>
+            #end
+        </select>
+        <select name="year">
+            #foreach ($number in [1990..2050])
+                <option value="$number">$number</option>
+            #end
+        </select>
+    </div>
+
+</div>
+
+<div class="containerTile" style="display: none">
+
+    <div class="panel-tile text-center elemToAppend col-md-6 col-xs-12 mb20">
+        <div class="panel-body bg-light">
+            <h1 class="fs35 mbn enteText">18,020</h1>
+            <h3 class="text-system"><span class="numIscrittiText"></span> (<span class="percentageText"></span>)</h3>
+
+        </div>
+        <div class="panel-footer bg-light dark br-t br-light p12">
+            <span class="fs11 param-info">
+              Testo anno
+              <b>ANNO</b>
+            </span>
+        </div>
+    </div>
+
+</div>

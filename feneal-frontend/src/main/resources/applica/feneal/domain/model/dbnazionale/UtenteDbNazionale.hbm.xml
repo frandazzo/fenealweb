@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.dbnazionale.UtenteDbNazionale" table="utenteDbNazionales" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="codiceFiscale" />
+		<property name="nome" />
+		<property name="cognome" />
+		<property name="nomeCompleto" />
+		<property name="dataNascita" />
+		<property name="sesso" />
+		<property name="id_Nazione" />
+		<property name="nomeNazione" />
+		<property name="id_Provincia" />
+		<property name="nomeProvincia" />
+		<property name="id_Comune" />
+		<property name="nomeComune" />
+		<property name="id_Provincia_Residenza" />
+		<property name="nomeProvinciaResidenza" />
+		<property name="id_Comune_Residenza" />
+		<property name="nomeComuneResidenza" />
+		<property name="indirizzo" />
+		<property name="cap" />
+		<property name="telefono" />
+		<property name="ultimaModifica" />
+		<property name="ultimaProvinciaAdAggiornare" />
+	</class>
+</hibernate-mapping>

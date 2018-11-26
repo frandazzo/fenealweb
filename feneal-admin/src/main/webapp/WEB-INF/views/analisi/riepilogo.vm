@@ -1,0 +1,48 @@
+#parse("/shared/framework.vm")
+<div class="demo-container">
+
+    <div class="js">
+
+        <div id="longtabs">
+            <div class="caption"></div>
+            <div class="tabs-container">
+
+
+            </div>
+        </div>
+
+        <button id="indietro" class="button-xlarge pure-button"  hidden>&lt; Indietro</button>
+
+        <div class=" container">
+            <div class="mapContainer">
+                <div class="map"></div>
+            </div>
+
+
+            <div class="charts" style="margin-top: 20px; background-color: #fff">
+                <div class="chartsContainer">
+                    <div class="donught1"></div>
+                    <div class="lines1"></div>
+                </div>
+                <div class="chartsContainerCategory">
+                    <div class="donught2"></div>
+                    <div class="lines2"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    require(["analisi/riepilogo"], function(riepilogoManager){
+
+        var pivot = new riepilogoManager.Riepilogo();
+        pivot.init();
+
+    });
+</script>

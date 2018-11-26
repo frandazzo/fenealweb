@@ -1,0 +1,22 @@
+<applica>
+    <appname>feneal</appname>
+    <archetype>webapp</archetype>
+
+    <webapps>
+        <webapp name="feneal-admin">
+            <mappings>
+                <includes>
+                    <include>feneal-domain</include>
+                </includes>
+            </mappings>
+        </webapp>
+
+        <webapp name="feneal-frontend">
+            <mappings>
+                <includes>
+                    <include>feneal-domain</include>
+                </includes>
+            </mappings>
+        </webapp>
+    </webapps>
+</applica>

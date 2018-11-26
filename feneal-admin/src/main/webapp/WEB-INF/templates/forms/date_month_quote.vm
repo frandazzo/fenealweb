@@ -1,0 +1,106 @@
+#if(!$_type)
+    #set($_type = "text")
+#end
+
+#if(!$_component)
+    #set($_component = "text")
+#end
+
+#if(!$_icon)
+    #set($_icon = false)
+#end
+
+#if ($field.params.type)
+    #set($_type = $field.params.type)
+#elseif(!$_type)
+    #set($_type = "")
+#end
+
+#if ($field.params.component)
+    #set($_component = $field.params.component)
+#elseif(!$_component)
+    #set($_component = "")
+#end
+
+#if ($field.params.icon)
+    #set($_icon = $field.params.icon)
+#elseif(!$_icon)
+    #set($_icon = false)
+#end
+
+#if ($field.params.inputExtraClass)
+    #set($_inputExtraClass = $field.params.inputExtraClass)
+#elseif(!$_inputExtraClass)
+    #set($_inputExtraClass = "")
+#end
+
+#if ($field.params.fieldExtraClass)
+    #set($_fieldExtraClass = $field.params.fieldExtraClass)
+#elseif(!$_fieldExtraClass)
+    #set($_fieldExtraClass = "")
+#end
+
+#if ($field.params.cols)
+    #set($_colsClass = "col-md-" + $field.params.cols)
+#elseif(!$_colsClass)
+    #set($_colsClass = "col-md-12")
+#end
+
+#if ($field.description && $field.description != "")
+    #set($_description = $localization.m($field.description))
+#else
+    #set($_description = false)
+#end
+
+#if ($field.params.placeholder)
+    #set($_placeholder = $localization.m($field.params.placeholder))
+#else
+    #set($_placeholder = "")
+#end
+
+#set($_domId = "id_" + $field.property)
+
+
+<div class="$_fieldExtraClass $_colsClass" data-component="field" data-property="$field.property">
+    <div class="row">
+        #if ($_description)
+            #set($_fieldColClass = "col-md-10")
+
+            <div class="col-md-4 field-label text-right">
+                <label for="$_domId" class="">
+                    $_description
+                </label>
+            </div>
+        #else
+            #set($_fieldColClass = "col-md-12")
+        #end
+
+        <div class="col-md-8">
+
+            <label for="$_domId" class="field select">
+
+                <select
+                        name="$field.property"
+                        data-component="select"
+                        data-property="$field.property">
+                    <option value="">(Select)</option>
+                    <option value="1">Gennaio</option>
+                    <option value="2">Febbraio</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Aprile</option>
+                    <option value="5">Maggio</option>
+                    <option value="6">Giugno</option>
+                    <option value="7">Luglio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Settembre</option>
+                    <option value="10">Ottobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Dicembre</option>
+                </select>
+                    <i class="arrow double"></i>
+            </label>
+        </div>
+
+    </div>
+
+</div>

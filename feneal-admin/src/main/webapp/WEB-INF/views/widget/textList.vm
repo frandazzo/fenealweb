@@ -1,0 +1,34 @@
+<div class="panel-heading">
+    <span class="panel-title">Text List</span>
+    <span class="panel-controls">
+        <a class="panel-control-loader" href="#"></a>
+        <a class="panel-control-remove" href="#"></a>
+        <a class="panel-control-title" href="#"></a>
+        <a class="panel-control-color" href="#"></a>
+        <a class="panel-control-collapse" href="#"></a>
+        <a class="panel-control-fullscreen" href="#"></a>
+    </span>
+</div>
+<div class="panel-body pn">
+    <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
+        <thead>
+        <tr class="hidden">
+            <th class="w30">#</th>
+            <th>First Name</th>
+        </tr>
+        </thead>
+        <tbody>
+
+            #foreach($row in $data)
+
+                <tr>
+                    #set($incremental = $foreach.index + 1)
+                    <td>$incremental.</td>
+                    <td>$row</td>
+                </tr>
+
+            #end
+
+        </tbody>
+    </table>
+</div>

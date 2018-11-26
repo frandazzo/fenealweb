@@ -1,0 +1,33 @@
+<div class="panel-heading">
+    <span class="panel-title">Dot List</span>
+    <span class="panel-controls">
+        <a class="panel-control-loader" href="#"></a>
+        <a class="panel-control-remove" href="#"></a>
+        <a class="panel-control-title" href="#"></a>
+        <a class="panel-control-color" href="#"></a>
+        <a class="panel-control-collapse" href="#"></a>
+        <a class="panel-control-fullscreen" href="#"></a>
+    </span>
+</div>
+<div class="panel-body pn">
+    <table class="table mbn tc-med-1 tc-bold-last back-white">
+        <thead>
+        <tr class="hidden">
+            <th>#</th>
+            <th>First Name</th>
+        </tr>
+        </thead>
+        <tbody>
+
+            #set($text = ["text-warning","text-info","text-primary","text-alert"])
+            #foreach($row in $data)
+                <tr>
+                    <td>
+                        <span class="fa fa-circle $text[$foreach.index] fs14 mr10"></span>$row.name</td>
+                    <td>$row.data %</td>
+                </tr>
+            #end
+
+        </tbody>
+    </table>
+</div>

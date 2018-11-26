@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.dbnazionale.Iscrizione" table="iscrizioni" >
+		<id name="id" type="int" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="id_Lavoratore" column="Id_Lavoratore"/>
+		<property name="id_Importazione" column="Id_Importazione"/>
+		<property name="id_Provincia" column="Id_Provincia"/>
+		<property name="nomeProvincia" column="NomeProvincia"/>
+		<property name="id_Regione" column="Id_Regione"/>
+		<property name="nomeRegione" column="NomeRegione"/>
+		<property name="settore" column="Settore"/>
+		<property name="ente" column="Ente"/>
+		<property name="piva" column="Piva"/>
+		<property name="azienda" column="Azienda"/>
+		<property name="livello" column="Livello"/>
+		<property name="quota" column="Quota"/>
+		<property name="tipoPeriodo" column="TipoPeriodo"/>
+		<property name="periodo" column="Periodo"/>
+		<property name="anno" column="Anno"/>
+		<property name="dataInizio" column="DataInizio"/>
+		<property name="dataFine" column="DataFine"/>
+		<property name="contratto" column="Contratto"/>
+		<property name="nomeCompleto" column="NomeCompleto"/>
+	</class>
+</hibernate-mapping>

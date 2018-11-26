@@ -1,0 +1,102 @@
+#if(!$_type)
+    #set($_type = "text")
+#end
+
+#if(!$_component)
+    #set($_component = "text")
+#end
+
+#if(!$_icon)
+    #set($_icon = false)
+#end
+
+#if ($field.params.type)
+    #set($_type = $field.params.type)
+#elseif(!$_type)
+    #set($_type = "")
+#end
+
+#if ($field.params.component)
+    #set($_component = $field.params.component)
+#elseif(!$_component)
+    #set($_component = "")
+#end
+
+#if ($field.params.icon)
+    #set($_icon = $field.params.icon)
+#elseif(!$_icon)
+    #set($_icon = false)
+#end
+
+#if ($field.params.inputExtraClass)
+    #set($_inputExtraClass = $field.params.inputExtraClass)
+#elseif(!$_inputExtraClass)
+    #set($_inputExtraClass = "")
+#end
+
+#if ($field.params.fieldExtraClass)
+    #set($_fieldExtraClass = $field.params.fieldExtraClass)
+#elseif(!$_fieldExtraClass)
+    #set($_fieldExtraClass = "")
+#end
+
+#if ($field.params.cols)
+    #set($_colsClass = "col-md-" + $field.params.cols)
+#elseif(!$_colsClass)
+    #set($_colsClass = "col-md-12")
+#end
+
+#if ($field.description && $field.description != "")
+    #set($_description = $localization.m($field.description))
+#else
+    #set($_description = false)
+#end
+
+#if ($field.params.placeholder)
+    #set($_placeholder = $localization.m($field.params.placeholder))
+#else
+    #set($_placeholder = "")
+#end
+
+#set($_domId = "id_" + $field.property)
+
+<div class="$_fieldExtraClass $_colsClass" data-component="field" data-property="$field.property">
+    <div class="row">
+
+    ## $value contiene la lista dei tipi di quote da mostrare
+        #foreach($typeQuote in $value)
+            <div class="col-md-12">
+
+                <label class="mt10 mr10" data-component="error_state" data-error-property="$field.property">
+                    <input
+                            type="radio"
+                            name="$field.property"
+                    ##data-component="$_component"
+                            class="field $_inputExtraClass"
+                            value="$typeQuote.value"
+                            #if($typeQuote.value == "IQA")checked#end>
+                </label>
+                <label>
+                    $typeQuote.label
+                </label>
+            </div>
+        #end
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function() {
+
+        $("input[name=typeQuoteCash]").change(function() {
+
+            if ($(this).val() == "IQI") {
+                $(this).parents(".col-div").next().hide();
+            } else {
+                $(this).parents(".col-div").next().show();
+            }
+        });
+
+    });
+
+</script>

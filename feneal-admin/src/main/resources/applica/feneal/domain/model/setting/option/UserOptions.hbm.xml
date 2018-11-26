@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.setting.option.UserOptions" table="fenealweb_userOptions" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<many-to-one name="user" class="applica.feneal.domain.model.User" column="userId" lazy="false" />
+		<list name="widgets" table="fenealweb_userWidgetOptions" lazy="false" cascade="all-delete-orphan">
+			<key column="userOptionsId" />
+			<list-index column="idx" />
+			<one-to-many class="applica.feneal.domain.model.setting.option.UserWidgetOption" />
+		</list>
+		<property name="dashboardLayout" />
+		<property name="workerLayout" />
+		<property name="firmLayout" />
+		<property name="companyId" type="long" />
+	</class>
+</hibernate-mapping>

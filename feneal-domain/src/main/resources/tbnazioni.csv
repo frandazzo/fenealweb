@@ -1,0 +1,315 @@
+id,description,idRace,fiscalCode,issCode,continent
+100,Italia,NULL,A000,,Europe
+201,Albania,NULL,Z100,,Europe
+202,Andorra,NULL,Z101,,Europe
+203,Austria,NULL,Z102,,Europe
+206,Belgio,NULL,Z103,,Europe
+209,Bulgaria,NULL,Z104,,Europe
+210,Cecoslovacchia,NULL,Z105,TQ,Europe
+212,Danimarca,NULL,Z107,,Europe
+214,Finlandia,NULL,Z109,,Europe
+215,Francia,NULL,Z110,,Europe
+216,Germania,NULL,Z112,,Europe
+219,"Gran Bretagna E Irlanda Del Nord",NULL,Z114,GB,Europe
+220,Grecia,NULL,Z115,,Europe
+221,Irlanda=eire,NULL,Z116,IE,Europe
+223,Islanda,NULL,Z117,,Europe
+224,Iugoslavia,NULL,Z118,YU,Europe
+225,Liechtenstein,NULL,Z119,,Europe
+226,Lussemburgo,NULL,Z120,,Europe
+227,Malta,NULL,Z121,,Europe
+229,Monaco,NULL,Z123,MC,Europe
+231,Norvegia,NULL,Z125,,Europe
+232,"Paesi Bassi",NULL,Z126,NL,Europe
+233,Polonia,NULL,Z127,,Europe
+234,Portogallo,NULL,Z128,,Europe
+235,Romania,NULL,Z129,,Europe
+236,"San Marino",NULL,Z130,,Europe
+239,Spagna,NULL,Z131,,Europe
+240,Svezia,NULL,Z132,,Europe
+241,Svizzera,NULL,Z133,,Europe
+244,Ungheria,NULL,Z134,,Europe
+302,"Arabia Saudita",NULL,Z203,,Asia
+305,Bangladesh,NULL,Z249,,Asia
+306,Bhutan,NULL,Z205,,Asia
+309,Brunei,NULL,Z207,,Asia
+310,Cambogia,NULL,Z208,,Asia
+311,"Sri Lanka",NULL,Z209,LK,Asia
+315,Cipro,NULL,Z211,,Europe
+322,"Emirati Arabi Uniti",NULL,Z215,,Asia
+323,Filippine,NULL,Z216,,Asia
+326,Giappone,NULL,Z219,,Asia
+327,Giordania,NULL,Z220,,Asia
+330,India,NULL,Z222,,Asia
+331,Indonesia,NULL,Z223,,Asia
+332,Iran,NULL,Z224,,Asia
+333,Iraq,NULL,Z225,,Asia
+334,Israele,NULL,Z226,,Asia
+335,Kuwait,NULL,Z227,,Asia
+336,Laos,NULL,Z228,,Asia
+337,Libano,NULL,Z229,,Asia
+339,Maldive,NULL,Z232,MV,Asia
+341,Mongolia,NULL,Z233,,Asia
+342,Nepal,NULL,Z234,,Asia
+343,Oman,NULL,Z235,OM,Asia
+344,Pakistan,NULL,Z236,,Asia
+345,Qatar,NULL,Z237,,Asia
+346,Singapore,NULL,Z248,,Asia
+348,Siria,NULL,Z240,,Asia
+349,Thailandia,NULL,Z241,,Asia
+351,Turchia,NULL,Z243,,Asia
+353,Vietnam,NULL,Z251,,Asia
+355,Yemen,NULL,Z246,,Asia
+401,Algeria,NULL,Z301,,Africa
+402,Angola,NULL,Z302,,Africa
+404,"Costa D'Avorio",NULL,Z313,CI,Africa
+406,Benin,NULL,Z314,,Africa
+407,Bophuthatswana,NULL,Z364,ZA,Africa
+408,Botswana,NULL,Z358,,Africa
+410,Burundi,NULL,Z305,,Africa
+411,Camerun,NULL,Z306,,Africa
+413,"Capo Verde",NULL,Z307,,Africa
+415,Ciad,NULL,Z309,,Africa
+417,Comore,NULL,Z310,,Africa
+419,Egitto,NULL,Z336,,Africa
+420,Etiopia,NULL,Z315,,Africa
+421,Gabon,NULL,Z316,,Africa
+422,Gambia,NULL,Z317,,Africa
+423,Ghana,NULL,Z318,,Africa
+424,Gibuti,NULL,Z361,,Africa
+429,Lesotho,NULL,Z359,,Africa
+430,Liberia,NULL,Z325,,Africa
+431,Libia,NULL,Z326,,Africa
+432,Madagascar,NULL,Z327,,Africa
+434,Malawi,NULL,Z328,,Africa
+435,Mali,NULL,Z329,,Africa
+436,Marocco,NULL,Z330,,Africa
+437,Mauritania,NULL,Z331,,Africa
+442,Niger,NULL,Z334,,Africa
+443,Nigeria,NULL,Z335,,Africa
+449,Seicelle,NULL,Z342,SC,Africa
+450,Senegal,NULL,Z343,,Africa
+451,"Sierra Leone",NULL,Z344,,Africa
+453,Somalia,NULL,Z345,,Africa
+455,Sudan,NULL,Z348,,Africa
+456,Swaziland,NULL,Z349,,Africa
+457,Tanzania,NULL,Z357,,Africa
+458,Togo,NULL,Z351,,Africa
+460,Tunisia,NULL,Z352,,Africa
+461,Uganda,NULL,Z353,,Africa
+462,Venda,NULL,Z366,ZA,Africa
+463,Zaire,NULL,Z312,,Africa
+464,Zambia,NULL,Z355,,Africa
+465,Zimbabwe,NULL,Z337,ZW,Africa
+503,"Antigua E Barbuda",NULL,Z532,,America
+505,Bahama,NULL,Z502,BS,America
+506,Barbados,NULL,Z522,,America
+507,Belize,NULL,Z512,,America
+509,Canada,NULL,Z401,,America
+513,"Costa Rica",NULL,Z503,,America
+514,Cuba,NULL,Z504,,America
+517,"El Salvador",NULL,Z506,,America
+518,Giamaica,NULL,Z507,,America
+519,Grenada,NULL,Z524,,America
+523,Guatemala,NULL,Z509,,America
+529,Nicaragua,NULL,Z515,,America
+533,"Saint Vincent E Grenadine",NULL,Z528,VC,America
+536,"Stati Uniti D'America",NULL,Z404,US,America
+602,Argentina,NULL,Z600,,America
+604,Bolivia,NULL,Z601,,America
+605,Brasile,NULL,Z602,,America
+606,Cile,NULL,Z603,,America
+608,Colombia,NULL,Z604,,America
+609,Ecuador,NULL,Z605,,America
+614,Paraguay,NULL,Z610,,America
+616,Suriname,NULL,Z608,SR,America
+618,Uruguay,NULL,Z613,,America
+619,Venezuela,NULL,Z614,,America
+701,Australia,NULL,Z700,,Oceania
+708,Kiribati,NULL,Z731,KI,Oceania
+715,Nauru,NULL,Z713,,Oceania
+719,"Nuova Zelanda",NULL,Z719,,Oceania
+725,Salomone,NULL,Z724,SB,Oceania
+731,Tuvalu,NULL,Z732,,Oceania
+732,Vanuatu,NULL,Z733,VU,Oceania
+733,Afghanistan,NULL,Z200,,Asia
+734,"Africa Del Sud-ovest",NULL,Z300,NA,Africa
+735,"Anguilla (isola)",NULL,Z529,AI,America
+736,"Antille Britanniche",NULL,Z523,,America
+737,"Antille Olandesi",NULL,Z501,,America
+738,"Arabia Meridionale Federazione",NULL,Z201,YE,Asia
+739,"Arabia Meridionale Protettorato",NULL,Z202,YE,Asia
+740,Armenia,NULL,Z137,,Asia
+741,Azerbaigian,NULL,Z141,AZ,Asia
+742,"Bahama (isole)",NULL,Z502,BS,America
+743,Bahrein,NULL,Z204,BH,Asia
+744,"Basutoland-sud Africa Britannico",NULL,Z303,LS,Africa
+745,"Beciuania-sud Africa Britannico",NULL,Z304,BW,Africa
+746,"Bermuda (isole)",NULL,Z400,BM,America
+747,"Bielorussia=russia Bianca",NULL,Z139,BY,Europe
+748,Birmania,NULL,Z206,BU,Asia
+749,"Bosnia Ed Erzegovina",NULL,Z153,BA,Europe
+750,Burkina,NULL,Z354,BF,Africa
+751,"Capo Verde (isole)",NULL,Z307,CV,Africa
+752,"Caroline (isole)",NULL,Z701,PW,Oceania
+753,"Caroline (isole)=stati Federati Di Micronesia",NULL,Z701,PW,Oceania
+754,"Cayman (isole)",NULL,Z530,,America
+755,"Ceca Repubblica",NULL,Z156,TQ,Europe
+757,"Centrafricana Repubblica",NULL,Z308,CF,Africa
+758,"Centroafricana Repubblica",NULL,Z308,CF,Africa
+759,"Centroafricano Impero",NULL,Z308,CF,Africa
+760,Ceylon,NULL,Z209,LK,Asia
+761,"Christmas (isola)",NULL,Z702,CX,Oceania
+762,"Cina Repubblica Popolare",NULL,Z210,CN,Asia
+763,Ciskei,NULL,Z367,ZA,Africa
+764,"Citta' Del Vaticano",NULL,Z106,VA,Europe
+765,"Cocos (isole)",NULL,Z212,CC,Oceania
+766,"Comore (isole)",NULL,Z310,KM,Africa
+767,"Congo Brazzaville",NULL,Z311,CG,Africa
+768,"Congo Leopoldville",NULL,Z312,CG,Africa
+769,"Congo Repubblica Popolare",NULL,Z311,CG,Africa
+770,"Cook (isole)",NULL,Z703,CK,Oceania
+771,"Corea Del Nord",NULL,Z214,,Asia
+772,"Corea Del Sud",NULL,Z213,,Asia
+773,"Costa Dei Pirati=trucial States",NULL,Z215,AE,Asia
+774,Croazia,NULL,Z149,,Europe
+775,Dahomey=benin,NULL,Z314,DA,Africa
+776,"Dipendenze Australiane",NULL,Z900,NN,Oceania
+777,"Dipendenze Britanniche",NULL,Z901,NN,Europe
+778,"Dipendenze Canadesi",NULL,Z800,NN,America
+779,"Dipendenze Francesi",NULL,Z902,NN,Europe
+780,"Dipendenze Neozelandesi",NULL,Z903,NN,Oceania
+781,"Dipendenze Norvegesi Antartiche",NULL,Z904,NN,Europe
+782,"Dipendenze Norvegesi Artiche",NULL,Z801,NN,Europe
+783,"Dipendenze Russe",NULL,Z802,NN,Europe
+784,"Dipendenze Sovietiche",NULL,Z802,NN,Europe
+785,"Dipendenze Statunitensi",NULL,Z905,NN,America
+786,"Dipendenze Sudafricane",NULL,Z906,NN,Africa
+787,"Dominica (isola)",NULL,Z526,DM,America
+788,"Dominicana Repubblica",NULL,Z505,DO,America
+789,Eritrea,NULL,Z368,,Africa
+790,Estonia,NULL,Z144,,Europe
+791,"Faer Oer (isole)",NULL,Z108,FO,Europe
+792,Figi=viti,NULL,Z704,FJ,Oceania
+793,"Figi=viti (isole)",NULL,Z704,FJ,Oceania
+794,Formosa=taiwan,NULL,Z217,TW,Asia
+795,"Gaza (territorio Di)",NULL,Z218,NN,Asia
+796,Georgia,NULL,Z136,,Asia
+797,"Germania Repubblica Democratica",NULL,Z111,DE,Europe
+798,"Germania Repubblica Federale",NULL,Z112,DE,Europe
+799,Gibilterra,NULL,Z113,,Europe
+800,"Gilbert E Ellice (isole)",NULL,Z705,EI,Oceania
+802,Groenlandia,NULL,Z402,,America
+803,Guadalupa,NULL,Z508,GP,America
+804,"Guam (isola)",NULL,Z706,GU,Oceania
+805,"Guayana Olandese",NULL,Z608,SR,America
+806,"Guayana=guiana Francese",NULL,Z607,GF,America
+807,"Guinea Bissau",NULL,Z320,GW,Africa
+808,"Guinea Equatoriale",NULL,Z321,,Africa
+809,"Guinea Portoghese",NULL,Z320,GW,Africa
+810,"Guinea Repubblica Popolare",NULL,Z319,GN,Africa
+811,"Guinea Spagnola",NULL,Z321,GQ,Africa
+812,Guyana,NULL,Z606,,America
+813,"Guyana Britannica",NULL,Z606,GY,America
+814,Haiti,NULL,Z510,,America
+815,Honduras,NULL,Z511,,America
+816,"Honduras Britannico",NULL,Z512,NN,America
+817,"Hong Kong",NULL,Z221,,Asia
+818,Ifni,NULL,Z323,NN,Africa
+819,"Irian Occidentale",NULL,Z707,ID,Asia
+821,"Isole Cilene (pasqua E Sala Y Gomez)",NULL,Z721,CL,America
+822,Kazakistan,NULL,Z152,KZ,Asia
+823,Kenya,NULL,Z322,,Africa
+824,Kirghizistan,NULL,Z142,KG,Asia
+825,"La Reunion (isola)",NULL,Z324,RE,Africa
+826,Lettonia,NULL,Z145,,Europe
+827,Lituania,NULL,Z146,,Europe
+828,Macao,NULL,Z231,,Asia
+829,Macedonia,NULL,Z148,,Europe
+830,"Macquarie (isole)",NULL,Z708,NN,Oceania
+831,Malaysia,NULL,Z247,SX,Asia
+832,"Malvine=falkland (isole)",NULL,Z609,FK,America
+833,"Man (isola)",NULL,Z122,NN,Europe
+834,"Marcus (isole)",NULL,Z709,JP,Asia
+835,"Marianne (isole)",NULL,Z710,NM,Oceania
+836,"Marshall (isole)",NULL,Z711,,Oceania
+837,Martinica,NULL,Z513,,America
+838,"Maurizio (isole)",NULL,Z332,,Africa
+839,"Mayotte (isola)",NULL,Z360,ME,Africa
+840,Messico,NULL,Z514,,America
+841,"Micronesia Stati Federati",NULL,Z735,FM,Oceania
+842,"Midway (isole)",NULL,Z712,NN,Oceania
+843,Moldavia,NULL,Z140,,Europe
+844,Montserrat,NULL,Z531,,America
+845,Mozambico,NULL,Z333,,Africa
+846,Namibia,NULL,Z300,,Africa
+847,"Namibia=africa Del Sud Ovest",NULL,Z300,NA,Africa
+848,"Nauru (isole)",NULL,Z713,NR,Oceania
+849,"Niue=savage (isole)",NULL,Z714,NU,Oceania
+850,"Norfolk (isole E Isole Del Mar Dei Coralli)",NULL,Z715,NF,Europe
+851,"Normanne (isole)=isole Del Canale",NULL,Z124,CE,Europe
+852,"Nuova Caledonia (isole E Dipendenze)",NULL,Z716,NC,Oceania
+853,"Nuova Guinea",NULL,Z718,PG,Oceania
+854,"Nuove Ebridi (isole Condominio Franco-inglese)",NULL,Z717,VU,Oceania
+855,"Palau Repubblica",NULL,Z734,PW,Oceania
+856,"Panama Zona Del Canale",NULL,Z517,PA,America
+857,Panama',NULL,Z516,PA,America
+858,"Papua Nuova Guinea",NULL,Z730,PG,Oceania
+859,Papuasia,NULL,Z720,PG,Oceania
+860,"Pasqua (isola)",NULL,Z721,NN,America
+861,Peru',NULL,Z611,PE,America
+862,"Pitcairn (e Dipendenze)",NULL,Z722,PN,Oceania
+863,"Polinesia Francese (isole)",NULL,Z723,PF,Oceania
+864,"Puerto Rico",NULL,Z518,PR,America
+865,"Repubblica Della Cina Nazionale=taiwan",NULL,Z217,TW,Asia
+866,"Repubblica Di Polonia",NULL,Z127,PL,Europe
+867,Rhodesia,NULL,Z337,ZW,Africa
+868,Ruanda,NULL,Z338,,Africa
+869,"Russia=federazione Russa",NULL,Z154,RU,Europe
+870,"Ryukyu (isole)",NULL,Z238,JP,Asia
+871,"Sahara Meridionale",NULL,Z362,MA,Africa
+872,"Sahara Settentrionale",NULL,Z363,,Africa
+873,"Sahara Spagnolo",NULL,Z339,MA,Africa
+874,"Saint Kitts E Nevis=saint Christopher E Nevis",NULL,Z533,KN,America
+875,"Saint Lucia",NULL,Z527,,America
+876,"Saint Pierre Et Miquelon (isole)",NULL,Z403,PM,America
+877,"Salomone (isole)",NULL,Z724,SB,Oceania
+878,Samoa,NULL,Z726,AS,Oceania
+879,"Samoa Americane (isole)",NULL,Z725,AS,Oceania
+880,"Sant'Elena (isola)",NULL,Z340,SH,Africa
+881,"Sao Tome' E Principe (isole)",NULL,Z341,ST,Africa
+882,"Seicelle (isole)",NULL,Z342,SC,Africa
+883,Sikkim,NULL,Z239,IN,Asia
+884,"Slovacca Repubblica",NULL,Z155,SK,Europe
+885,Slovenia,NULL,Z150,,Europe
+886,"Somalia Francese",NULL,Z346,SO,Africa
+887,"Sudafricana Repubblica",NULL,Z347,ZA,Africa
+888,"Swaziland-sudafrica Britannico",NULL,Z349,SZ,Africa
+889,Tagikistan,NULL,Z147,TJ,Asia
+890,Tanganica,NULL,Z350,TZ,Africa
+891,"Territorio Francese Degli Afar E Degli Issa",NULL,Z346,DJ,Africa
+892,"Timor (isola)",NULL,Z242,TL,Asia
+893,"Tokelau=isole Dell'Unione",NULL,Z727,TK,Oceania
+894,"Tonga=degli Amici (isole)",NULL,Z728,TO,Oceania
+895,"Tonga=isole Degli Amici",NULL,Z728,TO,Oceania
+896,Transkei,NULL,Z365,ZA,Africa
+897,"Trinidad E Tobago",NULL,Z612,,America
+899,Turkemenistan,NULL,Z151,TU,Asia
+900,"Turks E Caicos (isole)",NULL,Z519,TC,America
+901,Ucraina,NULL,Z138,,Europe
+902,"Unione Repubbliche Socialiste Sovietiche",NULL,Z135,RU,Europe
+903,Uzbekistan,NULL,Z143,,Asia
+904,"Vergini Americane (isole)",NULL,Z520,VI,America
+905,"Vergini Britanniche (isole)",NULL,Z525,VG,America
+906,"Vietnam Del Nord",NULL,Z245,VN,Asia
+907,"Vietnam Del Sud",NULL,Z244,VN,Asia
+908,Volta=altovolta,NULL,Z354,BF,Africa
+909,"Wallis E Futuna (isole)",NULL,Z729,WF,Oceania
+910,"Yemen Repubblica Democratica  Popolare",NULL,Z250,YE,Asia
+911,Zanzibar,NULL,Z356,,Africa
+912,Palestina,NULL,Z907,PS,Asia
+913,"SERBIA E MONTENEGRO",NULL,Z157,,Europe
+914,MONTENEGRO,NULL,Z159,,Europe
+915,SERBIA,NULL,Z158,,Europe
+916,KOSSOVO,NULL,Z160,,Europe
+917,"TERRITORI PALESTINESI",NULL,Z161,,Asia

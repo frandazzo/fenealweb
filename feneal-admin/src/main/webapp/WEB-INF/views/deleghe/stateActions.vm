@@ -1,0 +1,6 @@
+#foreach($newState in $delega.supportedNextStates)
+<li>
+    <a href="#/delegastatecontroller?id=$delega.id&newState=$newState">$delega.getNewStateAction($newState)</a>
+</li>
+#end
+

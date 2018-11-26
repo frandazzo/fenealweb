@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.core.Company" table="companies" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="description" />
+		<list name="provinces" table="companies_provinces" lazy="false" >
+			<key column="companyId" />
+			<list-index column="idx" />
+			<many-to-many class="applica.feneal.domain.model.geo.Province" column="provinceId" />
+		</list>
+		<property name="nationaUsername" />
+		<property name="nationUserPassword" />
+		<property name="smsUsername" />
+		<property name="smsPassword" />
+		<property name="smsSenderNumber" />
+		<property name="smsSenderAlias" />
+		<property name="automaticRipresaDati" />
+		<list name="visibleFunctions" table="visibleFunctions" lazy="false" cascade="all-delete-orphan">
+			<key column="companyId" />
+			<list-index column="idx" />
+			<one-to-many class="applica.feneal.domain.model.core.VisibleFunction" />
+		</list>
+	</class>
+</hibernate-mapping>

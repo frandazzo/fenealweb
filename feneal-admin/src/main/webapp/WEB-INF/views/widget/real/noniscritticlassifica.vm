@@ -1,0 +1,55 @@
+<script type="text/javascript">
+
+    require(["widget/real/nonIscritti"], function(manager){
+        var name = '$widgetName';
+        var params = '$widgetParams';
+        var nonIscritti = new manager.NonIscritti(name, params);
+        nonIscritti.init();
+
+    });
+
+</script>
+
+<div class="panel-heading">
+    <span class="panel-title sindTextLeft">Classifica non iscritti</span>
+    <span class="panel-controls sindTextRiht">
+        <a class="panel-control-loader" href="#"></a>
+        <a class="panel-control-remove" href="#"></a>
+        <a class="panel-control-title" href="#"></a>
+        <a class="panel-control-color" href="#"></a>
+        <a class="panel-control-collapse" href="#"></a>
+        <a class="panel-control-fullscreen" href="#"></a>
+    </span>
+</div>
+
+<div class="panel-body noniscritti-container">
+
+    <div id="nonIscritti" class="" style="height: 300px;width: 100%">
+
+    </div>
+
+
+
+
+##davide lascia in ogni vista di widget questo codice che
+##mi consentirà in ogni cotroller di valorizzare la lista dei territori
+##guarda il controller
+    <div class="param-fields-container" style="display: none">
+
+        <input type="hidden" name="hidden-province" value="$provincia">
+        <input type="hidden" name="hidden-year" value="$anno">
+        <input type="hidden" name="hidden-ente" value="$ente">
+
+        <select name="province">
+            #foreach ($province in $provinces)
+                <option value="$province" >$province</option>
+            #end
+        </select>
+        <select name="ente">
+            #foreach ($ente in $enti)
+                <option value="$ente" >$ente</option>
+            #end
+        </select>
+    </div>
+
+</div>

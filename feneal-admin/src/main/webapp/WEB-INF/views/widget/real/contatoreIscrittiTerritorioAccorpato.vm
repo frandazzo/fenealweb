@@ -1,0 +1,70 @@
+<script type="text/javascript">
+
+    require(["widget/real/contatoreIscrittiTerritorioAccorpato"], function(manager){
+        var name = '$widgetName';
+        var params = '$widgetParams';
+        var contatore = new manager.contatoreIscrittiTerritorioAccorpato(name, params);
+        contatore.init();
+
+    });
+
+</script>
+
+<div class="panel-heading">
+    <span class="panel-title">Iscritti territorio accorpato</span>
+    <span class="panel-controls">
+        <a class="panel-control-loader" href="#"></a>
+        <a class="panel-control-remove" href="#"></a>
+        <a class="panel-control-title" href="#"></a>
+        <a class="panel-control-color" href="#"></a>
+        <a class="panel-control-collapse" href="#"></a>
+        <a class="panel-control-fullscreen" href="#"></a>
+    </span>
+</div>
+
+<div class="panel-body contatore-iscritti-territorio-accorpato-container padding-top-20">
+
+
+    <div class="col-md-12 col-xs-12 circleContainer chToResize">
+
+    </div>
+
+
+    <div class="col-md-12 col-xs-12 tileContainer">
+
+    </div>
+
+    ##davide lascia in ogni vista di widget questo codice che
+    ##mi consentirà in ogni cotroller di valorizzare la lista dei territori
+    ##guarda il controller
+    <div class="param-fields-container" style="display: none">
+        <input type="hidden" name="hidden-province" value="$provincia">
+        <input type="hidden" name="hidden-year" value="$anno">
+        <input type="hidden" name="hidden-ente" value="$ente">
+        <select name="year">
+            #foreach ($number in [1990..2050])
+                <option value="$number">$number</option>
+            #end
+        </select>
+    </div>
+
+</div>
+
+<div class="containerElement" style="display: none">
+
+    <div class="info-circle col-xs-6" id="" value="" data-title="" data-circle-color=""></div>
+
+    <div class="tileToAppend col-xs-6" style="margin-top:3px">
+
+        <div class="col-md-12 col-xs-12 bg-light dark">
+
+            <h3 class="mbn text-center">18,020</h3>
+            <h6 class="text-system text-center">NB CONVERSIONS</h6>
+
+        </div>
+
+    </div>
+
+</div>
+
+

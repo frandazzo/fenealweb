@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.dbnazionale.Iscrizione" table="iscriziones" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="id_Lavoratore" />
+		<property name="id_Importazione" />
+		<property name="id_Provincia" />
+		<property name="nomeProvincia" />
+		<property name="id_Regione" />
+		<property name="nomeRegione" />
+		<property name="settore" />
+		<property name="ente" />
+		<property name="piva" />
+		<property name="azienda" />
+		<property name="livello" />
+		<property name="quota" />
+		<property name="tipoPeriodo" />
+		<property name="periodo" />
+		<property name="anno" />
+		<property name="dataInizio" />
+		<property name="dataFine" />
+		<property name="contratto" />
+		<property name="nomeCompleto" />
+	</class>
+</hibernate-mapping>

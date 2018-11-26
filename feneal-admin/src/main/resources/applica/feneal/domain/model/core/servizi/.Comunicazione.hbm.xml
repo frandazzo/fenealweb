@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.core.servizi.Comunicazione" table="fenealweb_comunicazione" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<many-to-one name="lavoratore" class="applica.feneal.domain.model.core.lavoratori.Lavoratore" column="lavoratoreId" lazy="false" />
+		<property name="data" />
+		<many-to-one name="tipo" class="applica.feneal.domain.model.setting.TipoComunicazione" column="tipoId" lazy="false" />
+		<many-to-one name="causale" class="applica.feneal.domain.model.setting.CausaleComunicazione" column="causaleId" lazy="false" />
+		<property name="oggetto" />
+		<property name="companyId" type="long" />
+		<many-to-one name="province" class="applica.feneal.domain.model.geo.Province" column="provinceId" lazy="false" />
+
+	</class>
+</hibernate-mapping>

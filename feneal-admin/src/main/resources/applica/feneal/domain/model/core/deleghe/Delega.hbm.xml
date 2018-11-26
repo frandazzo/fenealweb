@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.core.deleghe.Delega" table="fenealweb_delega" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<property name="documentDate" />
+		<property name="sendDate" />
+		<property name="acceptDate" />
+		<property name="activationDate" />
+		<property name="cancelDate" />
+		<property name="revokeDate" />
+		<many-to-one name="sector" class="applica.feneal.domain.model.core.Sector" column="sectorId" lazy="false" />
+		<many-to-one name="paritethic" class="applica.feneal.domain.model.core.Paritethic" column="paritethicId" lazy="false" />
+		<many-to-one name="workerCompany" class="applica.feneal.domain.model.core.aziende.Azienda" column="workerCompanyId" lazy="false" />
+		<property name="state" />
+		<many-to-one name="collaborator" class="applica.feneal.domain.model.setting.Collaboratore" column="collaboratorId" lazy="false" />
+		<many-to-one name="worker" class="applica.feneal.domain.model.core.lavoratori.Lavoratore" column="workerId" lazy="false" />
+		<many-to-one name="province" class="applica.feneal.domain.model.geo.Province" column="provinceId" lazy="false" />
+		<many-to-one name="subscribeReason" class="applica.feneal.domain.model.setting.CausaleIscrizioneDelega" column="subscribeReasonId" lazy="false" />
+		<many-to-one name="revokeReason" class="applica.feneal.domain.model.setting.CausaleRevoca" column="revokeReasonId" lazy="false" />
+		<many-to-one name="cancelReason" class="applica.feneal.domain.model.setting.CausaleRevoca" column="cancelReasonId" lazy="false" />
+		<property name="tombstoneDelega">
+
+
+				<column name="tombstoneDelega" not-null="false" default="0" />
+
+		</property>
+		<property name="preecedingState" />
+		<property name="activatedWithoutAcceptance" />
+		<property name="notes" />
+		<property name="importGuid"/>
+		<property name="companyId" type="long" />
+		<property name="validityDate"/>
+
+		<many-to-one name="firstAziendaEdile" class="applica.feneal.domain.model.core.aziende.Azienda" column="firstAziendaEdileId" lazy="false" />
+
+	</class>
+</hibernate-mapping>

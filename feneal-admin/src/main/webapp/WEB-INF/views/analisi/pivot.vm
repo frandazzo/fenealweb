@@ -1,0 +1,16 @@
+<div style="margin:20px;">
+    <div id="pivotgrid-chart" style="margin-top: 20px;"></div>
+    <div id="grid"></div>
+</div>
+
+<script type="text/javascript">
+
+    require(["analisi/pivot"], function(pivotManager){
+
+        var pivot = new pivotManager.Pivot("$datasource");
+        pivot.init();
+
+    });
+
+
+</script>

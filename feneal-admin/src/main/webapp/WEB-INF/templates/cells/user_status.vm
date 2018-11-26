@@ -1,0 +1,5 @@
+#if($value == true)
+    <span>Attivo </span><a href="#" class="user-status-link" style="text-decoration: underline;">(Disattiva)</a>
+#else
+    <span>Non Attivo </span><a href="#" class="user-status-link" style="text-decoration: underline;">(Attiva)</a>
+#end

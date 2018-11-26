@@ -1,0 +1,275 @@
+#if ($field.params.inputExtraClass)
+    #set($_inputExtraClass = $field.params.inputExtraClass)
+#elseif(!$_inputExtraClass)
+    #set($_inputExtraClass = "")
+#end
+
+#if ($field.params.fieldExtraClass)
+    #set($_fieldExtraClass = $field.params.fieldExtraClass)
+#elseif(!$_fieldExtraClass)
+    #set($_fieldExtraClass = "")
+#end
+
+#if ($field.description && $field.description != "")
+    #set($_description = $localization.m($field.description))
+#else
+    #set($_description = false)
+#end
+
+#if ($field.params.placeholder)
+    #set($_placeholder = $localization.m($field.params.placeholder))
+#else
+    #set($_placeholder = "")
+#end
+
+#if ($field.params.cols)
+    #set($_colsClass = "col-md-" + $field.params.cols)
+#elseif(!$_colsClass)
+    #set($_colsClass = "col-md-12")
+#end
+
+#set($_domId = "id_" + $field.property)
+
+<div class="$_fieldExtraClass $_colsClass" data-component="field" data-property="$field.property">
+    <div class="row">
+        #if ($_description)
+            #set($_fieldColClass = "col-md-10")
+
+            <div class="col-md-2 field-label text-right">
+                <label for="$_domId">
+                    $_description
+                </label>
+            </div>
+        #else
+            #set($_fieldColClass = "col-md-12")
+        #end
+
+        <div class="$_fieldColClass" style="margin-bottom: 7px;">
+            <div data-component="error_state" data-error-property="$field.property">
+                <div
+                        data-component="data_export_multi_searchable_input"
+                        data-serviceUrl="$serviceUrl"
+                        data-property="$field.property">
+
+                    #foreach($item in $selectedItems)
+                        #if($item.value.id)
+                            <input type="hidden" name="$field.property" data-label="$item.label" value="$item.value.id" data-group="$item.group"/>
+                        #else
+                            <input type="hidden" name="$field.property" data-label="$item.label" value="$item.value" data-group="$item.group"/>
+                        #end
+                    #end
+
+                    <input type="hidden" name="dataExportFilenames" value=$dataExportFilenames />
+                </div>
+            </div>
+            <em
+                    for="$_domId"
+                    class="state-error"
+                    data-component="error"
+                    data-error-property="$field.property">
+            </em>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+
+        (function($) {
+            $.fn.multiSearchableDataExportFilenames = function (opts) {
+                var main = null;
+                var buttonsContainer = null;
+                var resultsDiv = null;
+                var dialog = null;
+                var options = null;
+                //il parametro "forza" una chiamata al server anche dopo aver già materializzato i dati la prima volta
+                var forceReload = false;
+                //Il parametro consente di ottenere l'url del servizio in modo dinamico richiamando una funzione
+                var getUrlFunction = null;
+                var resultsIsSelectList = false;
+                var mainText = null;
+                //Va settato a false se si vuole disabilitare l'autocomplete
+                var autocomplete = true;
+                var dataExportFilenamesValue = $("input[name=dataExportFilenames]").val();
+                var dataExportFilenames = JSON.parse(dataExportFilenamesValue);
+
+                function createDialog() {
+                    resultsDiv = _E("div");
+                    resultsDiv.html(msg.MSG_SEARCHABLEINPUT_HELP);
+
+                    dialog = _E("div")
+                            .addClass("searchableInputDialog")
+                            .append(resultsDiv);
+
+                    var buttons = {
+                        OK: {
+                            primary: true,
+                            command: function () {
+                                var items = $(resultsDiv).selectList("getSelectedData");
+
+                                $(main).selectList("addAll", items);
+
+                                $(this).modalDialog("close");
+                            }
+                        }
+                    };
+
+                    buttons[msg.TOOLBAR_SELECT_ALL] = {
+                        action: true,
+                        command: function () {
+                            $(resultsDiv).selectList("selectAll");
+                        }
+                    };
+
+                    $(dialog).modalDialog({
+                        //se specificate, setta dimensioni custom alla webpart di selezione
+                        height: opts.height || 400,
+                        width: opts.width || 400,
+                        autoOpen: false,
+                        title: options.title || "Selezionare",
+                        buttons: buttons,
+                        close: function () {
+                            $(main).focus();
+                        }
+                    });
+
+                    $(main).data("searchableInput_dialog", dialog);
+                }
+
+                function doSearch() {
+                    if (!resultsIsSelectList) {
+                        $(resultsDiv).empty().selectList({
+                            name: "results_" + options.name,
+                            allowDuplicates: false,
+                            multiselect: true
+                        });
+                        resultsIsSelectList = true;
+                    }
+
+                    $(resultsDiv).selectList("clear");
+debugger;
+                    $(resultsDiv).selectList("addAll", dataExportFilenames);
+                }
+
+                function initMulti() {
+                    $(main).selectList(options);
+
+                    buttonsContainer = _E("div")
+                            .addClass("buttonsContainer")
+                            .addClass("input-footer")
+                            .addClass("text-right")
+                    ;
+
+                    // add buttons
+                    $(buttonsContainer)
+                            .append(
+                                    _E("a")
+                                            .attr("href", "javascript:;")
+                                            .addClass("text-success mr15")
+                                            .append("<i class='fa fa-plus-circle pr5'></i>")
+                                            .append(msg.LABEL_ADD ? msg.LABEL_ADD : "Add")
+                                            .click(function () {
+                                                $(dialog).modalDialog("open");
+                                                if (!main.autoloaded
+                                                        && options.autoloadResults) {
+                                                    main.autoloaded = true;
+                                                    doSearch();
+                                                }
+                                            })
+                            )
+                            .append(
+                                    _E("a")
+                                            .attr("href", "javascript:;")
+                                            .addClass("text-danger")
+                                            .append("<i class='fa fa-minus-circle pr5'></i>")
+                                            .append(msg.LABEL_REMOVE ? msg.LABEL_REMOVE : "Remove")
+                                            .click(function () {
+                                                $(main).selectList("removeSelection");
+                                            })
+
+                            )
+                            .append(
+                                    _E("span")
+                                            .addClass("pull-left")
+                                            .text("Push 'Add' button to open search dialog")
+                            )
+                    ;
+
+                    if (opts.allowCustom) {
+                        $(buttonsContainer)
+                                .append(
+                                        _E("input")
+                                                .attr("type", "button")
+                                                .addClass("btn btn-small btn-block")
+                                                .attr("value", "Altro")
+                                                .css("margin-top", "10px")
+                                                .click(
+                                                        function () {
+                                                            var customItem = prompt("Specificare altro");
+                                                            if (customItem) {
+                                                                $(main)
+                                                                        .selectList(
+                                                                                "add",
+                                                                                {
+                                                                                    label: customItem,
+                                                                                    value: customItem
+                                                                                });
+                                                            }
+                                                        }));
+                    }
+
+                    // clear floating divs
+                    $(main)
+                            .addClass("searchableInput")
+                            .addClass("searchableInputMulti")
+                            .append(buttonsContainer)
+                            .append(_E("div")
+                                    .css("clear", "both")
+                            );
+                }
+
+                var methods = {
+                    init: function (opts) {
+                        if (!opts.serviceUrl && !opts.getUrlFunction)
+                            throw "Service url not specified";
+                        if (!opts.name)
+                            throw "Name not specified";
+
+                        if(opts.autocomplete != undefined){
+                            autocomplete = opts.autocomplete;
+                        }
+
+                        main = this;
+                        options = $.extend({
+                            mode: "multi",
+                            allowDuplicates: false,
+                            allowCustom: false,
+                            autoloadResults: true
+                        }, opts);
+
+                        createDialog();
+
+
+                        initMulti();
+                    },
+
+                    destroy: function() {
+                        var dialog = $(this).data("searchableInput_dialog");
+                        if(dialog) {
+                            $(dialog).modalDialog("destroy");
+                        }
+                    }
+                };
+
+                if (methods[opts]) {
+                    methods[opts].apply(this, Array.prototype.slice.call(arguments, 1));
+                } else {
+                    methods.init.apply(this, arguments);
+                }
+            }
+        }(jQuery));
+
+        $("[data-component='data_export_multi_searchable_input']").multiSearchableDataExportFilenames({name:'dataexport', serviceUrl:'$serviceUrl'});
+
+    });
+</script>

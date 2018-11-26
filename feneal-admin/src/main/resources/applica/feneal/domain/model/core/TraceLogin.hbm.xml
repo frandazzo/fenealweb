@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.core.TraceLogin" table="fenealweb_traceLogins" >
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        <property name="counterApp" />
+        <property name="counterWebsite" />
+        <property name="year"  />
+        <property name="month"  />
+        <property name="company"  />
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.geo.Province" table="tb_provincie" >
+		<id name="id" type="int"  column="ID">
+			<!--<generator class="native" />-->
+		</id>
+		<property name="description"  column="DESCRIZIONE"/>
+		<property name="sigla"  column="SIGLA"/>
+		<property name="idRegion"  column="ID_TB_REGIONI"/>
+	</class>
+</hibernate-mapping>

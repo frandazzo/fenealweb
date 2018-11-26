@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.core.inps.InpsFile" table="fenealweb_inpsfiles" >
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        <property name="companyId" type="long" />
+
+        <property name="csc" />
+        <property name="filename" />
+        <property name="filepath" />
+        <many-to-one name="ristornoInps" class="applica.feneal.domain.model.core.inps.RistornoInps" column="ristornoInpsId" lazy="false" />
+
+
+    </class>
+</hibernate-mapping>

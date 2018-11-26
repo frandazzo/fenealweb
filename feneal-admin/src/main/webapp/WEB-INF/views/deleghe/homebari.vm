@@ -1,0 +1,70 @@
+#parse("/shared/framework.vm")
+
+<div class="panel">
+    <div class="panel-menu admin-form theme-primary">
+
+    </div>
+    <div class="panel-body pn">
+        <div class="table-responsive">
+            #if($deleghe.size() > 0)
+                <table class="table admin-form theme-warning tc-checkbox-1 fs13">
+                    <thead>
+                    <tr class="bg-light">
+                        <th class="">Data protocollo</th>
+                        <th class="">Numero protocollo</th>
+                        <th class="">Azienda</th>
+                        <th>Decorrenza</th>
+                        <th>Iscrizione</th>
+                        <th>Revoca</th>
+                        <th>Doppione</th>
+                        <th>Anomalia</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        #foreach($delega in $deleghe)
+                        <tr data-delega-id="$delega.id">
+                            <td class="">
+                                $delega.toDate($delega.protocolDate)
+                            </td>
+                            <td class="">
+                                $delega.protocolNumber
+                            </td>
+                            <td class="">
+                                #if( $delega.workerCompany)
+                                    $delega.workerCompany.description
+                                #end
+
+                            </td>
+                            <td class="">
+
+                                $delega.toDate($delega.effectDate)
+
+                            </td>
+
+                            <td class="">
+                                $delega.signup
+                            </td>
+                            <td class="">
+                                $delega.revocation
+                            </td>
+                            <td class="">
+                                $delega.duplicate
+                            </td>
+                            <td class="">
+                                $delega.anomaly
+                            </td>
+                        </tr>
+                        #end
+
+                    </tbody>
+                </table>
+            #else
+                <div class="alert alert-system alert-border-left alert-dismissable mv30">
+                    <b>Nessuna delega presente:</b>
+                </div>
+
+            #end
+
+        </div>
+    </div>
+</div>

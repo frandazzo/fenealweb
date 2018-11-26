@@ -1,0 +1,53 @@
+<script type="text/javascript">
+
+    require(["widget/circulars"], function(manager){
+        var name = '$widgetName';
+        var params = '$widgetParams';
+        var circulars = new manager.circulars(name, params);
+        circulars.init();
+
+    });
+
+</script>
+
+<div class="panel-heading">
+    <span class="panel-title">Circulars</span>
+    <span class="panel-controls">
+        <a class="panel-control-loader" href="#"></a>
+        <a class="panel-control-remove" href="#"></a>
+        <a class="panel-control-title" href="#"></a>
+        <a class="panel-control-color" href="#"></a>
+        <a class="panel-control-collapse" href="#"></a>
+        <a class="panel-control-fullscreen" href="#"></a>
+    </span>
+</div>
+<div class="panel-body">
+    <div class="mb20 text-right">
+
+        #set($text = ["text-warning","text-info","text-primary","text-alert"])
+
+        #foreach($row in $data)
+
+            <span class="fs11 text-muted ml10">
+                <i class="fa fa-circle $text[$foreach.index] fs12 pr5"></i>
+                $row.name
+            </span>
+
+        #end
+
+    </div>
+    <div class="row">
+
+        #set($color = ["warning","info","primary","alert"])
+
+        #foreach($row in $data)
+
+            <div class="col-xs-4 text-center">
+                #set($incremental = $foreach.index + 1)
+                <div class="info-circle" id="c$incremental" value="$row.data" data-circle-color="$color[$foreach.index]"></div>
+            </div>
+
+        #end
+
+    </div>
+</div>

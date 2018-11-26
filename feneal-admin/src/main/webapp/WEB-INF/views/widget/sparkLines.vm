@@ -1,0 +1,44 @@
+<script type="text/javascript">
+
+    require(["widget/sparkLines"], function(manager){
+
+        var sparkLines = new manager.sparkLines();
+        sparkLines.init($dataJSON);
+
+    });
+
+</script>
+
+<div class="panel-heading">
+    <span class="panel-title">Sparklines</span>
+    <span class="panel-controls">
+        <a class="panel-control-loader" href="#"></a>
+        <a class="panel-control-remove" href="#"></a>
+        <a class="panel-control-title" href="#"></a>
+        <a class="panel-control-color" href="#"></a>
+        <a class="panel-control-collapse" href="#"></a>
+        <a class="panel-control-fullscreen" href="#"></a>
+    </span>
+</div>
+<div class="panel-body pn of-a">
+    <table class="table mbn">
+        <thead>
+        <tr class="hidden">
+            <th class="mw30">1</th>
+            <th>Data</th>
+            <th>Sparkline</th>
+        </tr>
+        </thead>
+        <tbody>
+            #foreach($row in $data)
+                <tr>
+                    <td class="fw600 text-muted">$row.name</td>
+                    <td>
+                        <span class="inlinesparkline pull-right" data-spark-color="$row.color" values="$row.data"></span>
+                    </td>
+                </tr>
+            #end
+
+        </tbody>
+    </table>
+</div>

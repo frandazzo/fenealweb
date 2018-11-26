@@ -1,0 +1,100 @@
+#parse("/shared/framework.vm")
+
+<div id="ristorno-container" style="padding: 20px; overflow: hidden">
+    <div class="page-title mb25">
+        <span class="text-primary">Pagina Ristorno</span>
+    </div>
+        <div id="info" class="col-sm-9">
+            <div class="ristorno-data">
+                <h1>Nome Incrocio: $summary.titolo</h1>
+                #if ($summary.data)
+                    <h3>Data Incrocio: </h3>
+                    <h4>$summary.data</h4>
+                #end
+            </div>
+        </div>
+        <div id="data" class="col-sm-3">
+            <div class="ristorno-data">
+                <h3>Percentuali e costi</h3>
+                <div class="pt15 pl25">
+                    <p><b>Ristorno: </b>$summary.percentualeRistorno%</p>
+                    <p><b>Ristorno Edili: </b>$summary.percentualeRistornoEdili%</p>
+                    <p><b>Costo Inps Riga: </b>$summary.costoInpsRiga</p>
+                    <p><b>Percentuale Effettiva: </b>$summary.percentualeEffettiva%</p>
+                    <p><b>Costo Tessera: </b>$summary.costoTessera</p>
+                </div>
+            </div>
+        </div>
+        <div id="quote" class="col-sm-9">
+            <div class="ristorno-data">
+                <h3>Esito Incrocio</h3>
+                <div id="tabpanel">
+                    <div id="tabpanel-container">
+                        <div data-options="dxItem: { title: 'Quote pagate' } ">
+                            <div id="quotePagateGrid"></div>
+                        </div>
+                        <div data-options="dxItem: { title: 'Quote complete' } ">
+                            <div id="quoteCompleteGrid"></div>
+                        </div>
+                        <div data-options="dxItem: { title: 'Pagamento referenti' } ">
+##                            <div class="row">
+##                                <div class="col-sm-6">
+                                    <div id="pagamentoReferentiGrid"></div>
+##                                </div>
+##                                <div class="col-sm-6">
+                                    <div id="pieChart"></div>
+##                                </div>
+##                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="files" class="col-sm-3">
+            <div class="ristorno-data">
+                <h3>File caricati</h3>
+                <div class="pt15 pl25">
+                    <p><b>Inps files:</b></p>
+                    <div id="inps-files-container" style="margin-left: -20px">
+                        <ul>
+                            #foreach($f in $summary.inpsFiles)
+                            <li>
+                                <div class="filename-container mb15">
+                                    <span>File #$summary.inpsFiles.indexOf($f):</span>
+                                    <a class="file">$f.filename</a>
+                                </div>
+                            </li>
+                            #end
+                        </ul>
+                    </div>
+                </div>
+                <div class="pt15 pl25">
+                    <p><b>Csc files:</b></p>
+                    <div id="csc-files-container" style="margin-left: -20px">
+                        <ul>
+                            #foreach($f in $summary.cscFiles)
+                                <li>
+                                    <div class="filename-container">
+                                        <span style="margin-right: 5px">File #$summary.inpsFiles.indexOf($f):</span>
+                                        <a class="file">$f.filename</a>
+                                    </div>
+                                </li>
+                            #end
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+<script type="text/javascript">
+    require([ "inps/ristornoInps"], function( manager){
+        var dashboard = new manager.Dashboard($summary.id);
+        dashboard.init();
+
+
+        console.log('yyyyyyyyyyyyyyyyyyyy:');
+    });
+</script>

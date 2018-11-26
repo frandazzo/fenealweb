@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.dbnazionale.Importazione" table="importazioni" >
+		<id name="id" type="int" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="nomeProvincia" column="NomeProvincia"/>
+		<property name="idProvincia" column="Id_Provincia"/>
+		<property name="settore" column="Settore"/>
+		<property name="dataInvio" column="DataEsportazione"/>
+		<property name="tipoInvio" column="TipoEsportazione"/>
+		<property name="responsabile" column="Responsabile"/>
+		<property name="tipoPeriodo" column="TipoPeriodo"/>
+		<property name="anno" column="Anno"/>
+		<property name="periodo" column="Periodo"/>
+		<property name="dataInizio" column="DataInizio"/>
+		<property name="dataFine" column="DataFine"/>
+		<property name="synched" >
+			<column name="synched" not-null="false" default="0" />
+		</property>
+		<property name="dataFileUrl" column="dataFileUrl"/>
+		<property name="logFileUrl" column="logFileUrl"/>
+	</class>
+</hibernate-mapping>

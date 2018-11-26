@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.dbnazionale.UtenteDbNazionale" table="lavoratori" >
+		<id name="id" type="int" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="codiceFiscale" column="CodiceFiscale"/>
+		<property name="nome" column="Nome"/>
+		<property name="cognome" column="Cognome"/>
+		<property name="nomeCompleto" column="NomeCompleto"/>
+		<property name="dataNascita" column="DataNascita"/>
+		<property name="sesso" column="Sesso"/>
+		<property name="id_Nazione" column="Id_Nazione"/>
+		<property name="nomeNazione" column="NomeNazione"/>
+		<property name="id_Provincia" column="Id_Provincia"/>
+		<property name="nomeProvincia" column="NomeProvincia"/>
+		<property name="id_Comune" column="Id_Comune"/>
+		<property name="nomeComune" column="NomeComune"/>
+		<property name="id_Provincia_Residenza" column="Id_Provincia_Residenza"/>
+		<property name="nomeProvinciaResidenza" column="NomeProvinciaResidenza"/>
+		<property name="id_Comune_Residenza" column="Id_Comune_Residenza"/>
+		<property name="nomeComuneResidenza" column="NomeComuneResidenza"/>
+		<property name="indirizzo" column="Indirizzo"/>
+		<property name="cap" column="Cap"/>
+		<property name="telefono" column="Telefono"/>
+		<property name="ultimaModifica" column="UltimaModifica"/>
+		<property name="ultimaProvinciaAdAggiornare" column="UltimaProvinciaAdAggiornare"/>
+	</class>
+</hibernate-mapping>

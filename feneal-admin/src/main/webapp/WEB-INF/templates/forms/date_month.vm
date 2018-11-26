@@ -1,0 +1,130 @@
+#if(!$_type)
+    #set($_type = "text")
+#end
+
+#if(!$_component)
+    #set($_component = "text")
+#end
+
+#if(!$_icon)
+    #set($_icon = false)
+#end
+
+#if ($field.params.type)
+    #set($_type = $field.params.type)
+#elseif(!$_type)
+    #set($_type = "")
+#end
+
+#if ($field.params.component)
+    #set($_component = $field.params.component)
+#elseif(!$_component)
+    #set($_component = "")
+#end
+
+#if ($field.params.icon)
+    #set($_icon = $field.params.icon)
+#elseif(!$_icon)
+    #set($_icon = false)
+#end
+
+#if ($field.params.inputExtraClass)
+    #set($_inputExtraClass = $field.params.inputExtraClass)
+#elseif(!$_inputExtraClass)
+    #set($_inputExtraClass = "")
+#end
+
+#if ($field.params.fieldExtraClass)
+    #set($_fieldExtraClass = $field.params.fieldExtraClass)
+#elseif(!$_fieldExtraClass)
+    #set($_fieldExtraClass = "")
+#end
+
+#if ($field.params.cols)
+    #set($_colsClass = "col-md-" + $field.params.cols)
+#elseif(!$_colsClass)
+    #set($_colsClass = "col-md-12")
+#end
+
+#if ($field.description && $field.description != "")
+    #set($_description = $localization.m($field.description))
+#else
+    #set($_description = false)
+#end
+
+#if ($field.params.placeholder)
+    #set($_placeholder = $localization.m($field.params.placeholder))
+#else
+    #set($_placeholder = "")
+#end
+
+#set($_domId = "id_" + $field.property)
+
+
+<div class="$_fieldExtraClass $_colsClass" data-component="field" data-property="$field.property">
+    <div class="row">
+        #if ($_description)
+            #set($_fieldColClass = "col-md-10")
+
+            <div class="col-md-2 field-label text-right">
+                <label for="$_domId" class="">
+                    $_description
+                </label>
+            </div>
+        #else
+            #set($_fieldColClass = "col-md-12")
+        #end
+
+        <div class="col-md-6">
+
+            <label for="$_domId" class="field select">
+
+                <select
+                        name="$field.property$propMonth"
+                        data-component="select"
+                        data-property="$field.property$field.property">
+                    #if ($optionalDate)
+                        <option value="">(Select)</option>
+                    #end
+                    <option value="1" #if(!$optionalDate && 1 == $currentMonth)selected="selected"#end>Gennaio</option>
+                    <option value="2" #if(!$optionalDate && 2 == $currentMonth)selected="selected"#end>Febbraio</option>
+                    <option value="3" #if(!$optionalDate && 3 == $currentMonth)selected="selected"#end>Marzo</option>
+                    <option value="4" #if(!$optionalDate && 4 == $currentMonth)selected="selected"#end>Aprile</option>
+                    <option value="5" #if(!$optionalDate && 5 == $currentMonth)selected="selected"#end>Maggio</option>
+                    <option value="6" #if(!$optionalDate && 6 == $currentMonth)selected="selected"#end>Giugno</option>
+                    <option value="7" #if(!$optionalDate && 7 == $currentMonth)selected="selected"#end>Luglio</option>
+                    <option value="8" #if(!$optionalDate && 8 == $currentMonth)selected="selected"#end>Agosto</option>
+                    <option value="9" #if(!$optionalDate && 9 == $currentMonth)selected="selected"#end>Settembre</option>
+                    <option value="10" #if(!$optionalDate && 10 == $currentMonth)selected="selected"#end>Ottobre</option>
+                    <option value="11" #if(!$optionalDate && 11 == $currentMonth)selected="selected"#end>Novembre</option>
+                    <option value="12" #if(!$optionalDate && 12 == $currentMonth)selected="selected"#end>Dicembre</option>
+                </select>
+                    <i class="arrow double"></i>
+            </label>
+        </div>
+        <div class="col-md-3">
+
+            <label class="field select">
+
+                <select
+                        name="$field.property$propYear"
+                        data-component="select">
+
+                    #if ($optionalDate)
+                        <option value="">(Select)</option>
+                    #end
+
+                    #set($start = 1990)
+                    #set($end = 2050)
+                    #set($years = [$end..$start])
+                    #foreach($i in $years)
+                        <option value="$i" #if(!$optionalDate && $i == $currentYear)selected="selected"#end>$i</option>
+                    #end
+                </select>
+                <i class="arrow double"></i>
+            </label>
+        </div>
+
+    </div>
+
+</div>

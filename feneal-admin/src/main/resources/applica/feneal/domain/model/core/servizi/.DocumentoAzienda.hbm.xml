@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="applica.feneal.domain.model.core.servizi.DocumentoAzienda" table="fenealweb_documentoAzienda" >
+		<id name="id" type="long">
+			<generator class="native" />
+		</id>
+		<many-to-one name="azienda" class="applica.feneal.domain.model.core.aziende.Azienda" column="aziendaId" lazy="false" />
+		<property name="data" />
+
+		<many-to-one name="tipo" class="applica.feneal.domain.model.setting.TipoDocumento" column="tipoId" lazy="false" />
+		<property name="notes" />
+		<property name="allegato1" />
+		<property name="allegato2" />
+		<property name="allegato3" />
+		<property name="allegato4" />
+		<property name="allegato5" />
+		<property name="allegato6" />
+
+		<property name="nomeallegato1" />
+		<property name="nomeallegato2" />
+		<property name="nomeallegato3" />
+		<property name="nomeallegato4" />
+		<property name="nomeallegato5" />
+		<property name="nomeallegato6" />
+
+		<many-to-one name="collaboratore" class="applica.feneal.domain.model.setting.Collaboratore" column="collaboratoreId" lazy="false" />
+		<many-to-one name="province" class="applica.feneal.domain.model.geo.Province" column="provinceId" lazy="false" />
+
+	</class>
+</hibernate-mapping>
