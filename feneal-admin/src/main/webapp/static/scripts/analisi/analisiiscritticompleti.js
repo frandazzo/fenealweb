@@ -16,7 +16,8 @@ define(["analisi/riepilogoData"
         this.viewType = "global";
 
         this.moreTime = false;
-    }
+        this.next = false;
+    };
 
     AnalisiIscrittiCompleti.prototype.init = function(){
         var self = this;
@@ -25,29 +26,33 @@ define(["analisi/riepilogoData"
             text: "Iscritti presi una sola volta.",
             value: false,
             onValueChanged: function (isChecked) {
-                if (isChecked) {
+                if (isChecked.value) {
                     self.moreTime = true;
                 }
                 else {
                     self.moreTime = false;
                 }
-                self.loadData(self.currentYear, self.moreTime);
+                if (self.next)
+                    self.loadData(self.currentYear, self.moreTime);
             }
         });
 
-        dataService.getAnniIscrizioni().done(function (arrayAnni) {
+        $("#next").click(function() {
+            dataService.getAnniIscrizioni().done(function (arrayAnni) {
 
-            if (arrayAnni.length == 0){
-                alert("Nessun anno trovato per le iscrizioni!!!");
-                return;
-            }
+                if (arrayAnni.length == 0){
+                    alert("Nessun anno trovato per le iscrizioni!!!");
+                    return;
+                }
 
-            self.currentYear = arrayAnni[0];
+                self.currentYear = arrayAnni[0];
 
-            // Call horizontalNav on the navigations wrapping element
-            self.disposeTabs(arrayAnni);
-            self.loadData(arrayAnni[0], self.moreTime);
-            self.anni = arrayAnni;
+                // Call horizontalNav on the navigations wrapping element
+                self.disposeTabs(arrayAnni);
+                self.loadData(arrayAnni[0], self.moreTime);
+                self.anni = arrayAnni;
+            });
+            self.next = true;
         });
 
     };
@@ -176,17 +181,6 @@ define(["analisi/riepilogoData"
             tabs.push({
                 text: year
             });
-        });
-
-        $("#longtabs > .tabs-container").dxTabs({
-            dataSource: tabs,
-            selectedIndex: 0,
-            onItemClick: function (e) {
-                var index = e.itemIndex;
-                self.currentYear = self.anni[index];
-                self.loadData(self.anni[index]);
-                $('.mapContainer').show();
-            }
         });
 
     };

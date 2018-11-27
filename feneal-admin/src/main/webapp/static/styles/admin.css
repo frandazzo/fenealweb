@@ -473,3 +473,14 @@ div[data-property=competenceSelection] {
 }
 
 
+.warning {
+    margin-bottom: 30px;
+}
+.warning h1, .warning p{
+    color: red;
+}
+.warning #next {
+    margin-top: 15px;
+}
+
+

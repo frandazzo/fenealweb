@@ -1,15 +1,20 @@
 
 
-<div id="iscrittiCheckBox"></div>
 
-<div id="longtabs">
-    <div class="caption"></div>
-    <div class="tabs-container">
 
-    </div>
-</div>
 
 <div style="margin:20px;">
+    <div class="warning">
+        <h1>Avviso:</h1>
+        <p>La seguente procedura potrebbe richiedere diversi minuti di elaborazione.</p>
+        <p>Clicca sul pulsante "Avanti" per procedere.</p>
+        <button id="next" class="btn btn-primary">
+            <i class="glyphicon glyphicon-share pr5"></i>
+            Avanti
+        </button>
+    </div>
+
+    <div id="iscrittiCheckBox"></div>
     <div id="pivotgrid-chart" style="margin-top: 20px;"></div>
     <div id="grid"></div>
 </div>

@@ -25,7 +25,7 @@ define(["analisi/riepilogoData"
             text: "Iscritti presi una sola volta.",
             value: false,
             onValueChanged: function (isChecked) {
-                if (isChecked) {
+                if (isChecked.value) {
                     self.moreTime = true;
                 }
                 else {
