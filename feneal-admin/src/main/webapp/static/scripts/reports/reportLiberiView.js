@@ -564,7 +564,7 @@ define([
                     { dataField:"liberoEnteBilaterale", visible : false, visibleIndex: 2},
                     { dataField:"liberoIscrittoA", visible : false , visibleIndex: 4},
 
-                    { dataField:"lavoratoreNomeCompleto", fixed :true, fixedPosition:"left",visible : true, visibleIndex: 0,
+                    { dataField:"lavoratoreNomeCompleto",  visible : true, visibleIndex: 0,
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
                             var completeName = options.data.lavoratoreNomeCompleto;
@@ -590,7 +590,7 @@ define([
 
 
                     },
-                    { dataField:"lavoratoreCellulare", visible : true},
+                    { dataField:"lavoratoreCellulare", visible : false},
                     { dataField:"lavoratoreDelegheOwner", caption:"Possiede delega", visible : viewFirm,
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
@@ -605,15 +605,17 @@ define([
                             }
 
                         }},
+
                     { dataField:"lavoratoreCodiceFiscale", visible : false},
                     { dataField:"lavoratoreDataNascita", dataType:'date', visible : false},
-                    { dataField:"lavoratoreProvinciaResidenza", visible : true},
-                    { dataField:"lavoratoreCittaResidenza", visible : true},
-
+                    { dataField:"lavoratoreProvinciaResidenza", visible : false},
+                    { dataField:"lavoratoreCittaResidenza", visible : false},
+                    { dataField:"lavoratoreIndirizzo", visible : false},
+                    { dataField:"lavoratoreCap", visible : false},
                     { dataField:"lavoratoreNome", visible : false},
                     { dataField:"lavoratoreCognome", visible : false},
                     { dataField:"lavoratoreSesso", visible : false},
-                    {dataField:"numIscrizioni", fixed :true, fixedPosition:"right", visible: true,visibleIndex: 1, caption:"Iscritto storico",
+                    {dataField:"numIscrizioni", visible: true,visibleIndex: 1, caption:"Iscritto storico",
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
                             var numIscrizioni = options.data.numIscrizioni;
