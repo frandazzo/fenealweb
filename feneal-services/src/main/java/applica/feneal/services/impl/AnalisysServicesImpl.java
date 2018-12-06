@@ -11,6 +11,7 @@ import applica.framework.security.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,7 +31,8 @@ public class AnalisysServicesImpl implements AnalisysService {
     public Integer[] getAnniIscrizioni() {
 
         List<Integer> a= utils.getListaAnniIscrizioni();
-
+        Collections.sort(a);
+        Collections.reverse(a);
         Integer[] a1 = new Integer[a.size()];
 
         a1 = a.toArray(a1);
