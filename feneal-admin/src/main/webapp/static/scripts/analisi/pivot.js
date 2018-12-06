@@ -15,7 +15,7 @@ define(["analisi/riepilogoData"
         //campo per indicare visione globale o lacale
         this.viewType = "global";
 
-        this.moreTime = false;
+        this.oneTime = false;
     }
 
     Pivot.prototype.init = function(){
@@ -24,14 +24,11 @@ define(["analisi/riepilogoData"
         var iscrittiCheckBox = $("#iscrittiCheckBox").dxCheckBox({
             text: "Iscritti presi una sola volta.",
             value: false,
-            onValueChanged: function (isChecked) {
-                if (isChecked) {
-                    self.moreTime = true;
-                }
-                else {
-                    self.moreTime = false;
-                }
-                self.loadData(self.currentYear, self.moreTime);
+            onValueChanged: function (e) {
+
+                self.oneTime = e.value;
+
+                self.loadData(self.currentYear, self.oneTime);
             }
         });
 
@@ -46,19 +43,19 @@ define(["analisi/riepilogoData"
 
             // Call horizontalNav on the navigations wrapping element
             self.disposeTabs(arrayAnni);
-            self.loadData(arrayAnni[0], self.moreTime);
+            self.loadData(arrayAnni[0], self.oneTime);
             self.anni = arrayAnni;
         });
 
     };
 
-    Pivot.prototype.loadData = function(anno, moreTime){
+    Pivot.prototype.loadData = function(anno, onetime){
 
         var self = this;
 
         var fields = [
             {dataField: "Anno", area: "column", sortByPath: []},
-            {dataField: "Settore", area: "row", sortOrder: "desc"},
+            //{dataField: "Settore", area: "row", sortOrder: "desc"},
             {dataField: "Regione", area: "filter", sortOrder: "desc"},
             {dataField: "Provincia", area: "filter", sortOrder: "desc"},
 
@@ -67,10 +64,10 @@ define(["analisi/riepilogoData"
 
             {dataField: "Id_Lavoratore", caption: "Num. Lavoratori", summaryType: "count", area: "data"}
         ];
-        if (moreTime)
+        if (!onetime)
             fields = [
                     {dataField: "Anno", area: "column", sortByPath: []},
-                    // { dataField: "Settore", area: "row",  sortOrder: "desc" },
+                    { dataField: "Settore", area: "row",  sortOrder: "desc" },
                     {dataField: "Regione", area: "row", sortOrder: "desc"},
                     {dataField: "Provincia", area: "filter", sortOrder: "desc"},
 
@@ -141,7 +138,7 @@ define(["analisi/riepilogoData"
                 remoteOperations: true,
                 store: DevExpress.data.AspNet.createStore({
                     key: "ID",
-                    loadUrl: self.generateUrl(anno, moreTime)
+                    loadUrl: self.generateUrl(anno, onetime)
                 })
             }
         }).dxPivotGrid("instance");
@@ -154,15 +151,15 @@ define(["analisi/riepilogoData"
 
 
     };
-    Pivot.prototype.generateUrl = function(anno, moreTime){
+    Pivot.prototype.generateUrl = function(anno, onetime){
         var self = this;
 
         if (!anno)
-            anno = 2017;
+            anno = new Date().getYear();
 
         var baseurl = self.urlDataSource + "?anno=" + anno;
 
-        if (moreTime) {
+        if (onetime == false) {
             baseurl += "&moreTime=true";
         }
 
@@ -184,7 +181,7 @@ define(["analisi/riepilogoData"
             onItemClick: function (e) {
                 var index = e.itemIndex;
                 self.currentYear = self.anni[index];
-                self.loadData(self.anni[index]);
+                self.loadData(self.anni[index] , self.oneTime);
                 $('.mapContainer').show();
             }
         });
