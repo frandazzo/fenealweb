@@ -192,12 +192,12 @@ public class InpsController {
             List<QuotaInps> result = inpsSeervices.inserisciQuoteInps(file.getFilepath());
 
 //            //invio i dati al dbnaizonale
-//            StringBuilder currentUsername = new StringBuilder();
-//            StringBuilder currentPassword = new StringBuilder();
-//            Province province = ((User) sec.getLoggedUser()).getDefaultProvince();//geo.getProvinceById(Integer.parseInt(data.getParams().getProvince()));
-//            exporter.calculateCredentials(currentUsername, currentPassword, province);
-//
-//            exporter.exportInps(result,currentUsername.toString(), currentPassword.toString(),province.getDescription());
+            StringBuilder currentUsername = new StringBuilder();
+            StringBuilder currentPassword = new StringBuilder();
+            Province province = ((User) sec.getLoggedUser()).getDefaultProvince();//geo.getProvinceById(Integer.parseInt(data.getParams().getProvince()));
+            exporter.calculateCredentials(currentUsername, currentPassword, province);
+
+            exporter.exportInps(result,currentUsername.toString(), currentPassword.toString(),province.getDescription());
             return new ValueResponse("ok");
         } catch (Exception e) {
             return new ErrorResponse(e.getMessage());
