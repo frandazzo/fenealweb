@@ -90,7 +90,7 @@ define([
                     $('html, body').animate({scrollTop: $('#reportContainer').offset().top - 160}, 1400, "swing");
 
                     //configuro la navigabilità e la toolbar delle actions del report
-                    var reportResultsConfigurer = new resultsConfigurer.ReportUiConfigurer(grid, "incassi quote", true);
+                    var reportResultsConfigurer = new resultsConfigurer.ReportUiConfigurer(grid, "incassiquote", true);
                     reportResultsConfigurer.init();
 
                 });
@@ -134,6 +134,8 @@ define([
                     { dataField:"provincia",  visible : true, visibleIndex: 1},
                     { dataField:"settore", visible : true, visibleIndex: 7},
                     { dataField:"ente", visible : true, visibleIndex: 8},
+                    { dataField:"lavoratoreCodiceFiscale", visible : false},
+                    { dataField:"lavoratoreTotaleQuote", visible : false},
                     { dataField:"idQuota", visible : false,
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -48,9 +49,20 @@ public class IqaFacade {
     }
 
 
+    private void addToHashmap(Hashtable<String, Double> map, String fiscalCode, Double amount){
+        if (map.containsKey(fiscalCode)){
+            Double val = map.get(fiscalCode);
+            val = val + amount;
+            map.replace(fiscalCode,val);
+            return;
+        }
+
+        map.put(fiscalCode, amount);
+    }
+
     private List<UiDettaglioQuota> convertQuoteToUiQuote(List<DettaglioQuotaAssociativa> quote) {
         List<UiDettaglioQuota> result = new ArrayList<>();
-
+        Hashtable<String, Double> totQuote = new Hashtable<>();
         for (DettaglioQuotaAssociativa dettaglio : quote) {
             UiDettaglioQuota q = new UiDettaglioQuota();
 
@@ -80,8 +92,15 @@ public class IqaFacade {
             }
 
             result.add(q);
+            addToHashmap(totQuote, q.getLavoratoreCodiceFiscale(), q.getQuota());
         }
 
+
+        //prinma di restituire il risultato
+        //per ogni quota associo il valro totale delle quote
+        for (UiDettaglioQuota uiDettaglioQuota : result) {
+            uiDettaglioQuota.setLavoratoreTotaleQuote(totQuote.get(uiDettaglioQuota.getLavoratoreCodiceFiscale()));
+        }
         return result;
     }
 
