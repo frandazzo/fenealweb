@@ -128,7 +128,7 @@ public class ListaLavoroController {
 
     }
 
-    @RequestMapping(value = "/incassiQuote/{description}", method = RequestMethod.POST)
+    @RequestMapping(value = "/incassiquote/{description}", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody
     SimpleResponse viewListaIncassiQuote(@RequestBody List<UiDettaglioQuota> iqa, @PathVariable String description) {

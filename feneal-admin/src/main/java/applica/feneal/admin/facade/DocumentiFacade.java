@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -36,8 +37,13 @@ public class DocumentiFacade {
 
     }
 
+
     private List<UiDocumento> convertDocumentiToUiDocumenti(List<Documento> doc) {
         List<UiDocumento> result = new ArrayList<>();
+
+
+
+
 
         for (Documento documento : doc) {
             UiDocumento d = new UiDocumento();
@@ -47,7 +53,7 @@ public class DocumentiFacade {
             if (documento.getCollaboratore() != null)
                 d.setDocCollaboratore(documento.getCollaboratore().toString());
             d.setDocProvince(documento.getProvince().toString());
-
+            d.setDocNote(documento.getNotes());
             d.setLavoratoreId(documento.getLavoratore().getLid());
             d.setLavoratoreCap(documento.getLavoratore().getCap());
             d.setLavoratoreCellulare(documento.getLavoratore().getCellphone());
@@ -77,6 +83,8 @@ public class DocumentiFacade {
             d.setLavoratoreNote(documento.getLavoratore().getNotes());
 
             result.add(d);
+
+
         }
 
         return result;

@@ -12,6 +12,7 @@ import applica.feneal.domain.model.core.report.Sindacalizzaizone;
 import applica.feneal.domain.utils.Box;
 import applica.feneal.services.StatisticService;
 import applica.feneal.services.utils.StatisticsUtils;
+import applica.framework.library.options.OptionsManager;
 import applica.framework.security.Security;
 import it.fenealgestweb.www.FenealgestStatsStub;
 import org.apache.axis2.AxisFault;
@@ -41,6 +42,9 @@ public class StatisticServiceImpl implements StatisticService {
 
     @Autowired
     private StatisticsUtils utils;
+
+    @Autowired
+    private OptionsManager opt;
 
 
     @Override
@@ -418,7 +422,8 @@ public class StatisticServiceImpl implements StatisticService {
     public List<String> statsGetDataExportIscritti(String provinceName) throws IOException {
         it.fenealgestweb.www.FenealgestStatsStub svc = null;
         try {
-            svc =  new FenealgestStatsStub("http://www.fenealgest.it/servizi/WebServices/FenealgestStats.asmx");
+            String service = opt.get("applica.fenealgeststats");
+            svc =  new FenealgestStatsStub(service);
         } catch (AxisFault axisFault) {
             axisFault.printStackTrace();
         }
@@ -440,7 +445,9 @@ public class StatisticServiceImpl implements StatisticService {
     public FenealgestStatsStub.DataExportResult statsGetStatisticsResult(String province, String filenames) throws IOException {
         it.fenealgestweb.www.FenealgestStatsStub svc = null;
         try {
-            svc =  new FenealgestStatsStub("http://www.fenealgest.it/servizi/WebServices/FenealgestStats.asmx");
+            String service = opt.get("applica.fenealgeststats");
+            svc =  new FenealgestStatsStub(service);
+            //svc =  new FenealgestStatsStub("http://www.fenealgest.it/servizi/WebServices/FenealgestStats.asmx");
         } catch (AxisFault axisFault) {
             axisFault.printStackTrace();
         }

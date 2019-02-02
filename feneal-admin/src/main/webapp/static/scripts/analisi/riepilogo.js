@@ -173,15 +173,17 @@ define(["analisi/riepilogoData"
     };
 
     riepilogo.prototype.getObjectWithMapId = function(objects, mapId) {
-        var transcodedMapId = mapId.toUpperCase();
-        
+        if (mapId)
+            mapId = mapId.toUpperCase();
+        var transcodedMapId = mapId;
+
         if (transcodedMapId == "PROV. AUTONOMA BOLZANO")
             transcodedMapId = "PROV. AUT. BOLZANO";
 
         if (transcodedMapId == "PROV. AUTONOMA TRENTO")
             transcodedMapId = "PROV. AUT. TRENTO";
-        
-        
+
+
         var indexes = $.map(objects, function(obj, index) {
             if(obj.label === transcodedMapId) {
                 return index;

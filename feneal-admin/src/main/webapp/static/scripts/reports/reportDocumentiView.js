@@ -126,7 +126,7 @@ define([
                     { dataField:"docTipoDocumento", visible : true, visibleIndex: 5},
                     { dataField:"docCollaboratore", visible : true},
                     { dataField:"docProvince", visible : true},
-
+                    { dataField:"docNote", visible : false},
                     { dataField:"lavoratoreNomeCompleto",fixed :true, fixedPosition:"left",visible : true, visibleIndex: 0,
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");

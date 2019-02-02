@@ -39,20 +39,33 @@ public class IncrocioInps {
 
 
 
-        List<String> s1 = quote.stream().map( a -> a.getLavoratore().getFiscalcode()).collect(Collectors.toList());
-        Set<String> uniqueLavs = new HashSet<String>(s1);
-
-        List<String> s11 = quote.stream().filter(a->a.isLavoratoreEdile()).map( a -> a.getLavoratore().getFiscalcode()).collect(Collectors.toList());
-        Set<String> uniqueLavsEdili = new HashSet<String>(s11);
-
-
-        List<String> s12 = quote.stream().filter(a->!a.isLavoratoreEdile()).map( a -> a.getLavoratore().getFiscalcode()).collect(Collectors.toList());
-        Set<String> uniqueLavsNonEdili = new HashSet<String>(s12);
 
 
 
 
         for (String referente : uniquereferenti) {
+
+
+            List<String> s1 = quote.stream()
+                    .filter(a -> a.getReferente().equals(referente))
+                    .map( a -> a.getLavoratore().getFiscalcode()).collect(Collectors.toList());
+            Set<String> uniqueLavs = new HashSet<String>(s1);
+
+            List<String> s11 = quote.stream()
+                    .filter(a -> a.getReferente().equals(referente))
+                    .filter(a->a.isLavoratoreEdile()).map( a -> a.getLavoratore().getFiscalcode()).collect(Collectors.toList());
+            Set<String> uniqueLavsEdili = new HashSet<String>(s11);
+
+
+            List<String> s12 = quote.stream()
+                    .filter(a -> a.getReferente().equals(referente))
+                    .filter(a->!a.isLavoratoreEdile()).map( a -> a.getLavoratore().getFiscalcode()).collect(Collectors.toList());
+            Set<String> uniqueLavsNonEdili = new HashSet<String>(s12);
+
+
+
+
+
             PagamentoReferenti ref = new PagamentoReferenti();
             ref.setReferente(referente);
             ref.setNumeroLavoratori(uniqueLavs.size());

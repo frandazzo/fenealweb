@@ -1,6 +1,7 @@
 package applica.feneal.services.impl.lavoratori;
 
 import applica.feneal.domain.data.Command;
+import applica.feneal.domain.data.core.CompanyRepository;
 import applica.feneal.domain.data.core.aziende.AziendeRepository;
 import applica.feneal.domain.data.core.deleghe.DelegheRepository;
 import applica.feneal.domain.data.core.lavoratori.LavoratoriRepository;
@@ -10,6 +11,7 @@ import applica.feneal.domain.data.dbnazionale.IscrizioniRepository;
 import applica.feneal.domain.data.dbnazionale.LiberoDbNazionaleRepository;
 import applica.feneal.domain.data.dbnazionale.UtenteDBNazioneRepository;
 import applica.feneal.domain.model.User;
+import applica.feneal.domain.model.core.Company;
 import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.domain.model.core.lavoratori.IscrittoAnnoInCorso;
@@ -47,6 +49,9 @@ public class LavoratoriServiceImpl implements LavoratoreService {
 
     @Autowired
     private DelegheRepository delRep;
+
+    @Autowired
+    private CompanyRepository compRep;
 
     @Autowired
     private LavoratoriRepository lavRep;
@@ -353,18 +358,24 @@ public class LavoratoriServiceImpl implements LavoratoreService {
 
         //verifoco l'esistenza di una dleega attiva
         List<DettaglioQuotaAssociativa> ll = new ArrayList<>();
-        for (DettaglioQuotaAssociativa dettaglioQuotaAssociativa : quoteIscrittiSenzaDuplicati) {
 
-
+        //ottengo la provincia di bolzano
+        Company p = compRep.findCompanyByProvinceName("Bolzano");
+        if (((User) sec.getLoggedUser()).getCompany().getLid() == p.getLid()){
+            //eseguo la verifica della delega attiva
+            for (DettaglioQuotaAssociativa dettaglioQuotaAssociativa : quoteIscrittiSenzaDuplicati) {
                 //se non ho selezionato una provincia nella ricerca... la recupero dalla quota
                 if (delServ.hasWorkerDelegaAttivaOAccettata(dettaglioQuotaAssociativa.getIdLavoratore(),
                         dettaglioQuotaAssociativa.getSettore(),dettaglioQuotaAssociativa.getEnte(), a.getDescription(), dettaglioQuotaAssociativa.getProvincia())){
                     ll.add(dettaglioQuotaAssociativa);
                 }
-
-
-
+            }
+        }else{
+            ll = quoteIscrittiSenzaDuplicati;
         }
+
+
+
 
 
         HashMap<Long, Lavoratore> g = new HashMap<>();

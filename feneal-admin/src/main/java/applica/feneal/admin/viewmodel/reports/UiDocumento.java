@@ -12,7 +12,15 @@ public class UiDocumento {
     private String docTipoDocumento;
     private String docCollaboratore;
     private String docProvince;
+    private String docNote;
 
+    public String getDocNote() {
+        return docNote;
+    }
+
+    public void setDocNote(String docNote) {
+        this.docNote = docNote;
+    }
 
     public String getLavoratoreNomeCompleto() {
         SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");

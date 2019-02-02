@@ -25,6 +25,17 @@ public class UiDettaglioQuota {
     private String lavoratoreCodiceFiscale;
     private long lavoratoreId;
 
+
+    private Double lavoratoreTotaleQuote;
+
+    public Double getLavoratoreTotaleQuote() {
+        return lavoratoreTotaleQuote;
+    }
+
+    public void setLavoratoreTotaleQuote(Double lavoratoreTotaleQuote) {
+        this.lavoratoreTotaleQuote = lavoratoreTotaleQuote;
+    }
+
     //Dati azienda
     private String aziendaRagioneSociale;
     private long aziendaId;

@@ -211,14 +211,14 @@ public class LiberiExcelExporter {
 
         ExcelProperty com2 = new ExcelProperty();
         com2.setName("Provincia nascita");
-        com2.setValue(lib.getLavoratoreProvinciaResidenza());
+        com2.setValue(lib.getLavoratoreProvinciaNascita());
         com2.setPriority(6);
         props.addExcelProperty(com2);
 
 
         ExcelProperty com = new ExcelProperty();
         com.setName("Comune nascita");
-        com.setValue(lib.getLavoratoreCittaResidenza());
+        com.setValue(lib.getLavoratoreLuogoNascita());
         com.setPriority(7);
         props.addExcelProperty(com);
 

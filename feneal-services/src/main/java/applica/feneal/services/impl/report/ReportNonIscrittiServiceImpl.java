@@ -141,13 +141,14 @@ public class ReportNonIscrittiServiceImpl implements ReportNonIscrittiService {
                             .addScalar("NomeProvinciaResidenza")
                             //.addScalar("Id_Comune_Residenza")
                             .addScalar("NomeComuneResidenza")
-                            //.addScalar("Indirizzo")
-                            //.addScalar("Cap")
+
 
                             .addScalar("Telefono")
                             //.addScalar("UltimaModifica")
                             //.addScalar("UltimaProvinciaAdAggiornare")
                             .addScalar("idWorker")
+                            .addScalar("Indirizzo")
+                            .addScalar("Cap")
                             .list();
 
                     tx.commit();
@@ -173,6 +174,8 @@ public class ReportNonIscrittiServiceImpl implements ReportNonIscrittiService {
                         v.setNomeComuneResidenza((String)object[9]);
                         v.setTelefono((String)object[10]);
                         v.setIdWorker((Integer)object[11]);
+                        v.setIndirizzo((String)object[12]);
+                        v.setCap((String)object[13]);
                         a.add(v);
                     }
 
@@ -205,7 +208,7 @@ public class ReportNonIscrittiServiceImpl implements ReportNonIscrittiService {
                         "t.NomeProvinciaResidenza," +
                         "t.NomeComuneResidenza," +
                         "t.Telefono," +
-                        "a.ID as idWorker from lavoratori_liberi t left join lavoratori a on t.CodiceFiscale = a.CodiceFiscale where NomeProvinciaFeneal = '%s' and ente = '%s' ", p.getDescription()
+                        "a.ID as idWorker , t.Indirizzo, t.Cap from lavoratori_liberi t left join lavoratori a on t.CodiceFiscale = a.CodiceFiscale where NomeProvinciaFeneal = '%s' and ente = '%s' ", p.getDescription()
                         .replace("'","''"), t.getType());
 
                 String iscrittoA = params.getSignedTo();

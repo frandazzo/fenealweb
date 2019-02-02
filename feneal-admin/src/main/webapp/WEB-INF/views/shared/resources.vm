@@ -7,8 +7,8 @@
 
 <link rel="shortcut icon" href="${staticBase}images/loader_favicon.png">
 
-<link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800'>
-<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:400,500,700,300">
+<link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800'>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,300">
 
 
 <link rel="stylesheet" type="text/css" href="${wwwBase}framework-resources/admin/theme/vendor/plugins/datepicker/css/bootstrap-datetimepicker.min.css">
@@ -35,8 +35,12 @@
 
 
 
-<link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/16.2.4/css/dx.common.css" />
-<link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/16.2.4/css/dx.light.css" />
+##<link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/16.2.4/css/dx.common.css" />
+##<link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/16.2.4/css/dx.light.css" />
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/18.2.4/css/dx.common.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/18.2.4/css/dx.light.css" />
 
 ##<link rel="stylesheet" type="text/css" href="${staticBase}styles/bootstrap-datetimepicker-standalone.css">
 
