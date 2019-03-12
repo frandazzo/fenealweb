@@ -11,6 +11,7 @@
 		<property name="updateWorkersDuringImport" />
 		<property name="creaDelegaIfNotExistDuringImport" />
 		<property name="associaDelegaDuringImport" />
+		<property name="enableExclusiveLiberiQuery"/>
 
 	</class>
 </hibernate-mapping>

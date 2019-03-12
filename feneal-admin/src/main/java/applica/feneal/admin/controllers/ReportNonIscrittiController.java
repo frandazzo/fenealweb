@@ -2,10 +2,7 @@ package applica.feneal.admin.controllers;
 
 import applica.feneal.admin.facade.LiberiFacade;
 import applica.feneal.admin.facade.TraceFacade;
-import applica.feneal.admin.fields.renderers.AziendeSingleSearchFieldRenderer;
-import applica.feneal.admin.fields.renderers.LoggedUserProvinceNonOptionalSelectFieldRenderer;
-import applica.feneal.admin.fields.renderers.ParithericNonOptionalSelectFieldRenderer;
-import applica.feneal.admin.fields.renderers.SignedToSelectFieldRenderer;
+import applica.feneal.admin.fields.renderers.*;
 import applica.feneal.admin.fields.renderers.geo.OptionalCityFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalProvinceFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalStateFieldRenderer;
@@ -137,7 +134,7 @@ public class ReportNonIscrittiController {
 
             FormDescriptor formDescriptor = new FormDescriptor(form);
 
-            formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggedUserProvinceNonOptionalSelectFieldRenderer.class))
+            formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggdUserExclusiveProvicesNonOptionalSelectFieldRenderer.class))
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt")
                     .putParam(Params.FORM_COLUMN, " ");

@@ -99,6 +99,7 @@ public class RolesSetup implements AppSetup {
         secretaryPermissions.addAll(PermissionMap.staticPermissions("magazzinodeleghe"));
         secretaryPermissions.addAll(PermissionMap.staticPermissions("magazzinodeleghelecce"));
         secretaryPermissions.addAll(PermissionMap.staticPermissions("contract"));
+        secretaryPermissions.addAll(PermissionMap.staticPermissions("applicationoption"));
 
         long secretaryId = 3;
         setPermissionsToRole(secretaryPermissions, secretaryId);

@@ -385,6 +385,13 @@
                             <span class="sidebar-title">Invii database nazionale</span>
                         </a>
                     </li>
+
+                    <li class="appoptions" style="display: none">
+                        <a href="#/crud?e=applicationoption" class="framework-navigation">
+                            <span class="fa fa-certificate"></span>
+                            <span class="sidebar-title">Opzioni applicazione</span>
+                        </a>
+                    </li>
                 #end
             #end
 

@@ -25,6 +25,15 @@ public class ApplicationOptions extends SecuredDomainEntity{
     //serve per attivare le deleghe in fase di importazione quote
     private boolean associaDelegaDuringImport;
 
+    private Boolean enableExclusiveLiberiQuery;
+
+    public Boolean getEnableExclusiveLiberiQuery() {
+        return enableExclusiveLiberiQuery;
+    }
+
+    public void setEnableExclusiveLiberiQuery(Boolean enableExclusiveLiberiQuery) {
+        this.enableExclusiveLiberiQuery = enableExclusiveLiberiQuery;
+    }
 
     public boolean isUpdateFirmasDuringImport() {
         return updateFirmasDuringImport;

@@ -77,7 +77,7 @@
                                 <li>
                                     <div class="filename-container">
                                         <span style="margin-right: 5px">File #$summary.inpsFiles.indexOf($f):</span>
-                                        <a class="file">$f.filename</a>
+                                        <a class="file" target="_blank" href="$filesBase$f.filepath">$f.filename</a>
                                     </div>
                                 </li>
                             #end
@@ -95,6 +95,6 @@
         dashboard.init();
 
 
-        console.log('yyyyyyyyyyyyyyyyyyyy:');
+
     });
 </script>
