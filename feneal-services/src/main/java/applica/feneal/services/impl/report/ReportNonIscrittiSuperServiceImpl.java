@@ -11,10 +11,14 @@ import applica.feneal.domain.data.geo.CitiesRepository;
 import applica.feneal.domain.data.geo.CountriesRepository;
 import applica.feneal.domain.data.geo.ProvinceRepository;
 import applica.feneal.domain.model.core.Paritethic;
+import applica.feneal.domain.model.core.Sector;
+import applica.feneal.domain.model.core.deleghe.Delega;
+import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
 import applica.feneal.domain.model.dbnazionale.Iscrizione;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 import applica.feneal.domain.model.dbnazionale.search.LiberoReportSearchParams;
 import applica.feneal.domain.model.geo.Province;
+import applica.feneal.domain.model.geo.Region;
 import applica.feneal.services.ReportNonIscrittiSuper;
 import applica.framework.LoadRequest;
 import applica.framework.security.Security;
@@ -24,6 +28,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -110,6 +115,10 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
 
     }
+
+
+
+
     private String createQueryForDeleghe(String nomeProvincia, String nomeEnte){
 
 //
@@ -173,7 +182,46 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 .addScalar("attachment")
                 .addScalar("nomeattachment");
     }
+    private DelegaNazionale materializeDelegheDbNazionle(Object[] object,
+                                                         List<Sector> sectors,
+                                                         List<Paritethic> paritetichs,
+                                                         List<Province> provinces,
+                                                         List<Region> regions){
+        DelegaNazionale v = new DelegaNazionale();
+        v.setCodiceFiscale((String)object[0]);
+        v.setIdWorker((Long)object[1]);
+        v.setCompanyId((Long)object[2]);
 
+        Integer state = (Integer)object[3];
+        if (state == Delega.state_subscribe || state == Delega.state_sent)
+            v.setState("Sottoscritta");
+        else if (state == Delega.state_accepted || state == Delega.state_activated)
+            v.setState("Accreditata");
+        else if (state == Delega.state_cancelled)
+            v.setState("Annullata");
+        else
+            v.setState("Revocata");
+
+        v.setDocumentDate((Date)object[4]);
+
+        Province pp = provinces.stream()
+                .filter(a -> a.getIid() == (Integer)object[5]).findFirst().get();
+        v.setProvince(pp.getDescription());
+        v.setSector(sectors.stream()
+                .filter(a -> a.getLid() == (Long)object[6]).findFirst().get().getType());
+        v.setEnte(paritetichs.stream()
+                .filter(a -> a.getLid() == (Long)object[7]).findFirst().get().getType());
+        v.setRegion(regions.stream().filter(a -> a.getIid() == pp.getIdRegion()).findFirst().get().getDescription());
+        v.setOperator((String)object[8]);
+
+        v.setAcceptDate((Date)object[9]);
+        v.setCancelDate((Date)object[10]);
+        v.setRevokeDate((Date)object[11]);
+
+        v.setAttachment((String)object[12]);
+        v.setNomeattachment((String)object[13]);
+        return v;
+    }
 
 
 
@@ -246,7 +294,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
     }
     private Iscrizione materializeIscrizioniDbNazionle(Object[] object){
         Iscrizione v = new Iscrizione();
-
+        v.setCodiceFiscale((String)object[0]);
        v.setAnno((Integer)object[2]);
        v.setNomeProvincia((String) object[3]);
         v.setNomeRegione((String) object[4]);
