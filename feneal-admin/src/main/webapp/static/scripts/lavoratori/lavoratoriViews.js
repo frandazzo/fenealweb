@@ -1242,7 +1242,7 @@ define([
                 columns:[
 
 
-                    { dataField:"nomeCompleto", fixed :true, fixedPosition:"left",visible : true, visibleIndex: 0,
+                    { dataField:"nomeCompleto", visible : true, visibleIndex: 0,
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
                             var completeName = options.data.nomeCompleto;

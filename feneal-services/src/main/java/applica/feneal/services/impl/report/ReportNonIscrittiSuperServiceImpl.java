@@ -11,6 +11,7 @@ import applica.feneal.domain.data.geo.CitiesRepository;
 import applica.feneal.domain.data.geo.CountriesRepository;
 import applica.feneal.domain.data.geo.ProvinceRepository;
 import applica.feneal.domain.model.core.Paritethic;
+import applica.feneal.domain.model.dbnazionale.Iscrizione;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 import applica.feneal.domain.model.dbnazionale.search.LiberoReportSearchParams;
 import applica.feneal.domain.model.geo.Province;
@@ -127,8 +128,20 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 //        where NomeProvinciaFeneal = 'NAPOLI' and t.ente = 'CASSA EDILE';
 
         String query =  String.format("select \n" +
-                        "t.CodiceFiscale,a.ID  as idWorker, a.companyId, d.state, d.documentDate, d.provinceId, d.sectorId, \n" +
-                        "d.paritethicId, c.description, d.acceptDate, d.cancelDate, d.revokeDate\n" +
+                        "t.CodiceFiscale," +
+                        "a.ID  as idWorker, " +
+                        "a.companyId, " +
+                        "d.state, " +
+                        "d.documentDate, " +
+                        "d.provinceId, " +
+                        "d.sectorId, \n" +
+                        "d.paritethicId, " +
+                        "c.description, " +
+                        "d.acceptDate, " +
+                        "d.cancelDate, " +
+                        "d.revokeDate, \n" +
+                        "d.attachment, " +
+                        "d.nomeattachment\n" +
                         "from \n" +
                         "lavoratori_liberi t \n" +
                         "inner join \n" +
@@ -143,6 +156,27 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
         return query;
     }
+    private SQLQuery createHibernateQueryForDeleghe(Session session, String query){
+        return session.createSQLQuery(query)
+                .addScalar("CodiceFiscale")
+                .addScalar("idWorker")
+                .addScalar("companyId")
+                .addScalar("state")
+                .addScalar("documentDate")
+                .addScalar("provinceId")
+                .addScalar("sectorId")
+                .addScalar("paritethicId")
+                .addScalar("description")
+                .addScalar("acceptDate")
+                .addScalar("cancelDate")
+                .addScalar("revokeDate")
+                .addScalar("attachment")
+                .addScalar("nomeattachment");
+    }
+
+
+
+
     private String createQueryForIscrizioniDbNazionale(String nomeProvincia, String nomeEnte){
 
 
@@ -194,6 +228,40 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         return query;
 
     }
+    private SQLQuery createHibernateQueryForIscrizioniDbNazionale(Session session, String query){
+        return session.createSQLQuery(query)
+                .addScalar("CodiceFiscale")
+                .addScalar("idWorker")
+                .addScalar("anno")
+                .addScalar("NomeProvincia")
+                .addScalar("NomeRegione")
+                .addScalar("Settore")
+                .addScalar("Ente")
+                .addScalar("Azienda")
+                .addScalar("Piva")
+                .addScalar("Livello")
+                .addScalar("Quota")
+                .addScalar("Periodo")
+                .addScalar("Contratto");
+    }
+    private Iscrizione materializeIscrizioniDbNazionle(Object[] object){
+        Iscrizione v = new Iscrizione();
+
+       v.setAnno((Integer)object[2]);
+       v.setNomeProvincia((String) object[3]);
+        v.setNomeRegione((String) object[4]);
+        v.setSettore((String) object[5]);
+        v.setEnte((String) object[6]);
+        v.setAzienda((String) object[7]);
+        v.setPiva((String) object[8]);
+        v.setLivello((String) object[9]);
+        v.setQuota((Double) object[10]);
+        v.setPeriodo((Integer) object[11]);
+        v.setContratto((String) object[12]);
+        return v;
+    }
+
+
 
     private String createQueryForLiberi(String nomeProvincia, String nomeEnte){
 

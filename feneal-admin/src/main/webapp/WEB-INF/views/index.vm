@@ -517,7 +517,7 @@
 
 
                 if (window.appcontext.roleid == 3)//se sonosegretario del veneto
-                if (window.appcontext.provinces.includes("alessandria"))
+                if (window.appcontext.provinces.includes("venezia"))
                     $("li.appoptions").show();
 
                 if (window.appcontext.provinces.indexOf("chieti") > -1 ||
