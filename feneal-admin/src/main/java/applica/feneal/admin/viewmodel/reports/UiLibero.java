@@ -1,5 +1,8 @@
 package applica.feneal.admin.viewmodel.reports;
 
+import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
+import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +53,44 @@ public class UiLibero {
     //Dati azienda//
     private String aziendaRagioneSociale;
     private List<UiIscrizione> iscrizioni;
+    private List<LiberoDbNazionale> nonIscrizioni;
+    private List<DelegaNazionale> delegheNazionali;
+
+    private int numNonIscrizioni;
+    private int numDeleghe;
+
+    public int getNumNonIscrizioni() {
+        return numNonIscrizioni;
+    }
+
+    public void setNumNonIscrizioni(int numNonIscrizioni) {
+        this.numNonIscrizioni = numNonIscrizioni;
+    }
+
+    public int getNumDeleghe() {
+        return numDeleghe;
+    }
+
+    public void setNumDeleghe(int numDeleghe) {
+        this.numDeleghe = numDeleghe;
+    }
+
+    public List<LiberoDbNazionale> getNonIscrizioni() {
+        return nonIscrizioni;
+    }
+
+    public void setNonIscrizioni(List<LiberoDbNazionale> nonIscrizioni) {
+        this.nonIscrizioni = nonIscrizioni;
+    }
+
+    public List<DelegaNazionale> getDelegheNazionali() {
+        return delegheNazionali;
+    }
+
+    public void setDelegheNazionali(List<DelegaNazionale> delegheNazionali) {
+        this.delegheNazionali = delegheNazionali;
+    }
+
     private int numIscrizioni;
 
     public boolean isLavoratoreDelegheOwner() {

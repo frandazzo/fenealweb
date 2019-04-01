@@ -31,6 +31,7 @@ public class Iscrizione extends IEntity {
     private String contratto;
 
     private String nomeCompleto;
+    private String codiceFiscale;
 
     public String getNomeCompleto() {
         return nomeCompleto;
@@ -182,5 +183,13 @@ public class Iscrizione extends IEntity {
 
     public void setContratto(String contratto) {
         this.contratto = contratto;
+    }
+
+    public void setCodiceFiscale(String codiceFiscale) {
+        this.codiceFiscale = codiceFiscale;
+    }
+
+    public String getCodiceFiscale() {
+        return codiceFiscale;
     }
 }

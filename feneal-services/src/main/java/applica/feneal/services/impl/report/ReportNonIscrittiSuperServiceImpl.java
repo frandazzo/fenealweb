@@ -1,6 +1,9 @@
 package applica.feneal.services.impl.report;
 
+import applica.feneal.data.hibernate.geo.RegionsHibernateRepository;
+import applica.feneal.domain.data.Command;
 import applica.feneal.domain.data.core.ParitheticRepository;
+import applica.feneal.domain.data.core.SectorRepository;
 import applica.feneal.domain.data.core.aziende.AziendeRepository;
 import applica.feneal.domain.data.core.deleghe.DelegheRepository;
 import applica.feneal.domain.data.core.lavoratori.LavoratoriRepository;
@@ -10,6 +13,7 @@ import applica.feneal.domain.data.dbnazionale.LiberoDbNazionaleSecondaryReposito
 import applica.feneal.domain.data.geo.CitiesRepository;
 import applica.feneal.domain.data.geo.CountriesRepository;
 import applica.feneal.domain.data.geo.ProvinceRepository;
+import applica.feneal.domain.data.geo.RegonsRepository;
 import applica.feneal.domain.model.core.Paritethic;
 import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.deleghe.Delega;
@@ -17,20 +21,24 @@ import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
 import applica.feneal.domain.model.dbnazionale.Iscrizione;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 import applica.feneal.domain.model.dbnazionale.search.LiberoReportSearchParams;
+import applica.feneal.domain.model.geo.City;
+import applica.feneal.domain.model.geo.Country;
 import applica.feneal.domain.model.geo.Province;
 import applica.feneal.domain.model.geo.Region;
+import applica.feneal.domain.utils.Box;
 import applica.feneal.services.ReportNonIscrittiSuper;
 import applica.framework.LoadRequest;
 import applica.framework.security.Security;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper {
@@ -40,10 +48,23 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
     @Autowired
     private ProvinceRepository proRep;
 
+    @Autowired
+    private RegonsRepository regRep;
+
+    @Autowired
+    private SectorRepository secRep;
+
 
 
     @Autowired
     private ParitheticRepository enteRep;
+
+
+    @Autowired
+    private Security sec;
+
+
+
 
 
 
@@ -52,8 +73,190 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
 
     @Override
-    public List<LiberoDbNazionale> retrieveLiberi(LiberoReportSearchParams params) {
-        return null;
+    public List<LiberoDbNazionale> retrieveLiberi(LiberoReportSearchParams params, boolean isOldReportStyle) {
+
+        final Province p = proRep.get(Integer.parseInt(params.getProvince())).orElse(null);
+
+        final Paritethic t = enteRep.get(Long.parseLong(params.getParithetic())).orElse(null);
+
+
+        final String queryLiberi = createQueryForLiberi(p.getDescription(), t.getType());
+        final String queryIscrizioniDbNazionale = createQueryForIscrizioniDbNazionale(p.getDescription(), t.getType());
+
+        final String queryDeleghe = createQueryForDeleghe(p.getDescription(), t.getType());
+        final String queryNonIscrizioniAttuali = createQueryForNonIscrizioniAttuali(p.getDescription(), t.getType(), p.getIdRegion());
+        final String queryNonIscrizioni = createQueryForNonIscrizioni(p.getDescription(), t.getType(), p.getIdRegion());
+
+        final Box box = new Box();
+
+        enteRep.executeCommand(new Command() {
+            @Override
+            public void execute() {
+                Session s = enteRep.getSession();
+                Transaction tx = null;
+
+                try{
+
+                    tx = s.beginTransaction();
+
+                    List<Object[]> deleghe = new ArrayList<>();
+                    List<Object[]> iscrizioniAltroSindacatoAttuali= new ArrayList<>();
+                    List<Object[]> iscrizioniAltroSindacato= new ArrayList<>();
+
+                    if (!isOldReportStyle){
+                        deleghe = createHibernateQueryForDeleghe(s,queryDeleghe).list();
+                        iscrizioniAltroSindacatoAttuali= createHibernateQueryForNonIscrizioniAttuali(s,queryNonIscrizioniAttuali).list();
+                        iscrizioniAltroSindacato= createHibernateQueryForNonIscrizioni(s,queryNonIscrizioni).list();
+                    }
+
+
+
+                    List<Object[]> isscrizioni = createHibernateQueryForIscrizioniDbNazionale(s,queryIscrizioniDbNazionale).list();
+                    List<Object[]> liberi = createHibernateQueryForLibery(s,queryLiberi).list();
+
+                    tx.commit();
+
+
+
+                    //metto i dati di iscrizioni deleghe e iscrizioni altro indacato
+                    // in una hashtable per codice fiscale
+                    //in modo da poterle recuperare immediatamente
+
+                    //materializoz le icrizoini
+                    Hashtable<String, List<Iscrizione>> i = mateiralizeHashIscrizioni(isscrizioni);
+                    Hashtable<String, List<DelegaNazionale>> i1 = materializeHashDeleghe(deleghe);
+                    Hashtable<String, List<LiberoDbNazionale>> i2 = materializeHashNonIscrizioni(iscrizioniAltroSindacatoAttuali, iscrizioniAltroSindacato);
+                    List<LiberoDbNazionale> a = new ArrayList<>();
+                    for (Object[] objects : liberi) {
+                        LiberoDbNazionale ss = materializeLiberi(objects,t.getType(),p.getDescription());
+                        List<Iscrizione> sd = i.get(ss.getCodiceFiscale());
+                        List<LiberoDbNazionale> sdc = i2.get(ss.getCodiceFiscale());
+                        List<DelegaNazionale> sddel = i1.get(ss.getCodiceFiscale());
+                        if (sd == null)
+                            sd = new ArrayList<>();
+                        if (sddel == null)
+                            sddel = new ArrayList<>();
+                        if (sdc == null)
+                            sdc = new ArrayList<>();
+                        ss.setIscrizioni(sd);
+                        ss.setDeleghe(sddel);
+                        ss.setIscrizioniAltroSindacato(sdc);
+
+                        a.add(ss);
+                    }
+
+
+
+
+
+                    //associo adesso al record liberi le iscrizioni
+
+
+                    box.setValue(a);
+
+
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                    tx.rollback();
+                }
+                finally{
+
+                        s.close();
+
+                }
+            }
+
+
+        });
+
+        return (List<LiberoDbNazionale>)box.getValue();
+
+
+
+    }
+
+    private Hashtable<String, List<Iscrizione>> mateiralizeHashIscrizioni(List<Object[]> isscrizioni) {
+        Hashtable<String,List<Iscrizione>> i = new Hashtable<>();
+        for (Object[] objects : isscrizioni) {
+            Iscrizione r = materializeIscrizioniDbNazionle(objects);
+            if (!i.containsKey(r.getCodiceFiscale())){
+                List<Iscrizione> a1 = new ArrayList<>();
+                a1.add(r);
+                i.put(r.getCodiceFiscale(), a1);
+            }
+
+            else{
+                List<Iscrizione> a1 = i.get(r.getCodiceFiscale());
+                a1.add(r);
+            }
+        }
+        return i;
+    }
+
+    private Hashtable<String, List<DelegaNazionale>> materializeHashDeleghe(List<Object[]> deleghe) {
+
+        //recupero ttute le entittà necessarie alla eventuale materializzazione delle deleghe
+        final List<Province> provinces = proRep.find(null).getRows();
+        final List<Region> regions = regRep.find(null).getRows();
+        final List<Paritethic> enti = enteRep.find(null).getRows();
+        final List<Sector> settori = secRep.find(null).getRows();
+
+
+        Hashtable<String,List<DelegaNazionale>> i = new Hashtable<>();
+        for (Object[] objects : deleghe) {
+            DelegaNazionale r = materializeDelegheDbNazionle(objects,settori,enti,provinces,regions);
+            if (!i.containsKey(r.getCodiceFiscale())){
+                List<DelegaNazionale> a1 = new ArrayList<>();
+                a1.add(r);
+                i.put(r.getCodiceFiscale(), a1);
+            }
+
+            else{
+                List<DelegaNazionale> a1 = i.get(r.getCodiceFiscale());
+                a1.add(r);
+            }
+        }
+        return i;
+    }
+
+
+    private Hashtable<String, List<LiberoDbNazionale>> materializeHashNonIscrizioni(List<Object[]> attuali, List<Object[]> vecchie) {
+
+
+
+
+        Hashtable<String,List<LiberoDbNazionale>> i = new Hashtable<>();
+        for (Object[] objects : attuali) {
+            LiberoDbNazionale r = materializeNonIscrizioniAttuali(objects);
+            if (!i.containsKey(r.getCodiceFiscale())){
+                List<LiberoDbNazionale> a1 = new ArrayList<>();
+                a1.add(r);
+                i.put(r.getCodiceFiscale(), a1);
+            }
+
+            else{
+                List<LiberoDbNazionale> a1 = i.get(r.getCodiceFiscale());
+                a1.add(r);
+            }
+        }
+
+
+        for (Object[] objects : vecchie) {
+            LiberoDbNazionale r = materializeNonIscrizioni(objects);
+            if (!i.containsKey(r.getCodiceFiscale())){
+                List<LiberoDbNazionale> a1 = new ArrayList<>();
+                a1.add(r);
+                i.put(r.getCodiceFiscale(), a1);
+            }
+
+            else{
+                List<LiberoDbNazionale> a1 = i.get(r.getCodiceFiscale());
+                a1.add(r);
+            }
+        }
+
+        return i;
     }
 
 
@@ -80,11 +283,35 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                         "                (select descrizione as provincia from tb_provincie where ID_TB_REGIONI = %s )\n" +
                         "        and iscrittoa <> \"\") n\n" +
                         "        on t.CodiceFiscale = n.codicefiscale" +
-                        " where NomeProvinciaFeneal = '%s' and ente = '%s' ",
+                        " where t.NomeProvinciaFeneal = '%s' and t.ente = '%s' ",
                 idREgione,  nomeProvincia.replace("'","''"), nomeEnte);
 
         return query;
     }
+    private SQLQuery createHibernateQueryForNonIscrizioni(Session session, String query){
+        return session.createSQLQuery(query)
+                .addScalar("CodiceFiscale")
+                .addScalar("nomeprovinciafeneal")
+                .addScalar("currentAzienda")
+                .addScalar("liberoAl")
+                .addScalar("ente")
+                .addScalar("iscrittoa")
+                ;
+    }
+    private LiberoDbNazionale materializeNonIscrizioni(Object[] object){
+        LiberoDbNazionale v = new LiberoDbNazionale();
+
+        v.setCodiceFiscale((String)object[0]);
+        v.setNomeProvinciaFeneal((String)object[1]);
+        v.setCurrentAzienda((String)object[2]);
+        v.setLiberoAl((Date)object[3]);
+        v.setEnte((String)object[4]);
+        v.setIscrittoA((String)object[5]);
+
+
+        return v;
+    }
+
     private String createQueryForNonIscrizioniAttuali(String nomeProvincia, String nomeEnte, int idREgione){
 
 
@@ -108,12 +335,35 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                         "(select descrizione as provincia from tb_provincie where ID_TB_REGIONI = %s and descrizione <> '%s') \n" +
                         "and iscrittoa <> \"\") n\n" +
                         "on t.CodiceFiscale = n.codicefiscale " +
-                " where NomeProvinciaFeneal = '%s' and ente = '%s' ",
+                " where t.NomeProvinciaFeneal = '%s' and t.ente = '%s' ",
                 idREgione, nomeProvincia.replace("'","''"), nomeProvincia.replace("'","''"), nomeEnte);
 
         return query;
 
 
+    }
+    private SQLQuery createHibernateQueryForNonIscrizioniAttuali(Session session, String query){
+        return session.createSQLQuery(query)
+                .addScalar("CodiceFiscale")
+                .addScalar("nomeprovinciafeneal")
+                .addScalar("currentAzienda")
+                .addScalar("liberoAl")
+                .addScalar("ente")
+                .addScalar("iscrittoa")
+                ;
+    }
+    private LiberoDbNazionale materializeNonIscrizioniAttuali(Object[] object){
+        LiberoDbNazionale v = new LiberoDbNazionale();
+
+        v.setCodiceFiscale((String)object[0]);
+        v.setNomeProvinciaFeneal((String)object[1]);
+        v.setCurrentAzienda((String)object[2]);
+        v.setLiberoAl((Date)object[3]);
+        v.setEnte((String)object[4]);
+        v.setIscrittoA((String)object[5]);
+
+
+        return v;
     }
 
 
@@ -189,8 +439,12 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                                                          List<Region> regions){
         DelegaNazionale v = new DelegaNazionale();
         v.setCodiceFiscale((String)object[0]);
-        v.setIdWorker((Long)object[1]);
-        v.setCompanyId((Long)object[2]);
+        BigInteger dd = (BigInteger)object[1];
+
+        v.setIdWorker(dd.longValue());
+        BigInteger dd1 = (BigInteger)object[2];
+
+        v.setCompanyId(dd1.longValue());
 
         Integer state = (Integer)object[3];
         if (state == Delega.state_subscribe || state == Delega.state_sent)
@@ -207,10 +461,14 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         Province pp = provinces.stream()
                 .filter(a -> a.getIid() == (Integer)object[5]).findFirst().get();
         v.setProvince(pp.getDescription());
+
+        BigInteger dd2 = (BigInteger)object[6];
+
         v.setSector(sectors.stream()
-                .filter(a -> a.getLid() == (Long)object[6]).findFirst().get().getType());
+                .filter(a -> a.getLid() == dd2.longValue()).findFirst().get().getType());
+        BigInteger dd3 = (BigInteger)object[7];
         v.setEnte(paritetichs.stream()
-                .filter(a -> a.getLid() == (Long)object[7]).findFirst().get().getType());
+                .filter(a -> a.getLid() == dd3.longValue()).findFirst().get().getType());
         v.setRegion(regions.stream().filter(a -> a.getIid() == pp.getIdRegion()).findFirst().get().getDescription());
         v.setOperator((String)object[8]);
 
@@ -270,7 +528,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                         "        inner join" +
                         "        iscrizioni i" +
                         "        on a.ID = i.Id_Lavoratore " +
-                        " where NomeProvinciaFeneal = '%s' and ente = '%s' ",
+                        " where t.NomeProvinciaFeneal = '%s' and t.ente = '%s' ",
                 nomeProvincia.replace("'","''"), nomeEnte);
 
         return query;

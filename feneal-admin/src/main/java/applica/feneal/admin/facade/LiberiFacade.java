@@ -44,6 +44,9 @@ public class LiberiFacade {
     private ReportNonIscrittiService libService;
 
     @Autowired
+    private ReportNonIscrittiSuper libServicenew;
+
+    @Autowired
     private RichieseInfoAiTerritoriService richSvc;
 
     @Autowired
@@ -93,41 +96,49 @@ public class LiberiFacade {
         List<UiLibero> result = new ArrayList<>();
 
         for (LiberoDbNazionale liberoDbNazionale : lib) {
-            UiLibero l = new UiLibero();
-            l.setLavoratoreDelegheOwner(liberoDbNazionale.isDelegheOwner());
-            l.setAziendaRagioneSociale(liberoDbNazionale.getCurrentAzienda());
-            l.setLavoratoreCap(liberoDbNazionale.getCap());
-            l.setLavoratoreCellulare(liberoDbNazionale.getTelefono());
-            l.setLavoratoreCittaResidenza(liberoDbNazionale.getNomeComuneResidenza());
-            l.setLavoratoreCodiceFiscale(liberoDbNazionale.getCodiceFiscale());
-            l.setLavoratoreCognome(liberoDbNazionale.getCognome());
+                UiLibero l = new UiLibero();
+          //  if (liberoDbNazionale.getDeleghe().size() > 0){
+                l.setLavoratoreDelegheOwner(liberoDbNazionale.isDelegheOwner());
+                l.setAziendaRagioneSociale(liberoDbNazionale.getCurrentAzienda());
+                l.setLavoratoreCap(liberoDbNazionale.getCap());
+                l.setLavoratoreCellulare(liberoDbNazionale.getTelefono());
+                l.setLavoratoreCittaResidenza(liberoDbNazionale.getNomeComuneResidenza());
+                l.setLavoratoreCodiceFiscale(liberoDbNazionale.getCodiceFiscale());
+                l.setLavoratoreCognome(liberoDbNazionale.getCognome());
 
-            l.setLavoratoreDataNascita(liberoDbNazionale.getDataNascita());
-            l.setLavoratoreIndirizzo(liberoDbNazionale.getIndirizzo());
-            l.setLavoratoreLuogoNascita(liberoDbNazionale.getNomeComune());
-            l.setLavoratoreNazionalita(liberoDbNazionale.getNomeNazione());
-            l.setLavoratoreNome(liberoDbNazionale.getNome());
-            l.setLavoratoreCittaResidenza(liberoDbNazionale.getNomeComuneResidenza());
-            l.setLavoratoreProvinciaNascita(liberoDbNazionale.getNomeProvincia());
-            l.setLavoratoreProvinciaResidenza(liberoDbNazionale.getNomeProvinciaResidenza());
-            if (liberoDbNazionale.getSesso().equals("MASCHIO"))
-                l.setLavoratoreSesso(Lavoratore.MALE);
-            else
-            l.setLavoratoreSesso(Lavoratore.FEMALE);
-            l.setLiberoEnteBilaterale(liberoDbNazionale.getEnte());
-
-
-            l.setLiberoData(liberoDbNazionale.getLiberoAl());
-            l.setLiberoProvincia(liberoDbNazionale.getNomeProvinciaFeneal());
-            l.setLiberoIscrittoA(liberoDbNazionale.getIscrittoA());
+                l.setLavoratoreDataNascita(liberoDbNazionale.getDataNascita());
+                l.setLavoratoreIndirizzo(liberoDbNazionale.getIndirizzo());
+                l.setLavoratoreLuogoNascita(liberoDbNazionale.getNomeComune());
+                l.setLavoratoreNazionalita(liberoDbNazionale.getNomeNazione());
+                l.setLavoratoreNome(liberoDbNazionale.getNome());
+                l.setLavoratoreCittaResidenza(liberoDbNazionale.getNomeComuneResidenza());
+                l.setLavoratoreProvinciaNascita(liberoDbNazionale.getNomeProvincia());
+                l.setLavoratoreProvinciaResidenza(liberoDbNazionale.getNomeProvinciaResidenza());
+                if (liberoDbNazionale.getSesso().equals("MASCHIO"))
+                    l.setLavoratoreSesso(Lavoratore.MALE);
+                else
+                    l.setLavoratoreSesso(Lavoratore.FEMALE);
+                l.setLiberoEnteBilaterale(liberoDbNazionale.getEnte());
 
 
-            l.setIscrizioni(convertIscrizioniToUiiscrizioni(liberoDbNazionale.getIscrizioni()));
+                l.setLiberoData(liberoDbNazionale.getLiberoAl());
+                l.setLiberoProvincia(liberoDbNazionale.getNomeProvinciaFeneal());
+                l.setLiberoIscrittoA(liberoDbNazionale.getIscrittoA());
 
-            l.setNumIscrizioni(l.getIscrizioni().size());
 
-            result.add(l);
+                l.setIscrizioni(convertIscrizioniToUiiscrizioni(liberoDbNazionale.getIscrizioni()));
+
+                l.setNumIscrizioni(l.getIscrizioni().size());
+
+                l.setDelegheNazionali(liberoDbNazionale.getDeleghe());
+                l.setNumDeleghe(l.getDelegheNazionali().size());
+
+                l.setNonIscrizioni(liberoDbNazionale.getIscrizioniAltroSindacato());
+                l.setNumNonIscrizioni(l.getNonIscrizioni().size());
+                result.add(l);
         }
+
+        //}
 
 
         return result;
@@ -415,5 +426,11 @@ public class LiberiFacade {
 
 
         return p;
+    }
+
+    public List<UiLibero> reportNonIscrittiNew(LiberoReportSearchParams params) throws ParseException {
+        List<LiberoDbNazionale> lib = libServicenew.retrieveLiberi(params, false);
+
+        return convertLiberiToUiLiberi(lib);
     }
 }

@@ -101,6 +101,7 @@ require([
         //percorso per i reports
         ui.Navigation.instance().registerController("reportiscritti", function() { return new iscrittiReportController.IscrittiReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportliberi", function() { return new liberiReportController.LiberiReportController(); }, "singleton");
+        ui.Navigation.instance().registerController("reportliberisuper", function() { return new liberiReportController.NewLiberiReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportiqa", function() { return new iqaReportController.IncassiQuoteReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportdeleghe", function() { return new delController.DelegheReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportdocumenti", function() { return new docReportController.DocumentiReportController(); }, "singleton");

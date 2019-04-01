@@ -95,6 +95,22 @@ public class ReportNonIscrittiController {
 
     }
 
+    @RequestMapping(value="/liberi/reportnew", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse reportLiberinew(@RequestBody LiberoReportSearchParams params){
+        List<UiLibero> f;
+        try{
+            f = liberiReportFac.reportNonIscrittiNew(params);
+            manageActivityReportNonIscritti(params, "Report non iscritti", f);
+            return new ValueResponse(f);
+        }catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+
+
+    }
+
     @RequestMapping(value="/liberi/reportforapp", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody
@@ -138,14 +154,6 @@ public class ReportNonIscrittiController {
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt")
                     .putParam(Params.FORM_COLUMN, " ");
-//            formDescriptor.addField("date", String.class, "Da", null, applicationContext.getBean(DateFromMonthFieldRenderer.class))
-//                    .putParam(Params.COLS, Values.COLS_12)
-//                    .putParam(Params.ROW, "dt1")
-//                    .putParam(Params.FORM_COLUMN, " ");
-//            formDescriptor.addField("date", String.class, "a", null, applicationContext.getBean(DateToMonthFieldRenderer.class))
-//                    .putParam(Params.COLS, Values.COLS_12)
-//                    .putParam(Params.ROW, "dt2")
-//                    .putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("signedTo", String.class, "Iscritto a", null, applicationContext.getBean(SignedToSelectFieldRenderer.class))
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt3")
@@ -171,6 +179,43 @@ public class ReportNonIscrittiController {
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt7")
                     .putParam(Params.FORM_COLUMN, "  ");
+
+
+            FormResponse response = new FormResponse();
+
+            response.setContent(form.writeToString());
+            response.setTitle("Report liberi");
+
+            return response;
+        } catch (FormCreationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        } catch (CrudConfigurationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/liberinew",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse searchviewnew(HttpServletRequest request) {
+        try{
+            Form form = new Form();
+            form.setRenderer(applicationContext.getBean(ReportsSearchFormRenderer.class));
+            form.setIdentifier("liberireportnew");
+
+            FormDescriptor formDescriptor = new FormDescriptor(form);
+
+            formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggdUserExclusiveProvicesNonOptionalSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+            formDescriptor.addField("parithetic", String.class, "Ente", null, applicationContext.getBean(ParithericNonOptionalSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt4")
+                    .putParam(Params.FORM_COLUMN, " ");
 
 
             FormResponse response = new FormResponse();
