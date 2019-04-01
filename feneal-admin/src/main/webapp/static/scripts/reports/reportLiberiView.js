@@ -1431,8 +1431,47 @@ define([
                     template: function(container, options) {
                         var currentData = options.data;
 
-                        container.addClass("internal-grid-container");
-                        $("<div>").text("Iscrizioni lavoratore").appendTo(container);
+                        var fiscalCode = currentData.lavoratoreCodiceFiscale;
+
+                        var containerString = '<div class="col-md-12">\n' +
+                            '    <div class="tab-block mb25">\n' +
+                            '        <ul class="nav nav-tabs tabs-border nav-justified">\n' +
+                            '            <li class="active">\n' +
+                            '                <a href="#tab15_1_' + fiscalCode + '" data-toggle="tab" aria-expanded="false">Iscrizioni db nazionale</a>\n' +
+                            '            </li>\n' +
+                            '            <li >\n' +
+                            '                <a href="#tab15_2_' + fiscalCode + '" data-toggle="tab" aria-expanded="true"><i class="fa fa-pencil text-purple pr5"></i> Deleghe</a>\n' +
+                            '            </li>\n' +
+                            '            <li >\n' +
+                            '                <a href="#tab15_3_' + fiscalCode + '" data-toggle="tab" aria-expanded="true"><i class="fa fa-pencil text-purple pr5"></i> Iscrizioni altro sindacato</a>\n' +
+                            '            </li>\n' +
+                            '        </ul>\n' +
+                            '        <div class="tab-content">\n' +
+                            '            <div id="tab15_1_' + fiscalCode + '" class="tab-pane active">\n' +
+                            '                <div class="iscon"></div>\n' +
+                            '            </div>\n' +
+                            '            <div id="tab15_2_' + fiscalCode + '" class="tab-pane ">\n' +
+                            '               <div class="delcon"></div>\n' +
+                            '            </div>\n' +
+                            '            <div id="tab15_3_' + fiscalCode + '" class="tab-pane">\n' +
+                            '                 <div class="noniscon"></div>\n' +
+                            '            </div>\n' +
+                            '          \n' +
+                            '        </div>\n' +
+                            '    </div>\n' +
+                            '</div>';
+
+                        var mainContainer = $(containerString);
+
+                        mainContainer.appendTo(container);
+
+                        // container.addClass("internal-grid-container");
+                        // $("<div>").text("Iscrizioni lavoratore")
+                        //     .appendTo(container);
+                        //
+                        //
+                        //
+                        //
                         $("<div>")
                             .addClass("internal-grid")
                             .dxDataGrid({
@@ -1470,7 +1509,51 @@ define([
 
                                 ],
                                 dataSource: currentData.iscrizioni
-                            }).appendTo(container);
+                            })
+                            .appendTo(mainContainer.find('.iscon'));
+
+
+                        $("<div>")
+                            .addClass("internal-grid-deleghe")
+                            .dxDataGrid({
+                                columnAutoWidth: true,
+                                // columns: [
+                                //     { dataField:"nomeRegione",  visible : true, visibleIndex: 0},
+                                //     { dataField:"nomeProvincia",  visible : true, visibleIndex: 1},
+                                //     { dataField:"settore",  visible : true, visibleIndex: 2},
+                                //     { dataField:"ente",  visible : true, visibleIndex: 3},
+                                //     { dataField:"periodo",  visible : true, visibleIndex: 4},
+                                //     { dataField:"anno",  visible : true, visibleIndex: 5},
+                                //     { dataField:"azienda", visible : true, visibleIndex: 6},
+                                //     { dataField:"piva",  visible : true, visibleIndex: 7},
+                                //     { dataField:"livello",  visible : true, visibleIndex: 8},
+                                //     { dataField:"quota",  visible : true, visibleIndex: 9},
+                                //     { dataField:"contratto",  visible : true, visibleIndex: 10},
+                                //
+                                //
+                                //
+                                // ],
+                                dataSource: currentData.delegheNazionali
+                            })
+                            .appendTo(mainContainer.find('.delcon'));
+
+
+                        $("<div>")
+                            .addClass("internal-grid-nonniscrizioni")
+                            .dxDataGrid({
+                                columnAutoWidth: true,
+                                columns: [
+                                    { dataField:"liberoAl", caption:"Data", visible : true, dataType:'date'},
+                                    { dataField:"nomeProvinciaFeneal", caption:"Provincia",  visible : true},
+                                    { dataField:"ente", caption:"Ente bilaterale", visible : true},
+                                    { dataField:"iscrittoA", caption:"Altro sindacato", visible : true },
+                                    { dataField:"currentAzienda", caption:"Azienda", visible : true, visibleIndex: 5}
+                                ],
+                                dataSource: currentData.nonIscrizioni
+                            })
+                            .appendTo(mainContainer.find('.noniscon'));
+
+
                     }
                 }
 

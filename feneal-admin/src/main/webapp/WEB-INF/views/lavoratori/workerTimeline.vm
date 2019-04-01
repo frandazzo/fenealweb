@@ -1,0 +1,56 @@
+<script type="text/javascript">
+    var containerString = '<div class="col-md-12">\n' +
+            '    <div class="tab-block mb25">\n' +
+            '        <ul class="nav nav-tabs tabs-border nav-justified">\n' +
+            '            <li class="active">\n' +
+            '                <a href="#tab15_1" data-toggle="tab" aria-expanded="false">Iscrizioni db nazionale</a>\n' +
+            '            </li>\n' +
+            '            <li >\n' +
+            '                <a href="#tab15_2" data-toggle="tab" aria-expanded="true"><i class="fa fa-pencil text-purple pr5"></i> Deleghe</a>\n' +
+            '            </li>\n' +
+            '            <li >\n' +
+            '                <a href="#tab15_3" data-toggle="tab" aria-expanded="true"><i class="fa fa-pencil text-purple pr5"></i> Iscrizioni altro sindacato</a>\n' +
+            '            </li>\n' +
+            '        </ul>\n' +
+            '        <div class="tab-content">\n' +
+            '            <div id="tab15_1" class="tab-pane active">\n' +
+            '                rfefrrf\n' +
+            '            </div>\n' +
+            '            <div id="tab15_2" class="tab-pane ">\n' +
+            '               efefef\n' +
+            '            </div>\n' +
+            '            <div id="tab15_3" class="tab-pane">\n' +
+            '                nvjenv\n' +
+            '            </div>\n' +
+            '          \n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '</div>';
+</script>
+<div class="col-md-12">
+    <div class="tab-block mb25">
+        <ul class="nav nav-tabs tabs-border nav-justified">
+            <li class="active">
+                <a href="#tab15_1" data-toggle="tab" aria-expanded="false">Tab One</a>
+            </li>
+            <li >
+                <a href="#tab15_2" data-toggle="tab" aria-expanded="true"><i class="fa fa-pencil text-purple pr5"></i> Tab Two</a>
+            </li>
+            <li >
+                <a href="#tab15_3" data-toggle="tab" aria-expanded="true"><i class="fa fa-pencil text-purple pr5"></i> Tab Two</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="tab15_1" class="tab-pane active">
+                rfefrrf
+            </div>
+            <div id="tab15_2" class="tab-pane ">
+               efefef
+            </div>
+            <div id="tab15_3" class="tab-pane">
+                nvjenv
+            </div>
+
+        </div>
+    </div>
+</div>
