@@ -19,6 +19,17 @@ define([
         ctor: function(){
             LavoratoreSummaryController.super.ctor.call(this);
         },
+        multiterritorio: function(params) {
+
+            var workerId = params.id;
+            var url = BASE + "worker/summarymultiterritorio/"+ workerId;
+            var service = new fmodel.AjaxService();
+            service.set({
+                url: url
+            });
+            return new views.WorkerSummaryRemoteView(service, workerId);
+
+        },
         index: function(params) {
 
             var workerId = params.id;
@@ -117,11 +128,45 @@ define([
         }
 
     });
+
+
+
+    var LavoratoriSearchNewController = fcontrollers.Controller.extend({
+        ctor: function(){
+            LavoratoriSearchNewController.super.ctor.call(this);
+        },
+        index: function(params) {
+
+
+            var workername = "";
+
+            if (params)
+                if (params.workername)
+                    workername = params.workername;
+
+
+            var service = new fmodel.FormService();
+            service.set({
+                method: "GET",
+                url: BASE + "workers/searchnew",
+                data: {}
+            });
+
+
+
+            var view = new views.SearchWorkersNewAppView(service, workername);
+            // view.set("title", "Ricerca lavoratori");
+
+            return view;
+        }
+
+    });
    
     
     exports.LavoratoreEditController = LavoratoreEditController;
     exports.LavoratoreSummaryController = LavoratoreSummaryController;
     exports.LavoratoriSearchController = LavoratoriSearchController;
+    exports.LavoratoriSearchNewController = LavoratoriSearchNewController;
 
     return exports;
 });

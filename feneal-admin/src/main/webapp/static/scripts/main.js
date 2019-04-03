@@ -76,6 +76,7 @@ require([
 
         //percorsi per il lavoratore 
         ui.Navigation.instance().registerController("searchworkers", function() { return new lavController.LavoratoriSearchController(); }, "singleton");
+        ui.Navigation.instance().registerController("searchworkersnew", function() { return new lavController.LavoratoriSearchNewController(); }, "singleton");
         ui.Navigation.instance().registerController("summaryworker", function() { return new lavController.LavoratoreSummaryController(); }, "singleton");
         ui.Navigation.instance().registerController("editworker", function() { return new lavController.LavoratoreEditController(); }, "singleton");
 

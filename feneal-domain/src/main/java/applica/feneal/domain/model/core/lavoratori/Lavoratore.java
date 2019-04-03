@@ -21,6 +21,23 @@ public class Lavoratore extends SecuredDomainEntity {
     public static final String MALE = "M";
     public static final String FEMALE = "F";
 
+    //AATTENZIONE : questa proprietà è stata aggiunta solamente per
+    //gestire la nuova ricerca utente multiterritoriale richiesta
+    //dalla lombardia (03/04/2019)
+    //poichè la facade non restituisce un dto ma restituisce direttamente lìoggetto di dominio alllora
+    //per evitare di fare il dto, la conversione ecc
+    //utilizzo una bruttissima scorciatoia (lo metto come proprietà transiente nell'oggetto di dominio)
+    //da ggiustare quanto prima
+    private transient String companyName;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     private String name;
     private String surname;
     private String sex;

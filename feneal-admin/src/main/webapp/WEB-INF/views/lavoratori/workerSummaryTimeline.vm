@@ -1,0 +1,820 @@
+#parse("/shared/framework.vm")
+
+<div class="worker-summary-header" data-id="">
+
+    <div class="col-md-3">
+
+        <div class="col-md-12 col-xs-12 zero-padding" style="background-color: white; border-bottom: 1px solid #DDD; margin-top:10px">
+
+            <div class="media clearfix">
+
+                <div class="col-md-12 col-xs-12 p20">
+                    #if(!$summary.data.image || $summary.data.image == "")
+                        #if ($summary.data.name != "" && $summary.data.surname != "")
+                            #set($initials = "$summary.data.name.charAt(0)$summary.data.surname.charAt(0)")
+                        #else
+                            #set($initials = "")
+                        #end
+                        #set($userImg = "dynaimg/" + $initials + "?size=30x30")
+                    #else
+                        #set($userImg = $summary.data.image + "?size=30x30")
+                    #end
+                    <div class="col-md-2 col-xs-2 zero-padding-left">
+                        <img src="${wwwBase}$userImg" alt="avatar" class="br64 mrd15" style="width: 50px;height: 50px;">
+                    </div>
+                    <div class="col-md-10 col-xs-10 zero-padding pl20">
+                        <div class="col-md-12 col-xs-12 zero-padding">
+                            #if ($displaySignalUser)
+                                <button data-toggle="tooltip" data-placement="left" title="Segnala lavoratore" type="button" #if($isWorkerSigned)data-worker-signed="1"#end class="btn btn-signal-worker pull-right p0 #if($isWorkerSigned)btn-primary #else btn-danger#end border-radius-3" style="width: 40px;height: 40px;"><span class="glyphicon glyphicon-plane" aria-hidden="true"></span></button>
+                            #end
+                            #if ($existSMSCredentials)
+                                <button data-toggle="tooltip" data-placement="left" title="Invia SMS" type="button" class="btn btn-primary pull-right p0 mr5 btn-send-sms border-radius-3" style="width: 40px;height: 40px;"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></button>
+                                <button data-toggle="tooltip" data-placement="left" title="Credito residuo SMS" type="button" class="btn btn-primary pull-right p0 mr5 btn-residual-credit border-radius-3" style="width: 40px;height: 40px;"><span class="glyphicon glyphicon-euro" aria-hidden="true"></span></button>
+                            #end
+                        </div>
+                    </div>
+
+                    #if($summary.data.cellphone && $summary.data.cellphone!="")
+                        <div class="col-md-12 col-xs-12 fs14 mt10">
+                            <span>Cellulare:</span><span class="ml10">$summary.data.cellphone</span>
+                        </div>
+                    #end
+
+
+                </div>
+
+
+                <div class="va-m mt10">
+
+                    <div class="col-md-12 col-xs-12 p20">
+
+                        <input type="hidden" name="id" id="id" value="$summary.data.id"/>
+
+                        <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Nome:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.name)$summary.data.name#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Cognome:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.surname)$summary.data.surname#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Data di nascita:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.birthDate)$localization.formatDate($summary.data.birthDate)#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Nazionalità:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.nationality)$summary.data.nationality#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Provincia di nascita:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.birthProvince)$summary.data.birthProvince#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Comune di nascita:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.birthPlace)$summary.data.birthPlace#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>C.F.:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.fiscalcode)$summary.data.fiscalcode#end</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+
+                ##                    <div class="media-left pr30 pt15 p20">
+                ##                        <h3 class="media-heading pb15 pt10 pull-right text-center fs14"> ISCRIZIONI </h3>
+                ##                    </div>
+
+                    <div class="col-md-12 col-xs-12 zero-padding">
+
+                        <div class="col-md-12 col-xs-12 zero-padding back-blue-color-white" style="padding-top: 0px;padding-bottom: 0px">
+
+                            <span class="glyphicon glyphicon-print print color-dark-blue cursor-pointer" aria-hidden="true" style="z-index: 100;font-size: 16px;position: absolute;top: 10px;right: 10px"></span>
+
+                            <div class="col-md-6 col-xs-12 full-height padding-bottom-20 padding-top-20">
+
+                                <button
+                                        type="button"
+                                        class="btn back-white img-center box-shadow-button mt25"
+                                        style="width: 100px;height: 70px;"
+                                        data-toggle="popover"
+                                        data-trigger="hover">
+
+                                    #if($summary.iscrittoData.iscritto)
+                                        <span class="color-green"><i class="material-icons font-size-36">sentiment_satisfied</i></span>
+                                    #else
+                                        <span class="color-red"><i class="material-icons font-size-36">sentiment_dissatisfied</i></span>
+                                    #end
+
+                                </button>
+
+                                #if($summary.iscrittoData.iscritto)
+                                    <p class="text-center mt10">Iscritto</p>
+                                #else
+                                    <p class="text-center mt10">Non iscritto</p>
+                                #end
+
+                            </div>
+
+                            <div class="col-md-6 col-xs-12 full-height border-left-white-min-992 padding-bottom-20 padding-top-20">
+
+                                <button
+                                        type="button"
+                                        class="btn back-white img-center box-shadow-button mt25 tesseraButton"
+                                        style="width: 100px;height: 70px;">
+
+                                    #if(!$summary.tesseraData)
+                                        <span class="color-red"><i class="material-icons font-size-36">sentiment_dissatisfied</i></span>
+                                    #else
+                                        <span class="color-green"><i class="material-icons font-size-36">sentiment_satisfied</i></span>
+                                    #end
+
+                                </button>
+
+                                #if(!$summary.tesseraData)
+                                    <p class="text-center mt10 label-tessera">Tessera non stampata</p>
+                                #else
+                                    <p class="text-center mt10 label-tessera">Tessera stampata</p>
+                                #end
+
+                            </div>
+
+                            #if($summary.iscrittoData.iscritto)
+                                <div class="col-md-12 col-xs-12 zero-padding margin-bottom-20 popover-content-div" style="display: none">
+
+                                    <div class='col-md-12 col-xs-12 p5 zero-padding border-bottom-light-gray'>
+                                        <div class='col-md-6 col-xs-6 zero-padding'>
+                                            <span>Settore:</span>
+                                        </div>
+                                        <div class='col-md-6 col-xs-6 zero-padding'>
+                                            <span class='pull-right'>#if($summary.iscrittoData.settore)$summary.iscrittoData.settore#end</span>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-12 col-xs-12 p5 zero-padding border-bottom-light-gray'>
+                                        <div class='col-md-6 col-xs-6 zero-padding'>
+                                            <span>Ente:</span>
+                                        </div>
+                                        <div class='col-md-6 col-xs-6 zero-padding'>
+                                            <span class='pull-right'>#if($summary.iscrittoData.ente)$summary.iscrittoData.ente#end</span>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-12 col-xs-12 p5 zero-padding border-bottom-light-gray'>
+                                        <div class='col-md-6 col-xs-6 zero-padding'>
+                                            <span>Azienda:</span>
+                                        </div>
+                                        <div class='col-md-6 col-xs-6 zero-padding'>
+                                            <span class='pull-right'>#if($summary.iscrittoData.azienda)$summary.iscrittoData.azienda#end</span>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-12 col-xs-12 p5 zero-padding border-bottom-light-gray'>
+                                        <div class='col-md-6 col-xs-6 zero-padding'>
+                                            <span>Periodo:</span>
+                                        </div>
+                                        <div class='col-md-6 col-xs-6 zero-padding'>
+                                            <span class='pull-right'>#if($summary.iscrittoData.periodo)$summary.iscrittoData.periodo#end</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            #end
+
+
+                            <div class="col-md-12 col-xs-12 zero-padding tessera-content-div" style="display: none">
+                                <div class="col-md-12 col-xs-12 tessera-printed">
+                                    #if($summary.tesseraData)
+                                        <div class="col-md-12 col-xs-12">
+                                            <span class="text-bold">Tessera stampata da</span>
+                                        </div>
+                                        <div class="col-md-12 col-xs-12 padding-10">
+                                            <div class="col-md-6 col-xs-6 zero-padding">
+                                                <span>$summary.tesseraData.printedFrom</span>
+                                            </div>
+                                            <div class="col-md-6 col-xs-6">
+                                                <span class="pull-right">$summary.tesseraData.date</span>
+                                            </div>
+                                        </div>
+                                    #else
+                                        <div class="col-md-12 col-xs-12">
+                                            <span class="text-bold">Tessera non posseduta.</span>
+                                        </div>
+                                    #end
+                                </div>
+
+                            ## altre tessere
+                                <div class="col-md-12 col-xs-12 other-tessere-printed margin-top-20">
+                                    <div class="col-md-12 col-xs-12">
+                                        <span class="text-bold">Altre tessere stampate</span>
+                                    </div>
+                                    #if ($summary.otherTessereData.size() == 0)
+                                        <div class="col-md-12 col-xs-12 padding-10">
+                                            <span class="">Non sono presenti altre tessere.</span>
+                                        </div>
+                                    #else
+                                        #foreach($otherTessera in $summary.otherTessereData)
+                                            <div class="col-md-12 col-xs-12 padding-10">
+                                                <div class="col-md-4 col-xs-4 zero-padding">
+                                                    <span>$otherTessera.company</span>
+                                                </div>
+                                                <div class="col-md-4 col-xs-4 zero-padding">
+                                                    <span>$otherTessera.printedFrom</span>
+                                                </div>
+                                                <div class="col-md-4 col-xs-4 zero-padding">
+                                                    <span>$otherTessera.date</span>
+                                                </div>
+                                            </div>
+                                        #end
+                                    #end
+                                </div>
+
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+
+                    <div class='col-md-12 col-xs-12 p20'>
+
+                        <div class="media-left pr30 pt15">
+                        ##                        <a href="#">
+                        ##                        ##<img class="media-object mw150" src="static/images/gallery_1.jpg" alt="..." width="165px" height="165px">
+                        ##                            <i class="fa fa-phone fs30"></i>
+                        ##                        </a>
+                            <h3 class="media-heading pb15 pt10 pull-right text-center fs14"> CONTATTI </h3>
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Telefono:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.phone)$summary.data.phone#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Cellulare:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                #if($summary.data.cellphone && $summary.data.cellphone!="") <span class="color-green pull-right">$summary.data.cellphone</span> #else <span class="color-red pull-right">Nessun numero</span> #end
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>E-mail:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.mail)$summary.data.mail#end</span>
+                            </div>
+                        </div>
+
+
+                        <div class="media-left pr30 pt15">
+                        ##                        <a href="#">
+                        ##                        ##<img class="media-object mw150" src="static/images/gallery_1.jpg" alt="..." width="165px" height="165px">
+                        ##                            <i class="fa fa-home fs30"></i>
+                        ##                        </a>
+                            <h3 class="media-heading pb15 pt10 pull-right text-center fs14"> RESIDENZA </h3>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Provincia</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.livingProvince)$summary.data.livingProvince#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Comune:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.livingPlace)$summary.data.livingPlace#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Indirizzo:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.address)$summary.data.address#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>CAP:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.cap)$summary.data.cap#end</span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="media-left pr30 pt15">
+                        ##                        <a href="#">
+                        ##                        ##<img class="media-object mw150" src="static/images/gallery_1.jpg" alt="..." width="165px" height="165px">
+                        ##                            <i class="fa fa-info fs30"></i>
+                        ##                        </a>
+                            <h3 class="media-heading pb15 pt10 pull-right text-center fs14"> VARIE </h3>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>C.E.:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.ce)$summary.data.ce#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>E.C.:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.ec)$summary.data.ec#end</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 p5 border-bottom-light-gray zero-padding">
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span>Fondo:</span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 zero-padding">
+                                <span class="pull-right">#if($summary.data.fund)$summary.data.fund#end</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-9 zero-padding">
+
+        <div class="mt30" id="timeline">
+
+            <div class="timeline-divider mtn">
+                <div class="divider-label">2013</div>
+                <div class="pull-right">
+                    <button id="timeline-toggle" class="btn btn-default btn-sm">
+                        <span class="glyphicons glyphicons-show_lines fs16"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6 left-column">
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="glyphicons glyphicons-user text-primary"></span>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-heading">
+                                        <span class="panel-title">
+                                            <span class="glyphicon glyphicon-comment"></span> User Posting </span>
+                                <div class="panel-header-menu pull-right mr10 text-muted fs12"> July 30, 2013 </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="media">
+                                    <a class="pull-left" href="#"> <img class="media-object thumbnail mw50" src="assets/img/avatars/4.jpg" alt="..."> </a>
+                                    <div class="media-body">
+                                        <h5 class="media-heading mb20">Simon Rivers Posted <small> - 3 hours ago</small></h5>
+                                        <img src="assets/img/stock/1.jpg" class="mw140 mr25 mb20"> <img src="assets/img/stock/2.jpg" class="mw140 mb20">
+                                        <div class="media-links">
+                                                    <span class="text-light fs12 mr10">
+                                                        <span class="glyphicons glyphicons-thumbs_up text-primary mr5"></span> Like </span>
+                                            <span class="text-light fs12 mr10">
+                                                        <span class="glyphicons glyphicons-share text-primary mr5"></span> Share </span>
+                                            <span class="text-light fs12 mr10">
+                                                        <span class="glyphicon glyphicon-floppy-save text-primary mr5"></span> Save </span>
+                                            <span class="text-light fs12 mr10">
+                                                        <span class="glyphicons glyphicons-chat text-primary mr5"></span> Comment </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="media mt20">
+                                    <a class="pull-left" href="#"> <img class="media-object thumbnail thumbnail-sm rounded mw40" src="assets/img/avatars/3.jpg" alt="..."> </a>
+                                    <div class="media-body mb5">
+                                        <h5 class="media-heading mbn">Simon Rivers Posted <small> - 3 hours ago</small></h5>
+                                        <p> Omg so freaking sweet dude.</p>
+                                    </div>
+                                </div>
+                                <div class="media mt15">
+                                    <a class="pull-left" href="#"> <img class="media-object thumbnail thumbnail-sm rounded mw40" src="assets/img/avatars/4.jpg" alt="..."> </a>
+                                    <div class="media-body mb5">
+                                        <h5 class="media-heading mbn">Jessica Wong <small> - 3 hours ago</small></h5>
+                                        <p>Omgosh I'm in love</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer p15">
+                                <div class="admin-form">
+                                    <label for="reply1" class="field prepend-icon">
+                                        <input type="text" name="reply1" id="reply1" class="event-name gui-input" placeholder="Respond with a comment.">
+                                        <label for="reply1" class="field-icon"><i class="fa fa-pencil"></i>
+                                        </label>
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- end .form-footer section -->
+
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="glyphicons glyphicons-picture text-info"></span>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-heading">
+                                        <span class="panel-title">
+                                            <span class="glyphicon glyphicon-picture"></span> Gallery </span>
+                                <div class="panel-header-menu pull-right mr10 text-muted fs12"> August 7, 2013 </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <a class="gallery-item" href="assets/img/stock/3.jpg"><img src="assets/img/stock/3.jpg" class="img-responsive" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <a class="gallery-item" href="assets/img/stock/4.jpg"><img src="assets/img/stock/4.jpg" class="img-responsive" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <a class="gallery-item" href="assets/img/stock/5.jpg"><img src="assets/img/stock/5.jpg" class="img-responsive" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="glyphicons glyphicons-user text-primary"></span>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-heading">
+                                        <span class="panel-title">
+                                            <span class="glyphicon glyphicon-facetime-video"></span> Timeline Video! </span>
+                                <div class="panel-header-menu pull-right mr10 text-muted fs12"> November 27, 2012 </div>
+                            </div>
+                            <div class="panel-body p10">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe class="embed-responsive-item" src="http://www.youtube.com/embed/q94n3eWOWXM?rel=0" allowfullscreen=""></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 right-column">
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="glyphicons glyphicons-edit text-warning"></span>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <span class="panel-title hidden-xs">Working Content Form</span>
+                                <ul class="nav panel-tabs">
+                                    <li class="active">
+                                        <a href="#tab1" data-toggle="tab">Image</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab2" data-toggle="tab">Basic</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab3" data-toggle="tab">Video</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab4" data-toggle="tab">Map</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+                                <div class="admin-form theme-primary">
+                                    <div class="tab-content pn pt10 border-none">
+
+                                        <div id="tab1" class="tab-pane active">
+                                            <form id="timeline-image-form" role="form">
+
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+
+                                                    <div class="tab-body">
+                                                        <div class="fileupload-preview thumbnail">
+                                                            <img data-src="holder.js/100%x140" alt="100%x140" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDk2IiBoZWlnaHQ9IjE0MCIgdmlld0JveD0iMCAwIDQ5NiAxNDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxkZWZzLz48cmVjdCB3aWR0aD0iNDk2IiBoZWlnaHQ9IjE0MCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE4OC4zMTI1IiB5PSI3MCIgc3R5bGU9ImZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToyM3B0O2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjQ5NngxNDA8L3RleHQ+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="height: 140px; width: 100%; display: block;">
+                                                        </div>
+                                                        <div class="row mv25">
+                                                            <div class="col-md-3">
+                                                                        <span class="button btn-system btn-file btn-block">
+                                                                            <span class="fileupload-new">Select image</span>
+                                                                            <span class="fileupload-exists">Change File</span>
+                                                                            <input type="file">
+                                                                        </span>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label for="name2" class="field prepend-icon">
+                                                                    <input type="text" name="name2" id="name2" class="event-name gui-input" placeholder="Event Title">
+                                                                    <label for="name2" class="field-icon"><i class="fa fa-pencil"></i>
+                                                                    </label>
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <label for="date2" class="field prepend-icon">
+                                                                    <input type="text" name="date2" id="date2" class="datepicker gui-input hasDatepicker" placeholder="Event Date">
+                                                                    <label for="date2" class="field-icon"><i class="fa fa-calendar"></i>
+                                                                    </label>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="panel-footer mhn15 mbn15">
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <a href="#" class="button btn-danger btn-block fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                                            </div>
+                                                            <div class="col-md-9 text-right">
+                                                                <button type="submit" class="button btn-primary submit-btn">Create Event</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- end .form-footer section -->
+
+                                                </div>
+
+                                            </form>
+                                        </div>
+
+                                        <div id="tab2" class="tab-pane">
+                                            <form id="timeline-basic-form" role="form">
+
+                                                <div class="section row">
+
+                                                    <div class="col-md-6">
+                                                        <label for="name1" class="field prepend-icon">
+                                                            <input type="text" name="name1" id="name1" class="event-name gui-input" placeholder="Event Title">
+                                                            <label for="name1" class="field-icon"><i class="fa fa-pencil"></i>
+                                                            </label>
+                                                        </label>
+                                                    </div>
+                                                    <!-- end section -->
+
+                                                    <div class="col-md-6">
+                                                        <label for="date1" class="field prepend-icon">
+                                                            <input type="text" name="date1" id="date1" class="datepicker gui-input hasDatepicker" placeholder="First name">
+                                                            <label for="date1" class="field-icon"><i class="fa fa-calendar"></i>
+                                                            </label>
+                                                        </label>
+                                                    </div>
+                                                    <!-- end section -->
+
+                                                </div>
+                                                <!-- end section row section -->
+
+                                                <div class="section mb30">
+                                                    <label class="field prepend-icon">
+                                                        <textarea class="event-desc gui-textarea" id="desc1" name="desc1" placeholder="Type the description for the event here..."></textarea>
+                                                        <label for="desc1" class="field-icon"><i class="fa fa-comments"></i>
+                                                        </label>
+                                                        <span class="input-footer">
+                                                                    <strong>Hint:</strong> Don't be negative or off topic! just be awesome...</span>
+                                                    </label>
+                                                </div>
+                                                <!-- end section row section -->
+
+                                                <div class="panel-footer mhn15 mbn15 text-right">
+                                                    <button type="submit" class="button btn-primary submit-btn">Create Event</button>
+                                                </div>
+                                                <!-- end .form-footer section -->
+
+                                            </form>
+                                        </div>
+
+                                        <div id="tab3" class="tab-pane">
+                                            <form id="timeline-video-form" role="form">
+
+                                                <div class="section row">
+                                                    <div class="col-md-6">
+                                                        <label for="name3" class="field prepend-icon">
+                                                            <input type="text" name="name3" id="name3" class="event-name gui-input" placeholder="Event Title">
+                                                            <label for="name3" class="field-icon"><i class="fa fa-pencil"></i>
+                                                            </label>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="date3" class="field prepend-icon">
+                                                            <input type="text" name="date3" id="date3" class="datepicker gui-input hasDatepicker" placeholder="Event Date">
+                                                            <label for="date3" class="field-icon"><i class="fa fa-calendar"></i>
+                                                            </label>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <!-- end section row section -->
+
+                                                <div class="section mb30">
+                                                    <label class="field prepend-icon">
+                                                                <textarea class="event-video gui-textarea" id="desc2" name="desc2" placeholder="<iframe></iframe>">&lt;iframe class="embed-responsive-item" src="http://www.youtube.com/embed/q94n3eWOWXM?rel=0" allowfullscreen=""&gt;&lt;/iframe&gt;
+                                                                </textarea>
+                                                        <label for="desc2" class="field-icon"><i class="fa fa-video-camera"></i>
+                                                        </label>
+                                                        <span class="input-footer">
+                                                                    <strong>This field accepts youtube embed:</strong> An example has already been placed in the field</span>
+                                                    </label>
+                                                </div>
+                                                <!-- end section row section -->
+
+                                                <div class="panel-footer mhn15 mbn15 text-right">
+                                                    <button type="submit" class="button btn-primary submit-btn">Create Event</button>
+                                                </div>
+                                                <!-- end .form-footer section -->
+
+                                            </form>
+                                        </div>
+
+                                        <div id="tab4" class="tab-pane">
+
+                                            <form id="timeline-map-form" role="form">
+
+                                                <div class="section row">
+                                                    <div class="col-md-6">
+                                                        <label for="name4" class="field prepend-icon">
+                                                            <input type="text" name="name4" id="name4" class="event-name gui-input" placeholder="Event Title">
+                                                            <label for="name4" class="field-icon"><i class="fa fa-pencil"></i>
+                                                            </label>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="date4" class="field prepend-icon">
+                                                            <input type="text" name="date4" id="date4" class="datepicker gui-input hasDatepicker" placeholder="Event Date">
+                                                            <label for="date4" class="field-icon"><i class="fa fa-calendar"></i>
+                                                            </label>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <!-- end section row section -->
+
+                                                <div class="section">
+                                                    <label class="field prepend-icon">
+                                                        <textarea class="event-map gui-textarea" id="desc3" name="desc3" placeholder="Accepts Coordinates, try clicking an example below."></textarea>
+                                                        <label for="desc3" class="field-icon"><i class="fa fa-map-marker"></i>
+                                                        </label>
+                                                        <span class="input-footer"><strong>This field accepts youtube embed:</strong> An example has already been placed in the field</span>
+                                                    </label>
+                                                </div>
+                                                <!-- end section row section -->
+
+                                                <div class="section mb30">
+                                                    <a class="button btn-default example-loc-1">Los Angeles</a>
+                                                    <a class="button btn-default ml5 example-loc-2">New York</a>
+                                                    <a class="button btn-default ml5 example-loc-3">Tokyo</a>
+                                                </div>
+                                                <!-- end section row section -->
+
+                                                <div class="panel-footer mhn15 mbn15 text-right">
+                                                    <button type="submit" class="button btn-primary submit-btn">Create Event</button>
+                                                </div>
+                                                <!-- end .form-footer section -->
+
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="glyphicons glyphicons-compass text-success"></span>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-heading">
+                                        <span class="panel-title">
+                                            <span class="glyphicon glyphicon-camera"></span> Map Posting</span>
+                                <div class="panel-header-menu pull-right mr10 text-muted fs12"> August 7, 2013 </div>
+                            </div>
+                            <div class="panel-body">
+                                <div id="map_canvas" class="map" style="height: 275px; width: 100%; position: relative; overflow: hidden;"><div style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgb(229, 227, 223);"><div class="gm-style" style="position: absolute; z-index: 0; left: 0px; top: 0px; height: 100%; width: 100%; padding: 0px; border-width: 0px; margin: 0px;"><div tabindex="0" style="position: absolute; z-index: 0; left: 0px; top: 0px; height: 100%; width: 100%; padding: 0px; border-width: 0px; margin: 0px; cursor: url(&quot;http://maps.gstatic.com/mapfiles/openhand_8_8.cur&quot;), default; touch-action: pan-x pan-y;"><div style="z-index: 1; position: absolute; left: 50%; top: 50%; width: 100%; transform: translate(0px, 0px);"><div style="position: absolute; left: 0px; top: 0px; z-index: 100; width: 100%;"><div style="position: absolute; left: 0px; top: 0px; z-index: 0;"><div style="position: absolute; z-index: 990; transform: matrix(1, 0, 0, 1, -71, -129);"><div style="position: absolute; left: 0px; top: 0px; width: 256px; height: 256px;"><div style="width: 256px; height: 256px;"></div></div><div style="position: absolute; left: -256px; top: 0px; width: 256px; height: 256px;"><div style="width: 256px; height: 256px;"></div></div><div style="position: absolute; left: -256px; top: -256px; width: 256px; height: 256px;"><div style="width: 256px; height: 256px;"></div></div><div style="position: absolute; left: 0px; top: -256px; width: 256px; height: 256px;"><div style="width: 256px; height: 256px;"></div></div><div style="position: absolute; left: 256px; top: -256px; width: 256px; height: 256px;"><div style="width: 256px; height: 256px;"></div></div><div style="position: absolute; left: 256px; top: 0px; width: 256px; height: 256px;"><div style="width: 256px; height: 256px;"></div></div><div style="position: absolute; left: 256px; top: 256px; width: 256px; height: 256px;"><div style="width: 256px; height: 256px;"></div></div><div style="position: absolute; left: 0px; top: 256px; width: 256px; height: 256px;"><div style="width: 256px; height: 256px;"></div></div><div style="position: absolute; left: -256px; top: 256px; width: 256px; height: 256px;"><div style="width: 256px; height: 256px;"></div></div></div></div></div><div style="position: absolute; left: 0px; top: 0px; z-index: 101; width: 100%;"></div><div style="position: absolute; left: 0px; top: 0px; z-index: 102; width: 100%;"></div><div style="position: absolute; left: 0px; top: 0px; z-index: 103; width: 100%;"><div style="width: 27px; height: 43px; overflow: hidden; position: absolute; left: -14px; top: -43px; z-index: 0;"><img alt="" src="http://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2_hdpi.png" draggable="false" style="position: absolute; left: 0px; top: 0px; width: 27px; height: 43px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: 0px; top: 0px; z-index: -1;"><div style="position: absolute; z-index: 990; transform: matrix(1, 0, 0, 1, -71, -129);"><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 0px; top: 0px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: -256px; top: 0px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: -256px; top: -256px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 0px; top: -256px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 256px; top: -256px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 256px; top: 0px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 256px; top: 256px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 0px; top: 256px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: -256px; top: 256px;"></div></div></div></div><div style="position: absolute; left: 0px; top: 0px; z-index: 0;"><div style="position: absolute; z-index: 990; transform: matrix(1, 0, 0, 1, -71, -129);"><div style="position: absolute; left: 0px; top: 0px; width: 256px; height: 256px; transition: opacity 200ms linear 0s;"><img draggable="false" alt="" role="presentation" src="http://maps.google.com/maps/vt?pb=!1m5!1m4!1i10!2i546!3i309!4i256!2m3!1e0!2sm!3i460169124!2m3!1e2!6m1!3e5!3m14!2sit-IT!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC5zOi02MHxwLmw6LTYw!4e0!5m1!5f2&amp;token=20727" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: -256px; top: 0px; width: 256px; height: 256px; transition: opacity 200ms linear 0s;"><img draggable="false" alt="" role="presentation" src="http://maps.google.com/maps/vt?pb=!1m5!1m4!1i10!2i545!3i309!4i256!2m3!1e0!2sm!3i460169124!2m3!1e2!6m1!3e5!3m14!2sit-IT!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC5zOi02MHxwLmw6LTYw!4e0!5m1!5f2&amp;token=115000" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: -256px; top: -256px; width: 256px; height: 256px; transition: opacity 200ms linear 0s;"><img draggable="false" alt="" role="presentation" src="http://maps.google.com/maps/vt?pb=!1m5!1m4!1i10!2i545!3i308!4i256!2m3!1e0!2sm!3i460169124!2m3!1e2!6m1!3e5!3m14!2sit-IT!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC5zOi02MHxwLmw6LTYw!4e0!5m1!5f2&amp;token=125381" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: 0px; top: -256px; width: 256px; height: 256px; transition: opacity 200ms linear 0s;"><img draggable="false" alt="" role="presentation" src="http://maps.google.com/maps/vt?pb=!1m5!1m4!1i10!2i546!3i308!4i256!2m3!1e0!2sm!3i460169124!2m3!1e2!6m1!3e5!3m14!2sit-IT!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC5zOi02MHxwLmw6LTYw!4e0!5m1!5f2&amp;token=31108" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: 256px; top: -256px; width: 256px; height: 256px; transition: opacity 200ms linear 0s;"><img draggable="false" alt="" role="presentation" src="http://maps.google.com/maps/vt?pb=!1m5!1m4!1i10!2i547!3i308!4i256!2m3!1e0!2sm!3i460169124!2m3!1e2!6m1!3e5!3m14!2sit-IT!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC5zOi02MHxwLmw6LTYw!4e0!5m1!5f2&amp;token=67906" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: 256px; top: 0px; width: 256px; height: 256px; transition: opacity 200ms linear 0s;"><img draggable="false" alt="" role="presentation" src="http://maps.google.com/maps/vt?pb=!1m5!1m4!1i10!2i547!3i309!4i256!2m3!1e0!2sm!3i460169124!2m3!1e2!6m1!3e5!3m14!2sit-IT!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC5zOi02MHxwLmw6LTYw!4e0!5m1!5f2&amp;token=57525" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: 256px; top: 256px; width: 256px; height: 256px; transition: opacity 200ms linear 0s;"><img draggable="false" alt="" role="presentation" src="http://maps.google.com/maps/vt?pb=!1m5!1m4!1i10!2i547!3i310!4i256!2m3!1e0!2sm!3i460169124!2m3!1e2!6m1!3e5!3m14!2sit-IT!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC5zOi02MHxwLmw6LTYw!4e0!5m1!5f2&amp;token=27861" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: 0px; top: 256px; width: 256px; height: 256px; transition: opacity 200ms linear 0s;"><img draggable="false" alt="" role="presentation" src="http://maps.google.com/maps/vt?pb=!1m5!1m4!1i10!2i546!3i310!4i256!2m3!1e0!2sm!3i460169124!2m3!1e2!6m1!3e5!3m14!2sit-IT!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC5zOi02MHxwLmw6LTYw!4e0!5m1!5f2&amp;token=122134" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: -256px; top: 256px; width: 256px; height: 256px; transition: opacity 200ms linear 0s;"><img draggable="false" alt="" role="presentation" src="http://maps.google.com/maps/vt?pb=!1m5!1m4!1i10!2i545!3i310!4i256!2m3!1e0!2sm!3i460169124!2m3!1e2!6m1!3e5!3m14!2sit-IT!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC5zOi02MHxwLmw6LTYw!4e0!5m1!5f2&amp;token=85336" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div></div></div></div><div class="gm-style-pbc" style="z-index: 2; position: absolute; height: 100%; width: 100%; padding: 0px; border-width: 0px; margin: 0px; left: 0px; top: 0px; opacity: 0;"><p class="gm-style-pbt"></p></div><div style="z-index: 3; position: absolute; height: 100%; width: 100%; padding: 0px; border-width: 0px; margin: 0px; left: 0px; top: 0px; touch-action: pan-x pan-y;"><div style="z-index: 4; position: absolute; left: 50%; top: 50%; width: 100%; transform: translate(0px, 0px);"><div style="position: absolute; left: 0px; top: 0px; z-index: 104; width: 100%;"></div><div style="position: absolute; left: 0px; top: 0px; z-index: 105; width: 100%;"></div><div style="position: absolute; left: 0px; top: 0px; z-index: 106; width: 100%;"><div style="width: 27px; height: 43px; overflow: hidden; position: absolute; opacity: 0; left: -14px; top: -43px; z-index: 0;"><img alt="" src="http://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2_hdpi.png" draggable="false" usemap="#gmimap0" style="position: absolute; left: 0px; top: 0px; width: 27px; height: 43px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"><map name="gmimap0" id="gmimap0"><area log="miw" coords="13.5,0,4,3.75,0,13.5,13.5,43,27,13.5,23,3.75" shape="poly" title="" style="cursor: pointer; touch-action: none;"></map></div></div><div style="position: absolute; left: 0px; top: 0px; z-index: 107; width: 100%;"></div></div></div></div><iframe aria-hidden="true" frameborder="0" style="z-index: -1; position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; border: none;" src="about:blank"></iframe><div style="margin-left: 5px; margin-right: 5px; z-index: 1000000; position: absolute; left: 0px; bottom: 0px;"><a target="_blank" rel="noopener" href="https://maps.google.com/maps?ll=57.797333,12.050211&amp;z=10&amp;t=m&amp;hl=it-IT&amp;gl=US&amp;mapclient=apiv3" title="Visualizza questa zona in Google Maps (in una nuova finestra)" style="position: static; overflow: visible; float: none; display: inline;"><div style="width: 66px; height: 26px; cursor: pointer;"><img alt="" src="http://maps.gstatic.com/mapfiles/api-3/images/google4_hdpi.png" draggable="false" style="position: absolute; left: 0px; top: 0px; width: 66px; height: 26px; user-select: none; border: 0px; padding: 0px; margin: 0px;"></div></a></div><div style="background-color: white; padding: 15px 21px; border: 1px solid rgb(171, 171, 171); font-family: Roboto, Arial, sans-serif; color: rgb(34, 34, 34); box-sizing: border-box; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 16px; z-index: 10000002; display: none; width: 300px; height: 180px; position: absolute; left: 103px; top: 48px;"><div style="padding: 0px 0px 10px; font-size: 16px;">Dati mappa</div><div style="font-size: 13px;">Dati mappa ©2019 Google</div><button draggable="false" title="Chiudi" aria-label="Chiudi" type="button" class="gm-ui-hover-effect" style="background: none; display: block; border: 0px; margin: 0px; padding: 0px; position: absolute; cursor: pointer; user-select: none; top: 0px; right: 0px; width: 37px; height: 37px;"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224px%22%20height%3D%2224px%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M19%206.41L17.59%205%2012%2010.59%206.41%205%205%206.41%2010.59%2012%205%2017.59%206.41%2019%2012%2013.41%2017.59%2019%2019%2017.59%2013.41%2012z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22%2F%3E%0A%3C%2Fsvg%3E%0A" style="pointer-events: none; display: block; width: 13px; height: 13px; margin: 12px;"></button></div><div class="gmnoprint" style="z-index: 1000001; position: absolute; right: 274px; bottom: 0px; width: 130px;"><div draggable="false" class="gm-style-cc" style="user-select: none; height: 14px; line-height: 14px;"><div style="opacity: 0.7; width: 100%; height: 100%; position: absolute;"><div style="width: 1px;"></div><div style="background-color: rgb(245, 245, 245); width: auto; height: 100%; margin-left: 1px;"></div></div><div style="position: relative; padding-right: 6px; padding-left: 6px; font-family: Roboto, Arial, sans-serif; font-size: 10px; color: rgb(68, 68, 68); white-space: nowrap; direction: ltr; text-align: right; vertical-align: middle; display: inline-block;"><a style="text-decoration: none; cursor: pointer; display: none;">Dati mappa</a><span>Dati mappa ©2019 Google</span></div></div></div><div class="gmnoscreen" style="position: absolute; right: 0px; bottom: 0px;"><div style="font-family: Roboto, Arial, sans-serif; font-size: 11px; color: rgb(68, 68, 68); direction: ltr; text-align: right; background-color: rgb(245, 245, 245);">Dati mappa ©2019 Google</div></div><div class="gmnoprint gm-style-cc" draggable="false" style="z-index: 1000001; user-select: none; height: 14px; line-height: 14px; position: absolute; right: 146px; bottom: 0px;"><div style="opacity: 0.7; width: 100%; height: 100%; position: absolute;"><div style="width: 1px;"></div><div style="background-color: rgb(245, 245, 245); width: auto; height: 100%; margin-left: 1px;"></div></div><div style="position: relative; padding-right: 6px; padding-left: 6px; font-family: Roboto, Arial, sans-serif; font-size: 10px; color: rgb(68, 68, 68); white-space: nowrap; direction: ltr; text-align: right; vertical-align: middle; display: inline-block;"><a href="https://www.google.com/intl/it-IT_US/help/terms_maps.html" target="_blank" rel="noopener" style="text-decoration: none; cursor: pointer; color: rgb(68, 68, 68);">Termini e condizioni d'uso</a></div></div><button draggable="false" title="Attiva/disattiva vista schermo intero" aria-label="Attiva/disattiva vista schermo intero" type="button" class="gm-control-active gm-fullscreen-control" style="background: none rgb(255, 255, 255); border: 0px; margin: 10px; padding: 0px; position: absolute; cursor: pointer; user-select: none; border-radius: 2px; height: 40px; width: 40px; box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px; overflow: hidden; display: none; top: 0px; right: 0px;"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%20018%2018%22%3E%0A%20%20%3Cpath%20fill%3D%22%23666%22%20d%3D%22M0%2C0v2v4h2V2h4V0H2H0z%20M16%2C0h-4v2h4v4h2V2V0H16z%20M16%2C16h-4v2h4h2v-2v-4h-2V16z%20M2%2C12H0v4v2h2h4v-2H2V12z%22%2F%3E%0A%3C%2Fsvg%3E%0A" style="height: 18px; width: 18px;"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%3E%0A%20%20%3Cpath%20fill%3D%22%23333%22%20d%3D%22M0%2C0v2v4h2V2h4V0H2H0z%20M16%2C0h-4v2h4v4h2V2V0H16z%20M16%2C16h-4v2h4h2v-2v-4h-2V16z%20M2%2C12H0v4v2h2h4v-2H2V12z%22%2F%3E%0A%3C%2Fsvg%3E%0A" style="height: 18px; width: 18px;"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%3E%0A%20%20%3Cpath%20fill%3D%22%23111%22%20d%3D%22M0%2C0v2v4h2V2h4V0H2H0z%20M16%2C0h-4v2h4v4h2V2V0H16z%20M16%2C16h-4v2h4h2v-2v-4h-2V16z%20M2%2C12H0v4v2h2h4v-2H2V12z%22%2F%3E%0A%3C%2Fsvg%3E%0A" style="height: 18px; width: 18px;"></button><div draggable="false" class="gm-style-cc" style="user-select: none; height: 14px; line-height: 14px; position: absolute; right: 0px; bottom: 0px;"><div style="opacity: 0.7; width: 100%; height: 100%; position: absolute;"><div style="width: 1px;"></div><div style="background-color: rgb(245, 245, 245); width: auto; height: 100%; margin-left: 1px;"></div></div><div style="position: relative; padding-right: 6px; padding-left: 6px; font-family: Roboto, Arial, sans-serif; font-size: 10px; color: rgb(68, 68, 68); white-space: nowrap; direction: ltr; text-align: right; vertical-align: middle; display: inline-block;"><a target="_blank" rel="noopener" title="Segnala errori nella mappa stradale o nelle altre mappe di Google" href="https://www.google.com/maps/@57.7973333,12.0502107,10z/data=!10m1!1e1!12b1?source=apiv3&amp;rapsrc=apiv3" style="font-family: Roboto, Arial, sans-serif; font-size: 10px; color: rgb(68, 68, 68); text-decoration: none; position: relative;">Segnala un errore nella mappa</a></div></div></div></div><div style="background-color: white; font-weight: 500; font-family: Roboto, sans-serif; padding: 15px 25px; box-sizing: border-box; top: 5px; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: 5px; left: 50%; max-width: 375px; position: absolute; transform: translateX(-50%); width: calc(100% - 10px); z-index: 1;"><div><img alt="" src="http://maps.gstatic.com/mapfiles/api-3/images/google_gray.svg" draggable="false" style="padding: 0px; margin: 0px; border: 0px; height: 17px; vertical-align: middle; width: 52px; user-select: none;"></div><div style="line-height: 20px; margin: 15px 0px;"><span style="color: rgba(0, 0, 0, 0.87); font-size: 14px;">Questa pagina non carica correttamente Google Maps.</span></div><table style="width: 100%;"><tr><td style="line-height: 16px; vertical-align: middle;"><a href="https://developers.google.com/maps/documentation/javascript/error-messages?utm_source=maps_js&amp;utm_medium=degraded&amp;utm_campaign=keyless#api-key-and-billing-errors" target="_blank" rel="noopener" style="color: rgba(0, 0, 0, 0.54); font-size: 12px;">Sei il proprietario di questo sito web?</a></td><td style="text-align: right;"><button class="dismissButton">OK</button></td></tr></table></div><div style="background-color: white; font-weight: 500; font-family: Roboto, sans-serif; padding: 15px 25px; box-sizing: border-box; top: 5px; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: 5px; left: 50%; max-width: 375px; position: absolute; transform: translateX(-50%); width: calc(100% - 10px); z-index: 1;"><div><img alt="" src="http://maps.gstatic.com/mapfiles/api-3/images/google_gray.svg" draggable="false" style="padding: 0px; margin: 0px; border: 0px; height: 17px; vertical-align: middle; width: 52px; user-select: none;"></div><div style="line-height: 20px; margin: 15px 0px;"><span style="color: rgba(0, 0, 0, 0.87); font-size: 14px;">Questa pagina non carica correttamente Google Maps.</span></div><table style="width: 100%;"><tr><td style="line-height: 16px; vertical-align: middle;"><a href="https://developers.google.com/maps/documentation/javascript/error-messages?utm_source=maps_js&amp;utm_medium=degraded&amp;utm_campaign=billing#api-key-and-billing-errors" target="_blank" rel="noopener" style="color: rgba(0, 0, 0, 0.54); font-size: 12px;">Sei il proprietario di questo sito web?</a></td><td style="text-align: right;"><button class="dismissButton">OK</button></td></tr></table></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="glyphicons glyphicons-dislikes text-primary"></span>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <a class="gallery-item" href="assets/img/stock/4.jpg"><img src="assets/img/stock/4.jpg" class="img-responsive" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <a class="gallery-item" href="assets/img/stock/5.jpg"><img src="assets/img/stock/5.jpg" class="img-responsive" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <span class="glyphicons glyphicons-link text-danger"></span>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-body p10">
+                                <blockquote class="mbn ml10">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat Lorem ipsum dolor sit amet, dolor sit amet lorem adpiz. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean felis sapien, vestibulum in dignissim vitae, condimentum eu nibh. </p>
+                                    <small>Someone famous</small> </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="timeline-divider">
+                <div class="divider-label">2012</div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="popover"]').popover({
+            html: true,
+            content: function() {
+                return $('.popover-content-div').html();
+            }
+        })
+
+        var name = "$summary.data.name" + " " + "$summary.data.surname";
+        localStorage.setItem("workerName", name);
+
+    })
+
+</script>
+##
+##<script type="text/javascript">
+##    console.log("avvio la  require");
+##    require([ "dashboard", "widget/real/matrice", "lavoratori/workerSummaryManager"], function(dashboardManager, manager, workerSummaryManager){
+##
+##
+##
+##
+##
+##    });
+##
+##</script>

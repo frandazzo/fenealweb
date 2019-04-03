@@ -5,6 +5,7 @@ import applica.feneal.admin.facade.NotificationsFacade;
 import applica.feneal.admin.facade.TraceFacade;
 import applica.feneal.admin.facade.WidgetFacade;
 import applica.feneal.admin.fields.renderers.LoggedUserProvinceNonOptionalSelectFieldRenderer;
+import applica.feneal.admin.fields.renderers.RegionalCompaniesOptionalSelectfieldRenderer;
 import applica.feneal.admin.fields.renderers.SectorTypeWithoutInpsSelectRenderer;
 import applica.feneal.admin.fields.renderers.SexSelectFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalCityFieldRenderer;
@@ -102,6 +103,55 @@ public class LavoratoriController {
 
 
 
+    @RequestMapping(value="/localworkersnew", method= RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody SimpleResponse findLocalLavoratorinew(@RequestParam(value="name", required=false, defaultValue="") String name,
+                                                            @RequestParam(value="surname", required=false, defaultValue="") String surname,
+                                                            @RequestParam(value="fiscalcode", required=false, defaultValue="") String fiscalcode,
+                                                            @RequestParam(value="namesurname", required=false, defaultValue="") String namesurname,
+                                                            @RequestParam(value="page", required=false) Integer page,
+                                                            @RequestParam(value="company", required=false) String company ,
+                                                            @RequestParam(value="cell", required=false, defaultValue="") String cell){
+
+
+        //se mnon cÃ¨ una pagina la imposto alla prima pagina
+
+        if (page == null)
+            page = 1;
+
+        if (page == 0)
+            page = 1;
+
+
+        try {
+
+            LavoratoreSearchParams s = prepareSearchParams(name, surname, fiscalcode, namesurname, page, cell);
+            s.setCompany(company);
+
+            List<Lavoratore> lavs = tcFacade.findLavoratoriMultiTerritorioRegionale(s);
+
+            manageActivityLocalWorkers(name, surname, fiscalcode, namesurname, "Ricerca locale iscritti", lavs);
+
+            return new ValueResponse(lavs);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+    private LavoratoreSearchParams prepareSearchParams(@RequestParam(value = "name", required = false, defaultValue = "") String name, @RequestParam(value = "surname", required = false, defaultValue = "") String surname, @RequestParam(value = "fiscalcode", required = false, defaultValue = "") String fiscalcode, @RequestParam(value = "namesurname", required = false, defaultValue = "") String namesurname, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "cell", required = false, defaultValue = "") String cell) {
+        LavoratoreSearchParams s = new LavoratoreSearchParams();
+        s.setName(name);
+        s.setSurname(surname);
+        s.setFiscalcode(fiscalcode);
+        s.setNamesurname(namesurname);
+        s.setCell(cell);
+        s.setPage(page);
+        return s;
+    }
+
     @RequestMapping(value="/localworkers", method= RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody SimpleResponse findLocalLavoratori(@RequestParam(value="name", required=false, defaultValue="") String name,
@@ -123,13 +173,7 @@ public class LavoratoriController {
 
         try {
 
-            LavoratoreSearchParams s = new LavoratoreSearchParams();
-            s.setName(name);
-            s.setSurname(surname);
-            s.setFiscalcode(fiscalcode);
-            s.setNamesurname(namesurname);
-            s.setCell(cell);
-            s.setPage(page);
+            LavoratoreSearchParams s = prepareSearchParams(name, surname, fiscalcode, namesurname, page, cell);
 
             List<Lavoratore> lavs = tcFacade.findLocalLavoratori(s);
 
@@ -348,6 +392,38 @@ public class LavoratoriController {
     }
 
 
+    @RequestMapping(value = "/worker/summarymultiterritorio/{id}",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse viewTimeline(HttpServletRequest request, @PathVariable long id) {
+
+        try {
+
+            UiCompleteLavoratoreSummary c = tcFacade.getLavoratoreSummaryMultiterriotrioById(id);
+            HashMap<String, Object> model = new HashMap<String, Object>();
+            model.put("summary", c);
+
+            model.put("displaySignalUser", false);
+
+            // Se esistono le credenziali per l'invio SMS allora visualizzo il pulsante relativo
+            if (tcFacade.existSmsCredentials())
+                model.put("existSMSCredentials", true);
+            else
+                model.put("existSMSCredentials", false);
+
+
+
+            PartialViewRenderer renderer = new PartialViewRenderer();
+            String content = renderer.render(viewResolver, "lavoratori/workerSummaryTimeline", model, LocaleContextHolder.getLocale(), request);
+            return new ValueResponse(content);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+
 
     @RequestMapping(value = "/worker/summary/{id}",method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
@@ -397,6 +473,117 @@ public class LavoratoriController {
             return new ErrorResponse(e.getMessage());
         }
 
+    }
+
+
+    @RequestMapping(value = "/workers/searchnew",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse searchviewnew(HttpServletRequest request) {
+        try{
+            Form form = new Form();
+            form.setRenderer(applicationContext.getBean(WorkerSearchFormRenderer.class));
+            form.setIdentifier("workernew");
+
+            FormDescriptor formDescriptor = new FormDescriptor(form);
+            //tab per le varie ricerche da locale e da db nazionale
+            formDescriptor.addField("surname", String.class, "Cognome", null, applicationContext.getBean(DefaultFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_6)
+                    .putParam(Params.ROW, "dt")
+                    .putParam(Params.TAB, "Ricerca regionale")
+                    .putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("name", String.class, "Nome", null, applicationContext.getBean(DefaultFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_6)
+                    .putParam(Params.ROW, "dt")
+                    .putParam(Params.TAB, "Ricerca regionale")
+                    .putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("fiscalcode", String.class, "Cod. fisc.", null, applicationContext.getBean(DefaultFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_6)
+                    .putParam(Params.ROW, "dt1")
+                    .putParam(Params.TAB, "Ricerca regionale")
+                    .putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("company", String.class, "Territorio", null, applicationContext.getBean(RegionalCompaniesOptionalSelectfieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_6)
+                    .putParam(Params.ROW, "dt1")
+                    .putParam(Params.TAB, "Ricerca regionale")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+            // Campi per la ricerca da DB nazionale
+           /* formDescriptor.addField("year", String.class, "Anno", null, applicationContext.getBean(YearSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_4)
+                    .putParam(Params.ROW, "dt2")
+                    .putParam(Params.TAB, "Ricerca DB nazionale")
+                    .putParam(Params.FORM_COLUMN, "  ");
+            formDescriptor.addField("sector", String.class, "Settore", null, applicationContext.getBean(SectorSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_4)
+                    .putParam(Params.ROW, "dt2")
+                    .putParam(Params.TAB, "Ricerca DB nazionale")
+                    .putParam(Params.FORM_COLUMN, "  ");
+            formDescriptor.addField("company", String.class, "Territorio", null, applicationContext.getBean(CompanySelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_4)
+                    .putParam(Params.ROW, "dt2")
+                    .putParam(Params.TAB, "Ricerca DB nazionale")
+                    .putParam(Params.FORM_COLUMN, "  ");
+            */
+
+            defineRicercaDbnazionaleForm(formDescriptor);
+
+            FormResponse response = new FormResponse();
+
+            response.setContent(form.writeToString());
+            response.setTitle("Ricerca lavoratori");
+
+            return response;
+        } catch (FormCreationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        } catch (CrudConfigurationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
+    private void defineRicercaDbnazionaleForm(FormDescriptor formDescriptor) {
+        formDescriptor.addField("surnameDB", String.class, "Cognome", null, applicationContext.getBean(DefaultFieldRenderer.class))
+                .putParam(Params.COLS, Values.COLS_4)
+                .putParam(Params.ROW, "dt5")
+                .putParam(Params.TAB, "Ricerca DB nazionale")
+                .putParam(Params.FORM_COLUMN, "   ");
+        formDescriptor.addField("nameDB", String.class, "Nome", null, applicationContext.getBean(DefaultFieldRenderer.class))
+                .putParam(Params.COLS, Values.COLS_4)
+                .putParam(Params.ROW, "dt5")
+                .putParam(Params.TAB, "Ricerca DB nazionale")
+                .putParam(Params.FORM_COLUMN, "   ");
+        formDescriptor.addField("fiscalcodeDB", String.class, "C.F.", null, applicationContext.getBean(DefaultFieldRenderer.class))
+                .putParam(Params.COLS, Values.COLS_4)
+                .putParam(Params.ROW, "dt5")
+                .putParam(Params.TAB, "Ricerca DB nazionale")
+                .putParam(Params.FORM_COLUMN, " ");
+        formDescriptor.addField("sex", String.class, "Sesso", null, applicationContext.getBean(SexSelectFieldRenderer.class))
+                .putParam(Params.COLS, Values.COLS_5)
+                .putParam(Params.ROW, "dt6")
+                .putParam(Params.TAB, "Ricerca DB nazionale")
+                .putParam(Params.FORM_COLUMN, "   ");
+        formDescriptor.addField("birthDate", String.class, "Data nasc.", null, applicationContext.getBean(DatePickerRenderer.class))
+                .putParam(Params.COLS, Values.COLS_7)
+                .putParam(Params.ROW, "dt6")
+                .putParam(Params.TAB, "Ricerca DB nazionale")
+                .putParam(Params.FORM_COLUMN, "   ");
+        formDescriptor.addField("nationality", String.class, "Nazionalità", null, applicationContext.getBean(OptionalStateFieldRenderer.class))
+                .putParam(Params.COLS, Values.COLS_4)
+                .putParam(Params.ROW, "dt7")
+                .putParam(Params.TAB, "Ricerca DB nazionale")
+                .putParam(Params.FORM_COLUMN, "   ");
+        formDescriptor.addField("livingProvince", String.class, "Prov. resid.", null, applicationContext.getBean(OptionalProvinceFieldRenderer.class))
+                .putParam(Params.COLS, Values.COLS_4)
+                .putParam(Params.ROW, "dt7")
+                .putParam(Params.TAB, "Ricerca DB nazionale")
+                .putParam(Params.FORM_COLUMN, "   ");
+        formDescriptor.addField("livingCity", String.class, "Com. resid.", null, applicationContext.getBean(OptionalCityFieldRenderer.class))
+                .putParam(Params.COLS, Values.COLS_4)
+                .putParam(Params.ROW, "dt7")
+                .putParam(Params.TAB, "Ricerca DB nazionale")
+                .putParam(Params.FORM_COLUMN, "   ");
     }
 
 
@@ -450,49 +637,9 @@ public class LavoratoriController {
                     .putParam(Params.FORM_COLUMN, "  ");
             */
 
-            formDescriptor.addField("surnameDB", String.class, "Cognome", null, applicationContext.getBean(DefaultFieldRenderer.class))
-                    .putParam(Params.COLS, Values.COLS_4)
-                    .putParam(Params.ROW, "dt5")
-                    .putParam(Params.TAB, "Ricerca DB nazionale")
-                    .putParam(Params.FORM_COLUMN, "   ");
-            formDescriptor.addField("nameDB", String.class, "Nome", null, applicationContext.getBean(DefaultFieldRenderer.class))
-                    .putParam(Params.COLS, Values.COLS_4)
-                    .putParam(Params.ROW, "dt5")
-                    .putParam(Params.TAB, "Ricerca DB nazionale")
-                    .putParam(Params.FORM_COLUMN, "   ");
-            formDescriptor.addField("fiscalcodeDB", String.class, "C.F.", null, applicationContext.getBean(DefaultFieldRenderer.class))
-                    .putParam(Params.COLS, Values.COLS_4)
-                    .putParam(Params.ROW, "dt5")
-                    .putParam(Params.TAB, "Ricerca DB nazionale")
-                    .putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("sex", String.class, "Sesso", null, applicationContext.getBean(SexSelectFieldRenderer.class))
-                    .putParam(Params.COLS, Values.COLS_5)
-                    .putParam(Params.ROW, "dt6")
-                    .putParam(Params.TAB, "Ricerca DB nazionale")
-                    .putParam(Params.FORM_COLUMN, "   ");
-            formDescriptor.addField("birthDate", String.class, "Data nasc.", null, applicationContext.getBean(DatePickerRenderer.class))
-                    .putParam(Params.COLS, Values.COLS_7)
-                    .putParam(Params.ROW, "dt6")
-                    .putParam(Params.TAB, "Ricerca DB nazionale")
-                    .putParam(Params.FORM_COLUMN, "   ");
-            formDescriptor.addField("nationality", String.class, "Nazionalità", null, applicationContext.getBean(OptionalStateFieldRenderer.class))
-                    .putParam(Params.COLS, Values.COLS_4)
-                    .putParam(Params.ROW, "dt7")
-                    .putParam(Params.TAB, "Ricerca DB nazionale")
-                    .putParam(Params.FORM_COLUMN, "   ");
-            formDescriptor.addField("livingProvince", String.class, "Prov. resid.", null, applicationContext.getBean(OptionalProvinceFieldRenderer.class))
-                    .putParam(Params.COLS, Values.COLS_4)
-                    .putParam(Params.ROW, "dt7")
-                    .putParam(Params.TAB, "Ricerca DB nazionale")
-                    .putParam(Params.FORM_COLUMN, "   ");
-            formDescriptor.addField("livingCity", String.class, "Com. resid.", null, applicationContext.getBean(OptionalCityFieldRenderer.class))
-                    .putParam(Params.COLS, Values.COLS_4)
-                    .putParam(Params.ROW, "dt7")
-                    .putParam(Params.TAB, "Ricerca DB nazionale")
-                    .putParam(Params.FORM_COLUMN, "   ");
+            defineRicercaDbnazionaleForm(formDescriptor);
 
             FormResponse response = new FormResponse();
-
             response.setContent(form.writeToString());
             response.setTitle("Ricerca lavoratori");
 

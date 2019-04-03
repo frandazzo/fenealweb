@@ -103,6 +103,10 @@ public class LavoratoriFacade {
         UiCompleteLavoratoreSummary s = new UiCompleteLavoratoreSummary();
 
         Lavoratore l = getLavoratoreById(id);
+        return prepareDto(id, s, l);
+    }
+
+    private UiCompleteLavoratoreSummary prepareDto(long id, UiCompleteLavoratoreSummary s, Lavoratore l) throws Exception {
         if (l == null)
             return null;
 
@@ -365,7 +369,9 @@ public class LavoratoriFacade {
     public void deleteLavoratore(long id) throws Exception {
         svc.delete(((User) security.getLoggedUser()).getLid(), id);
     }
-
+    public List<Lavoratore> findLavoratoriMultiTerritorioRegionale(LavoratoreSearchParams s) {
+        return svc.findLavoratoriMultiterritorio(((User) security.getLoggedUser()).getLid(), s);
+    }
     public List<Lavoratore> findLocalLavoratori(LavoratoreSearchParams s) {
         return svc.findLocalLavoratori(((User) security.getLoggedUser()).getLid(), s);
     }
@@ -973,5 +979,12 @@ public class LavoratoriFacade {
         l.setIscrizioneCorrente(calculateIscrizioneCorrente(lav.getLid()));
         l.setStampeTessera(calculateOtherStampe(lav));
         return l;
+    }
+
+    public UiCompleteLavoratoreSummary getLavoratoreSummaryMultiterriotrioById(long id) throws Exception {
+        UiCompleteLavoratoreSummary s = new UiCompleteLavoratoreSummary();
+
+        Lavoratore l = svc.getLavoratoreMultiterritorioById(((User) security.getLoggedUser()).getLid(), id);
+        return prepareDto(l.getLid(), s, l);
     }
 }

@@ -118,6 +118,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="#/searchworkersnew" class="framework-navigation">
+                        <span class="glyphicons glyphicons-group"></span>
+                        <span class="sidebar-title">Lavoratori (new))</span>
+                    </a>
+                </li>
+                <li>
                     <a href="#/searchfirms" class="framework-navigation">
                         <span class="glyphicons glyphicons-building"></span>
                         <span class="sidebar-title">Aziende</span>
