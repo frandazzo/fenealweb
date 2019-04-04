@@ -473,3 +473,12 @@ div[data-property=competenceSelection] {
 }
 
 
+#timeline.timeline-single {
+    margin-left: 6%;
+     max-width: 1200px;
+}
+
+
+.great-icon{
+    font-size: 32px
+}
