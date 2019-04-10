@@ -1517,22 +1517,22 @@ define([
                             .addClass("internal-grid-deleghe")
                             .dxDataGrid({
                                 columnAutoWidth: true,
-                                // columns: [
-                                //     { dataField:"nomeRegione",  visible : true, visibleIndex: 0},
-                                //     { dataField:"nomeProvincia",  visible : true, visibleIndex: 1},
-                                //     { dataField:"settore",  visible : true, visibleIndex: 2},
-                                //     { dataField:"ente",  visible : true, visibleIndex: 3},
-                                //     { dataField:"periodo",  visible : true, visibleIndex: 4},
-                                //     { dataField:"anno",  visible : true, visibleIndex: 5},
-                                //     { dataField:"azienda", visible : true, visibleIndex: 6},
-                                //     { dataField:"piva",  visible : true, visibleIndex: 7},
-                                //     { dataField:"livello",  visible : true, visibleIndex: 8},
-                                //     { dataField:"quota",  visible : true, visibleIndex: 9},
-                                //     { dataField:"contratto",  visible : true, visibleIndex: 10},
-                                //
-                                //
-                                //
-                                // ],
+                                columns: [
+                                    { dataField:"region", caption:"Regione", visible : true, visibleIndex: 0},
+                                    { dataField:"province", caption:"Provincia", visible : true, visibleIndex: 0},
+                                    { dataField:"documentDate", dataType:"date", caption: "Data", visible : true, visibleIndex: 1},
+                                    { dataField:"state", caption: "Stato",  visible : true, visibleIndex: 3},
+                                    { dataField:"sector", caption: "Settore", visible : true, visibleIndex: 4},
+                                    { dataField:"ente", caption: "Ente",  visible : true, visibleIndex: 5},
+                                    { dataField:"operator", caption: "Operatore",visible : true, visibleIndex: 6},
+                                    { dataField:"acceptDate", caption: "Data accreditamento", dataType:"date",  visible : true, visibleIndex: 7},
+                                    { dataField:"cancelDate", caption: "Data annullamento", dataType:"date", visible : true, visibleIndex: 8},
+                                    { dataField:"revokeDate", caption: "Data revoca", dataType:"date",  visible : true, visibleIndex: 9},
+                                   // { dataField:"notes",  visible : true, visibleIndex: 10},
+
+
+
+                                ],
                                 dataSource: currentData.delegheNazionali
                             })
                             .appendTo(mainContainer.find('.delcon'));

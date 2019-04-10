@@ -91,7 +91,7 @@ public class LavoratoriFacade {
     private MagazzinoDelegheRepository magRep;
 
     @Autowired
-    private QuoteAssociativeService quoteService;
+    private ReportNonIscrittiSuper noniscrittiAnalisysService;
 
     @Autowired
     private VersamentiFacade verFac;
@@ -985,6 +985,16 @@ public class LavoratoriFacade {
         UiCompleteLavoratoreSummary s = new UiCompleteLavoratoreSummary();
 
         Lavoratore l = svc.getLavoratoreMultiterritorioById(((User) security.getLoggedUser()).getLid(), id);
-        return prepareDto(l.getLid(), s, l);
+
+        //recupero inoltre i dati dellatimeline
+        LiberoDbNazionale f = noniscrittiAnalisysService.analyzeFiscaleCodeData(l.getFiscalcode());
+
+
+        UiCompleteLavoratoreSummary summary = prepareDto(l.getLid(), s, l);
+//        summary.setDeleghe(f.getDeleghe());
+//        summary.setIscrizioniAltroSindacato(f.getIscrizioniAltroSindacato());
+//        summary.setIscrizioni(f.getIscrizioni());
+
+        return summary;
     }
 }

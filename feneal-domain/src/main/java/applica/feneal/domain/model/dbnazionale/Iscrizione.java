@@ -1,9 +1,12 @@
 package applica.feneal.domain.model.dbnazionale;
 
+import applica.feneal.domain.model.core.Sector;
 import applica.framework.AEntity;
 import applica.framework.IEntity;
+import applica.framework.library.utils.DateUtils;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by fgran on 30/04/2016.
@@ -32,6 +35,23 @@ public class Iscrizione extends IEntity {
 
     private String nomeCompleto;
     private String codiceFiscale;
+
+    public Date getDataInizioIscrizione(){
+        GregorianCalendar ff = new GregorianCalendar();
+        if (Sector.sector_edile.equals(settore)){
+            if (periodo == 1){
+                ff.set(anno-1, 9,1);
+            }else{
+                ff.set(anno, 3,1);
+            }
+
+        }else {
+
+            ff.set(anno, 0,1);
+
+        }
+        return ff.getTime();
+    }
 
     public String getNomeCompleto() {
         return nomeCompleto;

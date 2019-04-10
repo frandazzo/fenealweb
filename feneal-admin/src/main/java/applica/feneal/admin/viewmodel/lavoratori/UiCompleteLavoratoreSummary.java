@@ -1,11 +1,17 @@
 package applica.feneal.admin.viewmodel.lavoratori;
 
+import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
+import applica.feneal.domain.model.dbnazionale.Iscrizione;
+import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
+
 import java.util.List;
 
 /**
  * Created by fgran on 06/04/2016.
  */
 public class UiCompleteLavoratoreSummary {
+
+
 
     public UiLavoratoreAnagraficaSummary getData() {
         return data;
@@ -46,6 +52,7 @@ public class UiCompleteLavoratoreSummary {
     private UiPrintedTessera tesseraData;
 
     private List<UiPrintedTessera> otherTessereData;
+
 
 
 }

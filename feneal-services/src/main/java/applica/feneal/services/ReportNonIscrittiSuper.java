@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ReportNonIscrittiSuper {
     List<LiberoDbNazionale> retrieveLiberi(LiberoReportSearchParams params , boolean isOldReportStyle);
+    LiberoDbNazionale analyzeFiscaleCodeData(String fiscalCode);
 }

@@ -14,6 +14,7 @@ import applica.feneal.domain.data.geo.CitiesRepository;
 import applica.feneal.domain.data.geo.CountriesRepository;
 import applica.feneal.domain.data.geo.ProvinceRepository;
 import applica.feneal.domain.data.geo.RegonsRepository;
+import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.Paritethic;
 import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.deleghe.Delega;
@@ -83,7 +84,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         final String queryLiberi = createQueryForLiberi(p.getDescription(), t.getType());
         final String queryIscrizioniDbNazionale = createQueryForIscrizioniDbNazionale(p.getDescription(), t.getType());
 
-        final String queryDeleghe = createQueryForDeleghe(p.getDescription(), t.getType());
+        final String queryDeleghe = createQueryForDeleghe(p.getDescription(), t.getType(), p.getIdRegion());
         final String queryNonIscrizioniAttuali = createQueryForNonIscrizioniAttuali(p.getDescription(), t.getType(), p.getIdRegion());
         final String queryNonIscrizioni = createQueryForNonIscrizioni(p.getDescription(), t.getType(), p.getIdRegion());
 
@@ -129,19 +130,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                     List<LiberoDbNazionale> a = new ArrayList<>();
                     for (Object[] objects : liberi) {
                         LiberoDbNazionale ss = materializeLiberi(objects,t.getType(),p.getDescription());
-                        List<Iscrizione> sd = i.get(ss.getCodiceFiscale());
-                        List<LiberoDbNazionale> sdc = i2.get(ss.getCodiceFiscale());
-                        List<DelegaNazionale> sddel = i1.get(ss.getCodiceFiscale());
-                        if (sd == null)
-                            sd = new ArrayList<>();
-                        if (sddel == null)
-                            sddel = new ArrayList<>();
-                        if (sdc == null)
-                            sdc = new ArrayList<>();
-                        ss.setIscrizioni(sd);
-                        ss.setDeleghe(sddel);
-                        ss.setIscrizioniAltroSindacato(sdc);
-
+                        materialiazeObjectContents(i, i1, i2, ss);
                         a.add(ss);
                     }
 
@@ -176,6 +165,94 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
     }
 
+    @Override
+    public LiberoDbNazionale analyzeFiscaleCodeData(String fiscalCode) {
+
+        User u = ((User) sec.getLoggedUser());
+        int regionId = u.getCompany().getRegionId();
+
+        final String queryIscrizioniDbNazionale = createQueryForIscrizioniDbNazionalePerCodiceFiscale(fiscalCode);
+
+        final String queryDeleghe = createQueryForDeleghePerCodiceFiscale(regionId, fiscalCode);
+        final String queryNonIscrizioniAttuali = createQueryForNonIscrizioniAttualiPerCodiceFiscale(regionId, fiscalCode);
+        final String queryNonIscrizioni = createQueryForNonIscrizioniPerCodiceFiscale(regionId, fiscalCode);
+
+        final Box box = new Box();
+
+        enteRep.executeCommand(new Command() {
+            @Override
+            public void execute() {
+                Session s = enteRep.getSession();
+                Transaction tx = null;
+
+                try{
+
+                    tx = s.beginTransaction();
+
+                    List<Object[]> deleghe = createHibernateQueryForDeleghe(s,queryDeleghe).list();
+                    List<Object[]> iscrizioniAltroSindacatoAttuali= createHibernateQueryForNonIscrizioniAttuali(s,queryNonIscrizioniAttuali).list();
+                    List<Object[]> iscrizioniAltroSindacato= createHibernateQueryForNonIscrizioni(s,queryNonIscrizioni).list();
+                    List<Object[]> isscrizioni = createHibernateQueryForIscrizioniDbNazionale(s,queryIscrizioniDbNazionale).list();
+
+
+                    tx.commit();
+
+
+
+                    //metto i dati di iscrizioni deleghe e iscrizioni altro indacato
+                    // in una hashtable per codice fiscale
+                    //in modo da poterle recuperare immediatamente
+
+                    //materializoz le icrizoini
+                    Hashtable<String, List<Iscrizione>> i = mateiralizeHashIscrizioni(isscrizioni);
+                    Hashtable<String, List<DelegaNazionale>> i1 = materializeHashDeleghe(deleghe);
+                    Hashtable<String, List<LiberoDbNazionale>> i2 = materializeHashNonIscrizioni(iscrizioniAltroSindacatoAttuali, iscrizioniAltroSindacato);
+
+                    LiberoDbNazionale ss = new LiberoDbNazionale();
+                    materialiazeObjectContents(i, i1, i2, ss);
+
+
+                    //associo adesso al record liberi le iscrizioni
+
+
+                    box.setValue(ss);
+
+
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                    tx.rollback();
+                }
+                finally{
+
+                    s.close();
+
+                }
+            }
+
+
+        });
+
+        return (LiberoDbNazionale)box.getValue();
+
+
+    }
+
+    private void materialiazeObjectContents(Hashtable<String, List<Iscrizione>> i, Hashtable<String, List<DelegaNazionale>> i1, Hashtable<String, List<LiberoDbNazionale>> i2, LiberoDbNazionale ss) {
+        List<Iscrizione> sd = i.get(ss.getCodiceFiscale());
+        List<LiberoDbNazionale> sdc = i2.get(ss.getCodiceFiscale());
+        List<DelegaNazionale> sddel = i1.get(ss.getCodiceFiscale());
+        if (sd == null)
+            sd = new ArrayList<>();
+        if (sddel == null)
+            sddel = new ArrayList<>();
+        if (sdc == null)
+            sdc = new ArrayList<>();
+        ss.setIscrizioni(sd);
+        ss.setDeleghe(sddel);
+        ss.setIscrizioniAltroSindacato(sdc);
+    }
+
     private Hashtable<String, List<Iscrizione>> mateiralizeHashIscrizioni(List<Object[]> isscrizioni) {
         Hashtable<String,List<Iscrizione>> i = new Hashtable<>();
         for (Object[] objects : isscrizioni) {
@@ -193,7 +270,6 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         }
         return i;
     }
-
     private Hashtable<String, List<DelegaNazionale>> materializeHashDeleghe(List<Object[]> deleghe) {
 
         //recupero ttute le entittà necessarie alla eventuale materializzazione delle deleghe
@@ -219,8 +295,6 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         }
         return i;
     }
-
-
     private Hashtable<String, List<LiberoDbNazionale>> materializeHashNonIscrizioni(List<Object[]> attuali, List<Object[]> vecchie) {
 
 
@@ -259,7 +333,25 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         return i;
     }
 
+    private String createQueryForNonIscrizioniPerCodiceFiscale(int idREgione, String codiceFiscale){
 
+
+//        select CodiceFiscale, nomeprovinciafeneal, currentAzienda, liberoAl, ente, IscrittoA
+//        from lavoratori_liberi_copy
+//        where NomeProvinciaFeneal in
+//                (select descrizione as provincia from tb_provincie where ID_TB_REGIONI = 150)
+//        and iscrittoa <> "" and CodiceFiscale = "CPLMRZ71T23B872M"
+        String query =  String.format("select CodiceFiscale, nomeprovinciafeneal, currentAzienda, liberoAl, ente, IscrittoA " +
+                        "from lavoratori_liberi " +
+                        "where NomeProvinciaFeneal in" +
+                        "  (select descrizione as provincia from tb_provincie where ID_TB_REGIONI = %s)" +
+                        "        and iscrittoa <> \"\" and  CodiceFiscale = \"%s\"",
+                idREgione, codiceFiscale);
+
+        return query;
+
+
+    }
     private String createQueryForNonIscrizioni(String nomeProvincia, String nomeEnte, int idREgione){
 
 
@@ -312,6 +404,28 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         return v;
     }
 
+
+
+
+    private String createQueryForNonIscrizioniAttualiPerCodiceFiscale(int idREgione, String codiceFiscale){
+
+
+//        select CodiceFiscale, nomeprovinciafeneal, currentAzienda, liberoAl, ente, IscrittoA
+//        from lavoratori_liberi
+//        where NomeProvinciaFeneal in
+//                (select descrizione as provincia from tb_provincie where ID_TB_REGIONI = 150)
+//         and CodiceFiscale = "CPLMRZ71T23B872M"
+        String query =  String.format("select CodiceFiscale, nomeprovinciafeneal, currentAzienda, liberoAl, ente, IscrittoA " +
+                        "from lavoratori_liberi " +
+                        "where NomeProvinciaFeneal in" +
+                        "  (select descrizione as provincia from tb_provincie where ID_TB_REGIONI = %s)" +
+                        "   and  CodiceFiscale = \"%s\"",
+                idREgione, codiceFiscale);
+
+        return query;
+
+
+    }
     private String createQueryForNonIscrizioniAttuali(String nomeProvincia, String nomeEnte, int idREgione){
 
 
@@ -368,8 +482,29 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
 
 
+    private String createQueryForDeleghePerCodiceFiscale(int idRegione, String codiceFiscale){
+//        select a.fiscalcode as CodiceFiscale, a.id as idWorker, d.state, d.documentDate, d.provinceId, d.sectorId,
+//                d.paritethicId, c.description, d.acceptDate, d.cancelDate, d.revokeDate, r.ID_TB_REGIONI  as regione
+//        from fenealweb_delega d
+//        left join fenealweb_collaboratore c
+//        on c.id = d.collaboratorId
+//        inner join fenealweb_lavoratore a
+//        on a.id = d.workerId
+//        inner join tb_provincie r
+//        on r.ID= d.provinceId where r.ID_TB_REGIONI = 150 and a.fiscalcode = "RCCCCT68A56L083I";
 
-    private String createQueryForDeleghe(String nomeProvincia, String nomeEnte){
+        String query = String.format("select a.fiscalcode as CodiceFiscale, a.id as idWorker, d.state, d.documentDate, d.provinceId, d.sectorId,\n" +
+                "                d.paritethicId, c.description, d.acceptDate, d.cancelDate, d.revokeDate, r.ID_TB_REGIONI  as regione, d,notes \n" +
+                "        from fenealweb_delega d\n" +
+                "        left join fenealweb_collaboratore c\n" +
+                "        on c.id = d.collaboratorId\n" +
+                "        inner join fenealweb_lavoratore a\n" +
+                "        on a.id = d.workerId\n" +
+                "        inner join tb_provincie r\n" +
+                "        on r.ID= d.provinceId where r.ID_TB_REGIONI = %s and a.fiscalcode = \"%s\"", idRegione, codiceFiscale);
+        return query;
+    }
+    private String createQueryForDeleghe(String nomeProvincia, String nomeEnte, int idRegione){
 
 //
 //        select
@@ -400,7 +535,8 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                         "d.cancelDate, " +
                         "d.revokeDate, \n" +
                         "d.attachment, " +
-                        "d.nomeattachment\n" +
+                        "d.nomeattachment, \n" +
+                        "d.notes\n" +
                         "from \n" +
                         "lavoratori_liberi t \n" +
                         "inner join \n" +
@@ -410,8 +546,10 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                         "on d.workerId = a.id\n" +
                         "left join fenealweb_collaboratore c\n" +
                         "on c.id = d.collaboratorId " +
-                        " where NomeProvinciaFeneal = '%s' and ente = '%s' ",
-                nomeProvincia.replace("'","''"), nomeEnte);
+                        "inner join tb_provincie p " +
+                        "on p.ID = d.provinceId " +
+                        " where NomeProvinciaFeneal = '%s' and ente = '%s' and  p.ID_TB_REGIONI = %s",
+                nomeProvincia.replace("'","''"), nomeEnte, idRegione);
 
         return query;
     }
@@ -430,7 +568,8 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 .addScalar("cancelDate")
                 .addScalar("revokeDate")
                 .addScalar("attachment")
-                .addScalar("nomeattachment");
+                .addScalar("nomeattachment")
+                .addScalar("notes");
     }
     private DelegaNazionale materializeDelegheDbNazionle(Object[] object,
                                                          List<Sector> sectors,
@@ -478,11 +617,39 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
         v.setAttachment((String)object[12]);
         v.setNomeattachment((String)object[13]);
+        v.setNotes((String)object[14]);
         return v;
     }
 
 
+    private String createQueryForIscrizioniDbNazionalePerCodiceFiscale(String codiceFisclae){
+//        select
+//        a.CodiceFiscale,
+//                a.ID as idWorker,
+//        i.anno, i.NomeProvincia, i.NomeRegione, i.Settore, i.Ente, i.Azienda, i.Piva,
+//                i.Livello, i.Quota, i.Periodo, i.Contratto
+//        from
+//        iscrizioni i
+//        inner join
+//        lavoratori a
+//        on i.Id_Lavoratore = a.ID
+//        where a.CodiceFiscale = "BAALA"
 
+        String query =  String.format("        select\n" +
+                "        a.CodiceFiscale,\n" +
+                "                a.ID as idWorker,\n" +
+                "        i.anno, i.NomeProvincia, i.NomeRegione, i.Settore, i.Ente, i.Azienda, i.Piva,\n" +
+                "                i.Livello, i.Quota, i.Periodo, i.Contratto\n" +
+                "        from\n" +
+                " iscrizioni i\n" +
+                "        inner join\n" +
+                "        lavoratori a\n" +
+                "        on i.Id_Lavoratore = a.ID\n" +
+                "        where a.CodiceFiscale = \"%s\"", codiceFisclae);
+
+        return query;
+
+    }
     private String createQueryForIscrizioniDbNazionale(String nomeProvincia, String nomeEnte){
 
 
@@ -643,7 +810,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         v.setNomeComuneResidenza((String)object[9]);
 
         String telefono = (String)object[10];
-        if (StringUtils.isEmpty(telefono))
+        if (StringUtils.isEmpty(telefono) || telefono.trim().equals("-"))
             telefono = (String)object[14];
 
         v.setTelefono(telefono);

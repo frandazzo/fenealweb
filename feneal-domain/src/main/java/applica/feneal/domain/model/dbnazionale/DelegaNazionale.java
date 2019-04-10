@@ -20,6 +20,7 @@ public class DelegaNazionale {
     private Date revokeDate;
     private String attachment;
     private String nomeattachment;
+    private String notes;
 
 
     public String getRegion() {
@@ -140,5 +141,14 @@ public class DelegaNazionale {
 
     public void setNomeattachment(String nomeattachment) {
         this.nomeattachment = nomeattachment;
+    }
+
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getNotes() {
+        return notes;
     }
 }
