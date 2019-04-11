@@ -39,6 +39,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -298,11 +300,50 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
     private Hashtable<String, List<LiberoDbNazionale>> materializeHashNonIscrizioni(List<Object[]> attuali, List<Object[]> vecchie) {
 
 
+        List<Object[]> all = new ArrayList<Object[]>();
+        all.addAll(attuali);
+        all.addAll(vecchie);
+
+        //eseguo la materializzazione
+        List<LiberoDbNazionale> res = new ArrayList<>();
+        for (Object[] objects : all) {
+            res.add(materializeNonIscrizioniAttuali(objects));
+        }
+
+
+        //eseguo il raggruppamento
+
+        //prima di creare la hash finale rimuovo tutti i duplicati
+        //raggruppo per provincia, ente azienda
+//                //e prendo i record con data maggiore
+        Function<LiberoDbNazionale, String> f1 = a -> String.format("%s-%s-%s-%s", a.getCodiceFiscale(), a.getCurrentAzienda(), a.getNomeProvinciaFeneal(), a.getEnte());
+        Map<String, List<LiberoDbNazionale>> f = res.stream().collect(
+                Collectors.groupingBy(f1)
+        );
+
+        //definisco la lista finale
+        List<LiberoDbNazionale> result = new ArrayList<>();
+
+        //adesso ho una mappa contenente tutte le liste di libero db nazionale
+        for (List<LiberoDbNazionale> value : f.values()) {
+            if (value.size() <=1)
+                result.addAll(value);
+            else{
+                Collections.sort(value, new Comparator<LiberoDbNazionale>() {
+                    @Override
+                    public int compare(LiberoDbNazionale o1, LiberoDbNazionale o2) {
+                        return -1 * o1.getLiberoAl().compareTo(o2.getLiberoAl());
+                    }
+                });
+                result.add(value.get(0));
+            }
+
+        }
+
 
 
         Hashtable<String,List<LiberoDbNazionale>> i = new Hashtable<>();
-        for (Object[] objects : attuali) {
-            LiberoDbNazionale r = materializeNonIscrizioniAttuali(objects);
+        for (LiberoDbNazionale r : result) {
             if (!i.containsKey(r.getCodiceFiscale())){
                 List<LiberoDbNazionale> a1 = new ArrayList<>();
                 a1.add(r);
@@ -316,19 +357,55 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         }
 
 
-        for (Object[] objects : vecchie) {
-            LiberoDbNazionale r = materializeNonIscrizioni(objects);
-            if (!i.containsKey(r.getCodiceFiscale())){
-                List<LiberoDbNazionale> a1 = new ArrayList<>();
-                a1.add(r);
-                i.put(r.getCodiceFiscale(), a1);
-            }
+//        Hashtable<String,List<LiberoDbNazionale>> i = new Hashtable<>();
+//        for (Object[] objects : attuali) {
+//            LiberoDbNazionale r = materializeNonIscrizioniAttuali(objects);
+//            if (!i.containsKey(r.getCodiceFiscale())){
+//                List<LiberoDbNazionale> a1 = new ArrayList<>();
+//                a1.add(r);
+//                i.put(r.getCodiceFiscale(), a1);
+//            }
+//
+//            else{
+//                List<LiberoDbNazionale> a1 = i.get(r.getCodiceFiscale());
+//                a1.add(r);
+//            }
+//        }
+//
+//
+//        for (Object[] objects : vecchie) {
+//            LiberoDbNazionale r = materializeNonIscrizioni(objects);
+//            if (!i.containsKey(r.getCodiceFiscale())){
+//                List<LiberoDbNazionale> a1 = new ArrayList<>();
+//                a1.add(r);
+//                i.put(r.getCodiceFiscale(), a1);
+//            }
+//
+//            else{
+//                List<LiberoDbNazionale> a1 = i.get(r.getCodiceFiscale());
+//                a1.add(r);
+//            }
+//        }
 
-            else{
-                List<LiberoDbNazionale> a1 = i.get(r.getCodiceFiscale());
-                a1.add(r);
-            }
-        }
+//        for (String s : i.keySet()) {
+//            List<LiberoDbNazionale> result = i.get(s);
+//            if (result.size() > 1){
+//                //raggruppo per provincia, ente azienda
+//                //e prendo i record con data maggiore
+//                Function<LiberoDbNazionale, String> f1 = a -> String.format("%s-%s-%s", a.getCurrentAzienda(), a.getNomeProvinciaFeneal(), a.getEnte());
+//
+//                Map<String, List<LiberoDbNazionale>> f = result.stream().collect(
+//                        Collectors.groupingBy(f1)
+//                );
+//
+//                //adesso che posseggo tutte le mappe con i
+//                //record dbnazionale raggruppati per provincia ente e azienda
+//                //recupero da ognuna diloro solo i lrecod con la ladata libero al maggiroe
+//
+//
+//
+//            }
+//        }
 
         return i;
     }
@@ -391,20 +468,22 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 ;
     }
     private LiberoDbNazionale materializeNonIscrizioni(Object[] object){
+        return materializeNonIscritto(object);
+    }
+
+    private LiberoDbNazionale materializeNonIscritto(Object[] object) {
         LiberoDbNazionale v = new LiberoDbNazionale();
 
-        v.setCodiceFiscale((String)object[0]);
-        v.setNomeProvinciaFeneal((String)object[1]);
-        v.setCurrentAzienda((String)object[2]);
-        v.setLiberoAl((Date)object[3]);
-        v.setEnte((String)object[4]);
-        v.setIscrittoA((String)object[5]);
+        v.setCodiceFiscale((String) object[0]);
+        v.setNomeProvinciaFeneal((String) object[1]);
+        v.setCurrentAzienda((String) object[2]);
+        v.setLiberoAl((Date) object[3]);
+        v.setEnte((String) object[4]);
+        v.setIscrittoA((String) object[5]);
 
 
         return v;
     }
-
-
 
 
     private String createQueryForNonIscrizioniAttualiPerCodiceFiscale(int idREgione, String codiceFiscale){
@@ -467,17 +546,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 ;
     }
     private LiberoDbNazionale materializeNonIscrizioniAttuali(Object[] object){
-        LiberoDbNazionale v = new LiberoDbNazionale();
-
-        v.setCodiceFiscale((String)object[0]);
-        v.setNomeProvinciaFeneal((String)object[1]);
-        v.setCurrentAzienda((String)object[2]);
-        v.setLiberoAl((Date)object[3]);
-        v.setEnte((String)object[4]);
-        v.setIscrittoA((String)object[5]);
-
-
-        return v;
+        return materializeNonIscritto(object);
     }
 
 
@@ -494,7 +563,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 //        on r.ID= d.provinceId where r.ID_TB_REGIONI = 150 and a.fiscalcode = "RCCCCT68A56L083I";
 
         String query = String.format("select a.fiscalcode as CodiceFiscale, a.id as idWorker, d.state, d.documentDate, d.provinceId, d.sectorId,\n" +
-                "                d.paritethicId, c.description, d.acceptDate, d.cancelDate, d.revokeDate, r.ID_TB_REGIONI  as regione, d,notes \n" +
+                "                d.paritethicId, c.description, d.acceptDate, d.cancelDate, d.revokeDate, r.ID_TB_REGIONI  as regione, d.notes,  d.id as delegaId \n" +
                 "        from fenealweb_delega d\n" +
                 "        left join fenealweb_collaboratore c\n" +
                 "        on c.id = d.collaboratorId\n" +
@@ -536,7 +605,8 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                         "d.revokeDate, \n" +
                         "d.attachment, " +
                         "d.nomeattachment, \n" +
-                        "d.notes\n" +
+                        "d.notes, \n" +
+                        "d.id as delegaId\n" +
                         "from \n" +
                         "lavoratori_liberi t \n" +
                         "inner join \n" +
@@ -569,7 +639,8 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 .addScalar("revokeDate")
                 .addScalar("attachment")
                 .addScalar("nomeattachment")
-                .addScalar("notes");
+                .addScalar("notes")
+                .addScalar("delegaId");
     }
     private DelegaNazionale materializeDelegheDbNazionle(Object[] object,
                                                          List<Sector> sectors,
@@ -586,6 +657,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         v.setCompanyId(dd1.longValue());
 
         Integer state = (Integer)object[3];
+        v.setIntState(state);
         if (state == Delega.state_subscribe || state == Delega.state_sent)
             v.setState("Sottoscritta");
         else if (state == Delega.state_accepted || state == Delega.state_activated)
@@ -618,6 +690,11 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         v.setAttachment((String)object[12]);
         v.setNomeattachment((String)object[13]);
         v.setNotes((String)object[14]);
+
+        BigInteger idDelega = (BigInteger)object[15];
+        v.setDelegaId(idDelega.longValue());
+
+
         return v;
     }
 

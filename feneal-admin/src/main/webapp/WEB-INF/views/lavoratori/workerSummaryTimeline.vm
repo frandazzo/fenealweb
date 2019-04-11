@@ -386,217 +386,250 @@
 
     </div>
 
-    <div class="col-md-9 col-xs-12">
 
-        <div class="mt30 timeline-single" id="timeline">
+    <div class="col-md-9">
+        <div class="tab-block mb25">
+            <ul class="nav nav-tabs tabs-border nav-justified">
+                <li class="active">
+                    <a href="#tab15_1" data-toggle="tab">Timeline</a>
+                </li>
+                <li>
+                    <a href="#tab15_2" data-toggle="tab"><i class="fa fa-pencil text-purple pr5"></i> Lista eventi</a>
+                </li>
 
-            <div class="timeline-divider mtn">
-                <div class="divider-label">2013</div>
-            </div>
+            </ul>
+            <div class="tab-content">
+                <div id="tab15_1" class="tab-pane active">
 
-            <div class="row">
+                    <div class="col-md-12 col-xs-12">
 
-                <div class="col-sm-6 left-column">
-                    <div class="timeline-item">
-                        <div class="timeline-icon">
-                            <span class="glyphicons glyphicons-edit text-warning great-icon"></span>
-                        </div>
-                        <div class="panel">
-                            <div class="panel-heading">
-                                <span class="panel-title">Delega</span>
-                                <div class="panel-header-menu pull-right mr10 text-muted fs12">
-##                                    <span class="glyphicon glyphicon-comment"></span>
-                                    Data: 12/04/2019
-                                </div>
+                        <div class="mt30 timeline-single" id="timeline">
 
+                            <div class="timeline-divider mtn">
+                                <div class="divider-label">2013</div>
                             </div>
-                            <div class="panel-body">
-                                <table class="table">
-                                    <thead>
-                                    <tr class="warning">
-                                        <th>Provincia</th>
-                                        <th>Ente</th>
-                                        <th>Stato</th>
-                                        <th>Scansione</th>
-                                        <th>Operatore</th>
 
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>Milano</td>
-                                        <td>Edile - Cassa edile</td>
-                                        <td>
-                                            <div class="btn-group text-right">
+                            <div class="row">
 
-                                                <button type="button" class="btn btn-warning br2 btn-xs fs12 dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Sottoscritta
-                                                    <span class="caret ml5"></span>
-                                                </button>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <li>
-                                                        <a href="#/editdelega?id=154452&amp;workerId=129640"><i class="glyphicon glyphicon-pencil"></i>   Modifica </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#/deletedelega?id=154452&amp;workerId=129640" "=""><i class="glyphicon glyphicon-trash"></i> Elimina</a>
-                                                    </li>
-                                                    <li class="divider"></li>
-                                                    <li>
-                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=2">Inoltra delega</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=3">Accetta delega</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=5">Annulla delega</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=6">Revoca delega</a>
-                                                    </li>
+                                <div class="col-sm-6 left-column">
+                                    <div class="timeline-item">
+                                        <div class="timeline-icon">
+                                            <span class="glyphicons glyphicons-edit text-warning great-icon"></span>
+                                        </div>
+                                        <div class="panel">
+                                            <div class="panel-heading">
+                                                <span class="panel-title">Delega</span>
+                                                <div class="panel-header-menu pull-right mr10 text-muted fs12">
+                                                ##                                    <span class="glyphicon glyphicon-comment"></span>
+                                                    Data: 12/04/2019
+                                                </div>
 
-
-                                                </ul>
                                             </div>
-##                                            <a href="javascript:;">
-##                                            <span class="glyphicon glyphicon-edit"></span>
-##                                            </a>
-                                        </td>
-                                        <td><a href="javascript:;">Scarica</a></td>
-                                        <td>Francesco Randazzo</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5">
-                                            <blockquote class="blockquote-warning" style="font-size: 12px">
-                                                <dl class="dl-horizontal">
-                                                    <dt>Azienda</dt>
-                                                    <dd>Ciccio srl</dd>
-                                                    <dt>Data accreditamento</dt>
-                                                    <dd>14/07/2017</dd>
-                                                    <dt>Data cessazione</dt>
-                                                    <dd>-</dd>
-                                                    <dt>Causale cessazione</dt>
-                                                    <dd>-</dd>
-                                                    <dt>Annotazioni</dt>
-                                                    <dd>Etiam porta sem malesuada magna mollis euismod.
-                                                        Etiam porta sem malesuada magna mollis euismod.</dd>
-                                                </dl>
-                                            </blockquote>
-                                        </td>
-                                    </tr>
+                                            <div class="panel-body">
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr class="warning">
+                                                        <th>Provincia</th>
+                                                        <th>Ente</th>
+                                                        <th>Stato</th>
+                                                        <th>Scansione</th>
+                                                        <th>Operatore</th>
 
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-icon">
-                            <span class="glyphicon glyphicon-ok-circle text-success great-icon"></span>
-                        </div>
-                        <div class="panel">
-                            <div class="panel-heading">
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Milano</td>
+                                                        <td>Edile - Cassa edile</td>
+                                                        <td>
+                                                            <div class="btn-group text-right">
+
+                                                                <button type="button" class="btn btn-warning br2 btn-xs fs12 dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Sottoscritta
+                                                                    <span class="caret ml5"></span>
+                                                                </button>
+                                                                <ul class="dropdown-menu" role="menu">
+                                                                    <li>
+                                                                        <a href="#/editdelega?id=154452&amp;workerId=129640"><i class="glyphicon glyphicon-pencil"></i>   Modifica </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#/deletedelega?id=154452&amp;workerId=129640" "=""><i class="glyphicon glyphicon-trash"></i> Elimina</a>
+                                                                    </li>
+                                                                    <li class="divider"></li>
+                                                                    <li>
+                                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=2">Inoltra delega</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=3">Accetta delega</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=5">Annulla delega</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=6">Revoca delega</a>
+                                                                    </li>
+
+
+                                                                </ul>
+                                                            </div>
+                                                        ##                                            <a href="javascript:;">
+                                                        ##                                            <span class="glyphicon glyphicon-edit"></span>
+                                                        ##                                            </a>
+                                                        </td>
+                                                        <td><a href="javascript:;">Scarica</a></td>
+                                                        <td>Francesco Randazzo</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5">
+                                                            <blockquote class="blockquote-warning" style="font-size: 12px">
+                                                                <dl class="dl-horizontal">
+                                                                    <dt>Azienda</dt>
+                                                                    <dd>Ciccio srl</dd>
+                                                                    <dt>Data accreditamento</dt>
+                                                                    <dd>14/07/2017</dd>
+                                                                    <dt>Data cessazione</dt>
+                                                                    <dd>-</dd>
+                                                                    <dt>Causale cessazione</dt>
+                                                                    <dd>-</dd>
+                                                                    <dt>Annotazioni</dt>
+                                                                    <dd>Etiam porta sem malesuada magna mollis euismod.
+                                                                        Etiam porta sem malesuada magna mollis euismod.</dd>
+                                                                </dl>
+                                                            </blockquote>
+                                                        </td>
+                                                    </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-icon">
+                                            <span class="glyphicon glyphicon-ok-circle text-success great-icon"></span>
+                                        </div>
+                                        <div class="panel">
+                                            <div class="panel-heading">
                                         <span class="panel-title">
 ##                                            <span class="glyphicon glyphicon-comment"></span>
                                             Database nazionale </span>
-                                <div class="panel-header-menu pull-right mr10 text-muted fs12"> Sem 1 - 2018 </div>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table">
-                                    <thead>
-                                    <tr class="success">
-                                        <th>Regione</th>
-                                        <th>Provincia</th>
-                                        <th>Ente</th>
-                                        <th>Azienda</th>
-                                        <th>Periodo</th>
-                                        <th>Quota</th>
-                                        <th>Livello</th>
-                                        <th>Contratto</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>Lombardia</td>
-                                        <td>Milano</td>
-                                        <td>Edile - Cassa edile</td>
-                                        <td>
-                                           Cciccillo srl
-                                        </td>
-                                        <td>2018 sem. 1</td>
-                                        <td>11.2</td>
-                                        <td>O1</td>
-                                        <td>Cemento</td>
-                                    </tr>
+                                                <div class="panel-header-menu pull-right mr10 text-muted fs12"> Sem 1 - 2018 </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr class="success">
+                                                        <th>Regione</th>
+                                                        <th>Provincia</th>
+                                                        <th>Ente</th>
+                                                        <th>Azienda</th>
+                                                        <th>Periodo</th>
+                                                        <th>Quota</th>
+                                                        <th>Livello</th>
+                                                        <th>Contratto</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Lombardia</td>
+                                                        <td>Milano</td>
+                                                        <td>Edile - Cassa edile</td>
+                                                        <td>
+                                                            Cciccillo srl
+                                                        </td>
+                                                        <td>2018 sem. 1</td>
+                                                        <td>11.2</td>
+                                                        <td>O1</td>
+                                                        <td>Cemento</td>
+                                                    </tr>
 
 
-                                    </tbody>
-                                </table>
-                            </div>
-##                            <div class="panel-footer p15">
-##                                footer
-##                            </div>
-                            <!-- end .form-footer section -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        ##                            <div class="panel-footer p15">
+                                        ##                                footer
+                                        ##                            </div>
+                                            <!-- end .form-footer section -->
 
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-icon">
-                            <span class="glyphicons glyphicons-remove text-danger great-icon"></span>
-                        </div>
-                        <div class="panel">
-                            <div class="panel-heading">
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-icon">
+                                            <span class="glyphicons glyphicons-remove text-danger great-icon"></span>
+                                        </div>
+                                        <div class="panel">
+                                            <div class="panel-heading">
                                         <span class="panel-title">
                                              Iscrizione altro sindacato </span>
 
-                            </div>
-                            <div class="panel-body">
-                                <table class="table">
-                                    <thead>
-                                    <tr class="danger">
-##                                        <th>Regione</th>
-                                        <th>Provincia</th>
-                                        <th>Ente</th>
-                                        <th>Azienda</th>
-                                        <th>Libero al</th>
-                                        <th>Iscritto a</th>
-                                        <th>Livello</th>
-                                        <th>Contratto</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-##                                        <td>Lombardia</td>
-                                        <td>Milano</td>
-                                        <td>Cassa edile</td>
-                                        <td>
-                                            Ciccillo srl
-                                        </td>
-                                        <td>12/12/2019</td>
-                                        <td><strong>FILCA</strong></td>
-                                        <td>O1</td>
-                                        <td>Cemento</td>
-                                    </tr>
+                                            </div>
+                                            <div class="panel-body">
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr class="danger">
+                                                    ##                                        <th>Regione</th>
+                                                        <th>Provincia</th>
+                                                        <th>Ente</th>
+                                                        <th>Azienda</th>
+                                                        <th>Libero al</th>
+                                                        <th>Iscritto a</th>
+                                                        <th>Livello</th>
+                                                        <th>Contratto</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                    ##                                        <td>Lombardia</td>
+                                                        <td>Milano</td>
+                                                        <td>Cassa edile</td>
+                                                        <td>
+                                                            Ciccillo srl
+                                                        </td>
+                                                        <td>12/12/2019</td>
+                                                        <td><strong>FILCA</strong></td>
+                                                        <td>O1</td>
+                                                        <td>Cemento</td>
+                                                    </tr>
 
 
-                                    </tbody>
-                                </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
                             </div>
+
+                            <div class="timeline-divider">
+                                <div class="divider-label">2012</div>
+                            </div>
+
                         </div>
+
+
+
                     </div>
 
-                 </div>
 
+
+                </div>
+                <div id="tab15_2" class="tab-pane">
+                    <p><b>TAB TWO - </b> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
+                </div>
 
             </div>
-
-            <div class="timeline-divider">
-                <div class="divider-label">2012</div>
-            </div>
-
         </div>
-
-
-
     </div>
+
+
+
+
+
+
+
 
 </div>
 

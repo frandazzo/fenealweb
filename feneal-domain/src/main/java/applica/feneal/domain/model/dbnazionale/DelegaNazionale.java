@@ -21,7 +21,25 @@ public class DelegaNazionale {
     private String attachment;
     private String nomeattachment;
     private String notes;
+    private int intState;
+    private long delegaId;
 
+
+    public int getIntState() {
+        return intState;
+    }
+
+    public void setIntState(int intState) {
+        this.intState = intState;
+    }
+
+    public long getDelegaId() {
+        return delegaId;
+    }
+
+    public void setDelegaId(long delegaId) {
+        this.delegaId = delegaId;
+    }
 
     public String getRegion() {
         return region;
