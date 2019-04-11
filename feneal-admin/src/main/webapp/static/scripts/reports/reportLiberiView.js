@@ -64,8 +64,6 @@ define([
 
     });
 
-
-
     var ReportLiberiAppView = fviews.FormAppView.extend({
         ctor: function(formService) {
             ReportLiberiAppView.super.ctor.call(this, formService);
@@ -1025,11 +1023,12 @@ define([
 
         },
 
-        initFilterOptions: function(response){
+        initFilterOptions: function(response, searchTYpe){
+            $('.top-toolbar').remove();
             var self = this;
 
-
-
+            if (searchTYpe == undefined)
+                searchTYpe = 1;
             //recupero la barra dove cè il tasto esegui ricerca
             //in tale barra alla fine della ricerca devo inserire una select per la scelta dell'anno in
             //cui filtrare eventiali iscriziojni e una select per la provincia in cui è stata effettuata
@@ -1039,18 +1038,54 @@ define([
             //visualizzo i filtri sui liberi solo se ne ho trovato qualcuno
 
             if (response.length > 0){
+
+                var infoSelect = searchTYpe;
                 var province = [];
                 var anni = [];
 
+                if(infoSelect == 1){
+                    //devo ricercare tutte le provicne presenti nelle iscrizioni
+                    // e tutti gli anni di iscrizione quando l'opzione 'iscritto storico'
+                    //è selzionato tramite il val()
+                    $.each(response, function(index, elem){
+                        var iscrizioni = elem.iscrizioni;
+                        //ciclo su tutte le iscrizioni
+                        $.each(iscrizioni, function(index1, elem1){
+                            province.push(elem1.nomeProvincia);
+                            anni.push(elem1.anno);
+                        })
+                    });
+                }
+                else if(infoSelect == 2) {
+                    //ricerco le province e gli anni quando vengono
+                    //selezionate le deleghe
+                    $.each(response, function(index, elem){
+                        var deleghe = elem.delegheNazionali;
+                        //ciclo su tutte le deleghe
+                        $.each(deleghe, function(index1, elem1){
+                            province.push(elem1.province);
+                            var a = new Date(elem1.documentDate);
+                            anni.push(a.getFullYear());
+                        })
+                    });
+                } else if(infoSelect == 3) {
+                    //ricerco le province e gli anni quando vengono
+                    //selezionate le deleghe
+                    $.each(response, function (index, elem) {
+                        var nonis = elem.nonIscrizioni;
+                        //ciclo su tutte le non iscrizioni
+                        $.each(nonis, function (index1, elem1) {
+                            province.push(elem1.nomeProvinciaFeneal);
+                            var a = new Date(elem1.liberoAl);
+                            anni.push(a.getFullYear());
+                        })
+                    });
+                }
+
+
+
                 //devo ricercare tutte le provicne presenti nelle iscrizioni e tutti gli anni di iscrizione
-                $.each(response, function(index, elem){
-                    var iscrizioni = elem.iscrizioni;
-                    //ciclo su tutte le iscrizioni
-                    $.each(iscrizioni, function(index1, elem1){
-                        province.push(elem1.nomeProvincia);
-                        anni.push(elem1.anno);
-                    })
-                });
+
 
                 //per prima cosa eseguo una distinct su entrambi gli array per prendere le
                 // province ed gli anni una sola volta
@@ -1066,10 +1101,11 @@ define([
                 });
 
                 distinctProvince.sort();
-
+                 console.log(province.length);
 
                 //adesso se uno dei due array è vuoto non mostro nulla perche non ci sono iscrizioni
                 if (province.length > 0){
+
 
                     var bottombar = $('.bottom-form-bar');
 
@@ -1095,11 +1131,16 @@ define([
                     });
 
 
+                    var select1 = searchTYpe == 1 ? 'selected="selected"' : "";
+                    var select2 = searchTYpe == 2 ? 'selected="selected"' : "";
+                    var select3 = searchTYpe == 3 ? 'selected="selected"' : "";
+
+
                     var infoSelect =$(
-                        '<select name="infoSelect" style="margin-right: 5px">'+
-                        '<option selected="selected" value="">Tutti</option>'+
-                        '<option value="1">Senza richieste effettuate ad altri territori</option>'+
-                        '<option value="2">Con richieste effettuate ad altri territori</option>'+
+                        '<select name="infoSelect" style="margin-right: 5px" id="ciccio">'+
+                        '<option ' + select1 + ' value="1">Iscritto storico</option>'+
+                        '<option '  + select2 + ' value="2">Deleghe</option>'+
+                        '<option '  + select3 + ' value="3">Iscritto ad altro</option>'+
                         '</select>');
 
 
@@ -1128,23 +1169,15 @@ define([
 
                     });
                     infoSelect.change(function(){
-
-                        var selected = this.value;
-                        if (!yearSelect.val() && !provinceSelect.val() )
-                            return;
-
-                        //procedo a filtrare solo se cè un valore
-                        self.filterData(provinceSelect.val(),yearSelect.val(), selected);
-
+                         var selected = this.value;
+                         self.initFilterOptions(response, selected);
+                        // //procedo a filtrare solo se cè un valore
+                         self.filterData("","", selected);
                     });
-
-
                 }
-
             }
-
         },
-        filterData : function(province, year, infoType){
+        filterData : function(province, year, infoSelect){
 
             var self = this;
 
@@ -1156,41 +1189,95 @@ define([
             var filterdList = [];
             $.each(self.listOfLiberi, function(index, elem){
 
-                if (elem.numIscrizioni > 0){
+                if (infoSelect ==  1) {
 
-                    $.each(elem.iscrizioni, function(index1, elem1){
+                    $.each(elem.iscrizioni, function (index1, elem1) {
                         //variabile che indica se il criterio per l'anno è soddisfatto
                         //se l'anno è nullo il criterio restituira sempre true delegando agli altri criteri
                         //la veirfica
                         //ecco perchè lo imposto a true
                         var foundAnno = true;
-                        if (year){
-                            if (elem1.anno != parseInt(year)){
+                        if (year) {
+
+                            if (elem1.anno != parseInt(year)) {
                                 foundAnno = false;
                             }
                         }
 
                         var foundProvince = true;
-                        if (province){
-                            if (elem1.nomeProvincia != province){
+                        if (province) {
+                            if (elem1.nomeProvincia != province) {
                                 foundProvince = false;
                             }
                         }
 
-                        if (foundAnno && foundProvince)
-                        {
+                        if (foundAnno && foundProvince) {
                             filterdList.push(elem);
                             return false;
                         }
 
                     });
+                } else if(infoSelect == 2) {
 
+                    $.each(elem.delegheNazionali, function (index2, elem2) {
+                        //variabile che indica se il criterio per l'anno è soddisfatto
+                        //se l'anno è nullo il criterio restituira sempre true delegando agli altri criteri
+                        //la veirfica
+                        //ecco perchè lo imposto a true
+                        var foundAnno = true;
+                        if (year) {
+                            var a = new Date(elem2.documentDate);
+                            if (a.getFullYear() != parseInt(year)) {
+                                foundAnno = false;
+                            }
+                        }
+
+                        var foundProvince = true;
+                        if (province) {
+                            console.log(elem2.province);
+                            if (elem2.province != province) {
+                                foundProvince = false;
+                            }
+                        }
+
+                        if (foundAnno && foundProvince) {
+                            filterdList.push(elem);
+                            return false;
+                        }
+
+                    });
+                } else if(infoSelect == 3) {
+
+                    $.each(elem.nonIscrizioni, function (index3, elem3) {
+                        //variabile che indica se il criterio per l'anno è soddisfatto
+                        //se l'anno è nullo il criterio restituira sempre true delegando agli altri criteri
+                        //la veirfica
+                        //ecco perchè lo imposto a true
+                        var foundAnno = true;
+                        if (year) {
+                            var a = new Date(elem3.liberoAl);
+                            if (a.getFullYear() != parseInt(year)) {
+                                foundAnno = false;
+                            }
+                        }
+
+                        var foundProvince = true;
+                        if (province) {
+                            console.log(elem3.nomeProvinciaFeneal);
+                            if (elem3.nomeProvinciaFeneal != province) {
+                                foundProvince = false;
+                            }
+                        }
+
+                        if (foundAnno && foundProvince) {
+                            filterdList.push(elem);
+                            return false;
+                        }
+
+                    });
                 }
-
-
             });
-
-            if (!infoType)
+            if (infoSelect)
                 self.initGrid(filterdList);
             else{
                 //se info type è una dei due "con o senza info" invio tutti i record filtrati al server che provvedera
@@ -1226,8 +1313,6 @@ define([
 
                 svc.load();
                 $.loader.show({parent:'body'});
-
-
 
             }
 
@@ -1645,12 +1730,10 @@ define([
 
             return [
                 // {
-                //     text: "Crea anagrafica",
+                //     text: "ciccio",
                 //     command: function() {
                 //
-                //         ui.Navigation.instance().navigate("editworker", "index", {
-                //             fs: this.fullScreenForm
-                //         });
+                //        alert('ciao');
                 //     },
                 //     icon: "pencil"
                 // }
