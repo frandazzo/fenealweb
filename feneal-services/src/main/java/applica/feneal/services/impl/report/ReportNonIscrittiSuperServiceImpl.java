@@ -211,6 +211,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                     Hashtable<String, List<LiberoDbNazionale>> i2 = materializeHashNonIscrizioni(iscrizioniAltroSindacatoAttuali, iscrizioniAltroSindacato);
 
                     LiberoDbNazionale ss = new LiberoDbNazionale();
+                    ss.setCodiceFiscale(fiscalCode);
                     materialiazeObjectContents(i, i1, i2, ss);
 
 
@@ -562,8 +563,8 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 //        inner join tb_provincie r
 //        on r.ID= d.provinceId where r.ID_TB_REGIONI = 150 and a.fiscalcode = "RCCCCT68A56L083I";
 
-        String query = String.format("select a.fiscalcode as CodiceFiscale, a.id as idWorker, d.state, d.documentDate, d.provinceId, d.sectorId,\n" +
-                "                d.paritethicId, c.description, d.acceptDate, d.cancelDate, d.revokeDate, r.ID_TB_REGIONI  as regione, d.notes,  d.id as delegaId \n" +
+        String query = String.format("select a.fiscalcode as CodiceFiscale, a.id as idWorker,   a.companyId, d.state, d.documentDate, d.provinceId, d.sectorId,\n" +
+                "                d.paritethicId, c.description, d.acceptDate, d.cancelDate, d.revokeDate, d.attachment, nomeattachment, d.notes,  d.id as delegaId \n" +
                 "        from fenealweb_delega d\n" +
                 "        left join fenealweb_collaboratore c\n" +
                 "        on c.id = d.collaboratorId\n" +
@@ -678,8 +679,11 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         v.setSector(sectors.stream()
                 .filter(a -> a.getLid() == dd2.longValue()).findFirst().get().getType());
         BigInteger dd3 = (BigInteger)object[7];
-        v.setEnte(paritetichs.stream()
-                .filter(a -> a.getLid() == dd3.longValue()).findFirst().get().getType());
+        if (dd3 != null){
+            v.setEnte(paritetichs.stream()
+                    .filter(a -> a.getLid() == dd3.longValue()).findFirst().get().getType());
+        }
+
         v.setRegion(regions.stream().filter(a -> a.getIid() == pp.getIdRegion()).findFirst().get().getDescription());
         v.setOperator((String)object[8]);
 
