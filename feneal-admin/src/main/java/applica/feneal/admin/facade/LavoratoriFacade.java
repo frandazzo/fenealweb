@@ -991,9 +991,9 @@ public class LavoratoriFacade {
 
 
         UiCompleteLavoratoreSummary summary = prepareDto(l.getLid(), s, l);
-//        summary.setDeleghe(f.getDeleghe());
-//        summary.setIscrizioniAltroSindacato(f.getIscrizioniAltroSindacato());
-//        summary.setIscrizioni(f.getIscrizioni());
+        summary.setDeleghe(f.getDeleghe());
+        summary.setIscrizioniAltroSindacato(f.getIscrizioniAltroSindacato());
+        summary.setIscrizioni(f.getIscrizioni());
 
         return summary;
     }

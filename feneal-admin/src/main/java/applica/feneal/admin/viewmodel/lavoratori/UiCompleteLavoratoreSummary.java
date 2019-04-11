@@ -12,6 +12,9 @@ import java.util.List;
 public class UiCompleteLavoratoreSummary {
 
 
+    private List<DelegaNazionale> deleghe;
+    private List<LiberoDbNazionale> iscrizioniAltroSindacato;
+    private List<Iscrizione> iscrizioni;
 
     public UiLavoratoreAnagraficaSummary getData() {
         return data;
@@ -54,5 +57,27 @@ public class UiCompleteLavoratoreSummary {
     private List<UiPrintedTessera> otherTessereData;
 
 
+    public void setDeleghe(List<DelegaNazionale> deleghe) {
+        this.deleghe = deleghe;
+    }
 
+    public List<DelegaNazionale> getDeleghe() {
+        return deleghe;
+    }
+
+    public void setIscrizioniAltroSindacato(List<LiberoDbNazionale> iscrizioniAltroSindacato) {
+        this.iscrizioniAltroSindacato = iscrizioniAltroSindacato;
+    }
+
+    public List<LiberoDbNazionale> getIscrizioniAltroSindacato() {
+        return iscrizioniAltroSindacato;
+    }
+
+    public void setIscrizioni(List<Iscrizione> iscrizioni) {
+        this.iscrizioni = iscrizioni;
+    }
+
+    public List<Iscrizione> getIscrizioni() {
+        return iscrizioni;
+    }
 }
