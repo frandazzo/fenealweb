@@ -1,6 +1,7 @@
 package applica.feneal.admin.facade;
 
 import applica.feneal.admin.viewmodel.UiLavoratoreTimeLineItem;
+import applica.feneal.admin.viewmodel.UiLavoratoreTimelineYearGroup;
 import applica.feneal.admin.viewmodel.app.dashboard.lavoratori.*;
 import applica.feneal.admin.viewmodel.deleghe.UIDelega;
 import applica.feneal.admin.viewmodel.lavoratori.*;
@@ -49,6 +50,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by fgran on 06/04/2016.
@@ -993,12 +995,38 @@ public class LavoratoriFacade {
 
 
         UiCompleteLavoratoreSummary summary = prepareDto(l.getLid(), s, l);
-        summary.setTimelineList(convertToTimelineItems(f));
+        summary.setTimelineList(convertToTimelineGroups(convertToTimelineItems(f)));
         summary.setDeleghe(f.getDeleghe());
         summary.setIscrizioniAltroSindacato(f.getIscrizioniAltroSindacato());
         summary.setIscrizioni(f.getIscrizioni());
 
         return summary;
+    }
+
+    private List<UiLavoratoreTimelineYearGroup> convertToTimelineGroups(List<UiLavoratoreTimeLineItem> items) {
+
+
+        Map<Integer, List<UiLavoratoreTimeLineItem>> f = items.stream().collect(Collectors.groupingBy(UiLavoratoreTimeLineItem::getAnno));
+
+        List<UiLavoratoreTimelineYearGroup> result = new ArrayList<>();
+        for (Integer integer : f.keySet()) {
+            UiLavoratoreTimelineYearGroup ff = new UiLavoratoreTimelineYearGroup();
+            ff.setAnno(integer);
+            ff.setItem(f.get(integer));
+            result.add(ff);
+        }
+
+
+        Collections.sort(result, new Comparator<UiLavoratoreTimelineYearGroup>() {
+            @Override
+            public int compare(UiLavoratoreTimelineYearGroup o1, UiLavoratoreTimelineYearGroup o2) {
+                return -1 * new Integer(o1.getAnno()).compareTo(o2.getAnno());
+            }
+        });
+
+        return result;
+
+
     }
 
     private List<UiLavoratoreTimeLineItem> convertToTimelineItems(LiberoDbNazionale f) {

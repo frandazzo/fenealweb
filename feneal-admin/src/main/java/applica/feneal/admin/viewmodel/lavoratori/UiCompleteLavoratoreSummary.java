@@ -1,6 +1,7 @@
 package applica.feneal.admin.viewmodel.lavoratori;
 
 import applica.feneal.admin.viewmodel.UiLavoratoreTimeLineItem;
+import applica.feneal.admin.viewmodel.UiLavoratoreTimelineYearGroup;
 import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
 import applica.feneal.domain.model.dbnazionale.Iscrizione;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
@@ -16,7 +17,7 @@ public class UiCompleteLavoratoreSummary {
     private List<DelegaNazionale> deleghe;
     private List<LiberoDbNazionale> iscrizioniAltroSindacato;
     private List<Iscrizione> iscrizioni;
-    private List<UiLavoratoreTimeLineItem> timelineList;
+    private List<UiLavoratoreTimelineYearGroup> timelineList;
 
 
     public UiLavoratoreAnagraficaSummary getData() {
@@ -85,11 +86,11 @@ public class UiCompleteLavoratoreSummary {
     }
 
 
-    public void setTimelineList(List<UiLavoratoreTimeLineItem> timelineList) {
+    public void setTimelineList(List<UiLavoratoreTimelineYearGroup> timelineList) {
         this.timelineList = timelineList;
     }
 
-    public List<UiLavoratoreTimeLineItem> getTimelineList() {
+    public List<UiLavoratoreTimelineYearGroup> getTimelineList() {
         return timelineList;
     }
 }
