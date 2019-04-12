@@ -412,7 +412,7 @@
                             <div class="row">
 
                                 <div class="col-sm-6 left-column">
-                                    <div class="timeline-item">
+                                    <div class="timeline-item delega">
                                         <div class="timeline-icon">
                                             <span class="glyphicons glyphicons-edit text-warning great-icon"></span>
                                         </div>
@@ -503,7 +503,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="timeline-item">
+                                    <div class="timeline-item iscritto">
                                         <div class="timeline-icon">
                                             <span class="glyphicon glyphicon-ok-circle text-success great-icon"></span>
                                         </div>
@@ -553,7 +553,7 @@
 
                                         </div>
                                     </div>
-                                    <div class="timeline-item">
+                                    <div class="timeline-item noniscritto">
                                         <div class="timeline-icon">
                                             <span class="glyphicons glyphicons-remove text-danger great-icon"></span>
                                         </div>
@@ -608,27 +608,148 @@
                             </div>
 
                         </div>
+                    </div>
+                </div>
+                <div id="tab15_2" class="tab-pane">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <span class="panel-title">Database Nazionale</span>
+                        </div>
 
+                        <div class="panel-body">
+                            <table class="table">
+                                <thead>
+                                <tr class="success">
+                                    <th>Nome Regione</th>
+                                    <th>Nome Provincia</th>
+                                    <th>Settore</th>
+                                    <th>Ente</th>
+                                    <th>Periodo</th>
+                                    <th>Anno</th>
+                                    <th>Azienda</th>
+                                    <th>Piva</th>
+                                    <th>Livello</th>
+                                    <th>Quota</th>
+                                    <th>Contratto</th>
+                                </tr>
+                                </thead>
 
+                                <tbody>
+                                    #if($summary.iscrizioni.size() == 0)
+                                    <table>
+                                        <span class="col-md-12 col-xs-12 padding-10">Nessuna iscrizione</span>
+                                    </table>
+                                    #else
+                                        #foreach($iscritto in $summary.iscrizioni)
+                                        <tr>
+                                            <th>$iscritto.nomeRegione</th>
+                                            <th>$iscritto.nomeProvincia</th>
+                                            <th>$iscritto.settore</th>
+                                            <th>$iscritto.ente</th>
+                                            <th>$iscritto.periodo</th>
+                                            <th>$iscritto.anno</th>
+                                            <th>$iscritto.azienda</th>
+                                            <th>$iscritto.piva</th>
+                                            <th>$iscritto.livello</th>
+                                            <th>$iscritto.quota</th>
+                                            <th>$iscritto.contratto</th>
+                                        </tr>
+                                        #end
+                                    #end
+                                </tbody>
+                            </table>
+                        </div>
 
                     </div>
 
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <span class="panel-title">Deleghe</span>
+                        </div>
 
+                        <div class="panel-body">
+                            <table class="table">
+                                <thead>
+                                <tr class="warning">
+                                    <th>Regione</th>
+                                    <th>Provincia</th>
+                                    <th>Data</th>
+                                    <th>Stato</th>
+                                    <th>Settore</th>
+                                    <th>Ente</th>
+                                    <th>Operatore</th>
+                                    <th>Data Accreditamento</th>
+                                    <th>Data Annullamento</th>
+                                    <th>Data Revoca</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    #if($summary.deleghe.size() == 0)
+                                    <table>
+                                        <span class="col-md-12 col-xs-12 padding-10">Nessuna delega</span>
+                                    </table>
+                                    #else
+                                        #foreach($delega in $summary.deleghe)
+                                        <tr>
+                                            <th>#if($delega.region)$delega.region#end</th>
+                                            <th>#if($delega.province)$delega.province#end</th>
+                                            <th>$localization.formatDate($delega.documentDate)</th>
+                                            <th>#if($delega.state)$delega.state#end</th>
+                                            <th>#if($delega.sector)$delega.sector#end</th>
+                                            <th>#if($delega.ente)$delega.ente#end</th>
+                                            <th>#if($delega.operator)$delega.operator#end</th>
+                                            <th>$localization.formatDate($delega.acceptDate)</th>
+                                            <th>$localization.formatDate($delega.cancelDate)</th>
+                                            <th>$localization.formatDate($delega.revokeDate)</th>
+                                        </tr>
+                                        #end
+                                    #end
+                                </tbody>
+                            </table>
+                           </div>
+                        </div>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <span class="panel-title">Iscrizione altro sindacato</span>
+                        </div>
 
+                        <div class="panel-body">
+                            <table class="table">
+                                <thead>
+                                <tr class="danger">
+                                    <th>Data</th>
+                                    <th>Provincia</th>
+                                    <th>Ente Bilaterale</th>
+                                    <th>Altro Sindacato</th>
+                                    <th>Azienda</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    #if($summary.iscrizioniAltroSindacato.size() == 0)
+                                    <table>
+                                        <span class="col-md-12 col-xs-12 padding-10">Nessuna iscrizione ad altri sindacati</span>
+                                    </table>
+                                    #else
+
+                                        #foreach($nonIscritti in $summary.iscrizioniAltroSindacato)
+                                        <tr>
+                                            <th>$localization.formatDate($nonIscritti.liberoAl)</th>
+                                            <th>#if($nonIscritti.nomeProvinciaFeneal)$nonIscritti.nomeProvinciaFeneal#end</th>
+                                            <th>#if($nonIscritti.ente)$nonIscritti.ente#end</th>
+                                            <th>#if($nonIscritti.iscrittoA)$nonIscritti.iscrittoA#end</th>
+                                            <th>#if($nonIscritti.currentAzienda)$nonIscritti.currentAzienda#end</th>
+                                        </tr>
+                                        #end
+                                    #end
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
-                <div id="tab15_2" class="tab-pane">
-                    <p><b>TAB TWO - </b> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
-                </div>
-
             </div>
         </div>
     </div>
-
-
-
-
-
-
 
 
 </div>

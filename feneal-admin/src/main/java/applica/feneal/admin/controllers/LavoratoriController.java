@@ -105,7 +105,7 @@ public class LavoratoriController {
 
     @RequestMapping(value="/localworkersnew", method= RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
-    public @ResponseBody SimpleResponse findLocalLavoratorinew(@RequestParam(value="name", required=false, defaultValue="") String name,
+    public @ResponseBody  SimpleResponse findLocalLavoratorinew(@RequestParam(value="name", required=false, defaultValue="") String name,
                                                             @RequestParam(value="surname", required=false, defaultValue="") String surname,
                                                             @RequestParam(value="fiscalcode", required=false, defaultValue="") String fiscalcode,
                                                             @RequestParam(value="namesurname", required=false, defaultValue="") String namesurname,
