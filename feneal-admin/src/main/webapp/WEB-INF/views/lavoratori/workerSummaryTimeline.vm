@@ -401,214 +401,253 @@
             <div class="tab-content">
                 <div id="tab15_1" class="tab-pane active">
 
-                    <div class="col-md-12 col-xs-12">
+                    #if($summary.timelineList.size() == 0)
+                        <blockquote class="blockquote-danger">
+                            <p> Nessun dato trovato</p>
+                        </blockquote>
+                        #else
+                            #foreach($a in $summary.timelineList)
+                                <div class="col-md-12 col-xs-12">
 
-                        <div class="mt30 timeline-single" id="timeline">
+                                    <div class="mt30 timeline-single" id="timeline">
 
-                            <div class="timeline-divider mtn">
-                                <div class="divider-label">2013</div>
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-sm-6 left-column">
-                                    <div class="timeline-item delega">
-                                        <div class="timeline-icon">
-                                            <span class="glyphicons glyphicons-edit text-warning great-icon"></span>
+                                        <div class="timeline-divider mtn">
+                                            <div class="divider-label">$a.anno</div>
                                         </div>
-                                        <div class="panel">
-                                            <div class="panel-heading">
-                                                <span class="panel-title">Delega</span>
-                                                <div class="panel-header-menu pull-right mr10 text-muted fs12">
-                                                ##                                    <span class="glyphicon glyphicon-comment"></span>
-                                                    Data: 12/04/2019
-                                                </div>
 
-                                            </div>
-                                            <div class="panel-body">
-                                                <table class="table">
-                                                    <thead>
-                                                    <tr class="warning">
-                                                        <th>Provincia</th>
-                                                        <th>Ente</th>
-                                                        <th>Stato</th>
-                                                        <th>Scansione</th>
-                                                        <th>Operatore</th>
-
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td>Milano</td>
-                                                        <td>Edile - Cassa edile</td>
-                                                        <td>
-                                                            <div class="btn-group text-right">
-
-                                                                <button type="button" class="btn btn-warning br2 btn-xs fs12 dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Sottoscritta
-                                                                    <span class="caret ml5"></span>
-                                                                </button>
-                                                                <ul class="dropdown-menu" role="menu">
-                                                                    <li>
-                                                                        <a href="#/editdelega?id=154452&amp;workerId=129640"><i class="glyphicon glyphicon-pencil"></i>   Modifica </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="#/deletedelega?id=154452&amp;workerId=129640" "=""><i class="glyphicon glyphicon-trash"></i> Elimina</a>
-                                                                    </li>
-                                                                    <li class="divider"></li>
-                                                                    <li>
-                                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=2">Inoltra delega</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=3">Accetta delega</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=5">Annulla delega</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="#/delegastatecontroller?id=154452&amp;newState=6">Revoca delega</a>
-                                                                    </li>
+                                        <div class="row">
 
 
-                                                                </ul>
+                                            <div class="col-sm-6 left-column">
+                                                <div class="timeline-item delega">
+                                                    <div class="timeline-icon">
+                                                        <span class="glyphicons glyphicons-edit text-warning great-icon"></span>
+                                                    </div>
+                                                    <div class="panel">
+                                                        <div class="panel-heading">
+                                                            <span class="panel-title">Delega</span>
+                                                            <div class="panel-header-menu pull-right mr10 text-muted fs12">
+                                                              #foreach($item in $a.item)
+                                                                  #if($item.tipo == 'Delega')
+                                                                  $localization.formatDate($item.data)
+                                                                  #end
+                                                                 #end
                                                             </div>
-                                                        ##                                            <a href="javascript:;">
-                                                        ##                                            <span class="glyphicon glyphicon-edit"></span>
-                                                        ##                                            </a>
-                                                        </td>
-                                                        <td><a href="javascript:;">Scarica</a></td>
-                                                        <td>Francesco Randazzo</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="5">
-                                                            <blockquote class="blockquote-warning" style="font-size: 12px">
-                                                                <dl class="dl-horizontal">
-                                                                    <dt>Azienda</dt>
-                                                                    <dd>Ciccio srl</dd>
-                                                                    <dt>Data accreditamento</dt>
-                                                                    <dd>14/07/2017</dd>
-                                                                    <dt>Data cessazione</dt>
-                                                                    <dd>-</dd>
-                                                                    <dt>Causale cessazione</dt>
-                                                                    <dd>-</dd>
-                                                                    <dt>Annotazioni</dt>
-                                                                    <dd>Etiam porta sem malesuada magna mollis euismod.
-                                                                        Etiam porta sem malesuada magna mollis euismod.</dd>
-                                                                </dl>
-                                                            </blockquote>
-                                                        </td>
-                                                    </tr>
 
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="timeline-item iscritto">
-                                        <div class="timeline-icon">
-                                            <span class="glyphicon glyphicon-ok-circle text-success great-icon"></span>
-                                        </div>
-                                        <div class="panel">
-                                            <div class="panel-heading">
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <table class="table">
+                                                                <thead>
+                                                                <tr class="warning">
+                                                                    <th>Provincia</th>
+                                                                    <th>Ente</th>
+                                                                    <th>Stato</th>
+                                                                    <th>Scansione</th>
+                                                                    <th>Operatore</th>
+                                                                </tr>
+                                                                </thead>
+                                                                #foreach($item in $a.item)
+                                                                    #if($item.tipo == 'Delega')
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td>$item.provincia</td>
+                                                                            <td>$item.ente</td>
+                                                                            <td>
+                                                                                <div class="btn-group text-right">
+
+                                                                                    <button type="button" class="btn btn-warning br2 btn-xs fs12 dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Sottoscritta
+                                                                                        <span class="caret ml5"></span>
+                                                                                    </button>
+                                                                                    <ul class="dropdown-menu" role="menu">
+                                                                                        <li>
+                                                                                            <a href="#/editdelega?id=154452&amp;workerId=129640"><i class="glyphicon glyphicon-pencil"></i>   Modifica </a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#/deletedelega?id=154452&amp;workerId=129640" "=""><i class="glyphicon glyphicon-trash"></i> Elimina</a>
+                                                                                        </li>
+                                                                                        <li class="divider"></li>
+                                                                                        <li>
+                                                                                            <a href="#/delegastatecontroller?id=154452&amp;newState=2">Inoltra delega</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#/delegastatecontroller?id=154452&amp;newState=3">Accetta delega</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#/delegastatecontroller?id=154452&amp;newState=5">Annulla delega</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a href="#/delegastatecontroller?id=154452&amp;newState=6">Revoca delega</a>
+                                                                                        </li>
+
+
+                                                                                    </ul>
+                                                                                </div>
+                                                                            ##                                            <a href="javascript:;">
+                                                                            ##                                            <span class="glyphicon glyphicon-edit"></span>
+                                                                            ##                                            </a>
+                                                                            </td>
+                                                                            <td><a href="javascript:;">Scarica</a></td>
+                                                                            <td>#if($item.operator)$item.operator#end</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="5">
+                                                                                <blockquote class="blockquote-warning" style="font-size: 12px">
+                                                                                    <dl class="dl-horizontal">
+                                                                                        <dt>Azienda</dt>
+                                                                                        <dd>$item.azienda</dd>
+                                                                                        <dt>Data accreditamento</dt>
+                                                                                        <dd>
+                                                                                            #if( $item.dataAccreditamento)
+                                                                                                $item.dataAccreditamento
+                                                                                            #else
+                                                                                                -
+                                                                                            #end
+                                                                                        </dd>
+                                                                                        <dt>Data cessazione</dt>
+                                                                                        <dd>
+                                                                                            #if( $item.dataCessazione)
+                                                                                                $item.dataCessazione
+                                                                                            #else
+                                                                                                -
+                                                                                            #end
+                                                                                        </dd>
+                                                                                        <dt>Causale cessazione</dt>
+                                                                                        <dd>-</dd>
+                                                                                        <dt>Annotazioni</dt>
+                                                                                        <dd>
+
+                                                                                            #if( $item.annotazioni)
+                                                                                                $item.annotazioni
+                                                                                            #else
+                                                                                                Nessun annotazione
+                                                                                            #end
+                                                                                        </dd>
+                                                                                    </dl>
+                                                                                </blockquote>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        </tbody>
+                                                                    #end
+                                                                #end
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="timeline-item iscritto">
+                                                    <div class="timeline-icon">
+                                                        <span class="glyphicon glyphicon-ok-circle text-success great-icon"></span>
+                                                    </div>
+                                                    <div class="panel">
+                                                        <div class="panel-heading">
                                         <span class="panel-title">
 ##                                            <span class="glyphicon glyphicon-comment"></span>
                                             Database nazionale </span>
-                                                <div class="panel-header-menu pull-right mr10 text-muted fs12"> Sem 1 - 2018 </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <table class="table">
-                                                    <thead>
-                                                    <tr class="success">
-                                                        <th>Regione</th>
-                                                        <th>Provincia</th>
-                                                        <th>Ente</th>
-                                                        <th>Azienda</th>
-                                                        <th>Periodo</th>
-                                                        <th>Quota</th>
-                                                        <th>Livello</th>
-                                                        <th>Contratto</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td>Lombardia</td>
-                                                        <td>Milano</td>
-                                                        <td>Edile - Cassa edile</td>
-                                                        <td>
-                                                            Cciccillo srl
-                                                        </td>
-                                                        <td>2018 sem. 1</td>
-                                                        <td>11.2</td>
-                                                        <td>O1</td>
-                                                        <td>Cemento</td>
-                                                    </tr>
+                                                            <div class="panel-header-menu pull-right mr10 text-muted fs12">
+                                                                #foreach($item in $a.item)
+                                                                  #if($item.tipo == 'Iscritto')
+                                                                    Sem $item.periodo - $a.anno
+                                                                #end
+                                                                 #end
+                                                            </div>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <table class="table">
+                                                                <thead>
+                                                                <tr class="success">
+                                                                    <th>Regione</th>
+                                                                    <th>Provincia</th>
+                                                                    <th>Ente</th>
+                                                                    <th>Azienda</th>
+                                                                    <th>Periodo</th>
+                                                                    <th>Quota</th>
+                                                                    <th>Livello</th>
+                                                                    <th>Contratto</th>
+                                                                </tr>
+                                                                </thead>
+                                                                #foreach($item in $a.item)
+                                                                    #if($item.tipo == 'Iscritto')
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td>$item.regione</td>
+                                                                            <td>$item.provincia</td>
+                                                                            <td>$item.ente</td>
+                                                                            <td>
+                                                                                $item.azienda
+                                                                            </td>
+                                                                            <td>$item.periodo</td>
+                                                                            <td>$item.quota</td>
+                                                                            <td>$item.livello</td>
+                                                                            <td>$item.contratto</td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    #end
+                                                                #end
+                                                            </table>
+                                                        </div>
+                                                    ##                            <div class="panel-footer p15">
+                                                    ##                                footer
+                                                    ##                            </div>
+                                                        <!-- end .form-footer section -->
 
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        ##                            <div class="panel-footer p15">
-                                        ##                                footer
-                                        ##                            </div>
-                                            <!-- end .form-footer section -->
-
-                                        </div>
-                                    </div>
-                                    <div class="timeline-item noniscritto">
-                                        <div class="timeline-icon">
-                                            <span class="glyphicons glyphicons-remove text-danger great-icon"></span>
-                                        </div>
-                                        <div class="panel">
-                                            <div class="panel-heading">
+                                                    </div>
+                                                </div>
+                                                <div class="timeline-item noniscritto">
+                                                    <div class="timeline-icon">
+                                                        <span class="glyphicons glyphicons-remove text-danger great-icon"></span>
+                                                    </div>
+                                                    <div class="panel">
+                                                        <div class="panel-heading">
                                         <span class="panel-title">
                                              Iscrizione altro sindacato </span>
 
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <table class="table">
+                                                                <thead>
+                                                                <tr class="danger">
+                                                                ##                                        <th>Regione</th>
+                                                                    <th>Provincia</th>
+                                                                    <th>Ente</th>
+                                                                    <th>Azienda</th>
+                                                                    <th>Libero al</th>
+                                                                    <th>Iscritto a</th>
+                                                                    <th>Livello</th>
+                                                                    <th>Contratto</th>
+                                                                </tr>
+                                                                </thead>
+                                                                #foreach($item in $a.item)
+                                                                    #if($item.tipo == 'NonIscritto')
+                                                                        <tbody>
+                                                                        <tr>
+                                                                        ##                                        <td>Lombardia</td>
+                                                                            <td>$item.provincia</td>
+                                                                            <td>$item.ente</td>
+                                                                            <td>
+                                                                                $item.azienda
+                                                                            </td>
+                                                                            <td>$localization.formatDate($item.data)</td>
+                                                                            <td><strong>$item.iscrittoA</strong></td>
+                                                                            <td>#if($item.livello)$item.livello#end</td>
+                                                                            <td>#if($item.contratto)$item.contratto#end</td>
+                                                                        </tr>
+
+                                                                        </tbody>
+                                                                    #end
+                                                                #end
+
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="panel-body">
-                                                <table class="table">
-                                                    <thead>
-                                                    <tr class="danger">
-                                                    ##                                        <th>Regione</th>
-                                                        <th>Provincia</th>
-                                                        <th>Ente</th>
-                                                        <th>Azienda</th>
-                                                        <th>Libero al</th>
-                                                        <th>Iscritto a</th>
-                                                        <th>Livello</th>
-                                                        <th>Contratto</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                    ##                                        <td>Lombardia</td>
-                                                        <td>Milano</td>
-                                                        <td>Cassa edile</td>
-                                                        <td>
-                                                            Ciccillo srl
-                                                        </td>
-                                                        <td>12/12/2019</td>
-                                                        <td><strong>FILCA</strong></td>
-                                                        <td>O1</td>
-                                                        <td>Cemento</td>
-                                                    </tr>
 
 
-                                                    </tbody>
-                                                </table>
-                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
-
-
-                            </div>
-
-                            <div class="timeline-divider">
-                                <div class="divider-label">2012</div>
-                            </div>
-
-                        </div>
-                    </div>
+                            #end
+                    #end
                 </div>
                 <div id="tab15_2" class="tab-pane">
                     <div class="panel">
