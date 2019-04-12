@@ -1,5 +1,6 @@
 package applica.feneal.admin.utils;
 
+import applica.feneal.admin.crudconfig.DelegaFileRenderer;
 import applica.feneal.admin.fields.renderers.*;
 import applica.feneal.admin.fields.renderers.geo.OptionalCityFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalProvinceFieldRenderer;
@@ -73,13 +74,16 @@ public class FormUtils {
         formDescriptor.addField("workerCompany", Azienda.class, "Azienda", "Dati generali", applicationContext.getBean(AziendeSingleSearchFieldRenderer.class));
 
 
+        formDescriptor.addField("attachment", String.class, "Scansione", "Dati generali", applicationContext.getBean(DelegaFileRenderer.class));
+       // formDescriptor.addField("nomeattachment", String.class, "", "Dati generali", applicationContext.getBean(HiddenFieldRenderer.class));
+
         formDescriptor.addField("notes", String.class, "Note", "Dati generali", applicationContext.getBean(TextAreaFieldRenderer.class));
-        formDescriptor.addField("validityDate", Date.class, "Data validità (impianti fissi)", "Dati generali", applicationContext.getBean(DatePickerRenderer.class));
 
         formDescriptor.addField("collaborator", Collaboratore.class, "Collaboratore", "Dati collaboratore comunale", applicationContext.getBean(CollaboratoreSingleSearchableFieldRenderer.class));
 
 
         formDescriptor.addField("firstAziendaEdile", Azienda.class, "Azienda edile", "ATTENZIONE: SOLO come riferimento all'azienda per il settore edile. Non sarà inclusa in eventuali ricerche", applicationContext.getBean(AziendeSingleSearchFieldRenderer.class));
+        formDescriptor.addField("validityDate", Date.class, "Data validità (impianti fissi)", "Dati generali", applicationContext.getBean(DatePickerRenderer.class));
 
 
 
@@ -98,7 +102,6 @@ public class FormUtils {
         formDescriptor.addField("province", String.class, "Provincia", "Dati generali", applicationContext.getBean(ReadOnlyTextFieldRenderer.class));
         formDescriptor.addField("workerId", Lavoratore.class, "Lavoratore", "Dati generali", applicationContext.getBean(HiddenFieldRenderer.class));
         formDescriptor.addField("documentDate", Date.class, "Data documento", "Dati generali", applicationContext.getBean(ReadOnlyTextFieldRenderer.class));
-        formDescriptor.addField("validityDate", String.class, "Data validità (impianti fissi)", "Dati generali", applicationContext.getBean(DefaultFieldRenderer.class));
 
         formDescriptor.addField("sector", Sector.class, "Settore", "Dati generali", applicationContext.getBean(ReadOnlyTextFieldRenderer.class));
         if (d.getSector().getType().equals(Sector.sector_edile)){
@@ -106,6 +109,10 @@ public class FormUtils {
         }else{
             formDescriptor.addField("workerCompany", Azienda.class, "Azienda", "Dati generali", applicationContext.getBean(ReadOnlyTextFieldRenderer.class));
         }
+
+        formDescriptor.addField("attachment", String.class, "Scansione", "Dati generali", applicationContext.getBean(DelegaFileRenderer.class));
+       // formDescriptor.addField("nomeattachment", String.class, "", "Dati generali", applicationContext.getBean(HiddenFieldRenderer.class));
+
 
 
 
@@ -156,6 +163,7 @@ public class FormUtils {
 
         if (d.getSector().getDescription().equals(Sector.sector_edile))
             formDescriptor.addField("firstAziendaEdile", Azienda.class, "Azienda edile", "ATTENZIONE: SOLO come riferimento all'azienda per il settore edile. Non sarà inclusa in eventuali ricerche", applicationContext.getBean(AziendeSingleSearchFieldRenderer.class));
+        formDescriptor.addField("validityDate", String.class, "Data validità (impianti fissi)", "Dati generali", applicationContext.getBean(DefaultFieldRenderer.class));
 
 
         return form;

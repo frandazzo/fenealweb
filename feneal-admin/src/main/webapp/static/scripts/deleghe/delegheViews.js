@@ -234,6 +234,15 @@ define([
 
 
         },
+        __constructArrayOfValues: function (data) {
+            var result = [];
+
+            $.each(data, function (index, elem) {
+                result.push(elem.value);
+            });
+
+            return result;
+        },
         togglePariethicVisibility: function(selectedSector) {
             var pariethicDiv =  $("div[data-property=paritethic]");
             var workerCompany = $("div[data-property=workerCompany]");

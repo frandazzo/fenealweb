@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class UiLavoratoreTimeLineItem {
 
+    private String tipo;
     private Date data;
     private String dataStringa;
     private String periodo;
@@ -25,6 +26,18 @@ public class UiLavoratoreTimeLineItem {
     private String dataCessazione;
     private String annotazioni;
     private long delegaId;
+    private double quota;
+    private String operator;
+    private String attachment;
+    private String nomeAttachment;
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     public Date getData() {
         return data;
@@ -168,5 +181,37 @@ public class UiLavoratoreTimeLineItem {
 
     public void setDelegaId(long delegaId) {
         this.delegaId = delegaId;
+    }
+
+    public void setQuota(double quota) {
+        this.quota = quota;
+    }
+
+    public double getQuota() {
+        return quota;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setNomeAttachment(String nomeAttachment) {
+        this.nomeAttachment = nomeAttachment;
+    }
+
+    public String getNomeAttachment() {
+        return nomeAttachment;
     }
 }

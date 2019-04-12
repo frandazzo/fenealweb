@@ -1,5 +1,6 @@
 package applica.feneal.admin.facade;
 
+import applica.feneal.admin.viewmodel.UiLavoratoreTimeLineItem;
 import applica.feneal.admin.viewmodel.app.dashboard.lavoratori.*;
 import applica.feneal.admin.viewmodel.deleghe.UIDelega;
 import applica.feneal.admin.viewmodel.lavoratori.*;
@@ -22,6 +23,7 @@ import applica.feneal.domain.model.core.lavoratori.search.LavoratoreSearchParams
 import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
 import applica.feneal.domain.model.core.servizi.MagazzinoDelega;
 import applica.feneal.domain.model.core.tessere.Tessera;
+import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
 import applica.feneal.domain.model.dbnazionale.Iscrizione;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 import applica.feneal.domain.model.dbnazionale.UtenteDbNazionale;
@@ -991,10 +993,82 @@ public class LavoratoriFacade {
 
 
         UiCompleteLavoratoreSummary summary = prepareDto(l.getLid(), s, l);
+        summary.setTimelineList(convertToTimelineItems(f));
         summary.setDeleghe(f.getDeleghe());
         summary.setIscrizioniAltroSindacato(f.getIscrizioniAltroSindacato());
         summary.setIscrizioni(f.getIscrizioni());
 
         return summary;
+    }
+
+    private List<UiLavoratoreTimeLineItem> convertToTimelineItems(LiberoDbNazionale f) {
+        List<UiLavoratoreTimeLineItem> result = new ArrayList<>();
+
+        for (Iscrizione iscrizione : f.getIscrizioni()) {
+            UiLavoratoreTimeLineItem i = new UiLavoratoreTimeLineItem();
+            i.setTipo("Iscritto");
+            i.setAnno(iscrizione.getAnno());
+            i.setAzienda(iscrizione.getAzienda());
+            i.setPiva(iscrizione.getPiva());
+            i.setContratto(iscrizione.getContratto());
+            i.setEnte(String.format("%s - %s",iscrizione.getSettore(), iscrizione.getEnte()));
+            i.setLivello(iscrizione.getLivello());
+            i.setPeriodo(String.valueOf(iscrizione.getPeriodo()));
+            i.setProvincia(iscrizione.getNomeProvincia());
+            i.setRegione(iscrizione.getNomeRegione());
+            i.setQuota(iscrizione.getQuota());
+            result.add(i);
+        }
+        for (LiberoDbNazionale libero : f.getIscrizioniAltroSindacato()) {
+            UiLavoratoreTimeLineItem i = new UiLavoratoreTimeLineItem();
+            i.setTipo("NonIscritto");
+            i.setData(libero.getLiberoAl());
+            i.setDataStringa(new SimpleDateFormat("dd/MM/yyyy").format(libero.getLiberoAl()));
+            GregorianCalendar c = new GregorianCalendar();
+            c.setTime(libero.getLiberoAl());
+            i.setAnno(c.get(Calendar.YEAR));
+            i.setAzienda(libero.getCurrentAzienda());
+
+            i.setEnte(libero.getEnte());
+            i.setProvincia(libero.getNomeProvinciaFeneal());
+            i.setIscrittoA(libero.getIscrittoA());
+            result.add(i);
+        }
+        for (DelegaNazionale delega : f.getDeleghe()) {
+            UiLavoratoreTimeLineItem i = new UiLavoratoreTimeLineItem();
+            i.setTipo("Delega");
+
+            i.setData(delega.getDocumentDate());
+            GregorianCalendar c = new GregorianCalendar();
+            c.setTime(delega.getDocumentDate());
+            i.setAnno(c.get(Calendar.YEAR));
+            i.setDataStringa(new SimpleDateFormat("dd/MM/yyyy").format(delega.getDocumentDate()));
+            i.setAzienda("");
+            i.setEnte(String.format("%s - %s",delega.getSector(), delega.getEnte()));
+            i.setProvincia(delega.getProvince());
+            i.setIscrittoA(delega.getRegion());
+            i.setStato(delega.getState());
+            i.setIntStato(delega.getIntState());
+            i.setAnnotazioni(delega.getNotes());
+            i.setOperator(delega.getOperator());
+            i.setNomeAttachment(delega.getNomeattachment());
+            i.setAttachment(delega.getAttachment());
+            if (delega.getAcceptDate() != null)
+                i.setDataAccreditamento(new SimpleDateFormat("dd/MM/yyyy").format(delega.getAcceptDate()));
+            if (delega.getRevokeDate() != null)
+                i.setDataCessazione(new SimpleDateFormat("dd/MM/yyyy").format(delega.getRevokeDate()));
+            if (delega.getCancelDate() != null)
+                i.setDataCessazione(new SimpleDateFormat("dd/MM/yyyy").format(delega.getCancelDate()));
+            result.add(i);
+        }
+
+        Collections.sort(result, new Comparator<UiLavoratoreTimeLineItem>() {
+            @Override
+            public int compare(UiLavoratoreTimeLineItem o1, UiLavoratoreTimeLineItem o2) {
+                return -1 * new Integer(o1.getAnno()).compareTo(o2.getAnno());
+            }
+        });
+
+        return result;
     }
 }

@@ -99,5 +99,7 @@ public class SubscribeState implements DelegaState {
         delegaToUpdate.setCollaborator(data.getCollaborator());
         delegaToUpdate.setNotes(data.getNotes());
         delegaToUpdate.setValidityDate(data.getValidityDate());
+        delegaToUpdate.setNomeattachment(data.getNomeattachment());
+        delegaToUpdate.setAttachment(data.getAttachment());
 }
 }

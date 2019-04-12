@@ -1,9 +1,6 @@
 package applica.feneal.services.impl.deleghe;
 
-import applica.feneal.domain.data.core.ApplicationOptionRepository;
-import applica.feneal.domain.data.core.RevocationReasonRepository;
-import applica.feneal.domain.data.core.SectorRepository;
-import applica.feneal.domain.data.core.SignupDelegationReasonRepository;
+import applica.feneal.domain.data.core.*;
 import applica.feneal.domain.data.core.deleghe.DelegheRepository;
 import applica.feneal.domain.model.Filters;
 import applica.feneal.domain.model.User;
@@ -15,6 +12,7 @@ import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.servizi.search.UiQuoteImpiantiFissiSearchParams;
 import applica.feneal.domain.model.setting.CausaleIscrizioneDelega;
 import applica.feneal.domain.model.setting.CausaleRevoca;
+import applica.feneal.domain.model.setting.Collaboratore;
 import applica.feneal.domain.model.setting.option.ApplicationOptions;
 import applica.feneal.domain.validation.DelegaValidator;
 import applica.feneal.services.AziendaService;
@@ -75,6 +73,9 @@ public class DelegaServiceImpl implements DelegheService {
 
     @Autowired
     protected AziendaService azServ;
+
+    @Autowired
+    private CollaboratorRepository collRep;
 
 
     @Autowired
@@ -612,6 +613,20 @@ public class DelegaServiceImpl implements DelegheService {
 
     @Override
     public void subscribeDelega(Delega del) {
+
+        User u = ((User) sec.getLoggedUser());
+        //per creare la delega prendo l'utente corrente e verifico che esista tra gli operatori
+        if (del.getCollaborator() == null){
+            Collaboratore cc = collRep.find(LoadRequest.build().filter("description", u.getCompleteName())).findFirst().orElse(null);
+            if (cc == null){
+                cc = new Collaboratore();
+                cc.setDescription(u.getCompleteName().toUpperCase());
+                collRep.save(cc);
+            }
+            del.setCollaborator(cc);
+        }
+
+
         DelegaState stateManager = constructStateManager(del);
 
         stateManager.subscribeDelega(del);
