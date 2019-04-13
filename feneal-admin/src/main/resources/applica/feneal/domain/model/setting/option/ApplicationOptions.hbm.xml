@@ -12,6 +12,6 @@
 		<property name="creaDelegaIfNotExistDuringImport" />
 		<property name="associaDelegaDuringImport" />
 		<property name="enableExclusiveLiberiQuery"/>
-
+		<property name="fenealwebRegionale" />
 	</class>
 </hibernate-mapping>

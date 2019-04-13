@@ -68,7 +68,6 @@ define([
                     $(".versamenti").hide();
                 }
 
-
                 // Gestione pulsante Stampa tessera
                 $(".print").on("click",function(){
                     var formService = new fmodel.FormService();
@@ -116,9 +115,8 @@ define([
 
                 });
 
-
                     // Gestione pulsante di Visualizza credito residuo SMS
-                    $("button.btn-residual-credit").click(function() {
+                $("button.btn-residual-credit").click(function() {
                         var svc = new  fmodel.AjaxService();
 
                         svc.set("data", {});
@@ -140,7 +138,6 @@ define([
 
                         svc.load();
                     });
-
 
                 // Gestione pulsante INVIA SMS
                 $("button.btn-send-sms").click(function() {
@@ -339,16 +336,11 @@ define([
                     $("button.deleghe-lecce").hide();
                 }
 
-
                 $("button.deleghe").click(function(){
                     ui.Navigation.instance().navigate("deleghehome", "index", {
                         workerId: self.workerId
                     })
                 });
-
-
-
-
 
                 if (window.appcontext.provinces.indexOf("chieti") > -1 ||
                     window.appcontext.provinces.indexOf("teramo") > -1 ||
@@ -366,12 +358,6 @@ define([
                     $("button.magazzino").hide();
                 }
 
-
-
-
-
-
-
                 $("button.archiviodocumenti").click(function(){
                     ui.Navigation.instance().navigate("documenticrud", "list", {
                         workerId: self.workerId,
@@ -379,15 +365,12 @@ define([
                     })
                 });
 
-
-
                 $("button.comunicazioni").click(function(){
                     ui.Navigation.instance().navigate("comunicazionicrud", "list", {
                         workerId: self.workerId,
                         e : "comunicazione"
                     })
                 });
-
 
                 $("button.richiesteinfo").click(function(){
                     ui.Navigation.instance().navigate("richiestecrud", "list", {
@@ -1036,6 +1019,9 @@ define([
             this.geoUtils = new geoUtils.GeoUtils();
             //questo paramttro indica se si tratta di ricerca locale o nel dbnazionale
             this.localSearch = true;
+            //questa variabile indica se la ricerca che sto facendo ha una natura regionale oppure locale e quindi
+            //direttamente legate ad un solo territorio
+            this.regional = false;
 
             var self = this;
 
@@ -1077,11 +1063,14 @@ define([
 
             var searchWorkerUrl = self.localSearch ? "localworkers" :"remoteworkers";
 
-            //resultsContainer
 
-            // var formatDate = function(date) {
-            //     return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-            // };
+            //una volta compresa la natura della ricerca devo verificare se regionale o effettivamente locale
+            if (self.localSearch){
+                this.regional = $('[data-property="company"]').length > 0;
+                if (this.regional)
+                    searchWorkerUrl = searchWorkerUrl + "new";
+            }
+
 
             var svc = new fmodel.AjaxService();
             svc.url = BASE + searchWorkerUrl;
@@ -1095,53 +1084,6 @@ define([
                     self.initGrid(response);
 
 
-                    // if (response.length == 0) {
-                    //     $("div.no-results").show();
-                    //     return;
-                    // }
-                    //
-                    // $.each(response, function(i, o) {
-                    //     var newWorkerRow = self.rowCloned.clone();
-                    //
-                    //     $(newWorkerRow).attr("data-entity-id", o.id);
-                    //     $(newWorkerRow).find("[data-component=select_checkbox]").attr("data-entity-id", o.id);
-                    //
-                    //     // per capire se prendere l'oggetto di utenteDBNazionale o di Lavoratore
-                    //     if (o.nomeCompleto) {
-                    //         $(newWorkerRow).find("span.namesurname").text(o.cognome + " " + o.nome);
-                    //         $(newWorkerRow).find("[data-property=surname]").attr("data-property-value", o.cognome);
-                    //         $(newWorkerRow).find("span.birthDate").text(formatDate(new Date(o.dataNascita)));
-                    //         $(newWorkerRow).find("span.nationality").text(o.nomeNazione);
-                    //         $(newWorkerRow).find("span.phone").text(o.telefono);
-                    //         $(newWorkerRow).find("span.livingProvince").text(o.nomeProvinciaResidenza);
-                    //         $(newWorkerRow).find("span.livingCity").text(o.nomeComuneResidenza);
-                    //         $(newWorkerRow).find("span.address").text(o.indirizzo + ", " + o.cap);
-                    //     } else {
-                    //         $(newWorkerRow).find("span.namesurname").text(o.surname + " " + o.name);
-                    //         $(newWorkerRow).find("[data-property=surname]").attr("data-property-value", o.surname);
-                    //         $(newWorkerRow).find("span.birthDate").text(formatDate(new Date(o.birthDate)));
-                    //         $(newWorkerRow).find("span.nationality").text(o.nationality);
-                    //         $(newWorkerRow).find("span.phone").text(o.phone);
-                    //         $(newWorkerRow).find("span.livingProvince").text(o.livingProvince);
-                    //         $(newWorkerRow).find("span.livingCity").text(o.livingCity);
-                    //         $(newWorkerRow).find("span.address").text(o.address + ", " + o.cap);
-                    //     }
-                    //
-                    //     $(newWorkerRow).show();
-                    //     $(newWorkerRow).appendTo($(".tbody-workers"));
-                    // });
-                    // $("div.no-results").hide();
-                    //
-                    // //imposto l'handler per la navigazione verso l'utente selezionato
-                    // $("td a[data-property=surname]").click(function() {
-                    //     var workerId = $(this).parents("tr").attr("data-entity-id");
-                    //
-                    //     ui.Navigation.instance().navigate("summaryworker", "index", {
-                    //         id: workerId
-                    //     });
-                    //
-                    // });
-
                 },
                 error: function (error){
                     $.notify.error(error);
@@ -1154,10 +1096,96 @@ define([
         //inizializzazione della griglia dei risultati
         initGrid: function(responseData){
             var self = this;
-           
-            
+
+            //griglia dati regionali
+            if (self.regional){
+                console.log("griglia dati regionali");
+                $('#resultsContainer').dxDataGrid({
+                    dataSource:responseData,
+                    columns:[
+                        { dataField:"companyName", visible : true, visibleIndex: 0, caption:"Territorio"},
+                        { dataField:"surname", visible : true, visibleIndex: 1, caption:"Cognome",
+                            cellTemplate: function (container, options) {
+                                //container.addClass("img-container");
+                                var surname = options.data.surname;
+                                var id = options.data.id;
+
+                                $("<a />")
+                                    .text(surname)
+                                    .attr("href", "javascript:;")
+                                    .on('click', function(){
+
+                                        ui.Navigation.instance().navigate("summaryworker", "index", {
+                                            id:id
+                                        })
+
+                                    })
+                                    .appendTo(container);
+                            }
+                        },
+                        { dataField:"name", visible : true, caption:"Nome",visibleIndex: 2},
+                        { dataField:"birthDate", dataType:'date', visible : true, caption:"Data nascita" ,visibleIndex: 3},
+                        { dataField:"fiscalcode", visible : true, caption:"Codice fiscale",visibleIndex: 4},
+
+                        { dataField:"nationality", visible : true, caption:"Nazione nascita",visibleIndex: 5},
+                        { dataField:"livingProvince", visible : true, caption:"Prov. Residenza",visibleIndex: 6},
+                        { dataField:"livingCity", visible : true, caption:"Com. Residenza",visibleIndex: 7},
+                        { dataField:"address", visible : true, caption:"Indirizzo",visibleIndex: 8},
+                        { dataField:"cap", visible : true, caption:"Cap",visibleIndex: 9},
+                        { dataField:"cellphone", visible : true, caption:"Cellulare",visibleIndex: 10},
+                        { dataField:"phone", visible : true, caption:"Telefono",visibleIndex: 11},
+                        { dataField:"birthProvince", visible : true, caption:"Prov. nascita",visibleIndex: 12},
+                        { dataField:"birthPlace", visible : true, caption:"Com. nascita",visibleIndex: 13}
+
+
+                    ],
+                    headerFilter: {
+                        visible: true
+                    },
+                    summary: {
+                        totalItems: [{
+                            column: "surname",
+                            summaryType: "count",
+                            customizeText: function(data) {
+
+                                if (responseData.length <= 500)
+                                    return "Elementi trovati: " + data.value;
+                                else
+                                    return "Oltre 500 elementi";
+                            }
+                        }]
+                    },
+                    "export": {
+                        enabled: false,
+                        fileName: "anagrafiche",
+                        allowExportSelectedData: true
+                    },
+                    paging:{
+                        pageSize: 35
+                    },
+                    sorting:{
+                        mode:"multiple"
+                    },
+                    rowAlternationEnabled: true,
+                    showBorders: true,
+                    allowColumnReordering:true,
+                    allowColumnResizing:true,
+                    columnAutoWidth: true,
+                    selection:{
+                        mode:"none"
+                    },
+                    hoverStateEnabled: true
+
+                }).dxDataGrid("instance");
+
+                return;
+            }
+
+
+            //griglia dati locali
             if (self.localSearch){
                 //instanzio la griglia dei risultati locali...)
+                console.log("griglia dati locali");
                 $('#resultsContainer').dxDataGrid({
                     dataSource:responseData,
                     columns:[
@@ -1235,8 +1263,10 @@ define([
 
                 return;
             }
-            //griglia dati dbnazionale
 
+
+            //griglia dati dbnazionale
+            console.log("griglia dati nazionali");
             $('#resultsContainer').dxDataGrid({
                 dataSource:responseData,
                 columns:[
@@ -1512,54 +1542,6 @@ define([
                     $.loader.hide({parent:'body'});
 
                     self.initGrid(response);
-
-
-                    // if (response.length == 0) {
-                    //     $("div.no-results").show();
-                    //     return;
-                    // }
-                    //
-                    // $.each(response, function(i, o) {
-                    //     var newWorkerRow = self.rowCloned.clone();
-                    //
-                    //     $(newWorkerRow).attr("data-entity-id", o.id);
-                    //     $(newWorkerRow).find("[data-component=select_checkbox]").attr("data-entity-id", o.id);
-                    //
-                    //     // per capire se prendere l'oggetto di utenteDBNazionale o di Lavoratore
-                    //     if (o.nomeCompleto) {
-                    //         $(newWorkerRow).find("span.namesurname").text(o.cognome + " " + o.nome);
-                    //         $(newWorkerRow).find("[data-property=surname]").attr("data-property-value", o.cognome);
-                    //         $(newWorkerRow).find("span.birthDate").text(formatDate(new Date(o.dataNascita)));
-                    //         $(newWorkerRow).find("span.nationality").text(o.nomeNazione);
-                    //         $(newWorkerRow).find("span.phone").text(o.telefono);
-                    //         $(newWorkerRow).find("span.livingProvince").text(o.nomeProvinciaResidenza);
-                    //         $(newWorkerRow).find("span.livingCity").text(o.nomeComuneResidenza);
-                    //         $(newWorkerRow).find("span.address").text(o.indirizzo + ", " + o.cap);
-                    //     } else {
-                    //         $(newWorkerRow).find("span.namesurname").text(o.surname + " " + o.name);
-                    //         $(newWorkerRow).find("[data-property=surname]").attr("data-property-value", o.surname);
-                    //         $(newWorkerRow).find("span.birthDate").text(formatDate(new Date(o.birthDate)));
-                    //         $(newWorkerRow).find("span.nationality").text(o.nationality);
-                    //         $(newWorkerRow).find("span.phone").text(o.phone);
-                    //         $(newWorkerRow).find("span.livingProvince").text(o.livingProvince);
-                    //         $(newWorkerRow).find("span.livingCity").text(o.livingCity);
-                    //         $(newWorkerRow).find("span.address").text(o.address + ", " + o.cap);
-                    //     }
-                    //
-                    //     $(newWorkerRow).show();
-                    //     $(newWorkerRow).appendTo($(".tbody-workers"));
-                    // });
-                    // $("div.no-results").hide();
-                    //
-                    // //imposto l'handler per la navigazione verso l'utente selezionato
-                    // $("td a[data-property=surname]").click(function() {
-                    //     var workerId = $(this).parents("tr").attr("data-entity-id");
-                    //
-                    //     ui.Navigation.instance().navigate("summaryworker", "index", {
-                    //         id: workerId
-                    //     });
-                    //
-                    // });
 
                 },
                 error: function (error){
