@@ -102,7 +102,12 @@
                         <span class="sidebar-title">Analisi iscritti</span>
                     </a>
                 </li>
-
+##                <li>
+##                    <a href="#/prevedi" class="framework-navigation">
+##                        <span class="glyphicon glyphicon-th-list"></span>
+##                        <span class="sidebar-title">Importa Dati prevedi</span>
+##                    </a>
+##                </li>
 
             #end
 

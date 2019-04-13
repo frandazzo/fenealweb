@@ -12,6 +12,18 @@ public class ImportData {
     private Integer createLista;
     private String province;
 
+    public String getAnno() {
+        return anno;
+    }
+
+    public void setAnno(String anno) {
+        this.anno = anno;
+    }
+
+    private String anno;
+
+
+
     public String getProvince() {
         return province;
     }
