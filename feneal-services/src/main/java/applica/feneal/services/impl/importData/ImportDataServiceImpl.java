@@ -9,11 +9,13 @@ import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.domain.model.core.deleghe.Delega;
 import applica.feneal.domain.model.core.deleghe.ImportDelegheSummaryForBari;
+import applica.feneal.domain.model.core.importData.ImportAnagraficaPrevediValidator;
 import applica.feneal.domain.model.core.importData.ImportAnagraficheValidator;
 import applica.feneal.domain.model.core.importData.ImportDelegaSummary;
 import applica.feneal.domain.model.core.importData.ImportDelegheValidator;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.lavoratori.ListaLavoro;
+import applica.feneal.domain.model.dbnazionale.LavoratorePrevedi;
 import applica.feneal.domain.model.geo.City;
 import applica.feneal.domain.model.geo.Country;
 import applica.feneal.domain.model.geo.Province;
@@ -445,6 +447,168 @@ public class ImportDataServiceImpl implements ImportDataService{
         return l;
     }
 
+
+    @Override
+    public String importaAnagrafichePrevedi(ImportData importData) throws Exception {
+
+        baseValidate(importData);
+        //creo una cartella temporanea dove inserirò tutti i dati per fare l'analisi
+        File temp1 = File.createTempFile("import_anagrafiche_prevedi","");
+        temp1.delete();
+        temp1.mkdir();
+        //creo una cartella corrante temporanea che alla fine sarà zippata
+        //e restituita
+        File temp = File.createTempFile("LogImportazioneAnagrafiche","");
+        temp.delete();
+        temp.mkdir();
+
+
+        ExcelInfo data = importDataForAnagrafichePrevedi(importData, temp1);
+        validateExcelDataForAnagrafichePrevedi(data);
+
+
+        importAllAnagrafichePrevedi(data, temp, importData);
+
+        String zippedFile = compressData(temp);
+
+        //questa funxione restituiraà l'url della cartella zippata
+        //pertanto dovro' inviare tramite fileserver il file zippato
+        //al file server appunto
+        String pathToFile =  server.saveFile("files/importazioneAnagrafichePrevedi/", "zip", new FileInputStream(new File(zippedFile)));
+        return pathToFile;
+
+
+    }
+
+    private void importAllAnagrafichePrevedi(ExcelInfo data, File tempDir, ImportData importData) throws IOException {
+        String filename = tempDir + "\\logImportazioneAnagrafiche.txt";
+
+        File f = new File(filename);
+        f.createNewFile();
+
+        writeToFile(f,  "Avvio import anagrafiche prevedi: num ( " + data.getOnlyValidRows().size() + " )");
+        writeToFile(f,  "*****************************");
+        writeToFile(f,  "*****************************");
+
+
+
+
+
+        //Importo il lavoratore se non esiste
+        int i = 1; //numero di riga
+        List<LavoratorePrevedi> lavs = new ArrayList<>();
+        for (RowData rowData : data.getOnlyValidRows()) {
+            LavoratorePrevedi l = null;
+            try {
+                l = constructLavoratorePrevedi(rowData, f, importData);
+                lavs.add(l);
+            } catch (Exception e) {
+                writeToFile(f, "ERRORE nella costruzione del lavoratore riga " + String.valueOf(i) + "; " + e.getMessage() );
+            }
+
+            i++;
+
+        }
+
+        //qui posso inviare tutto al db.....
+    }
+
+    private LavoratorePrevedi constructLavoratorePrevedi(RowData rowData, File f, ImportData importData) {
+
+        SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
+        //creo il lavoratore
+        LavoratorePrevedi l = new LavoratorePrevedi();
+
+        if (StringUtils.isEmpty(importData.getAnno())){
+            GregorianCalendar d = new GregorianCalendar();
+            d.setTime(new Date());
+            importData.setAnno(String.valueOf(d.get(Calendar.YEAR)));
+        }
+        l.setAnno(Integer.parseInt(importData.getAnno()));
+        l.setName(rowData.getData().get("den_nome").trim());
+        l.setSurname(rowData.getData().get("den_cognome").trim());
+        try {
+            l.setBirthDate(ff.parse(rowData.getData().get("data_nascita").trim()));
+        }catch (Exception ex){
+            GregorianCalendar c = new GregorianCalendar();
+            c.set(Calendar.YEAR, 1900);
+            c.set(Calendar.MONTH, 0);
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            c.set(Calendar.HOUR, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND,0);
+            l.setBirthDate(c.getTime());
+        }
+
+        l.setFiscalcode(rowData.getData().get("cod_fiscale"));
+        l.setLivingCity(rowData.getData().get("den_localita_residenza"));
+        l.setLivingProvince(rowData.getData().get("provincia_residenza"));
+        l.setAddress(rowData.getData().get("den_indirizzo_residenza"));
+        l.setCap(rowData.getData().get("cod_cap_residenza"));
+        l.setCodCassa(rowData.getData().get("cod_cassa"));
+        l.setInquadramento(rowData.getData().get("cod_den_inquadramentocassa"));
+        l.setCassaEdile(rowData.getData().get("cassa_edile"));
+        l.setCassaEdileRegione(rowData.getData().get("regione_cassa_edile"));
+        l.setTipoAdesione(rowData.getData().get("desc_tipo_adesione"));
+
+        return l;
+    }
+
+    private void validateExcelDataForAnagrafichePrevedi(ExcelInfo data) throws Exception {
+        if (!fr.opensagres.xdocreport.core.utils.StringUtils.isEmpty(data.getError())){
+            //recupero il nome del file
+            String name = FilenameUtils.getName(data.getSourceFile());
+
+            throw new Exception(String.format("Un file contiene errori: %s  <br>",  data.getError()));
+        }
+
+        //prendo l'intestazione e verifico che sia la stessa che mi aspetto
+        List<String> template  = new ArrayList<>();
+        template.add("den_cognome");
+        template.add("den_nome");
+        template.add("cod_fiscale");
+        template.add("data_nascita");
+        template.add("den_indirizzo_residenza");
+        template.add("cod_cap_residenza");
+        template.add("den_localita_residenza");
+        template.add("cod_sigla_provincia_residenza");
+        template.add("provincia_residenza");
+        template.add("den_inquadramento");
+        template.add("cod_cassa");
+        template.add("cassa_edile");
+        template.add("regione_cassa_edile");
+        template.add("desc_tipo_adesione");
+
+
+
+
+        List<String> headers = data.getHeaderFields();
+        String name = FilenameUtils.getName(data.getSourceFile());
+        String err = headersContainsTemplate(headers, template);
+        boolean equal = StringUtils.isEmpty(err);
+        if (!equal){
+            //recupero il nome del file
+
+            throw new Exception(String.format("Il file %s non contiene le intestazioni richieste<br>: Campi mancanti: %s", name, err));
+        }
+        if (equal){
+            //verifico che ci sia almeno una riga
+            if (data.getOnlyValidRows().size() == 0){
+                throw new Exception(String.format("Il file %s non contiene informazioni<br>", name));
+            }
+
+        }
+    }
+
+    private ExcelInfo importDataForAnagrafichePrevedi(ImportData importData, File temp1) throws IOException {
+        String file = getTempFile(importData.getFile1(), temp1);
+
+        ExcelReader reader = new ExcelReader(file, 0,0 ,new ImportAnagraficaPrevediValidator());
+
+        return reader.readFile();
+    }
+
+
     @Override
     public String importaAnagrafiche(ImportData importData) throws Exception {
         baseValidate(importData);
@@ -477,6 +641,7 @@ public class ImportDataServiceImpl implements ImportDataService{
         String pathToFile =  server.saveFile("files/importazioneAnagrafiche/", "zip", new FileInputStream(new File(zippedFile)));
         return pathToFile;
     }
+
 
     private void importAllAnagrafiche(ExcelInfo data, File tempDir, ImportData importData) throws Exception {
         String filename = tempDir + "\\logImportazioneAnagrafiche.txt";

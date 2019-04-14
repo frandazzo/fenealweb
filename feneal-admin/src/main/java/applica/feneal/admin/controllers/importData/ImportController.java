@@ -1,6 +1,9 @@
 package applica.feneal.admin.controllers.importData;
 
+import applica.feneal.admin.fields.renderers.DocumentFileRenderer;
+import applica.feneal.admin.fields.renderers.DocumetPrevediFieldRenderer;
 import applica.feneal.admin.fields.renderers.LoggedUserProvinceNonOptionalSelectFieldRenderer;
+import applica.feneal.admin.fields.renderers.YearSelectFieldRenderer;
 import applica.feneal.admin.form.renderers.ReportsSearchFormRenderer;
 import applica.feneal.domain.model.core.ImportData;
 import applica.feneal.domain.model.core.deleghe.ImportDeleghe;
@@ -62,6 +65,22 @@ public class ImportController {
 
     }
 
+    @RequestMapping(value = "/preveditemplate", method = RequestMethod.GET)
+    public void getPrevediTemplate(HttpServletResponse response) {
+        try {
+            // get your file as InputStream
+            InputStream is = getClass().getResourceAsStream("/templates/prevedi_template.xlsx");
+            // copy it to response's OutputStream+
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException ex) {
+
+            throw new RuntimeException("IOError writing file to output stream");
+        }
+
+    }
+
     @RequestMapping(value = "/deleghetemplate", method = RequestMethod.GET)
     public void getDelegheTemplate(HttpServletResponse response) {
         try {
@@ -77,6 +96,48 @@ public class ImportController {
         }
 
     }
+
+    @RequestMapping(value = "/prevedi",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse importPrevediView(HttpServletRequest request) {
+        try{
+            Form form = new Form();
+            form.setRenderer(applicationContext.getBean(ReportsSearchFormRenderer.class));
+            form.setIdentifier("importaPrevedi");
+
+            FormDescriptor formDescriptor = new FormDescriptor(form);
+
+
+            formDescriptor.addField("anno", String.class, "Anno", null,applicationContext.getBean(YearSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt1")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+            formDescriptor.addField("file1", String.class, "File Anagrafiche Prevedi", null,applicationContext.getBean(DocumetPrevediFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt1")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+
+
+
+
+            FormResponse response = new FormResponse();
+
+            response.setContent(form.writeToString());
+            response.setTitle("Importazione anagrafiche prevedi");
+
+            return response;
+        } catch (FormCreationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        } catch (CrudConfigurationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
 
 
     @RequestMapping(value = "/anagrafiche",method = RequestMethod.GET)
@@ -199,6 +260,23 @@ public class ImportController {
             return new ErrorResponse(e.getMessage());
         }
     }
+
+
+
+    @RequestMapping(value = "/importprevedi",method = RequestMethod.POST)
+    public @ResponseBody
+    SimpleResponse executeimportanagrafichePrevedi(HttpServletRequest request, HttpServletResponse response, @RequestBody ImportData file) {
+
+        try{
+            String fileToDownload = importDataService.importaAnagrafichePrevedi(file);
+
+            return new ValueResponse(fileToDownload);
+        }catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
+
+
 
 
     @RequestMapping(value = "/importanagrafiche",method = RequestMethod.POST)

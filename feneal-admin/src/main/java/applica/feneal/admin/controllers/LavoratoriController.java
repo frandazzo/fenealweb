@@ -21,6 +21,7 @@ import applica.feneal.admin.viewmodel.lavoratori.UiWorkerIscrizioniChart;
 import applica.feneal.admin.viewmodel.options.UiWidgetManager;
 import applica.feneal.admin.viewmodel.reports.UiIscrizione;
 import applica.feneal.admin.viewmodel.reports.UiLibero;
+import applica.feneal.domain.data.core.ApplicationOptionRepository;
 import applica.feneal.domain.model.FenealEntities;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.Company;
@@ -31,6 +32,7 @@ import applica.feneal.domain.model.dbnazionale.UtenteDbNazionale;
 import applica.feneal.domain.model.geo.City;
 import applica.feneal.domain.model.geo.Country;
 import applica.feneal.domain.model.geo.Province;
+import applica.feneal.domain.model.setting.option.ApplicationOptions;
 import applica.feneal.services.GeoService;
 import applica.feneal.services.LavoratoreService;
 import applica.feneal.services.exceptions.FormNotFoundException;
@@ -101,6 +103,10 @@ public class LavoratoriController {
     @Autowired
     private WidgetFacade widgetFacade;
 
+    @Autowired
+
+    private ApplicationOptionRepository appRep;
+
 
 
     @RequestMapping(value="/localworkersnew", method= RequestMethod.GET)
@@ -159,10 +165,13 @@ public class LavoratoriController {
                                                             @RequestParam(value="fiscalcode", required=false, defaultValue="") String fiscalcode,
                                                             @RequestParam(value="namesurname", required=false, defaultValue="") String namesurname,
                                                             @RequestParam(value="page", required=false) Integer page,
+                                                            @RequestParam(value="company", required=false) String company ,
                                                             @RequestParam(value="cell", required=false, defaultValue="") String cell){
 
 
-        //se mnon cÃ¨ una pagina la imposto alla prima pagina
+        ApplicationOptions opt = appRep.find(null).findFirst().orElse(null);
+        if (opt != null && opt.getFenealwebRegionale() != null && opt.getFenealwebRegionale() == true)
+            return findLocalLavoratorinew(name, surname, fiscalcode,namesurname, page ,company,cell);
 
         if (page == null)
             page = 1;
@@ -432,6 +441,13 @@ public class LavoratoriController {
 
         try {
 
+            //se sono in un contesto regionale al posto della normale summary restituisco la timeline
+            ApplicationOptions opt = appRep.find(null).findFirst().orElse(null);
+            if (opt != null && opt.getFenealwebRegionale() != null && opt.getFenealwebRegionale() == true)
+                return viewTimeline(request, id);
+
+
+            //procedo con la normale summary.....
             UiCompleteLavoratoreSummary c = tcFacade.getLavoratoreSummaryById(id);
             HashMap<String, Object> model = new HashMap<String, Object>();
             model.put("summary", c);
@@ -591,6 +607,14 @@ public class LavoratoriController {
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody
     SimpleResponse searchview(HttpServletRequest request) {
+
+        ApplicationOptions opt = appRep.find(null).findFirst().orElse(null);
+        if (opt != null && opt.getFenealwebRegionale() != null && opt.getFenealwebRegionale() == true)
+            return searchviewnew(request);
+
+
+
+
         try{
             Form form = new Form();
             form.setRenderer(applicationContext.getBean(WorkerSearchFormRenderer.class));
@@ -731,10 +755,7 @@ public class LavoratoriController {
             //e se non cè lo predno dalla tabella dei lavoratori del db nazionel e lo creo per il territorio dell'utente
             //corrente
             long idWorker = tcFacade.getIdLavoratoreByFiscalCodeOrCreateItIfNotexist(fiscalCode);
-            if (idWorker == -1)
-                throw new Exception("Lavoratore non trovato");
-
-            return "redirect:/worker/summary/" + String.valueOf(idWorker);
+            return executeRedirect(idWorker);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -754,15 +775,25 @@ public class LavoratoriController {
             //e se non cè lo predno dalla tabella dei lavoratori del db nazionel e lo creo per il territorio dell'utente
             //corrente
             long idWorker = tcFacade.getIdLavoratoreByFiscalCodeOrCreateItIfNotexist(fiscalCode, province);
-            if (idWorker == -1)
-                throw new Exception("Lavoratore non trovato");
-
-            return "redirect:/worker/summary/" + String.valueOf(idWorker);
+            return executeRedirect(idWorker);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
 
+    }
+
+    private String executeRedirect(long idWorker) throws Exception {
+        if (idWorker == -1)
+            throw new Exception("Lavoratore non trovato");
+
+
+        //se sono in un contesto regionale al posto della normale summary restituisco la timeline
+        ApplicationOptions opt = appRep.find(null).findFirst().orElse(null);
+        if (opt != null && opt.getFenealwebRegionale() != null && opt.getFenealwebRegionale() == true)
+            return "redirect:/worker/summarymultiterritorio/" + String.valueOf(idWorker);
+
+        return "redirect:/worker/summary/" + String.valueOf(idWorker);
     }
 
 
@@ -889,6 +920,7 @@ public class LavoratoriController {
         }
 
     }
+
     @RequestMapping(value = "/worker/{id}/noniscrizionidetail", method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody

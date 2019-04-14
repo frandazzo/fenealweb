@@ -41,7 +41,7 @@ require([
     "deleghe/delegheLecceController",
     "inps/inpsLecceController",
     "reportnazionali/reportInviiDBNazionaleController",
-    "reportnazionali/stampaIscrittiController","analisi/analisiController"],
+    "reportnazionali/stampaIscrittiController","analisi/analisiController", "prevedi/importPrevediController"],
     function(fmodel,_p, core, ui, fviews, fcontrollers, fhelpers,
                                                  controllers, usercontroller, 
                                                  lavController, listeLavoroController, azController, azDocController,
@@ -60,7 +60,8 @@ require([
              inpsLecceController,
              reportInviiDBNazionaleController,
              stampaIscrittiController,
-             analisiController) {
+             analisiController,
+             importPrevediController) {
 
     $.datepicker.setDefaults( $.datepicker.regional[ "IT" ] );
 
@@ -162,6 +163,7 @@ require([
         //importazioni massive
         ui.Navigation.instance().registerController("importanagrafichegenerali", function() { return new importController.ImportaAnagraficheController(); }, "singleton");
         ui.Navigation.instance().registerController("importdeleghegenerali", function() { return new importController.ImportaDelegheController(); }, "singleton");
+        ui.Navigation.instance().registerController("prevedi", function() { return new importPrevediController.ImportaController(); }, "singleton");
 
 
         //analisi
@@ -197,6 +199,7 @@ require([
 
         fileUploader.set({
             url: BASE + action,
+            maxFileSize : "100mb",
             button : uploadButton,
             progressBar: progress,
             data: { path: path },

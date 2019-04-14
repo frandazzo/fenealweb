@@ -10,4 +10,5 @@ public interface ImportDataService {
     String importaDeleghe(ImportData importData) throws Exception;
     String importaAnagrafiche(ImportData importData) throws Exception;
 
+    String importaAnagrafichePrevedi(ImportData file) throws Exception;
 }
