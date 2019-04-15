@@ -55,11 +55,19 @@ public class HomeController {
         model.addAttribute("userInitials", String.format("%s%s",((User) sec.getLoggedUser()).getName().charAt(0), ((User) sec.getLoggedUser()).getSurname().charAt(0)));
 
 
-        if (((User) sec.getLoggedUser()).getCompany() != null)
-            model.addAttribute("provinces", ((User) sec.getLoggedUser()).getCompany().getProvinces()
-                .stream().map(p -> p.getDescription().toLowerCase()).collect(Collectors.joining(",")));
-        else
+        User uu = ((User) sec.getLoggedUser());
+        if (uu.getCompany() != null){
+            model.addAttribute("provinces", uu.getCompany().getProvinces()
+                    .stream().map(p -> p.getDescription().toLowerCase()).collect(Collectors.joining(",")));
+
+            model.addAttribute("regionid",String.valueOf(uu.getCompany().getRegionId()));
+
+        }
+        else{
             model.addAttribute("provinces", "");
+            model.addAttribute("regionid","");
+        }
+
 
         //invio alla vista principale la lista delle notifiche da mostrare
         try{

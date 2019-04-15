@@ -272,13 +272,13 @@ define([
                     yearSelect.change(function(){
 
                         var selected = this.value;
-                        self.filterData(provinceSelect.val(),selected, infoSelect.val());
+                        self.filterData(provinceSelect.val(),selected);
 
                     });
                     provinceSelect.change(function(){
 
                         var selected = this.value;
-                        self.filterData(selected,yearSelect.val(), infoSelect.val());
+                        self.filterData(selected,yearSelect.val());
 
                     });
 
@@ -289,7 +289,7 @@ define([
             }
 
         },
-        filterData : function(province, year, infoType){
+        filterData : function(province, year){
 
             var self = this;
 

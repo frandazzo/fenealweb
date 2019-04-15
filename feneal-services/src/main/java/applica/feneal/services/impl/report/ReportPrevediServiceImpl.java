@@ -140,6 +140,9 @@ public class ReportPrevediServiceImpl implements ReportPrevediService {
             Hashtable<String,List<Iscrizione>> i = new Hashtable<>();
             for (Object[] objects : isscrizioni) {
                 j++;
+                if (j == 111){
+                    j = 0;
+                }
                 Iscrizione r = materializeIscrizioniDbNazionle(objects);
                 if (!i.containsKey(r.getCodiceFiscale())){
                     List<Iscrizione> a1 = new ArrayList<>();
@@ -240,7 +243,7 @@ public class ReportPrevediServiceImpl implements ReportPrevediService {
 //        from fenealweb_lavoratoriprevedi p
 //        inner join lavoratori l
 //        on p.fiscalcode =  l.CodiceFiscale
-//        left join iscrizioni i
+//        inner join iscrizioni i
 //        on l.ID = i.Id_Lavoratore
 //        where p.anno = 2018 and
 //                (MATCH (p.cassaEdile)
@@ -253,7 +256,7 @@ public class ReportPrevediServiceImpl implements ReportPrevediService {
                         "               from fenealweb_lavoratoriprevedi p \n" +
                         "inner join lavoratori l \n" +
                         "on p.fiscalcode =  l.CodiceFiscale \n" +
-                        "left join iscrizioni i\n" +
+                        "inner join iscrizioni i\n" +
                         "on l.ID = i.Id_Lavoratore\n" +
                         "where p.anno = %s and \n" +
                         "(MATCH (p.cassaEdile)\n" +

@@ -122,7 +122,7 @@
         <servlet-class>applica.framework.fileserver.servlets.FilesServlet</servlet-class>
         <init-param>
             <param-name>basePath</param-name>
-            <param-value>C:\Users\felic\Documents\FileServerFolder\</param-value>
+            <param-value>C:\Users\fgran\Documents\FileServerFolder\</param-value>
             <!--<param-value>C:\Data\JavaApp\AppFiles\</param-value>-->
 
         </init-param>
@@ -137,7 +137,7 @@
         <servlet-class>applica.framework.fileserver.servlets.ImagesServlet</servlet-class>
         <init-param>
             <param-name>basePath</param-name>
-            <param-value>C:\Users\felic\Documents\FileServerFolder\</param-value>
+            <param-value>C:\Users\fgran\Documents\FileServerFolder\</param-value>
             <!--<param-value>C:\Data\JavaApp\AppFiles\</param-value>-->
         </init-param>
         <init-param>

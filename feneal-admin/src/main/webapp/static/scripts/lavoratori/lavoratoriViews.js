@@ -60,6 +60,11 @@ define([
 
             this.on("load", function(){
 
+                //se si tratta di timeline nella header ho i valori del codice fiscale  e dell'id
+                var id =$(".worker-summary-header").attr("data-worker-id");
+
+                if (id)
+                    self.workerId = id;
                 //alert("data loaded");
                 //qui inserisco tutto il codice di inizializzazione della vista
 

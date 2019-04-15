@@ -357,6 +357,11 @@
     </header>
     <!-- End: Header -->
 
+#if ($regionid == 30)
+    #parse("/shared/navRegionale.vm")
+#else
     #parse("/shared/nav.vm")
+#end
+
 
 
