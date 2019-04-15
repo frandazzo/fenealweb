@@ -489,6 +489,32 @@ define([
             var self = this;
 
             return [
+
+                {
+                    text: "Deleghe",
+                    command: function() {
+                        ui.Navigation.instance().navigate("deleghehome", "index", {
+                            workerId: self.workerId
+                        })
+
+                    },
+                    icon: "pencil"
+                },
+                {
+                    text: "Archivio documentale",
+                    command: function() {
+
+                        ui.Navigation.instance().navigate("documenticrud", "list", {
+                            workerId: self.workerId,
+                            e : "documento"
+                        })
+                    },
+                    icon: "pencil"
+                },
+
+
+
+
                 {
                     text: "Crea anagrafica",
                     command: function() {

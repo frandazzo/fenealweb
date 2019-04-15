@@ -418,6 +418,7 @@
                                         <div class="row">
 
                                             <div class="col-sm-6 left-column">
+
                                                 #foreach($item in $a.item)
                                                     #if($item.tipo == 'Delega')
                                                         <div class="timeline-item delega">
@@ -487,7 +488,7 @@
                                                                             ##                                            <span class="glyphicon glyphicon-edit"></span>
                                                                             ##                                            </a>
                                                                             </td>
-                                                                            <td><a href="javascript:;">Scarica</a></td>
+                                                                            <td><a target="__blank" href="${wwwBase}$item.attachment">$item.nomeAttachment</a></td>
                                                                             <td>#if($item.operator)$item.operator#end</td>
                                                                         </tr>
                                                                         <tr>

@@ -944,7 +944,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
     private String createQueryForPrevediPerCodiceFiscale(String codiceFisclae){
 //        select
 
-        String query =  String.format("select a.fiscalcode as CodiceFiscale, a.cassaEdile, a.cassaEdileRegione, a.inquadramento, a.tipoAdesione, a.anno from fenealweb_lavoratoriprevedi where fiscalcode = '%s'", codiceFisclae);
+        String query =  String.format("select a.fiscalcode as CodiceFiscale, a.cassaEdile, a.cassaEdileRegione, a.inquadramento, a.tipoAdesione, a.anno from fenealweb_lavoratoriprevedi  a where a.fiscalcode = '%s'", codiceFisclae);
 
         return query;
 
