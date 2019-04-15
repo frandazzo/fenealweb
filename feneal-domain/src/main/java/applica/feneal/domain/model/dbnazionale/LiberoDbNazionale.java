@@ -33,7 +33,7 @@ public class LiberoDbNazionale extends IEntity {
     private String telefono;
     private Date ultimaModifica;
     private String ultimaProvinciaAdAggiornare;
-
+    private List<LavoratorePrevedi> prevedi;
 
 
     public boolean isDelegheOwner() {
@@ -309,5 +309,13 @@ public class LiberoDbNazionale extends IEntity {
 
     public void setEnte(String ente) {
         this.ente = ente;
+    }
+
+    public void setPrevedi(List<LavoratorePrevedi> prevedi) {
+        this.prevedi = prevedi;
+    }
+
+    public List<LavoratorePrevedi> getPrevedi() {
+        return prevedi;
     }
 }

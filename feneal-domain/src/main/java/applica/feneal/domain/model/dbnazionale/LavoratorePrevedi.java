@@ -2,7 +2,9 @@ package applica.feneal.domain.model.dbnazionale;
 
 import applica.framework.AEntity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class LavoratorePrevedi extends AEntity {
 
@@ -21,6 +23,27 @@ public class LavoratorePrevedi extends AEntity {
     private String cassaEdileRegione;
     private String tipoAdesione;
     private int anno;
+    private int numIscrizioni;
+    private List<Iscrizione> iscrizioni = new ArrayList<>();
+
+
+    public int getNumIscrizioni() {
+        return numIscrizioni;
+    }
+
+    public void setNumIscrizioni(int numIscrizioni) {
+        this.numIscrizioni = numIscrizioni;
+    }
+
+
+
+    public List<Iscrizione> getIscrizioni() {
+        return iscrizioni;
+    }
+
+    public void setIscrizioni(List<Iscrizione> iscrizioni) {
+        this.iscrizioni = iscrizioni;
+    }
 
     public int getAnno() {
         return anno;

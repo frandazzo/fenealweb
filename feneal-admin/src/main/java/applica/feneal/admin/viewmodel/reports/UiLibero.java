@@ -1,6 +1,7 @@
 package applica.feneal.admin.viewmodel.reports;
 
 import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
+import applica.feneal.domain.model.dbnazionale.LavoratorePrevedi;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 
 import java.text.SimpleDateFormat;
@@ -21,6 +22,8 @@ public class UiLibero {
     //dati lavoratore
 
     private boolean lavoratoreDelegheOwner;
+    private int numPrevedi;
+    private List<LavoratorePrevedi> prevedi;
 
     public String getLavoratoreNomeCompleto() {
         SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
@@ -280,4 +283,19 @@ public class UiLibero {
     }
 
 
+    public void setNumPrevedi(int numPrevedi) {
+        this.numPrevedi = numPrevedi;
+    }
+
+    public int getNumPrevedi() {
+        return numPrevedi;
+    }
+
+    public void setPrevedi(List<LavoratorePrevedi> prevedi) {
+        this.prevedi = prevedi;
+    }
+
+    public List<LavoratorePrevedi> getPrevedi() {
+        return prevedi;
+    }
 }

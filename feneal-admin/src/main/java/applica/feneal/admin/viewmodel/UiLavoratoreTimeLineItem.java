@@ -30,6 +30,7 @@ public class UiLavoratoreTimeLineItem {
     private String operator;
     private String attachment;
     private String nomeAttachment;
+    private boolean owner;
 
     public String getTipo() {
         return tipo;
@@ -213,5 +214,13 @@ public class UiLavoratoreTimeLineItem {
 
     public String getNomeAttachment() {
         return nomeAttachment;
+    }
+
+    public void setOwner(boolean owner) {
+        this.owner = owner;
+    }
+
+    public boolean getOwner() {
+        return owner;
     }
 }

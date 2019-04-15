@@ -135,6 +135,8 @@ public class LiberiFacade {
 
                 l.setNonIscrizioni(liberoDbNazionale.getIscrizioniAltroSindacato());
                 l.setNumNonIscrizioni(l.getNonIscrizioni().size());
+                l.setPrevedi(liberoDbNazionale.getPrevedi());
+                l.setNumPrevedi(liberoDbNazionale.getPrevedi().size());
                 result.add(l);
         }
 

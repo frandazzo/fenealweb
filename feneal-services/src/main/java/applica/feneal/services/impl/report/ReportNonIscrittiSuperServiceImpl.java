@@ -20,6 +20,7 @@ import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.deleghe.Delega;
 import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
 import applica.feneal.domain.model.dbnazionale.Iscrizione;
+import applica.feneal.domain.model.dbnazionale.LavoratorePrevedi;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 import applica.feneal.domain.model.dbnazionale.search.LiberoReportSearchParams;
 import applica.feneal.domain.model.geo.City;
@@ -90,6 +91,11 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         final String queryNonIscrizioniAttuali = createQueryForNonIscrizioniAttuali(p.getDescription(), t.getType(), p.getIdRegion());
         final String queryNonIscrizioni = createQueryForNonIscrizioni(p.getDescription(), t.getType(), p.getIdRegion());
 
+        final String queryPrevedi = createQueryForPrevedi(p.getDescription(), t.getType());
+
+
+
+
         final Box box = new Box();
 
         enteRep.executeCommand(new Command() {
@@ -105,11 +111,13 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                     List<Object[]> deleghe = new ArrayList<>();
                     List<Object[]> iscrizioniAltroSindacatoAttuali= new ArrayList<>();
                     List<Object[]> iscrizioniAltroSindacato= new ArrayList<>();
+                    List<Object[]> iscrizioniPrevedi= new ArrayList<>();
 
                     if (!isOldReportStyle){
                         deleghe = createHibernateQueryForDeleghe(s,queryDeleghe).list();
                         iscrizioniAltroSindacatoAttuali= createHibernateQueryForNonIscrizioniAttuali(s,queryNonIscrizioniAttuali).list();
                         iscrizioniAltroSindacato= createHibernateQueryForNonIscrizioni(s,queryNonIscrizioni).list();
+                        iscrizioniPrevedi = createHibernateQueryForPrevedi(s, queryPrevedi).list();
                     }
 
 
@@ -129,20 +137,17 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                     Hashtable<String, List<Iscrizione>> i = mateiralizeHashIscrizioni(isscrizioni);
                     Hashtable<String, List<DelegaNazionale>> i1 = materializeHashDeleghe(deleghe);
                     Hashtable<String, List<LiberoDbNazionale>> i2 = materializeHashNonIscrizioni(iscrizioniAltroSindacatoAttuali, iscrizioniAltroSindacato);
+                    Hashtable<String, List<LavoratorePrevedi>> i3 = mateiralizeHashPrevedi(iscrizioniPrevedi);
+
+
                     List<LiberoDbNazionale> a = new ArrayList<>();
                     for (Object[] objects : liberi) {
                         LiberoDbNazionale ss = materializeLiberi(objects,t.getType(),p.getDescription());
-                        materialiazeObjectContents(i, i1, i2, ss);
+                        materialiazeObjectContents(i, i1, i2,i3, ss);
                         a.add(ss);
                     }
 
-
-
-
-
                     //associo adesso al record liberi le iscrizioni
-
-
                     box.setValue(a);
 
 
@@ -178,6 +183,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         final String queryDeleghe = createQueryForDeleghePerCodiceFiscale(regionId, fiscalCode);
         final String queryNonIscrizioniAttuali = createQueryForNonIscrizioniAttualiPerCodiceFiscale(regionId, fiscalCode);
         final String queryNonIscrizioni = createQueryForNonIscrizioniPerCodiceFiscale(regionId, fiscalCode);
+        final String queryPrevedi = createQueryForPrevediPerCodiceFiscale(fiscalCode);
 
         final Box box = new Box();
 
@@ -195,7 +201,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                     List<Object[]> iscrizioniAltroSindacatoAttuali= createHibernateQueryForNonIscrizioniAttuali(s,queryNonIscrizioniAttuali).list();
                     List<Object[]> iscrizioniAltroSindacato= createHibernateQueryForNonIscrizioni(s,queryNonIscrizioni).list();
                     List<Object[]> isscrizioni = createHibernateQueryForIscrizioniDbNazionale(s,queryIscrizioniDbNazionale).list();
-
+                    List<Object[]>  iscrizioniPrevedi = createHibernateQueryForPrevedi(s, queryPrevedi).list();
 
                     tx.commit();
 
@@ -209,10 +215,11 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                     Hashtable<String, List<Iscrizione>> i = mateiralizeHashIscrizioni(isscrizioni);
                     Hashtable<String, List<DelegaNazionale>> i1 = materializeHashDeleghe(deleghe);
                     Hashtable<String, List<LiberoDbNazionale>> i2 = materializeHashNonIscrizioni(iscrizioniAltroSindacatoAttuali, iscrizioniAltroSindacato);
+                    Hashtable<String, List<LavoratorePrevedi>> i3 = mateiralizeHashPrevedi(iscrizioniPrevedi);
 
                     LiberoDbNazionale ss = new LiberoDbNazionale();
                     ss.setCodiceFiscale(fiscalCode);
-                    materialiazeObjectContents(i, i1, i2, ss);
+                    materialiazeObjectContents(i, i1, i2,i3, ss);
 
 
                     //associo adesso al record liberi le iscrizioni
@@ -241,19 +248,47 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
     }
 
-    private void materialiazeObjectContents(Hashtable<String, List<Iscrizione>> i, Hashtable<String, List<DelegaNazionale>> i1, Hashtable<String, List<LiberoDbNazionale>> i2, LiberoDbNazionale ss) {
+    private void materialiazeObjectContents(Hashtable<String, List<Iscrizione>> i, Hashtable<String, List<DelegaNazionale>> i1, Hashtable<String, List<LiberoDbNazionale>> i2, Hashtable<String, List<LavoratorePrevedi>> i3, LiberoDbNazionale ss) {
         List<Iscrizione> sd = i.get(ss.getCodiceFiscale());
         List<LiberoDbNazionale> sdc = i2.get(ss.getCodiceFiscale());
         List<DelegaNazionale> sddel = i1.get(ss.getCodiceFiscale());
+
+        List<LavoratorePrevedi> sdprevedi = i3.get(ss.getCodiceFiscale());
+
         if (sd == null)
             sd = new ArrayList<>();
         if (sddel == null)
             sddel = new ArrayList<>();
         if (sdc == null)
             sdc = new ArrayList<>();
+
+        if (sdprevedi == null)
+            sdprevedi = new ArrayList<>();
+
+
         ss.setIscrizioni(sd);
         ss.setDeleghe(sddel);
         ss.setIscrizioniAltroSindacato(sdc);
+        ss.setPrevedi(sdprevedi);
+    }
+
+
+    private Hashtable<String, List<LavoratorePrevedi>> mateiralizeHashPrevedi(List<Object[]> isscrizioni) {
+        Hashtable<String,List<LavoratorePrevedi>> i = new Hashtable<>();
+        for (Object[] objects : isscrizioni) {
+            LavoratorePrevedi r = materializePrevedi(objects);
+            if (!i.containsKey(r.getFiscalcode())){
+                List<LavoratorePrevedi> a1 = new ArrayList<>();
+                a1.add(r);
+                i.put(r.getFiscalcode(), a1);
+            }
+
+            else{
+                List<LavoratorePrevedi> a1 = i.get(r.getFiscalcode());
+                a1.add(r);
+            }
+        }
+        return i;
     }
 
     private Hashtable<String, List<Iscrizione>> mateiralizeHashIscrizioni(List<Object[]> isscrizioni) {
@@ -901,6 +936,73 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
         return v;
     }
+
+
+
+
+
+    private String createQueryForPrevediPerCodiceFiscale(String codiceFisclae){
+//        select
+
+        String query =  String.format("select a.fiscalcode as CodiceFiscale, a.cassaEdile, a.cassaEdileRegione, a.inquadramento, a.tipoAdesione, a.anno from fenealweb_lavoratoriprevedi where fiscalcode = '%s'", codiceFisclae);
+
+        return query;
+
+    }
+    private String createQueryForPrevedi(String nomeProvincia, String nomeEnte){
+
+
+
+
+//        select t.CodiceFiscale,
+//                a.cassaEdile, a.cassaEdileRegione, a.inquadramento, a.tipoAdesione, a.anno
+//        from
+//        lavoratori_liberi t
+//        inner join
+//        fenealweb_lavoratoriprevedi a
+//        on t.CodiceFiscale = a.fiscalcode
+//        where t.NomeProvinciaFeneal = 'NAPOLI' and t.ente = 'CASSA EDILE';
+
+
+
+        String query =  String.format("select t.CodiceFiscale,\n" +
+                        "                a.cassaEdile, a.cassaEdileRegione, a.inquadramento, a.tipoAdesione, a.anno\n" +
+                        "                from\n" +
+                        "                lavoratori_liberi t\n" +
+                        "                inner join\n" +
+                        "                fenealweb_lavoratoriprevedi a\n" +
+                        "                on t.CodiceFiscale = a.fiscalcode" +
+                        " where t.NomeProvinciaFeneal = '%s' and t.ente = '%s' ",
+                nomeProvincia.replace("'","''"), nomeEnte);
+
+        return query;
+
+    }
+    private SQLQuery createHibernateQueryForPrevedi(Session session, String query){
+        return session.createSQLQuery(query)
+                .addScalar("CodiceFiscale")
+                .addScalar("cassaEdile")
+                .addScalar("cassaEdileRegione")
+                .addScalar("inquadramento")
+                .addScalar("tipoAdesione")
+                .addScalar("anno")
+                ;
+    }
+    private LavoratorePrevedi materializePrevedi(Object[] object){
+        LavoratorePrevedi v = new LavoratorePrevedi();
+        v.setFiscalcode((String)object[0]);
+        v.setCassaEdile((String)object[1]);
+        v.setCassaEdileRegione((String) object[2]);
+        v.setInquadramento((String) object[3]);
+        v.setTipoAdesione((String) object[4]);
+        v.setAnno((Integer) object[5]);
+
+        return v;
+    }
+
+
+
+
 
 
 }

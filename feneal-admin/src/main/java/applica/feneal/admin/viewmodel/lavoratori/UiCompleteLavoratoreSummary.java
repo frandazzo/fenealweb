@@ -4,6 +4,7 @@ import applica.feneal.admin.viewmodel.UiLavoratoreTimeLineItem;
 import applica.feneal.admin.viewmodel.UiLavoratoreTimelineYearGroup;
 import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
 import applica.feneal.domain.model.dbnazionale.Iscrizione;
+import applica.feneal.domain.model.dbnazionale.LavoratorePrevedi;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class UiCompleteLavoratoreSummary {
     private List<LiberoDbNazionale> iscrizioniAltroSindacato;
     private List<Iscrizione> iscrizioni;
     private List<UiLavoratoreTimelineYearGroup> timelineList;
+    private List<LavoratorePrevedi> prevedi;
 
 
     public UiLavoratoreAnagraficaSummary getData() {
@@ -92,5 +94,13 @@ public class UiCompleteLavoratoreSummary {
 
     public List<UiLavoratoreTimelineYearGroup> getTimelineList() {
         return timelineList;
+    }
+
+    public void setPrevedi(List<LavoratorePrevedi> prevedi) {
+        this.prevedi = prevedi;
+    }
+
+    public List<LavoratorePrevedi> getPrevedi() {
+        return prevedi;
     }
 }

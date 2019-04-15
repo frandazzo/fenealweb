@@ -110,6 +110,7 @@ require([
         ui.Navigation.instance().registerController("reportdocumentiazienda", function() { return new docAziendaReportController.DocumentiAziendaReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportcomunicazioni", function() { return new commReportController.ComunicazioniReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportrichieste", function() { return new richiesteReportController.RichiesteReportController(); }, "singleton");
+        ui.Navigation.instance().registerController("reportprevedi", function() { return new importPrevediController.ReportController(); }, "singleton");
 
 
         // Percorsi report nazionali

@@ -1423,6 +1423,21 @@ define([
                             //     <i class="material-icons">sentiment_satisfied</i>
                             //     </span>
                             if (numIscrizioni){
+                                var span =$("<span style='color:red' />");
+                                span.append($('<i class="material-icons" style=" text-align: center;display: block;">sentiment_neutral</i>'));
+                                span.appendTo(container);
+                            }
+
+                        }
+                    },
+                    {dataField:"numPrevedi", visible: true,visibleIndex: 1, caption:"Iscrizioni prevedi",
+                        cellTemplate: function (container, options) {
+                            //container.addClass("img-container");
+                            var numIscrizioni = options.data.numPrevedi;
+                            // <span class="color-black">
+                            //     <i class="material-icons">sentiment_satisfied</i>
+                            //     </span>
+                            if (numIscrizioni){
                                 var span =$("<span style='color:green' />");
                                 span.append($('<i class="material-icons" style=" text-align: center;display: block;">sentiment_satisfied</i>'));
                                 span.appendTo(container);

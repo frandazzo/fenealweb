@@ -122,12 +122,12 @@
                         <span class="sidebar-title">Lavoratori</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#/searchworkersnew" class="framework-navigation">
-                        <span class="glyphicons glyphicons-group"></span>
-                        <span class="sidebar-title">Lavoratori (new))</span>
-                    </a>
-                </li>
+##                <li>
+##                    <a href="#/searchworkersnew" class="framework-navigation">
+##                        <span class="glyphicons glyphicons-group"></span>
+##                        <span class="sidebar-title">Lavoratori (new))</span>
+##                    </a>
+##                </li>
                 <li>
                     <a href="#/searchfirms" class="framework-navigation">
                         <span class="glyphicons glyphicons-building"></span>
@@ -330,9 +330,15 @@
                     </a>
                 </li>
                 <li>
+                    <a href="#/reportprevedi" class="framework-navigation">
+                        <span class="fa fa-bar-chart-o"></span>
+                        <span class="sidebar-title">Report dati prevedi</span>
+                    </a>
+                </li>
+                <li>
                     <a href="#/reportliberisuper" class="framework-navigation">
                         <span class="fa fa-bar-chart-o"></span>
-                        <span class="sidebar-title">Report non iscritti (new))</span>
+                        <span class="sidebar-title">Report non iscritti regionale</span>
                     </a>
                 </li>
                 #if ($roleid == 3) ##segretario
