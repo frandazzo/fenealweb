@@ -1,6 +1,6 @@
 #parse("/shared/framework.vm")
 
-<div class="worker-summary-header" data-id="">
+<div class="worker-summary-header" data-worker-id="$summary.data.id" data-worker-fiscalcode="$summary.data.fiscalcode" data-id="">
 
     <div class="col-md-3 col-xs-12">
 
@@ -440,7 +440,7 @@
                                                                 <div class="panel-body">
                                                                     <table class="table">
                                                                         <thead>
-                                                                        <tr class="warning">
+                                                                        <tr>
                                                                             <th>Provincia</th>
                                                                             <th>Ente</th>
                                                                             <th>Stato</th>
@@ -454,49 +454,17 @@
                                                                         <tr>
                                                                             <td>$item.provincia</td>
                                                                             <td>$item.ente</td>
-                                                                            <td>
-                                                                                <div class="btn-group text-right">
-
-                                                                                    <button type="button" class="btn btn-warning br2 btn-xs fs12 dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Sottoscritta
-                                                                                        <span class="caret ml5"></span>
-                                                                                    </button>
-                                                                                    <ul class="dropdown-menu" role="menu">
-                                                                                        <li>
-                                                                                            <a href="#/editdelega?id=154452&amp;workerId=129640"><i class="glyphicon glyphicon-pencil"></i>   Modifica </a>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <a href="#/deletedelega?id=154452&amp;workerId=129640" "=""><i class="glyphicon glyphicon-trash"></i> Elimina</a>
-                                                                                        </li>
-                                                                                        <li class="divider"></li>
-                                                                                        <li>
-                                                                                            <a href="#/delegastatecontroller?id=154452&amp;newState=2">Inoltra delega</a>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <a href="#/delegastatecontroller?id=154452&amp;newState=3">Accetta delega</a>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <a href="#/delegastatecontroller?id=154452&amp;newState=5">Annulla delega</a>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <a href="#/delegastatecontroller?id=154452&amp;newState=6">Revoca delega</a>
-                                                                                        </li>
-
-
-                                                                                    </ul>
-                                                                                </div>
-                                                                            ##                                            <a href="javascript:;">
-                                                                            ##                                            <span class="glyphicon glyphicon-edit"></span>
-                                                                            ##                                            </a>
-                                                                            </td>
-                                                                            <td><a target="__blank" href="${wwwBase}$item.attachment">$item.nomeAttachment</a></td>
+                                                                            <td>$item.stato</td>
+                                                                            <td><a target="__blank" href="${wwwBase}$item.attachment">
+                                                                                #if($item.nomeAttachment) $item.nomeAttachment
+                                                                                #else
+                                                                                #end</a></td>
                                                                             <td>#if($item.operator)$item.operator#end</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td colspan="5">
                                                                                 <blockquote class="blockquote-warning" style="font-size: 12px">
                                                                                     <dl class="dl-horizontal">
-                                                                                        <dt>Azienda</dt>
-                                                                                        <dd>$item.azienda</dd>
                                                                                         <dt>Data accreditamento</dt>
                                                                                         <dd>
                                                                                             #if( $item.dataAccreditamento)
@@ -513,8 +481,6 @@
                                                                                                 -
                                                                                             #end
                                                                                         </dd>
-                                                                                        <dt>Causale cessazione</dt>
-                                                                                        <dd>-</dd>
                                                                                         <dt>Annotazioni</dt>
                                                                                         <dd>
 
@@ -537,8 +503,8 @@
                                                             </div>
                                                         </div>
 
-                                                        #elseif($item.tipo == 'Iscritto')
-                                                            <div class="timeline-item iscritto">
+                                                    #elseif($item.tipo == 'Iscritto')
+                                                        <div class="timeline-item iscritto">
                                                                 <div class="timeline-icon">
                                                                     <span class="glyphicon glyphicon-ok-circle text-success great-icon"></span>
                                                                 </div>
