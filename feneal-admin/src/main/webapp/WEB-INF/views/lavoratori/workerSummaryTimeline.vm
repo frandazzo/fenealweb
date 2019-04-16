@@ -781,6 +781,8 @@
                                     #if($summary.deleghe.size() == 0)
                                             class="warning"
                                     #end
+
+
                                     #foreach($item in $summary.deleghe)
                                         #if($item.state == 'Accreditata')
                                                 class="success"
