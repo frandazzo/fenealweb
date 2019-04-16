@@ -8,6 +8,7 @@ import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 import applica.framework.library.options.OptionsManager;
 import it.fenealgestweb.www.*;
 import org.apache.axis2.AxisFault;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -337,21 +338,41 @@ public class LiberiExcelExporter {
         operatore.setPriority(5);
         props.addExcelProperty(operatore);
 
+        SimpleDateFormat g = new SimpleDateFormat("dd/MM/yyyy");
+        String dtAcc= g.format(lib.getAcceptDate());
+
         ExcelProperty data_acc = new ExcelProperty();
         data_acc.setName("Data Accreditamento");
-        data_acc.setValue(String.valueOf(lib.getAcceptDate()));
+        if(StringUtils.isEmpty(dtAcc)){
+            data_acc.setValue("");
+        }
+        else
+        data_acc.setValue(dtAcc);
         data_acc.setPriority(6);
         props.addExcelProperty(data_acc);
 
+        SimpleDateFormat h = new SimpleDateFormat("dd/MM/yyyy");
+        String dtCanc= h.format(lib.getCancelDate());
+
         ExcelProperty data_canc = new ExcelProperty();
         data_canc.setName("Data Cancellazione");
-        data_canc.setValue(String.valueOf(lib.getCancelDate()));
+        if(StringUtils.isEmpty(dtCanc)){
+            data_acc.setValue("");
+        }
+        else
+            data_acc.setValue(dtCanc);
         data_canc.setPriority(7);
         props.addExcelProperty(data_canc);
 
+        SimpleDateFormat w = new SimpleDateFormat("dd/MM/yyyy");
+        String dtCess= w.format(lib.getRevokeDate());
+
         ExcelProperty data_cess = new ExcelProperty();
         data_cess.setName("Data Cessazione");
-        data_cess.setValue(String.valueOf(lib.getRevokeDate()));
+        if(StringUtils.isEmpty(dtCess)){
+            data_cess.setValue("");
+        }
+        else data_cess.setValue(dtCess);
         data_cess.setPriority(7);
         props.addExcelProperty(data_cess);
 
@@ -373,6 +394,8 @@ public class LiberiExcelExporter {
     private ArrayOfExcelProperty createPropertiesForAltriSindacati(LiberoDbNazionale lib) {
         ArrayOfExcelProperty props = new ArrayOfExcelProperty();
 
+        SimpleDateFormat g = new SimpleDateFormat("dd/MM/yyyy");
+        String dte= g.format(lib.getLiberoAl());
 
         ExcelProperty name = new ExcelProperty();
         name.setName("Provincia");
@@ -394,7 +417,11 @@ public class LiberiExcelExporter {
 
         ExcelProperty libero_al = new ExcelProperty();
         libero_al.setName("Libero al");
-        libero_al.setValue(String.valueOf(lib.getLiberoAl()));
+        if(StringUtils.isEmpty(dte)){
+            libero_al.setValue("");
+        }
+        else
+            libero_al.setValue(dte);
         libero_al.setPriority(4);
         props.addExcelProperty(libero_al);
 
