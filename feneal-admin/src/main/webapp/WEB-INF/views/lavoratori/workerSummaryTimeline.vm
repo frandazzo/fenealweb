@@ -616,8 +616,8 @@
                                                                     #if($item.owner == true)
                                                                         <span class="glyphicon glyphicon-user"></span>
                                                                     #end
-                                        <span class="panel-title">
-                                             Iscrizione altro sindacato </span>
+                                                                <span class="panel-title">
+                                                                     Iscrizione altro sindacato </span>
 
                                                                 </div>
                                                                 <div class="panel-body">
@@ -630,8 +630,6 @@
                                                                             <th>Azienda</th>
                                                                             <th>Libero al</th>
                                                                             <th>Iscritto a</th>
-                                                                            <th>Livello</th>
-                                                                            <th>Contratto</th>
                                                                         </tr>
                                                                         </thead>
 ##                                                                        #foreach($item in $a.item)
@@ -646,8 +644,6 @@
                                                                                     </td>
                                                                                     <td>$localization.formatDate($item.data)</td>
                                                                                     <td><strong>$item.iscrittoA</strong></td>
-                                                                                    <td>#if($item.livello)$item.livello#end</td>
-                                                                                    <td>#if($item.contratto)$item.contratto#end</td>
                                                                                 </tr>
 
                                                                                 </tbody>

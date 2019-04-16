@@ -307,14 +307,59 @@ public class LiberiExcelExporter {
         ArrayOfExcelProperty props = new ArrayOfExcelProperty();
 
 
-
-
         ExcelProperty name1 = new ExcelProperty();
         name1.setName("Provincia");
         name1.setValue(lib.getProvince());
         name1.setPriority(1);
         props.addExcelProperty(name1);
 
+        ExcelProperty ente = new ExcelProperty();
+        ente.setName("Ente");
+        ente.setValue(lib.getEnte());
+        ente.setPriority(2);
+        props.addExcelProperty(ente);
+
+        ExcelProperty stato = new ExcelProperty();
+        stato.setName("Stato");
+        stato.setValue(lib.getState());
+        stato.setPriority(3);
+        props.addExcelProperty(stato);
+
+        ExcelProperty scan = new ExcelProperty();
+        scan.setName("Scansione");
+        scan.setValue(lib.getNomeattachment());
+        scan.setPriority(4);
+        props.addExcelProperty(scan);
+
+        ExcelProperty operatore = new ExcelProperty();
+        operatore.setName("Operatore");
+        operatore.setValue(lib.getOperator());
+        operatore.setPriority(5);
+        props.addExcelProperty(operatore);
+
+        ExcelProperty data_acc = new ExcelProperty();
+        data_acc.setName("Data Accreditamento");
+        data_acc.setValue(String.valueOf(lib.getAcceptDate()));
+        data_acc.setPriority(6);
+        props.addExcelProperty(data_acc);
+
+        ExcelProperty data_canc = new ExcelProperty();
+        data_canc.setName("Data Cancellazione");
+        data_canc.setValue(String.valueOf(lib.getCancelDate()));
+        data_canc.setPriority(7);
+        props.addExcelProperty(data_canc);
+
+        ExcelProperty data_cess = new ExcelProperty();
+        data_cess.setName("Data Cessazione");
+        data_cess.setValue(String.valueOf(lib.getRevokeDate()));
+        data_cess.setPriority(7);
+        props.addExcelProperty(data_cess);
+
+        ExcelProperty ann = new ExcelProperty();
+        ann.setName("Annotazioni");
+        ann.setValue(String.valueOf(lib.getNotes()));
+        ann.setPriority(9);
+        props.addExcelProperty(ann);
 
 
 
@@ -334,6 +379,30 @@ public class LiberiExcelExporter {
         name.setValue(lib.getNomeProvinciaFeneal());
         name.setPriority(1);
         props.addExcelProperty(name);
+
+        ExcelProperty ente = new ExcelProperty();
+        ente.setName("Ente");
+        ente.setValue(lib.getEnte());
+        ente.setPriority(2);
+        props.addExcelProperty(ente);
+
+        ExcelProperty azienda = new ExcelProperty();
+        azienda.setName("Azienda");
+        azienda.setValue(lib.getCurrentAzienda());
+        azienda.setPriority(3);
+        props.addExcelProperty(azienda);
+
+        ExcelProperty libero_al = new ExcelProperty();
+        libero_al.setName("Libero al");
+        libero_al.setValue(String.valueOf(lib.getLiberoAl()));
+        libero_al.setPriority(4);
+        props.addExcelProperty(libero_al);
+
+        ExcelProperty iscrittoA = new ExcelProperty();
+        iscrittoA.setName("Iscritto A");
+        iscrittoA.setValue(lib.getIscrittoA());
+        iscrittoA.setPriority(5);
+        props.addExcelProperty(iscrittoA);
 
         return props;
     }
@@ -355,14 +424,27 @@ public class LiberiExcelExporter {
         name1.setPriority(2);
         props.addExcelProperty(name1);
 
+        ExcelProperty inq = new ExcelProperty();
+        inq.setName("Inquadramento");
+        inq.setValue(lib.getInquadramento());
+        inq.setPriority(3);
+        props.addExcelProperty(inq);
+
+        ExcelProperty tipoA = new ExcelProperty();
+        tipoA.setName("Tipo Adesione");
+        tipoA.setValue(lib.getTipoAdesione());
+        tipoA.setPriority(4);
+        props.addExcelProperty(tipoA);
+
+        ExcelProperty anno = new ExcelProperty();
+        anno.setName("Anno");
+        anno.setValue(String.valueOf(lib.getAnno()));
+        anno.setPriority(5);
+        props.addExcelProperty(anno);
 
 
         return props;
     }
-
-
-
-
 
     private ArrayOfExcelProperty createProperties(UiLibero lib) {
         ArrayOfExcelProperty props = new ArrayOfExcelProperty();
