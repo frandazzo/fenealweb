@@ -185,7 +185,7 @@
                 <li class="">
                     <a href="#/accettdeleghe" class="framework-navigation">
                         <span class="fa fa-check-square-o"></span>
-                        <span class="sidebar-title">Accetta deleghe</span>
+                        <span class="sidebar-title">Accredita deleghe</span>
                     </a>
                 </li>
 
@@ -335,12 +335,12 @@
                         <span class="sidebar-title">Report dati prevedi</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#/reportliberisuper" class="framework-navigation">
-                        <span class="fa fa-bar-chart-o"></span>
-                        <span class="sidebar-title">Report non iscritti regionale</span>
-                    </a>
-                </li>
+##                <li>
+##                    <a href="#/reportliberisuper" class="framework-navigation">
+##                        <span class="fa fa-bar-chart-o"></span>
+##                        <span class="sidebar-title">Report non iscritti regionale</span>
+##                    </a>
+##                </li>
                 #if ($roleid == 3) ##segretario
                 <li>
                     <a href="#/reportiqa" class="framework-navigation">
