@@ -488,7 +488,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                         "                (select descrizione as provincia from tb_provincie where ID_TB_REGIONI = %s )\n" +
                         "        and iscrittoa <> \"\") n\n" +
                         "        on t.CodiceFiscale = n.codicefiscale" +
-                        " where t.NomeProvinciaFeneal = '%s' and t.ente = '%s' ",
+                        " where t.NomeProvinciaFeneal = '%s' and t.ente = '%s'  ",
                 idREgione,  nomeProvincia.replace("'","''"), nomeEnte);
 
         return query;
@@ -561,11 +561,11 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                         "from lavoratori_liberi t\n" +
                         "inner join \n" +
                         " (select CodiceFiscale, nomeprovinciafeneal, currentAzienda, liberoAl, ente, IscrittoA from lavoratori_liberi where NomeProvinciaFeneal in\n" +
-                        "(select descrizione as provincia from tb_provincie where ID_TB_REGIONI = %s and descrizione <> '%s') \n" +
+                        "(select descrizione as provincia from tb_provincie where ID_TB_REGIONI = %s ) \n" +
                         "and iscrittoa <> \"\") n\n" +
                         "on t.CodiceFiscale = n.codicefiscale " +
                 " where t.NomeProvinciaFeneal = '%s' and t.ente = '%s' ",
-                idREgione, nomeProvincia.replace("'","''"), nomeProvincia.replace("'","''"), nomeEnte);
+                idREgione, nomeProvincia.replace("'","''"), nomeEnte);
 
         return query;
 
