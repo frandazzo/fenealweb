@@ -433,7 +433,6 @@
                                                                 #else
                                                                     text-warning
                                                                 #end
-
                                                                 great-icon"></span>
                                                             </div>
                                                             <div class="panel "
