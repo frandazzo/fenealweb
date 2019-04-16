@@ -338,41 +338,40 @@ public class LiberiExcelExporter {
         operatore.setPriority(5);
         props.addExcelProperty(operatore);
 
-        SimpleDateFormat g = new SimpleDateFormat("dd/MM/yyyy");
-        String dtAcc= g.format(lib.getAcceptDate());
-
         ExcelProperty data_acc = new ExcelProperty();
         data_acc.setName("Data Accreditamento");
-        if(StringUtils.isEmpty(dtAcc)){
-            data_acc.setValue("");
+        String dtAcc = "";
+        if (lib.getAcceptDate() != null) {
+            SimpleDateFormat g = new SimpleDateFormat("dd/MM/yyyy");
+            dtAcc = g.format(lib.getAcceptDate());
+
         }
-        else
         data_acc.setValue(dtAcc);
         data_acc.setPriority(6);
         props.addExcelProperty(data_acc);
 
-        SimpleDateFormat h = new SimpleDateFormat("dd/MM/yyyy");
-        String dtCanc= h.format(lib.getCancelDate());
 
         ExcelProperty data_canc = new ExcelProperty();
         data_canc.setName("Data Cancellazione");
-        if(StringUtils.isEmpty(dtCanc)){
-            data_acc.setValue("");
+        String dtCanc = "";
+        if(lib.getCancelDate() != null) {
+            SimpleDateFormat h = new SimpleDateFormat("dd/MM/yyyy");
+            dtCanc= h.format(lib.getCancelDate());
         }
-        else
-            data_acc.setValue(dtCanc);
+        data_canc.setValue(dtCanc);
         data_canc.setPriority(7);
         props.addExcelProperty(data_canc);
 
-        SimpleDateFormat w = new SimpleDateFormat("dd/MM/yyyy");
-        String dtCess= w.format(lib.getRevokeDate());
+
 
         ExcelProperty data_cess = new ExcelProperty();
         data_cess.setName("Data Cessazione");
-        if(StringUtils.isEmpty(dtCess)){
-            data_cess.setValue("");
+        String dtCess = "";
+        if(lib.getRevokeDate() != null) {
+            SimpleDateFormat w = new SimpleDateFormat("dd/MM/yyyy");
+            dtCess= w.format(lib.getRevokeDate());
         }
-        else data_cess.setValue(dtCess);
+        data_cess.setValue(dtCess);
         data_cess.setPriority(8);
         props.addExcelProperty(data_cess);
 
