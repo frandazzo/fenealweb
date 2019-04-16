@@ -373,7 +373,7 @@ public class LiberiExcelExporter {
             data_cess.setValue("");
         }
         else data_cess.setValue(dtCess);
-        data_cess.setPriority(7);
+        data_cess.setPriority(8);
         props.addExcelProperty(data_cess);
 
         ExcelProperty ann = new ExcelProperty();
@@ -381,11 +381,6 @@ public class LiberiExcelExporter {
         ann.setValue(String.valueOf(lib.getNotes()));
         ann.setPriority(9);
         props.addExcelProperty(ann);
-
-
-
-
-
 
         return props;
     }
