@@ -70,12 +70,41 @@ public class LiberiFacade {
     @Autowired
     private LiberiExcelExporter exporter;
 
+
+
+
+
+    public String printComplete(List<UiLibero> liberi, String type) throws IOException {
+
+
+
+//        '<select name="infoSelect" style="margin-right: 5px" id="ciccio">'+
+//                '<option ' + select1 + ' value="1">Iscritto storico</option>'+
+//                '<option '  + select2 + ' value="2">Deleghe</option>'+
+//                '<option '  + select3 + ' value="3">Iscritto ad altro</option>'+
+//                '<option '  + select4 + ' value="4">Iscritto Prevedi</option>'+
+//                '</select>');
+        if (type.equals("1"))
+            type = LiberiExcelExporter.db_nazionale_type;
+        if (type.equals("2"))
+            type = LiberiExcelExporter.delega_type;
+        if (type.equals("3"))
+            type = LiberiExcelExporter.altrosindacato_type;
+        if (type.equals("4"))
+            type = LiberiExcelExporter.prevedi_type;
+
+        //qui devo scrivere tutto il codice per trasformare l'ui inn un oggettto document excel
+        //da inviare ocn web service. non eseguo questa operazione nei servizi al causa del fatto che l'uilibero
+        //è definito nell'admin e non ho voglia di trasformarlo....
+        return exporter.createExcelFile(liberi, type);
+    }
+
     public String printComplete(List<UiLibero> liberi) throws IOException {
 
         //qui devo scrivere tutto il codice per trasformare l'ui inn un oggettto document excel
         //da inviare ocn web service. non eseguo questa operazione nei servizi al causa del fatto che l'uilibero
         //è definito nell'admin e non ho voglia di trasformarlo....
-        return exporter.createExcelFile(liberi);
+        return exporter.createExcelFile(liberi , LiberiExcelExporter.db_nazionale_type);
     }
 
 

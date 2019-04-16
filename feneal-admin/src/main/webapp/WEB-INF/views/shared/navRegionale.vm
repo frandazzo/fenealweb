@@ -43,12 +43,12 @@
 
                 <li class="sidebar-label pt20">Deleghe</li>
 
-##                <li class="">
-##                    <a href="#/inoltradeleghe" class="framework-navigation">
-##                        <span class="fa fa-reply"></span>
-##                        <span class="sidebar-title">Inoltra deleghe</span>
-##                    </a>
-##                </li>
+                <li class="">
+                    <a href="#/inoltradeleghe" class="framework-navigation">
+                        <span class="fa fa-reply"></span>
+                        <span class="sidebar-title">Inoltra deleghe</span>
+                    </a>
+                </li>
                 <li class="">
                     <a href="#/accettdeleghe" class="framework-navigation">
                         <span class="fa fa-check-square-o"></span>

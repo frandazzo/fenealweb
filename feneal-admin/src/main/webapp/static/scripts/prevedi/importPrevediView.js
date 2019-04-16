@@ -121,9 +121,11 @@ define([
                     var toolboxContainer = $('.toolbox-seach-report').find('.back-white').children("div");
                     var smallToolboxContainer = $('.toolbox-seach-report-xs').find('.back-white').children("div");
 
-                    toolboxContainer.append(btnStampaCompleta);
-                    smallToolboxContainer.append(btnStampaCompleta.clone());
-                    btnStampaCompleta.tooltip();
+
+
+                    // toolboxContainer.append(btnStampaCompleta);
+                    // smallToolboxContainer.append(btnStampaCompleta.clone());
+                    // btnStampaCompleta.tooltip();
 
 
 

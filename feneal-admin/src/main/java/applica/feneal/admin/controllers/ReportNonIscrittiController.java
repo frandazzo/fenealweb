@@ -207,7 +207,7 @@ public class ReportNonIscrittiController {
 
             FormDescriptor formDescriptor = new FormDescriptor(form);
 
-            formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggdUserExclusiveProvicesNonOptionalSelectFieldRenderer.class))
+            formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggdUserRegionalProvicesNonOptionalSelectFieldRenderer.class))
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt")
                     .putParam(Params.FORM_COLUMN, " ");
@@ -354,6 +354,21 @@ public class ReportNonIscrittiController {
     SimpleResponse retrievePathFileStampa(@RequestBody List<UiLibero> rows) throws Exception {
         try{
             String pathFile = liberiReportFac.printComplete(rows);
+            return new ValueResponse(pathFile);
+        } catch(Exception e) {
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+
+    @RequestMapping(value = "/liberi/retrievefilestampa/{type}", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse retrievePathFileStampa(@RequestBody List<UiLibero> rows, @PathVariable String type) throws Exception {
+        try{
+            String pathFile = liberiReportFac.printComplete(rows, type);
             return new ValueResponse(pathFile);
         } catch(Exception e) {
             return new ErrorResponse(e.getMessage());

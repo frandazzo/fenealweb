@@ -2,6 +2,9 @@ package applica.feneal.admin.utils;
 
 import applica.feneal.admin.viewmodel.reports.UiIscrizione;
 import applica.feneal.admin.viewmodel.reports.UiLibero;
+import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
+import applica.feneal.domain.model.dbnazionale.LavoratorePrevedi;
+import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 import applica.framework.library.options.OptionsManager;
 import it.fenealgestweb.www.*;
 import org.apache.axis2.AxisFault;
@@ -19,13 +22,28 @@ import java.util.List;
 @Component
 public class LiberiExcelExporter {
 
+    public static final String db_nazionale_type = "dbnazionale";
+    public static final String delega_type = "delega";
+    public static final String prevedi_type = "prevedi";
+    public static final String altrosindacato_type = "altro";
+
+    private String type = db_nazionale_type;
+
+
     @Autowired
     private OptionsManager optMan;
+    public   String createExcelFile(List<UiLibero> liberi, String type) throws IOException {
 
-    public   String createExcelFile(List<UiLibero> liberi) throws IOException {
+        if (!type.equals(db_nazionale_type) && !type.equals(delega_type) &&
+                !type.equals(prevedi_type) && !type.equals(altrosindacato_type))
+            type = db_nazionale_type;
+
+
         FenealgestUtils svc = createFenealgestUtilsService();
 
-        ExportDocumentToExcel f = createExcelDocument(liberi);
+        ExportDocumentToExcel f = null;
+
+        f = createExcelDocument(liberi, type);
 
         ExportDocumentToExcelResponse result = svc.exportDocumentToExcel(f);
 
@@ -35,24 +53,49 @@ public class LiberiExcelExporter {
         return extractFile(webResult);
     }
 
-    private ExportDocumentToExcel createExcelDocument(List<UiLibero> liberi) {
+//    public   String createExcelFile(List<UiLibero> liberi) throws IOException {
+//
+//
+//
+//        FenealgestUtils svc = createFenealgestUtilsService();
+//
+//        ExportDocumentToExcel f = createExcelDocument(liberi);
+//
+//        ExportDocumentToExcelResponse result = svc.exportDocumentToExcel(f);
+//
+//        DataHandler webResult = result.getExportDocumentToExcelResult();
+//
+//
+//        return extractFile(webResult);
+//    }
+
+    private ExportDocumentToExcel createExcelDocument(List<UiLibero> liberi, String type) {
         ExportDocumentToExcel doc = new ExportDocumentToExcel();
 
         ExcelDocument document = new ExcelDocument();
-        document.setRows(createRows(liberi));
+        document.setRows(createRows(liberi, type));
 
         doc.setDocument(document);
         return  doc;
     }
 
-    private ArrayOfExcelRow createRows(List<UiLibero> liberi) {
+    private ArrayOfExcelRow createRows(List<UiLibero> liberi, String type) {
         ArrayOfExcelRow rows = new ArrayOfExcelRow();
 
         for (UiLibero lib : liberi) {
 
             ExcelRow row = new ExcelRow();
             row.setProperties(createProperties(lib));
-            row.setDocument(createIscrizioniSubDocument(lib.getIscrizioni()));
+            if (type.equals(LiberiExcelExporter.db_nazionale_type))
+                row.setDocument(createIscrizioniSubDocument(lib.getIscrizioni()));
+            else if (type.equals(LiberiExcelExporter.altrosindacato_type))
+                row.setDocument(createAltriSindacatiSubDocument(lib.getNonIscrizioni()));
+            else if (type.equals(LiberiExcelExporter.delega_type))
+                row.setDocument(createDelegheSubDocument(lib.getDelegheNazionali()));
+            else
+            {
+                row.setDocument(createPrevediSubDocument(lib.getPrevedi()));
+            }
             rows.addExcelRow(row);
 
         }
@@ -75,6 +118,49 @@ public class LiberiExcelExporter {
 
     }
 
+
+    private ExcelDocument createDelegheSubDocument(List<DelegaNazionale> iscrizioni) {
+        if (iscrizioni == null)
+            return null;
+
+        if (iscrizioni.size() == 0)
+            return null;
+
+        ExcelDocument document = new ExcelDocument();
+        document.setRows(createRowsForDeleghe(iscrizioni));
+        return  document;
+
+
+    }
+
+    private ExcelDocument createAltriSindacatiSubDocument(List<LiberoDbNazionale> iscrizioni) {
+        if (iscrizioni == null)
+            return null;
+
+        if (iscrizioni.size() == 0)
+            return null;
+
+        ExcelDocument document = new ExcelDocument();
+        document.setRows(createRowsForAltriSindacati(iscrizioni));
+        return  document;
+
+
+    }
+
+    private ExcelDocument createPrevediSubDocument(List<LavoratorePrevedi> iscrizioni) {
+        if (iscrizioni == null)
+            return null;
+
+        if (iscrizioni.size() == 0)
+            return null;
+
+        ExcelDocument document = new ExcelDocument();
+        document.setRows(createRowsForPrevedi(iscrizioni));
+        return  document;
+
+
+    }
+
     private ArrayOfExcelRow createRowsForIscrizioni(List<UiIscrizione> iscrizioni) {
         ArrayOfExcelRow rows = new ArrayOfExcelRow();
 
@@ -82,6 +168,52 @@ public class LiberiExcelExporter {
 
             ExcelRow row = new ExcelRow();
             row.setProperties(createPropertiesForIscrizione(lib));
+            rows.addExcelRow(row);
+
+        }
+
+
+        return rows;
+    }
+
+    private ArrayOfExcelRow createRowsForDeleghe(List<DelegaNazionale> iscrizioni) {
+        ArrayOfExcelRow rows = new ArrayOfExcelRow();
+
+        for (DelegaNazionale lib : iscrizioni) {
+
+            ExcelRow row = new ExcelRow();
+            row.setProperties(createPropertiesForDeleghe(lib));
+            rows.addExcelRow(row);
+
+        }
+
+
+        return rows;
+    }
+
+    private ArrayOfExcelRow createRowsForAltriSindacati(List<LiberoDbNazionale> iscrizioni) {
+        ArrayOfExcelRow rows = new ArrayOfExcelRow();
+
+        for (LiberoDbNazionale lib : iscrizioni) {
+
+            ExcelRow row = new ExcelRow();
+            row.setProperties(createPropertiesForAltriSindacati(lib));
+            rows.addExcelRow(row);
+
+        }
+
+
+        return rows;
+    }
+
+    private ArrayOfExcelRow createRowsForPrevedi(List<LavoratorePrevedi> iscrizioni) {
+        ArrayOfExcelRow rows = new ArrayOfExcelRow();
+
+        for (LavoratorePrevedi
+                lib : iscrizioni) {
+
+            ExcelRow row = new ExcelRow();
+            row.setProperties(createPropertiesForPrevedi(lib));
             rows.addExcelRow(row);
 
         }
@@ -169,6 +301,67 @@ public class LiberiExcelExporter {
 
         return props;
     }
+
+
+    private ArrayOfExcelProperty createPropertiesForDeleghe(DelegaNazionale lib) {
+        ArrayOfExcelProperty props = new ArrayOfExcelProperty();
+
+
+
+
+        ExcelProperty name1 = new ExcelProperty();
+        name1.setName("Provincia");
+        name1.setValue(lib.getProvince());
+        name1.setPriority(1);
+        props.addExcelProperty(name1);
+
+
+
+
+
+
+
+        return props;
+    }
+
+
+    private ArrayOfExcelProperty createPropertiesForAltriSindacati(LiberoDbNazionale lib) {
+        ArrayOfExcelProperty props = new ArrayOfExcelProperty();
+
+
+        ExcelProperty name = new ExcelProperty();
+        name.setName("Provincia");
+        name.setValue(lib.getNomeProvinciaFeneal());
+        name.setPriority(1);
+        props.addExcelProperty(name);
+
+        return props;
+    }
+
+
+    private ArrayOfExcelProperty createPropertiesForPrevedi(LavoratorePrevedi lib) {
+        ArrayOfExcelProperty props = new ArrayOfExcelProperty();
+
+
+        ExcelProperty name = new ExcelProperty();
+        name.setName("Regione");
+        name.setValue(lib.getCassaEdileRegione());
+        name.setPriority(1);
+        props.addExcelProperty(name);
+
+        ExcelProperty name1 = new ExcelProperty();
+        name1.setName("Cassa Edille");
+        name1.setValue(lib.getCassaEdile());
+        name1.setPriority(2);
+        props.addExcelProperty(name1);
+
+
+
+        return props;
+    }
+
+
+
 
 
     private ArrayOfExcelProperty createProperties(UiLibero lib) {

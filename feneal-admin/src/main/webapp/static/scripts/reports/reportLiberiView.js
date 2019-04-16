@@ -969,6 +969,9 @@ define([
 
                     $('.complete-print').click(function() {
 
+
+                        var infoSelect = $('[name="infoSelect"]').val();
+
                         //ottengo la lista delle righe selezionate
                         var selectedrows = grid.getSelectedRowsData();
 
@@ -981,7 +984,7 @@ define([
 
                         var svc = new  fmodel.AjaxService();
 
-                        svc.set("url", BASE + "liberi/retrievefilestampa");
+                        svc.set("url", BASE + "liberi/retrievefilestampa/" + infoSelect);
                         svc.set("contentType", "application/json");
                         svc.set("data", JSON.stringify(selectedrows));
                         svc.set("method", "POST");
