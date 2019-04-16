@@ -1080,6 +1080,16 @@ define([
                             anni.push(a.getFullYear());
                         })
                     });
+                } else if(infoSelect == 4) {
+                    $.each(response, function (index, elem) {
+
+                        var isprev = elem.prevedi;
+
+                        $.each(isprev, function (index1, elem1) {
+                            province.push(elem1.cassaEdile);
+                            anni.push(elem1.anno);
+                        })
+                    });
                 }
 
 
@@ -1134,6 +1144,8 @@ define([
                     var select1 = searchTYpe == 1 ? 'selected="selected"' : "";
                     var select2 = searchTYpe == 2 ? 'selected="selected"' : "";
                     var select3 = searchTYpe == 3 ? 'selected="selected"' : "";
+                    var select4 = searchTYpe == 4 ? 'selected="selected"' : "";
+
 
 
                     var infoSelect =$(
@@ -1141,6 +1153,7 @@ define([
                         '<option ' + select1 + ' value="1">Iscritto storico</option>'+
                         '<option '  + select2 + ' value="2">Deleghe</option>'+
                         '<option '  + select3 + ' value="3">Iscritto ad altro</option>'+
+                        '<option '  + select4 + ' value="4">Iscritto Prevedi</option>'+
                         '</select>');
 
 
@@ -1263,8 +1276,34 @@ define([
 
                         var foundProvince = true;
                         if (province) {
-                            console.log(elem3.nomeProvinciaFeneal);
+
                             if (elem3.nomeProvinciaFeneal != province) {
+                                foundProvince = false;
+                            }
+                        }
+
+                        if (foundAnno && foundProvince) {
+                            filterdList.push(elem);
+                            return false;
+                        }
+
+                    });
+                } else if(infoSelect == 4) {
+
+                    $.each(elem.prevedi, function (index4, elem4) {
+
+                        var foundAnno = true;
+                        if (year) {
+
+                            if (elem4.anno != parseInt(year)) {
+                                foundAnno = false;
+                            }
+                        }
+
+                        var foundProvince = true;
+                        if (province) {
+
+                            if (elem4.cassaEdile != province) {
                                 foundProvince = false;
                             }
                         }
@@ -1545,6 +1584,9 @@ define([
                             '            <li >\n' +
                             '                <a href="#tab15_3_' + fiscalCode + '" data-toggle="tab" aria-expanded="true"><i class="fa fa-pencil text-purple pr5"></i> Iscrizioni altro sindacato</a>\n' +
                             '            </li>\n' +
+                            '            <li >\n' +
+                            '                <a href="#tab15_4_' + fiscalCode + '" data-toggle="tab" aria-expanded="true"><i class="fa fa-pencil text-purple pr5"></i> Iscrizioni Prevedi</a>\n' +
+                            '            </li>\n' +
                             '        </ul>\n' +
                             '        <div class="tab-content">\n' +
                             '            <div id="tab15_1_' + fiscalCode + '" class="tab-pane active">\n' +
@@ -1555,6 +1597,9 @@ define([
                             '            </div>\n' +
                             '            <div id="tab15_3_' + fiscalCode + '" class="tab-pane">\n' +
                             '                 <div class="noniscon"></div>\n' +
+                            '            </div>\n' +
+                            '            <div id="tab15_4_' + fiscalCode + '" class="tab-pane" >\n' +
+                            '                 <div class="isprev" ></div>\n' +
                             '            </div>\n' +
                             '          \n' +
                             '        </div>\n' +
@@ -1652,6 +1697,21 @@ define([
                                 dataSource: currentData.nonIscrizioni
                             })
                             .appendTo(mainContainer.find('.noniscon'));
+
+                        $("<div>")
+                            .addClass("internal-grid-iscrizioniprevedi")
+                            .dxDataGrid({
+                                columnAutoWidth: true,
+                                columns: [
+                                    { dataField:"cassaEdileRegione", caption:"Cassa Edile Regione", visible : true, dataType:'date'},
+                                    { dataField:"cassaEdile", caption:"Cassa Edile",  visible : true , visibleIndex: 2},
+                                    { dataField:"inquadramento", caption:"Inquadramento", visible : true , visibleIndex: 3},
+                                    { dataField:"tipoAdesione", caption:"Tipo Adesione", visible : true , visibleIndex: 4},
+                                    { dataField:"anno", caption:"Anno", visible : true , visibleIndex: 5}
+                                ],
+                                dataSource: currentData.prevedi
+                            })
+                            .appendTo(mainContainer.find('.isprev'));
 
 
                     }
