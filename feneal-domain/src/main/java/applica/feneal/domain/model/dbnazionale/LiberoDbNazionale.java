@@ -33,7 +33,7 @@ public class LiberoDbNazionale extends IEntity {
     private String telefono;
     private Date ultimaModifica;
     private String ultimaProvinciaAdAggiornare;
-    private List<LavoratorePrevedi> prevedi;
+    private List<LavoratorePrevedi> prevedi = new ArrayList<>();
 
 
     public boolean isDelegheOwner() {

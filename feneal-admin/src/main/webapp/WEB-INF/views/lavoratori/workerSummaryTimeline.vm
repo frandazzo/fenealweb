@@ -693,8 +693,8 @@
                                                                         ##                                        <td>Lombardia</td>
                                                                             <td>Cassa Edile $item.regione</td>
                                                                             <td>$item.ente</td>
-                                                                            <td>#if($item.inquadramento)$item.inquadramento#end</td>
-                                                                            <td>#if($item.tipoAdesione)$item.tipoAdesione#end</td>
+                                                                            <td>#if($item.livello)$item.livello#end</td>
+                                                                            <td>#if($item.contratto)$item.contratto#end</td>
                                                                             <td>$item.anno</td>
                                                                         </tr>
 
@@ -778,15 +778,18 @@
                             <table class="table">
                                 <thead>
                                 <tr
-                                        #foreach($item in $summary.deleghe)
-                                            #if($item.state == 'Accreditata')
-                                                    class="success"
-                                            #elseif($item.state == 'Revocata')
-                                                    class="danger"
-                                            #else
-                                                    class="warning"
-                                            #end
+                                    #if($summary.deleghe.size() == 0)
+                                            class="warning"
+                                    #end
+                                    #foreach($item in $summary.deleghe)
+                                        #if($item.state == 'Accreditata')
+                                                class="success"
+                                        #elseif($item.state == 'Revocata')
+                                                class="danger"
+                                        #else
+                                                class="warning"
                                         #end
+                                    #end
                                     >
                                     <th>Regione</th>
                                     <th>Provincia</th>
@@ -802,8 +805,8 @@
                                 </thead>
                                 <tbody>
                                     #if($summary.deleghe.size() == 0)
-                                    <table>
-                                        <span class="col-md-12 col-xs-12 padding-10">Nessuna delega</span>
+                                    <table class="warning">
+                                        <span class="col-md-12 col-xs-12 padding-10 ">Nessuna delega</span>
                                     </table>
                                     #else
                                         #foreach($delega in $summary.deleghe)
