@@ -29,6 +29,7 @@ import applica.feneal.services.DelegheService;
 import applica.feneal.services.LavoratoreService;
 import applica.framework.*;
 import applica.framework.security.Security;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -699,9 +700,77 @@ public class LavoratoriServiceImpl implements LavoratoreService {
         return libs;
     }
 
+    @Override
+    public List<String> getNumeriTelefono(String fiscalCode) {
 
 
 
+
+        final String query = createQueryForNumeriTelefono(fiscalCode);
+
+
+        final Box box = new Box();
+
+        lavRep.executeCommand(new Command() {
+            @Override
+            public void execute() {
+                Session s = lavRep.getSession();
+                Transaction tx = null;
+
+                try{
+
+                    tx = s.beginTransaction();
+
+                    List<Object[]> numTelefoni = createHibernateQueryForTelefoni(s,query).list();
+
+                    tx.commit();
+
+
+
+                    box.setValue(numTelefoni);
+
+
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                    tx.rollback();
+                }
+                finally{
+
+                    s.close();
+
+                }
+            }
+
+
+        });
+
+        return (List<String>)box.getValue();
+
+
+    }
+
+
+
+
+
+    private String createQueryForNumeriTelefono(String fiscalCode) {
+
+        return String.format("select l.Telefono  from lavoratori l where CodiceFiscale = '%s' and Telefono IS NOT NULL and Telefono <> '' and Telefono <> '-'\n" +
+                "UNION\n" +
+                "select l.Telefono from lavoratori_liberi l where CodiceFiscale = '%s' and Telefono IS NOT NULL and Telefono <> '' and Telefono <> '-'\n" +
+                "UNION\n" +
+                "select l.Telefono from lavoratori_liberi_copy l where CodiceFiscale = '%s' and Telefono IS NOT NULL and Telefono <> '' and Telefono <> '-'\n" +
+                "UNION\n" +
+                "select l.cellphone as Telefono from fenealweb_lavoratore l where fiscalcode = '%s' and cellphone IS NOT NULL and cellphone <> '' and cellphone <> '-'\n" +
+                "UNION\n" +
+                "select l.phone as Telefono from fenealweb_lavoratore l where fiscalcode = '%s'  and phone IS NOT NULL and phone <> '' and phone <> '-'",fiscalCode,fiscalCode,fiscalCode,fiscalCode, fiscalCode );
+
+    }
+    private SQLQuery createHibernateQueryForTelefoni(Session session, String query){
+        return session.createSQLQuery(query)
+                .addScalar("Telefono");
+    }
 
     private List<Lavoratore> getMockedWorkers() {
         Lavoratore lav1 = new Lavoratore();

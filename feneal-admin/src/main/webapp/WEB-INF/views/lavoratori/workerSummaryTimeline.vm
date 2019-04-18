@@ -103,7 +103,7 @@
                                 <span>C.F.:</span>
                             </div>
                             <div class="col-md-6 col-xs-6 zero-padding">
-                                <span class="pull-right">#if($summary.data.fiscalcode)$summary.data.fiscalcode#end</span>
+                                <span class="pull-right"  id="span-fiscale">#if($summary.data.fiscalcode)$summary.data.fiscalcode#end</span>
                             </div>
                         </div>
 

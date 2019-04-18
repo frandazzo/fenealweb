@@ -496,29 +496,33 @@ define([
             return [
 
                 {
-                    text: "Deleghe",
+                    text: "Verifica altri numeri di telefono",
                     command: function() {
-                        ui.Navigation.instance().navigate("deleghehome", "index", {
-                            workerId: self.workerId
-                        })
+
+                        var svc = new  fmodel.AjaxService();
+                        var fiscale = $('#span-fiscale').text();
+                        svc.set("data", {});
+                        svc.set("url", BASE + "wtelefoni/" + fiscale);
+                        svc.on("load", function(response){
+                            var container = $('<div class="telefoni">'+response.toString()+'</div>');
+
+                            var dialog = container.modalDialog({
+                                autoOpen: true,
+                                title: "Verifica altri contatti",
+                                destroyOnClose: true,
+                                height: 200,
+                                width: 340
+                            });
+                        });
+                        svc.on("error", function(error){
+                            $.notify.error(error);
+                        });
+
+                        svc.load();
 
                     },
                     icon: "pencil"
                 },
-                {
-                    text: "Archivio documentale",
-                    command: function() {
-
-                        ui.Navigation.instance().navigate("documenticrud", "list", {
-                            workerId: self.workerId,
-                            e : "documento"
-                        })
-                    },
-                    icon: "pencil"
-                },
-
-
-
 
                 {
                     text: "Crea anagrafica",
@@ -538,6 +542,27 @@ define([
                             fs: this.fullScreenForm,
                             id: self.workerId
                         });
+                    },
+                    icon: "pencil"
+                },
+                {
+                    text: "Deleghe",
+                    command: function() {
+                        ui.Navigation.instance().navigate("deleghehome", "index", {
+                            workerId: self.workerId
+                        })
+
+                    },
+                    icon: "pencil"
+                },
+                {
+                    text: "Archivio documentale",
+                    command: function() {
+
+                        ui.Navigation.instance().navigate("documenticrud", "list", {
+                            workerId: self.workerId,
+                            e : "documento"
+                        })
                     },
                     icon: "pencil"
                 },
@@ -1096,7 +1121,7 @@ define([
 
 
             //una volta compresa la natura della ricerca devo verificare se regionale o effettivamente locale
-            if (self.localSearch){
+            if (self.localSearch == 'localworkers'){
                 this.regional = $('[data-property="company"]').length > 0;
                 if (this.regional)
                     searchWorkerUrl = searchWorkerUrl + "new";

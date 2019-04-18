@@ -255,7 +255,24 @@ public class LavoratoriController {
 
     }
 
+    @RequestMapping(value="/wtelefoni/{fiscal}", method= RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody SimpleResponse findRemoteLavoratori(@PathVariable String fiscal ) {
 
+
+
+        try {
+
+
+
+            return new ValueResponse(svc.getNumeriTelefono(fiscal));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
 
 
 

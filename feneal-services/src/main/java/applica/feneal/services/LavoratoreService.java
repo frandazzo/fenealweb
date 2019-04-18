@@ -33,7 +33,7 @@ public interface LavoratoreService {
 
 
 
-
+    List<String> getNumeriTelefono(String fiscalCode);
 
 
 
