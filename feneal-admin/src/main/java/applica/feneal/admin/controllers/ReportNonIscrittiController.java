@@ -85,7 +85,8 @@ public class ReportNonIscrittiController {
     SimpleResponse reportLiberi(@RequestBody LiberoReportSearchParams params){
         List<UiLibero> f;
         try{
-            f = liberiReportFac.reportNonIscritti(params);
+            //f = liberiReportFac.reportNonIscritti(params);
+            f = liberiReportFac.reportNonIscrittiWithNewAlgoritm(params);
             manageActivityReportNonIscritti(params, "Report non iscritti", f);
             return new ValueResponse(f);
         }catch(Exception ex){

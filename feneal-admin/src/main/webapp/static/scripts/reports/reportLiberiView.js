@@ -562,7 +562,37 @@ define([
             var grid = $('#reportContainer').dxDataGrid({
                 dataSource:responseData,
                 columns:[
+                    {
+                        visibleIndex: 0,
+                        type: "buttons",
+                        width: 110,
+                        buttons: [{
+                            hint: "Verifica numeri di telefono",
+                            icon: "tel",
 
+                            onClick: function(e) {
+
+
+
+                                var svc = new  fmodel.AjaxService();
+                                var fiscale = e.row.data.lavoratoreCodiceFiscale;
+                                svc.set("data", {});
+                                svc.set("url", BASE + "wtelefoni/" + fiscale);
+                                svc.on("load", function(response){
+                                    e.row.data.lavoratoreCellulare = response.toString()
+
+                                    e.component.refresh(true);
+                                    e.event.preventDefault();
+                                });
+                                svc.on("error", function(error){
+                                    $.notify.error(error);
+                                });
+
+                                svc.load();
+
+                            }
+                        }]
+                    },
                     { dataField:"liberoData", visible : false, dataType:'date', visibleIndex: 5},
                     { dataField:"liberoProvincia",  visible : false, visibleIndex: 1},
                     { dataField:"liberoEnteBilaterale", visible : false, visibleIndex: 2},
@@ -594,7 +624,7 @@ define([
 
 
                     },
-                    { dataField:"lavoratoreCellulare", visible : false},
+                    { dataField:"lavoratoreCellulare", visible : true},
                     { dataField:"lavoratoreDelegheOwner", caption:"Possiede delega", visible : viewFirm,
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
@@ -945,7 +975,14 @@ define([
                     var reportResultsConfigurer = new resultsConfigurer.ReportUiConfigurer(grid, "liberi", true);
                     reportResultsConfigurer.init();
 
-
+                    //rimuovo il pulsante Richiesta Info se lo ho gia creato
+                    $('.request-info').remove();
+                    //aggiungo un pulsante per l'invio di reìichiesta info ai territori
+                    var btn = $('<div class="col-md-12 col-xs-12 margin-bottom-10 p0 request-info" title="" data-placement="top" data-toggle="tooltip" data-original-title="Richiedi info ai territori">'+
+                        '<button class="btn btn-primary full-width request-info-territori" type="button">'+
+                        '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>'+
+                        '</button>'+
+                        '</div>');
 
                     //rimuovo il pulsante Stampa Completa se lo ho gia creato
                     $('.complete-print').remove();
@@ -957,15 +994,124 @@ define([
                         '</div>');
 
 
+                    // var toolboxContainer = $('.toolbox-seach-report').find('.back-white').children("div");
+                    // var smallToolboxContainer = $('.toolbox-seach-report-xs').find('.back-white').children("div");
+                    //
+                    // toolboxContainer.append(btnStampaCompleta);
+                    // smallToolboxContainer.append(btnStampaCompleta.clone());
+                    // btnStampaCompleta.tooltip();
+
+
+
+
                     var toolboxContainer = $('.toolbox-seach-report').find('.back-white').children("div");
                     var smallToolboxContainer = $('.toolbox-seach-report-xs').find('.back-white').children("div");
-
+                    toolboxContainer.append(btn);
+                    smallToolboxContainer.append(btn.clone());
+                    btn.tooltip();
                     toolboxContainer.append(btnStampaCompleta);
                     smallToolboxContainer.append(btnStampaCompleta.clone());
                     btnStampaCompleta.tooltip();
 
 
+                    $('.request-info').click(function(){
+                        //ottengo la lista delle righe selezionate
+                        var selectedrows = grid.getSelectedRowsData();
+                        var provinceSelected = $("select[name=provinceSelect]").val();
 
+                        if (selectedrows.length == 0) {
+                            $.notify.error("Selezionare almeno un elemento");
+                            return false;
+                        }
+
+                        if (!provinceSelected) {
+                            $.notify.error("Selezionare una provincia");
+                            return false;
+                        }
+
+                        var container = $('<div class="request-info-territori-container"></div>');
+
+                        var data = {};
+                        var selectedrows = grid.getSelectedRowsData();
+                        data.selectedLiberi = selectedrows;
+                        data.province = provinceSelected;
+
+                        var path = BASE + "liberi/richiediinfoterritori";
+                        var formService = new fmodel.FormService();
+                        formService.set("url", path);
+                        formService.set("method", "POST");
+                        formService.set("data", JSON.stringify(data));
+                        formService.set("contentType", "application/json");
+
+                        var form = new fviews.FormView(formService);
+                        form.container = container;
+
+                        form.on("render", function () {
+
+                            // var winHeight = $(window).height();
+                            //
+                            // if (winHeight > 600)
+                            //     winHeight = winHeight - 160;
+                            // else
+                            //     winHeight = '400';
+                            // container.closest('.panel-body').css('height', winHeight + "px");
+                            //
+                            //
+                            // //codice per rimuovoere il pulsante salva - annulla
+                            container.find(".panel-footer, .panel-heading").hide();
+                        });
+
+                        form.show();
+
+                        var dialog = container.modalDialog({
+                            autoOpen: true,
+                            title: "Richiesta info ai territori",
+                            destroyOnClose: true,
+                            height: 500,
+                            width: 800,
+                            buttons: {
+                                Salva: {
+                                    primary: true,
+                                    command: function() {
+                                        form.form.resetValidation();
+
+                                        // Validazione e-mail
+                                        var mails = $("input[name=destinatario]").val();
+                                        var errors = self.validateMails(mails);
+
+                                        if (errors.errors.length){
+                                            form.form.handleValidationErrors(errors);
+                                            return;
+                                        }
+
+                                        // Se la validazione è OK invio i dati per la mail al server
+                                        var svc = new  fmodel.AjaxService();
+                                        var data = self.normalizeSubmitResult(form.form);
+                                        data.selectedRows = selectedrows;
+                                        svc.set("url", BASE + "liberi/sendrichiediinfo");
+                                        svc.set("contentType", "application/json");
+                                        svc.set("data", JSON.stringify(data));
+                                        svc.set("method", "POST");
+
+                                        svc.on("load", function(response){
+                                            $.loader.hide({parent:'body'});
+                                            dialog.modalDialog("close");
+                                            $.notify.success("La richiesta info è stata inoltrata con successo")
+                                        });
+                                        svc.on("error", function(error){
+                                            $.loader.hide({parent:'body'});
+                                            $.notify.error(error);
+                                        });
+
+                                        svc.load();
+                                        $.loader.show({parent:'body'});
+                                    }
+                                }
+                            }
+                        });
+
+
+                    });
 
                     $('.complete-print').click(function() {
 
@@ -1370,7 +1516,37 @@ define([
             var grid = $('#reportContainer').dxDataGrid({
                 dataSource:responseData,
                 columns:[
+                    {
+                        visibleIndex: 0,
+                        type: "buttons",
+                        width: 110,
+                        buttons: [{
+                            hint: "Verifica numeri di telefono",
+                            icon: "tel",
 
+                            onClick: function(e) {
+
+
+
+                                var svc = new  fmodel.AjaxService();
+                                var fiscale = e.row.data.lavoratoreCodiceFiscale;
+                                svc.set("data", {});
+                                svc.set("url", BASE + "wtelefoni/" + fiscale);
+                                svc.on("load", function(response){
+                                    e.row.data.lavoratoreCellulare = response.toString()
+
+                                    e.component.refresh(true);
+                                    e.event.preventDefault();
+                                });
+                                svc.on("error", function(error){
+                                    $.notify.error(error);
+                                });
+
+                                svc.load();
+
+                            }
+                        }]
+                    },
                     { dataField:"liberoData", visible : false, dataType:'date', visibleIndex: 5},
                     { dataField:"liberoProvincia",  visible : false, visibleIndex: 1},
                     { dataField:"liberoEnteBilaterale", visible : false, visibleIndex: 2},
@@ -1402,21 +1578,21 @@ define([
 
 
                     },
-                    { dataField:"lavoratoreCellulare", visible : false},
-                    { dataField:"lavoratoreDelegheOwner", caption:"Possiede delega", visible : viewFirm,
-                        cellTemplate: function (container, options) {
-                            //container.addClass("img-container");
-                            var lavoratoreDelegheOwner = options.data.lavoratoreDelegheOwner;
-                            // <span class="color-black">
-                            //     <i class="material-icons">sentiment_satisfied</i>
-                            //     </span>
-                            if (lavoratoreDelegheOwner){
-                                var span =$("<span style='color:green' />");
-                                span.append($('<i class="material-icons" style=" text-align: center;display: block;">done</i>'));
-                                span.appendTo(container);
-                            }
-
-                        }},
+                    { dataField:"lavoratoreCellulare", visible : true},
+                    // { dataField:"lavoratoreDelegheOwner", caption:"Possiede delega", visible : viewFirm,
+                    //     cellTemplate: function (container, options) {
+                    //         //container.addClass("img-container");
+                    //         var lavoratoreDelegheOwner = options.data.lavoratoreDelegheOwner;
+                    //         // <span class="color-black">
+                    //         //     <i class="material-icons">sentiment_satisfied</i>
+                    //         //     </span>
+                    //         if (lavoratoreDelegheOwner){
+                    //             var span =$("<span style='color:green' />");
+                    //             span.append($('<i class="material-icons" style=" text-align: center;display: block;">done</i>'));
+                    //             span.appendTo(container);
+                    //         }
+                    //
+                    //     }},
 
                     { dataField:"lavoratoreCodiceFiscale", visible : false},
                     { dataField:"lavoratoreDataNascita", dataType:'date', visible : false},

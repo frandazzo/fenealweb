@@ -459,6 +459,12 @@ public class LiberiFacade {
         return p;
     }
 
+    public List<UiLibero> reportNonIscrittiWithNewAlgoritm(LiberoReportSearchParams params) throws ParseException {
+        List<LiberoDbNazionale> lib = libServicenew.retrieveLiberi(params, true);
+
+        return convertLiberiToUiLiberi(lib);
+    }
+
     public List<UiLibero> reportNonIscrittiNew(LiberoReportSearchParams params) throws ParseException {
         List<LiberoDbNazionale> lib = libServicenew.retrieveLiberi(params, false);
 
