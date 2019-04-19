@@ -28,6 +28,7 @@ import applica.feneal.domain.model.geo.Country;
 import applica.feneal.domain.model.geo.Province;
 import applica.feneal.domain.model.geo.Region;
 import applica.feneal.domain.utils.Box;
+import applica.feneal.services.LavoratoreService;
 import applica.feneal.services.ReportNonIscrittiSuper;
 import applica.framework.LoadRequest;
 import applica.framework.security.Security;
@@ -57,6 +58,10 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
     @Autowired
     private SectorRepository secRep;
+
+    @Autowired
+    private LavoratoreService lavSvc;
+
 
 
 
@@ -166,10 +171,23 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
         });
 
-        return (List<LiberoDbNazionale>)box.getValue();
+        List<LiberoDbNazionale> result =  (List<LiberoDbNazionale>)box.getValue();
 
+        if (params.getCalculateCells() != null && ("1").equals(params.getCalculateCells()))
+        {
+            for (LiberoDbNazionale liberoDbNazionale : result) {
+                List<String> f = lavSvc.getNumeriTelefono(liberoDbNazionale.getCodiceFiscale());
+                StringBuilder sb = new StringBuilder();
+                for (String s : f)
+                {
+                    sb.append(s);
+                    sb.append("\t");
+                }
+                liberoDbNazionale.setTelefono(sb.toString());
+            }
+        }
 
-
+        return result;
     }
 
     @Override

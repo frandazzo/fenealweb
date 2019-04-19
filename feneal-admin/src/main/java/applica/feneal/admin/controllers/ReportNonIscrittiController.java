@@ -33,6 +33,7 @@ import applica.framework.widgets.FormCreationException;
 import applica.framework.widgets.FormDescriptor;
 import applica.framework.widgets.fields.Params;
 import applica.framework.widgets.fields.Values;
+import applica.framework.widgets.fields.renderers.DefaultFieldRenderer;
 import applica.framework.widgets.fields.renderers.HiddenFieldRenderer;
 import applica.framework.widgets.fields.renderers.HtmlFieldRenderer;
 import applica.framework.widgets.fields.renderers.MailFieldRenderer;
@@ -217,6 +218,17 @@ public class ReportNonIscrittiController {
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt4")
                     .putParam(Params.FORM_COLUMN, " ");
+
+            //abilito solo per l'alta lombardia....
+            User u = ((User) security.getLoggedUser());
+            if (u.getCompany().containProvince("Varese")){
+
+                formDescriptor.addField("calculateCells", Boolean.class, "Carica numeri telefono (Attenzione l'impostazione di questo flag può richiedere un tempo di eleaborazione di diversi minuti!))", null, applicationContext.getBean(DefaultFieldRenderer.class))
+                        .putParam(Params.COLS, Values.COLS_12)
+                        .putParam(Params.ROW, "dt4")
+                        .putParam(Params.FORM_COLUMN, " ");
+            }
+
 
 
             FormResponse response = new FormResponse();

@@ -199,7 +199,12 @@
                         <span class="sidebar-title">Tipi documento</span>
                     </a>
                 </li>
-
+                <li>
+                    <a href="#/crud?e=collaborator" class="framework-navigation">
+                        <span class="fa fa-users"></span>
+                        <span class="sidebar-title">Collaboratori</span>
+                    </a>
+                </li>
 
             #end
         </ul>

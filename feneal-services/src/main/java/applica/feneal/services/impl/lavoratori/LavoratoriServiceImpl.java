@@ -448,11 +448,11 @@ public class LavoratoriServiceImpl implements LavoratoreService {
 
 
         }else{
-            if (StringUtils.isEmpty(params.getSurname())){
-                return new ArrayList<>();
-            }
-            if (params.getSurname().length() <4)
-                return new ArrayList<>();
+//            if (StringUtils.isEmpty(params.getSurname())){
+//                return new ArrayList<>();
+//            }
+//            if (params.getSurname().length() <4)
+//                return new ArrayList<>();
 
             if (!StringUtils.isEmpty(params.getSurname())){
                 Filter f1 = new Filter();

@@ -16,7 +16,15 @@ public class LiberoReportSearchParams {
     private String livingProvince;
     private String livingCity;
     private String firm;
+    private String calculateCells;
 
+    public String getCalculateCells() {
+        return calculateCells;
+    }
+
+    public void setCalculateCells(String calculateCells) {
+        this.calculateCells = calculateCells;
+    }
 
     public String getFirm() {
         return firm;

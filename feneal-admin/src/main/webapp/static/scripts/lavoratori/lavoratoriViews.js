@@ -1121,11 +1121,14 @@ define([
 
 
             //una volta compresa la natura della ricerca devo verificare se regionale o effettivamente locale
-            if (self.localSearch == 'localworkers'){
+            if (self.localSearch ){
                 this.regional = $('[data-property="company"]').length > 0;
                 if (this.regional)
                     searchWorkerUrl = searchWorkerUrl + "new";
+            }else{
+                this.regional = false;
             }
+
 
 
             var svc = new fmodel.AjaxService();
