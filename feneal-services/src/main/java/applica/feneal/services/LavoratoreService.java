@@ -52,4 +52,6 @@ public interface LavoratoreService {
     IscrittoAnnoInCorso checkIfIscrittoAnnoInCorso(long workerId) throws Exception;
 
     Lavoratore getLavoratoreMultiterritorioById(long loggedUserId, long id);
+
+    void updateCellsForAll();
 }

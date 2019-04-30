@@ -14,6 +14,7 @@ import applica.feneal.admin.viewmodel.reports.UiLibero;
 import applica.feneal.admin.viewmodel.reports.UiRequestInfoAiTerritori;
 import applica.feneal.domain.data.core.ParitheticRepository;
 import applica.feneal.domain.model.User;
+import applica.feneal.domain.model.core.ImportData;
 import applica.feneal.domain.model.core.Paritethic;
 import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.domain.model.dbnazionale.search.LiberoReportSearchParams;
@@ -47,6 +48,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +82,23 @@ public class ReportNonIscrittiController {
 
     @Autowired
     private LiberiFacade liberiReportFac;
+
+
+    @RequestMapping(value = "/libericftemplate", method = RequestMethod.GET)
+    public void getAnagraficheTemplate(HttpServletResponse response) {
+        try {
+            // get your file as InputStream
+            InputStream is = getClass().getResourceAsStream("/templates/libericf.xlsx");
+            // copy it to response's OutputStream+
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException ex) {
+
+            throw new RuntimeException("IOError writing file to output stream");
+        }
+
+    }
 
     @RequestMapping(value="/liberi/report", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
@@ -197,6 +217,55 @@ public class ReportNonIscrittiController {
             return new ErrorResponse(e.getMessage());
         }
     }
+
+
+
+    @RequestMapping(value = "/libericf",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse searchviewcf(HttpServletRequest request) {
+        try{
+            Form form = new Form();
+            form.setRenderer(applicationContext.getBean(ReportsSearchFormRenderer.class));
+            form.setIdentifier("liberireportcf");
+
+            FormDescriptor formDescriptor = new FormDescriptor(form);
+
+
+            formDescriptor.addField("file1", String.class, "File codici fiscali", null,applicationContext.getBean(DocumetPrevediFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt1")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+
+            FormResponse response = new FormResponse();
+
+            response.setContent(form.writeToString());
+            response.setTitle("Report liberi per codice fiscale");
+
+            return response;
+        } catch (FormCreationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        } catch (CrudConfigurationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/importlibericf",method = RequestMethod.POST)
+    public @ResponseBody
+    SimpleResponse executeimportanagrafichePrevedi(@RequestBody ImportData file) {
+
+        try{
+
+
+            return new ValueResponse(liberiReportFac.incrociaCodiciFiscali(file));
+        }catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
+
 
     @RequestMapping(value = "/liberinew",method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")

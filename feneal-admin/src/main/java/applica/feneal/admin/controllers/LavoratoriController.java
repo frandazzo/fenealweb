@@ -55,6 +55,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -106,6 +107,17 @@ public class LavoratoriController {
     @Autowired
 
     private ApplicationOptionRepository appRep;
+
+
+    //ogni minuto
+    @Scheduled(fixedDelay=60000)
+    public void updatecellphones() {
+
+
+        svc.updateCellsForAll();
+
+
+    }
 
 
 

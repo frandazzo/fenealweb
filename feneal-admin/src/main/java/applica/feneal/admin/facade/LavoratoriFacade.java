@@ -988,7 +988,7 @@ public class LavoratoriFacade {
         Lavoratore l = svc.getLavoratoreMultiterritorioById(((User) security.getLoggedUser()).getLid(), id);
 
         //recupero inoltre i dati dellatimeline
-        LiberoDbNazionale f = noniscrittiAnalisysService.analyzeFiscaleCodeData(l.getFiscalcode());
+        LiberoDbNazionale f = noniscrittiAnalisysService.analyzeFiscaleCodeData(l.getFiscalcode(), false);
 
 
         UiCompleteLavoratoreSummary summary = prepareDto(l.getLid(), s, l);

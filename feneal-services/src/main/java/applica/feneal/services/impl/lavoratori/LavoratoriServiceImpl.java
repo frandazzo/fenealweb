@@ -134,6 +134,37 @@ public class LavoratoriServiceImpl implements LavoratoreService {
         return requiredLav;
     }
 
+    @Override
+    public void updateCellsForAll() {
+
+            lavRep.executeCommand(new Command() {
+                @Override
+                public void execute() {
+                    Session s = lavRep.getSession();
+
+
+                    try{
+
+                        SQLQuery query = null;
+                        query = s.createSQLQuery("{CALL aggiorna_lavoratori_recapiti() }");
+                        Object status =query.uniqueResult();
+                        System.out.println(status);
+
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+
+                    }
+                    finally{
+
+                        s.close();
+
+                    }
+                }
+            });
+
+    }
+
     private void verifyCellNumbers(Lavoratore requiredLav, Lavoratore sameTerritorioLav) {
         //devo verificare che esisteno i numeri di telefono e se non esistono li prendo dall'altra anagrafica
         if (!StringUtils.isEmpty(sameTerritorioLav.getCellphone()))
@@ -772,39 +803,7 @@ public class LavoratoriServiceImpl implements LavoratoreService {
                 .addScalar("Telefono");
     }
 
-    private List<Lavoratore> getMockedWorkers() {
-        Lavoratore lav1 = new Lavoratore();
 
-        lav1.setId(1);
-        lav1.setName("Angelo");
-        lav1.setSurname("Dalco");
-        lav1.setBirthDate(new Date());
-        lav1.setNationality("1");
-        lav1.setLivingCity("5");
-        lav1.setAddress("Viale Europa");
-        lav1.setCap("76200");
-        lav1.setFiscalcode("DDDDDDDDDDDDDDDD");
-
-        Lavoratore lav2 = new Lavoratore();
-
-        lav2.setId(2);
-        lav2.setName("Ciccio");
-        lav2.setSurname("Randa");
-        lav2.setBirthDate(new Date());
-        lav2.setNationality("1");
-        lav2.setLivingCity("6");
-        lav2.setAddress("Via Giolitti");
-        lav2.setCap("56100");
-        lav2.setFiscalcode("EEEEEEEEEEEEEEEE");
-
-        return new ArrayList<Lavoratore>() {
-            {
-                add(lav1);
-                add(lav2);
-            }
-        };
-
-    }
 
     public Lavoratore findLavoratoreForProvince(String provinceName, String fiscalcode) {
 

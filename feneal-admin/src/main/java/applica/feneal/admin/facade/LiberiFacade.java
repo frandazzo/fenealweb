@@ -8,6 +8,7 @@ import applica.feneal.admin.viewmodel.reports.UiIscrizione;
 import applica.feneal.admin.viewmodel.reports.UiLibero;
 import applica.feneal.domain.data.core.ParitheticRepository;
 import applica.feneal.domain.model.User;
+import applica.feneal.domain.model.core.ImportData;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.lavoratori.ListaLavoro;
 import applica.feneal.domain.model.core.servizi.RichiestaInfo;
@@ -467,6 +468,12 @@ public class LiberiFacade {
 
     public List<UiLibero> reportNonIscrittiNew(LiberoReportSearchParams params) throws ParseException {
         List<LiberoDbNazionale> lib = libServicenew.retrieveLiberi(params, false);
+
+        return convertLiberiToUiLiberi(lib);
+    }
+
+    public List<UiLibero> incrociaCodiciFiscali(ImportData file) throws Exception {
+        List<LiberoDbNazionale> lib = libServicenew.incrociaCodiciFiscali(file, true);
 
         return convertLiberiToUiLiberi(lib);
     }

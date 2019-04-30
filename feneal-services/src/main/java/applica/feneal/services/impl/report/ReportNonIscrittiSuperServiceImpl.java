@@ -10,18 +10,19 @@ import applica.feneal.domain.data.core.lavoratori.LavoratoriRepository;
 import applica.feneal.domain.data.dbnazionale.IscrizioniRepository;
 import applica.feneal.domain.data.dbnazionale.LiberoDbNazionaleRepository;
 import applica.feneal.domain.data.dbnazionale.LiberoDbNazionaleSecondaryRepository;
+import applica.feneal.domain.data.dbnazionale.UtenteDBNazioneRepository;
 import applica.feneal.domain.data.geo.CitiesRepository;
 import applica.feneal.domain.data.geo.CountriesRepository;
 import applica.feneal.domain.data.geo.ProvinceRepository;
 import applica.feneal.domain.data.geo.RegonsRepository;
 import applica.feneal.domain.model.User;
+import applica.feneal.domain.model.core.ImportData;
 import applica.feneal.domain.model.core.Paritethic;
 import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.deleghe.Delega;
-import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
-import applica.feneal.domain.model.dbnazionale.Iscrizione;
-import applica.feneal.domain.model.dbnazionale.LavoratorePrevedi;
-import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
+import applica.feneal.domain.model.core.importData.ImportAnagraficaPrevediValidator;
+import applica.feneal.domain.model.core.importData.ImportCfValidator;
+import applica.feneal.domain.model.dbnazionale.*;
 import applica.feneal.domain.model.dbnazionale.search.LiberoReportSearchParams;
 import applica.feneal.domain.model.geo.City;
 import applica.feneal.domain.model.geo.Country;
@@ -31,7 +32,12 @@ import applica.feneal.domain.utils.Box;
 import applica.feneal.services.LavoratoreService;
 import applica.feneal.services.ReportNonIscrittiSuper;
 import applica.framework.LoadRequest;
+import applica.framework.fileserver.FileServer;
+import applica.framework.management.excel.ExcelInfo;
+import applica.framework.management.excel.ExcelReader;
 import applica.framework.security.Security;
+import com.mysql.jdbc.RowData;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -39,6 +45,7 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.function.Function;
@@ -63,7 +70,11 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
     private LavoratoreService lavSvc;
 
 
+    @Autowired
+    private FileServer server;
 
+    @Autowired
+    private UtenteDBNazioneRepository dbnazRep;
 
     @Autowired
     private ParitheticRepository enteRep;
@@ -191,7 +202,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
     }
 
     @Override
-    public LiberoDbNazionale analyzeFiscaleCodeData(String fiscalCode) {
+    public LiberoDbNazionale analyzeFiscaleCodeData(String fiscalCode,  boolean isOldStyleReport) {
 
         User u = ((User) sec.getLoggedUser());
         int regionId = u.getCompany().getRegionId();
@@ -215,11 +226,29 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
                     tx = s.beginTransaction();
 
-                    List<Object[]> deleghe = createHibernateQueryForDeleghe(s,queryDeleghe).list();
-                    List<Object[]> iscrizioniAltroSindacatoAttuali= createHibernateQueryForNonIscrizioniAttuali(s,queryNonIscrizioniAttuali).list();
-                    List<Object[]> iscrizioniAltroSindacato= createHibernateQueryForNonIscrizioni(s,queryNonIscrizioni).list();
+
+
+                    List<Object[]> deleghe = new ArrayList<>();
+                    List<Object[]> iscrizioniAltroSindacatoAttuali= new ArrayList<>();
+                    List<Object[]> iscrizioniAltroSindacato= new ArrayList<>();
+                    List<Object[]> iscrizioniPrevedi= new ArrayList<>();
+
+
+                    if (!isOldStyleReport){
+                        deleghe =  createHibernateQueryForDeleghe(s,queryDeleghe).list();
+                        iscrizioniAltroSindacatoAttuali= createHibernateQueryForNonIscrizioniAttuali(s,queryNonIscrizioniAttuali).list();
+                        iscrizioniAltroSindacato= createHibernateQueryForNonIscrizioni(s,queryNonIscrizioni).list();
+                        iscrizioniPrevedi = createHibernateQueryForPrevedi(s, queryPrevedi).list();
+                    }
+
+
+
+
+                    //List<Object[]> deleghe = createHibernateQueryForDeleghe(s,queryDeleghe).list();
+                    //List<Object[]> iscrizioniAltroSindacatoAttuali= createHibernateQueryForNonIscrizioniAttuali(s,queryNonIscrizioniAttuali).list();
+                    //List<Object[]> iscrizioniAltroSindacato= createHibernateQueryForNonIscrizioni(s,queryNonIscrizioni).list();
                     List<Object[]> isscrizioni = createHibernateQueryForIscrizioniDbNazionale(s,queryIscrizioniDbNazionale).list();
-                    List<Object[]>  iscrizioniPrevedi = createHibernateQueryForPrevedi(s, queryPrevedi).list();
+                    //List<Object[]>  iscrizioniPrevedi = createHibernateQueryForPrevedi(s, queryPrevedi).list();
 
                     tx.commit();
 
@@ -264,6 +293,120 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         return (LiberoDbNazionale)box.getValue();
 
 
+    }
+
+    @Override
+    public List<LiberoDbNazionale> incrociaCodiciFiscali(ImportData file, boolean isOldStyleReport) throws Exception {
+
+        if (file == null || StringUtils.isEmpty(file.getFile1()))
+            throw new Exception("File non presente");
+
+        File temp1 = File.createTempFile("incrocio_cf","");
+        temp1.delete();
+        temp1.mkdir();
+        ExcelInfo data = extractData(file, temp1);
+
+        List<String> listaCf = data.getOnlyValidRows().stream()
+                .map(a -> a.getData().get("FISCALE")).collect(Collectors.toList());
+
+        return incrociaListaCodiciFiscali(listaCf, isOldStyleReport);
+
+    }
+
+    private List<LiberoDbNazionale> incrociaListaCodiciFiscali(List<String> listaCf, boolean isOldStyleReport) {
+        List<LiberoDbNazionale> result = new ArrayList<>();
+
+        for (String s : listaCf) {
+
+            //per ogni codice fiscale recupero il lavoratore sul db nazionale
+            UtenteDbNazionale d = dbnazRep.findUtenteByFiscalCode(s);
+            if (d != null){
+                LiberoDbNazionale ff = analyzeFiscaleCodeData(s, isOldStyleReport);
+                ff.setCognome(d.getCognome());
+                ff.setNome(d.getNome());
+                ff.setDataNascita(d.getDataNascita());
+                ff.setTelefono(d.getTelefono());
+                ff.setCap(d.getCap());
+                ff.setIndirizzo(d.getIndirizzo());
+                ff.setNomeComune(d.getNomeComune());
+                ff.setNomeComuneResidenza(d.getNomeComuneResidenza());
+                ff.setNomeNazione(d.getNomeNazione());
+                ff.setNomeProvincia(d.getNomeProvincia());
+                ff.setNomeProvinciaResidenza(d.getNomeProvinciaResidenza());
+                ff.setSesso("M");
+
+                result.add(ff);
+            }
+
+
+        }
+
+        return result;
+    }
+
+
+    private ExcelInfo extractData(ImportData importData, File temp1) throws IOException {
+        String file = getTempFile(importData.getFile1(), temp1);
+
+        ExcelReader reader = new ExcelReader(file, 0,0 ,new ImportCfValidator());
+
+        return reader.readFile();
+    }
+
+    private String getTempFile(String  filePath, File temp ) throws IOException {
+        if (fr.opensagres.xdocreport.core.utils.StringUtils.isEmpty(filePath))
+            return null;
+
+        InputStream file =server.getFile(filePath);
+        String mime = "." + FilenameUtils.getExtension(filePath);
+        String  a=FilenameUtils.getName(filePath);
+
+
+        return addToTempFolder(file, a, mime, temp);
+    }
+
+    private String addToTempFolder(InputStream inputStream, String name, String mime, File temp ) throws IOException {
+
+        //aggiungo il file alla direcotry
+        String filename = temp.getAbsolutePath() + "\\" + name;
+        File nn = new File(filename);
+        nn.createNewFile();
+
+        //copio il file inviato nella cartella temporanea
+        OutputStream outputStream = new FileOutputStream(nn);
+
+        try{
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+
+            while ((read = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+
+            System.out.println("Done!");
+
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (outputStream != null) {
+                try {
+                    // outputStream.flush();
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+
+        return nn.getAbsolutePath();
     }
 
     private void materialiazeObjectContents(Hashtable<String, List<Iscrizione>> i, Hashtable<String, List<DelegaNazionale>> i1, Hashtable<String, List<LiberoDbNazionale>> i2, Hashtable<String, List<LavoratorePrevedi>> i3, LiberoDbNazionale ss) {
@@ -876,7 +1019,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
 //        select
 //        t.CodiceFiscale,t.CurrentAzienda,t.IscrittoA,t.LiberoAl,t.Nome,t.Cognome,t.DataNascita,
-//                t.NomeNazione,t.NomeProvinciaResidenza,t.NomeComuneResidenza,t.Telefono,a.ID  as idWorker,
+//                t.NomeNazione,t.NomeProvinciaResidenza,t.NomeComuneResidenza,get_lavoratore_recapito(t.CodiceFiscale) as Telefono ,a.ID  as idWorker,
 //        a.Telefono as telefonoAnagrafica, t.Indirizzo, t.Cap
 //        from
 //        lavoratori_liberi t
@@ -900,8 +1043,8 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 "t.NomeNazione," +
                 "t.NomeProvinciaResidenza," +
                 "t.NomeComuneResidenza," +
-                "t.Telefono," +
-                "a.ID as idWorker , t.Indirizzo, t.Cap, a.Telefono as telefonodbnazionale from lavoratori_liberi t left join lavoratori a on t.CodiceFiscale = a.CodiceFiscale where NomeProvinciaFeneal = '%s' and ente = '%s' ",
+                "get_lavoratore_recapito(t.CodiceFiscale) as Telefono, " +
+                "a.ID as idWorker , t.Indirizzo, t.Cap from lavoratori_liberi t left join lavoratori a on t.CodiceFiscale = a.CodiceFiscale where NomeProvinciaFeneal = '%s' and ente = '%s' ",
                 nomeProvincia.replace("'","''"), nomeEnte);
 
         return query;
@@ -922,8 +1065,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 .addScalar("Telefono")
                 .addScalar("idWorker")
                 .addScalar("Indirizzo")
-                .addScalar("Cap")
-                .addScalar("telefonodbnazionale");
+                .addScalar("Cap");
     }
     private LiberoDbNazionale materializeLiberi(Object[] object, String ente, String provincia){
         LiberoDbNazionale v = new LiberoDbNazionale();
@@ -944,8 +1086,8 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         v.setNomeComuneResidenza((String)object[9]);
 
         String telefono = (String)object[10];
-        if (StringUtils.isEmpty(telefono) || telefono.trim().equals("-"))
-            telefono = (String)object[14];
+//        if (StringUtils.isEmpty(telefono) || telefono.trim().equals("-"))
+//            telefono = (String)object[14];
 
         v.setTelefono(telefono);
         v.setIdWorker((Integer)object[11]);
