@@ -522,7 +522,6 @@
                                                                                                       alert("si è verificato un errore!")
                                                                                                   }
                                                                                               })
-                                                                                              console.log(id);
                                                                                           })
                                                                                       </script>
 
