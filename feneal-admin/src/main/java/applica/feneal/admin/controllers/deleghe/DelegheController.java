@@ -90,6 +90,18 @@ public class DelegheController {
     }
 
 
+    @RequestMapping(value = "/retryRequireToDownload/{id}",method = RequestMethod.GET)
+    public @ResponseBody
+    SimpleResponse retryreq(@PathVariable long id) {
+
+        try{
+            return new ValueResponse("reinvia richiesta");
+        }catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
+
+
     @RequestMapping(value = "/importadeleghe",method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody

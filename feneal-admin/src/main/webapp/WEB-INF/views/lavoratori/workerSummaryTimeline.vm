@@ -480,10 +480,27 @@
                                                                             <td>$item.provincia</td>
                                                                             <td>$item.ente</td>
                                                                             <td>$item.stato</td>
-                                                                            <td><a target="__blank" href="${wwwBase}$item.attachment">
-                                                                                #if($item.nomeAttachment) $item.nomeAttachment
-                                                                                #else
-                                                                                #end</a></td>
+                                                                              #if($item.owner)
+                                                                                <td>
+                                                                                    <a target="__blank" href="${wwwBase}$item.attachment">
+                                                                                        #if($item.nomeAttachment)
+                                                                                               $item.nomeAttachment
+                                                                                        #end
+                                                                                    </a>
+                                                                                </td>
+
+                                                                              #elseif($item.autorizzato)
+                                                                                  <td><a onclick="request()" id=$item.delegaId>Richiedi Autorizzazione --$item.autorizzato</a></td>
+                                                                                  <script>
+                                                                                      function request() {
+                                                                                          alert("richesta");
+                                                                                          document.getElementById($item.delegaId).innerHTML = "Richiesta Effettuata!";
+                                                                                      }
+                                                                                  </script>
+                                                                               #else
+                                                                                  <td><a href="#">Controlla Richiesta</a> --$item.autorizzato</td>
+                                                                              #end
+
                                                                             <td>#if($item.operator)$item.operator#end</td>
                                                                         </tr>
                                                                         <tr>
