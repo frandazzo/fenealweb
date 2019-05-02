@@ -1,0 +1,230 @@
+<aside id="sidebar_left" class="nano nano-primary sidebar-default has-scrollbar">
+    <div class="nano-content">
+
+        <ul class="nav sidebar-menu">
+            <li class="sidebar-label pt20">Menu</li>
+
+                <li class="active">
+                    <a href="${wwwBase}" class="framework-navigation">
+                        <span class="fa fa-desktop"></span>
+                        <span class="sidebar-title">Dashboard _ Regionale</span>
+                    </a>
+                </li>
+
+#if ($roleid == 2) ##s
+            <li>
+                <a href="#/users" class="framework-navigation">
+                    <span class="glyphicons glyphicons-user"></span>
+                    <span class="sidebar-title">Utenti</span>
+                </a>
+            </li>
+            <li>
+                <a href="#/crud?e=applicationoption" class="framework-navigation">
+                    <span class="fa fa-certificate"></span>
+                    <span class="sidebar-title">Opzioni applicazione</span>
+                </a>
+            </li>
+    #end
+
+
+            #if ($roleid == 3 || $roleid == 4 || $roleid == 5) ##segretario feneal o i due funzionari
+                <li>
+                    <a href="#/searchworkers" class="framework-navigation">
+                        <span class="glyphicons glyphicons-group"></span>
+                        <span class="sidebar-title">Lavoratori</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/searchfirms" class="framework-navigation">
+                        <span class="glyphicons glyphicons-building"></span>
+                        <span class="sidebar-title">Aziende</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/searchlistelavoro" class="framework-navigation">
+                        <span class="glyphicons glyphicons-notes"></span>
+                        <span class="sidebar-title">Liste di lavoro</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-label pt20">Deleghe</li>
+
+                <li class="">
+                    <a href="#/inoltradeleghe" class="framework-navigation">
+                        <span class="fa fa-reply"></span>
+                        <span class="sidebar-title">Inoltra deleghe</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="#/accettdeleghe" class="framework-navigation">
+                        <span class="fa fa-check-square-o"></span>
+                        <span class="sidebar-title">Accredita deleghe</span>
+                    </a>
+                </li>
+
+            #end
+
+
+
+
+
+
+        ##la gestione delle quote è relativa solo al segretario
+            #if ($roleid == 3) ##segretario
+
+                <li class="sidebar-label pt20">Quote</li>
+                <li class="">
+                    <a href="#/quoteassociative" class="framework-navigation">
+                        <span class="fa fa-eur"></span>
+                        <span class="sidebar-title">Quote associative</span>
+                    </a>
+                </li>
+
+                <li class="">
+                    <a href="#/renewquoteimpianti" class="framework-navigation">
+                        <span class="fa fa-tasks"></span>
+                        <span class="sidebar-title">Rinnova quote impianti fissi</span>
+                    </a>
+                </li>
+
+
+            #end
+
+
+            #if ($roleid == 2 ) ##amministratore feenal
+                <li class="sidebar-label pt20">Importazioni</li>
+
+                <li class="">
+                    <a href="#/importanagrafichegenerali" class="framework-navigation">
+                        <span class="fa fa-reply"></span>
+                        <span class="sidebar-title">Importa anagrafiche</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="#/importdeleghegenerali" class="framework-navigation">
+                        <span class="fa fa-check-square-o"></span>
+                        <span class="sidebar-title">Importa deleghe</span>
+                    </a>
+                </li>
+            #end
+
+
+            #if ($roleid > 2)
+                <li class="sidebar-label pt15">REPORT</li>
+                <li>
+                    <a href="#/reportiscritti" class="framework-navigation">
+                        <span class="fa fa-bar-chart-o"></span>
+                        <span class="sidebar-title">Report iscritti</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/reportprevedi" class="framework-navigation">
+                        <span class="fa fa-bar-chart-o"></span>
+                        <span class="sidebar-title">Report dati prevedi</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/reportliberisuper" class="framework-navigation">
+                        <span class="fa fa-bar-chart-o"></span>
+                        <span class="sidebar-title">Report non iscritti regionale</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/reportlibericf" class="framework-navigation">
+                        <span class="fa fa-bar-chart-o"></span>
+                        <span class="sidebar-title">Report non iscritti per C.F.</span>
+                    </a>
+                </li>
+                #if ($roleid == 3) ##segretario
+                    <li>
+                        <a href="#/reportiqa" class="framework-navigation">
+                            <span class="fa fa-bar-chart-o"></span>
+                            <span class="sidebar-title">Report quote</span>
+                        </a>
+                    </li>
+                #end
+                <li>
+                    <a href="#/reportdeleghe" class="framework-navigation">
+                        <span class="fa fa-bar-chart-o"></span>
+                        <span class="sidebar-title">Report deleghe</span>
+                    </a>
+                </li>
+
+
+##                <li>
+##                    <a href="#/reportdocumenti" class="framework-navigation">
+##                        <span class="fa fa-bar-chart-o"></span>
+##                        <span class="sidebar-title">Report documenti</span>
+##                    </a>
+##                </li>
+##                <li>
+##                    <a href="#/reportdocumentiazienda" class="framework-navigation">
+##                        <span class="fa fa-bar-chart-o"></span>
+##                        <span class="sidebar-title">Report documenti azienda</span>
+##                    </a>
+##                </li>
+##                <li>
+##                    <a href="#/reportcomunicazioni" class="framework-navigation">
+##                        <span class="fa fa-bar-chart-o"></span>
+##                        <span class="sidebar-title">Report comunicazioni</span>
+##                    </a>
+##                </li>
+
+
+
+                #if ($roleid == 3) ##segretario
+                    <li class="sidebar-label pt15">Funzioni segretario</li>
+
+                    <li>
+                        <a href="#/dummyuser" class="framework-navigation">
+                            <span class="glyphicons glyphicons-user"></span>
+                            <span class="sidebar-title">Utenti</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/importazioneDB" class="framework-navigation">
+                            <span class="fa fa-database"></span>
+                            <span class="sidebar-title">Invii database nazionale</span>
+                        </a>
+                    </li>
+
+                #end
+            #end
+
+            #if ($roleid == 3 || $roleid == 4 || $roleid == 5) ##segretario feneal o i due funzionari
+                <li class="sidebar-label pt15">CAUSALI</li>
+                <li>
+                    <a href="#/crud?e=signupdelegationreason" class="framework-navigation">
+                        <span class="fa fa-flag-o"></span>
+                        <span class="sidebar-title">Causali iscrizione delega</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/crud?e=revocationreason" class="framework-navigation">
+                        <span class="fa fa-flag-o"></span>
+                        <span class="sidebar-title">Causali revoca</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/crud?e=documenttype" class="framework-navigation">
+                        <span class="fa fa-folder-open-o"></span>
+                        <span class="sidebar-title">Tipi documento</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/crud?e=collaborator" class="framework-navigation">
+                        <span class="fa fa-users"></span>
+                        <span class="sidebar-title">Collaboratori</span>
+                    </a>
+                </li>
+
+            #end
+        </ul>
+
+        <div class="sidebar-toggle-mini">
+            <a href="#">
+                <span class="fa fa-sign-out"></span>
+            </a>
+        </div>
+    </div>
+</aside>

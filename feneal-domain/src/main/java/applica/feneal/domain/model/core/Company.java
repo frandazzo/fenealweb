@@ -1,6 +1,7 @@
 package applica.feneal.domain.model.core;
 
 import applica.feneal.domain.model.geo.Province;
+import applica.feneal.domain.model.geo.Region;
 import applica.framework.AEntity;
 import applica.framework.annotations.ManyToMany;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -144,5 +145,9 @@ public class Company extends AEntity {
         }
 
         return false;
+    }
+
+    public int  getRegionId() {
+        return getProvinces().stream().findFirst().get().getIdRegion();
     }
 }

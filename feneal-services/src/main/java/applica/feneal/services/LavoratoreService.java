@@ -24,7 +24,7 @@ public interface LavoratoreService {
     void delete(long loggedUserId, long idLav) throws Exception;
 
     List<Lavoratore> findLocalLavoratori(long loggedUserId, LavoratoreSearchParams params);
-
+    List<Lavoratore> findLavoratoriMultiterritorio(long loggedUserId, LavoratoreSearchParams params);
     List<UtenteDbNazionale> findRemoteLavoratori(long loggedUserId, LavoratoreSearchParams params) throws ParseException;
 
 
@@ -33,7 +33,7 @@ public interface LavoratoreService {
 
 
 
-
+    List<String> getNumeriTelefono(String fiscalCode);
 
 
 
@@ -50,4 +50,8 @@ public interface LavoratoreService {
 
     Lavoratore getLavoratoreOfOtherCompanyAndCreateItIfNotExistForCurrentCompany(String id) throws Exception;
     IscrittoAnnoInCorso checkIfIscrittoAnnoInCorso(long workerId) throws Exception;
+
+    Lavoratore getLavoratoreMultiterritorioById(long loggedUserId, long id);
+
+    void updateCellsForAll();
 }

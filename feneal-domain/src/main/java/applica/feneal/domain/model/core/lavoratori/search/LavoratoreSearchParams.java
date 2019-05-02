@@ -25,6 +25,7 @@ public class LavoratoreSearchParams {
 
     private Integer page;
     private String cell;
+    private String company;
 
 
     public String getName() {
@@ -149,5 +150,13 @@ public class LavoratoreSearchParams {
 
     public String getCell() {
         return cell;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getCompany() {
+        return company;
     }
 }

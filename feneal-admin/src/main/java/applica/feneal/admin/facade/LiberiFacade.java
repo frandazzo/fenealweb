@@ -8,6 +8,7 @@ import applica.feneal.admin.viewmodel.reports.UiIscrizione;
 import applica.feneal.admin.viewmodel.reports.UiLibero;
 import applica.feneal.domain.data.core.ParitheticRepository;
 import applica.feneal.domain.model.User;
+import applica.feneal.domain.model.core.ImportData;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.lavoratori.ListaLavoro;
 import applica.feneal.domain.model.core.servizi.RichiestaInfo;
@@ -44,6 +45,9 @@ public class LiberiFacade {
     private ReportNonIscrittiService libService;
 
     @Autowired
+    private ReportNonIscrittiSuper libServicenew;
+
+    @Autowired
     private RichieseInfoAiTerritoriService richSvc;
 
     @Autowired
@@ -67,12 +71,41 @@ public class LiberiFacade {
     @Autowired
     private LiberiExcelExporter exporter;
 
+
+
+
+
+    public String printComplete(List<UiLibero> liberi, String type) throws IOException {
+
+
+
+//        '<select name="infoSelect" style="margin-right: 5px" id="ciccio">'+
+//                '<option ' + select1 + ' value="1">Iscritto storico</option>'+
+//                '<option '  + select2 + ' value="2">Deleghe</option>'+
+//                '<option '  + select3 + ' value="3">Iscritto ad altro</option>'+
+//                '<option '  + select4 + ' value="4">Iscritto Prevedi</option>'+
+//                '</select>');
+        if (type.equals("1"))
+            type = LiberiExcelExporter.db_nazionale_type;
+        if (type.equals("2"))
+            type = LiberiExcelExporter.delega_type;
+        if (type.equals("3"))
+            type = LiberiExcelExporter.altrosindacato_type;
+        if (type.equals("4"))
+            type = LiberiExcelExporter.prevedi_type;
+
+        //qui devo scrivere tutto il codice per trasformare l'ui inn un oggettto document excel
+        //da inviare ocn web service. non eseguo questa operazione nei servizi al causa del fatto che l'uilibero
+        //è definito nell'admin e non ho voglia di trasformarlo....
+        return exporter.createExcelFile(liberi, type);
+    }
+
     public String printComplete(List<UiLibero> liberi) throws IOException {
 
         //qui devo scrivere tutto il codice per trasformare l'ui inn un oggettto document excel
         //da inviare ocn web service. non eseguo questa operazione nei servizi al causa del fatto che l'uilibero
         //è definito nell'admin e non ho voglia di trasformarlo....
-        return exporter.createExcelFile(liberi);
+        return exporter.createExcelFile(liberi , LiberiExcelExporter.db_nazionale_type);
     }
 
 
@@ -93,41 +126,51 @@ public class LiberiFacade {
         List<UiLibero> result = new ArrayList<>();
 
         for (LiberoDbNazionale liberoDbNazionale : lib) {
-            UiLibero l = new UiLibero();
-            l.setLavoratoreDelegheOwner(liberoDbNazionale.isDelegheOwner());
-            l.setAziendaRagioneSociale(liberoDbNazionale.getCurrentAzienda());
-            l.setLavoratoreCap(liberoDbNazionale.getCap());
-            l.setLavoratoreCellulare(liberoDbNazionale.getTelefono());
-            l.setLavoratoreCittaResidenza(liberoDbNazionale.getNomeComuneResidenza());
-            l.setLavoratoreCodiceFiscale(liberoDbNazionale.getCodiceFiscale());
-            l.setLavoratoreCognome(liberoDbNazionale.getCognome());
+                UiLibero l = new UiLibero();
+          //  if (liberoDbNazionale.getDeleghe().size() > 0){
+                l.setLavoratoreDelegheOwner(liberoDbNazionale.isDelegheOwner());
+                l.setAziendaRagioneSociale(liberoDbNazionale.getCurrentAzienda());
+                l.setLavoratoreCap(liberoDbNazionale.getCap());
+                l.setLavoratoreCellulare(liberoDbNazionale.getTelefono());
+                l.setLavoratoreCittaResidenza(liberoDbNazionale.getNomeComuneResidenza());
+                l.setLavoratoreCodiceFiscale(liberoDbNazionale.getCodiceFiscale());
+                l.setLavoratoreCognome(liberoDbNazionale.getCognome());
 
-            l.setLavoratoreDataNascita(liberoDbNazionale.getDataNascita());
-            l.setLavoratoreIndirizzo(liberoDbNazionale.getIndirizzo());
-            l.setLavoratoreLuogoNascita(liberoDbNazionale.getNomeComune());
-            l.setLavoratoreNazionalita(liberoDbNazionale.getNomeNazione());
-            l.setLavoratoreNome(liberoDbNazionale.getNome());
-            l.setLavoratoreCittaResidenza(liberoDbNazionale.getNomeComuneResidenza());
-            l.setLavoratoreProvinciaNascita(liberoDbNazionale.getNomeProvincia());
-            l.setLavoratoreProvinciaResidenza(liberoDbNazionale.getNomeProvinciaResidenza());
-            if (liberoDbNazionale.getSesso().equals("MASCHIO"))
-                l.setLavoratoreSesso(Lavoratore.MALE);
-            else
-            l.setLavoratoreSesso(Lavoratore.FEMALE);
-            l.setLiberoEnteBilaterale(liberoDbNazionale.getEnte());
-
-
-            l.setLiberoData(liberoDbNazionale.getLiberoAl());
-            l.setLiberoProvincia(liberoDbNazionale.getNomeProvinciaFeneal());
-            l.setLiberoIscrittoA(liberoDbNazionale.getIscrittoA());
+                l.setLavoratoreDataNascita(liberoDbNazionale.getDataNascita());
+                l.setLavoratoreIndirizzo(liberoDbNazionale.getIndirizzo());
+                l.setLavoratoreLuogoNascita(liberoDbNazionale.getNomeComune());
+                l.setLavoratoreNazionalita(liberoDbNazionale.getNomeNazione());
+                l.setLavoratoreNome(liberoDbNazionale.getNome());
+                l.setLavoratoreCittaResidenza(liberoDbNazionale.getNomeComuneResidenza());
+                l.setLavoratoreProvinciaNascita(liberoDbNazionale.getNomeProvincia());
+                l.setLavoratoreProvinciaResidenza(liberoDbNazionale.getNomeProvinciaResidenza());
+                if (liberoDbNazionale.getSesso().equals("MASCHIO"))
+                    l.setLavoratoreSesso(Lavoratore.MALE);
+                else
+                    l.setLavoratoreSesso(Lavoratore.FEMALE);
+                l.setLiberoEnteBilaterale(liberoDbNazionale.getEnte());
 
 
-            l.setIscrizioni(convertIscrizioniToUiiscrizioni(liberoDbNazionale.getIscrizioni()));
+                l.setLiberoData(liberoDbNazionale.getLiberoAl());
+                l.setLiberoProvincia(liberoDbNazionale.getNomeProvinciaFeneal());
+                l.setLiberoIscrittoA(liberoDbNazionale.getIscrittoA());
 
-            l.setNumIscrizioni(l.getIscrizioni().size());
 
-            result.add(l);
+                l.setIscrizioni(convertIscrizioniToUiiscrizioni(liberoDbNazionale.getIscrizioni()));
+
+                l.setNumIscrizioni(l.getIscrizioni().size());
+
+                l.setDelegheNazionali(liberoDbNazionale.getDeleghe());
+                l.setNumDeleghe(l.getDelegheNazionali().size());
+
+                l.setNonIscrizioni(liberoDbNazionale.getIscrizioniAltroSindacato());
+                l.setNumNonIscrizioni(l.getNonIscrizioni().size());
+                l.setPrevedi(liberoDbNazionale.getPrevedi());
+                l.setNumPrevedi(liberoDbNazionale.getPrevedi().size());
+                result.add(l);
         }
+
+        //}
 
 
         return result;
@@ -415,5 +458,23 @@ public class LiberiFacade {
 
 
         return p;
+    }
+
+    public List<UiLibero> reportNonIscrittiWithNewAlgoritm(LiberoReportSearchParams params) throws ParseException {
+        List<LiberoDbNazionale> lib = libServicenew.retrieveLiberi(params, true);
+
+        return convertLiberiToUiLiberi(lib);
+    }
+
+    public List<UiLibero> reportNonIscrittiNew(LiberoReportSearchParams params) throws ParseException {
+        List<LiberoDbNazionale> lib = libServicenew.retrieveLiberi(params, false);
+
+        return convertLiberiToUiLiberi(lib);
+    }
+
+    public List<UiLibero> incrociaCodiciFiscali(ImportData file) throws Exception {
+        List<LiberoDbNazionale> lib = libServicenew.incrociaCodiciFiscali(file, true);
+
+        return convertLiberiToUiLiberi(lib);
     }
 }

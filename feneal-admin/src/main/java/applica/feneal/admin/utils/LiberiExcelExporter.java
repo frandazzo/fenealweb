@@ -2,9 +2,13 @@ package applica.feneal.admin.utils;
 
 import applica.feneal.admin.viewmodel.reports.UiIscrizione;
 import applica.feneal.admin.viewmodel.reports.UiLibero;
+import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
+import applica.feneal.domain.model.dbnazionale.LavoratorePrevedi;
+import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 import applica.framework.library.options.OptionsManager;
 import it.fenealgestweb.www.*;
 import org.apache.axis2.AxisFault;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +23,28 @@ import java.util.List;
 @Component
 public class LiberiExcelExporter {
 
+    public static final String db_nazionale_type = "dbnazionale";
+    public static final String delega_type = "delega";
+    public static final String prevedi_type = "prevedi";
+    public static final String altrosindacato_type = "altro";
+
+    private String type = db_nazionale_type;
+
+
     @Autowired
     private OptionsManager optMan;
+    public   String createExcelFile(List<UiLibero> liberi, String type) throws IOException {
 
-    public   String createExcelFile(List<UiLibero> liberi) throws IOException {
+        if (!type.equals(db_nazionale_type) && !type.equals(delega_type) &&
+                !type.equals(prevedi_type) && !type.equals(altrosindacato_type))
+            type = db_nazionale_type;
+
+
         FenealgestUtils svc = createFenealgestUtilsService();
 
-        ExportDocumentToExcel f = createExcelDocument(liberi);
+        ExportDocumentToExcel f = null;
+
+        f = createExcelDocument(liberi, type);
 
         ExportDocumentToExcelResponse result = svc.exportDocumentToExcel(f);
 
@@ -35,24 +54,49 @@ public class LiberiExcelExporter {
         return extractFile(webResult);
     }
 
-    private ExportDocumentToExcel createExcelDocument(List<UiLibero> liberi) {
+//    public   String createExcelFile(List<UiLibero> liberi) throws IOException {
+//
+//
+//
+//        FenealgestUtils svc = createFenealgestUtilsService();
+//
+//        ExportDocumentToExcel f = createExcelDocument(liberi);
+//
+//        ExportDocumentToExcelResponse result = svc.exportDocumentToExcel(f);
+//
+//        DataHandler webResult = result.getExportDocumentToExcelResult();
+//
+//
+//        return extractFile(webResult);
+//    }
+
+    private ExportDocumentToExcel createExcelDocument(List<UiLibero> liberi, String type) {
         ExportDocumentToExcel doc = new ExportDocumentToExcel();
 
         ExcelDocument document = new ExcelDocument();
-        document.setRows(createRows(liberi));
+        document.setRows(createRows(liberi, type));
 
         doc.setDocument(document);
         return  doc;
     }
 
-    private ArrayOfExcelRow createRows(List<UiLibero> liberi) {
+    private ArrayOfExcelRow createRows(List<UiLibero> liberi, String type) {
         ArrayOfExcelRow rows = new ArrayOfExcelRow();
 
         for (UiLibero lib : liberi) {
 
             ExcelRow row = new ExcelRow();
             row.setProperties(createProperties(lib));
-            row.setDocument(createIscrizioniSubDocument(lib.getIscrizioni()));
+            if (type.equals(LiberiExcelExporter.db_nazionale_type))
+                row.setDocument(createIscrizioniSubDocument(lib.getIscrizioni()));
+            else if (type.equals(LiberiExcelExporter.altrosindacato_type))
+                row.setDocument(createAltriSindacatiSubDocument(lib.getNonIscrizioni()));
+            else if (type.equals(LiberiExcelExporter.delega_type))
+                row.setDocument(createDelegheSubDocument(lib.getDelegheNazionali()));
+            else
+            {
+                row.setDocument(createPrevediSubDocument(lib.getPrevedi()));
+            }
             rows.addExcelRow(row);
 
         }
@@ -75,6 +119,49 @@ public class LiberiExcelExporter {
 
     }
 
+
+    private ExcelDocument createDelegheSubDocument(List<DelegaNazionale> iscrizioni) {
+        if (iscrizioni == null)
+            return null;
+
+        if (iscrizioni.size() == 0)
+            return null;
+
+        ExcelDocument document = new ExcelDocument();
+        document.setRows(createRowsForDeleghe(iscrizioni));
+        return  document;
+
+
+    }
+
+    private ExcelDocument createAltriSindacatiSubDocument(List<LiberoDbNazionale> iscrizioni) {
+        if (iscrizioni == null)
+            return null;
+
+        if (iscrizioni.size() == 0)
+            return null;
+
+        ExcelDocument document = new ExcelDocument();
+        document.setRows(createRowsForAltriSindacati(iscrizioni));
+        return  document;
+
+
+    }
+
+    private ExcelDocument createPrevediSubDocument(List<LavoratorePrevedi> iscrizioni) {
+        if (iscrizioni == null)
+            return null;
+
+        if (iscrizioni.size() == 0)
+            return null;
+
+        ExcelDocument document = new ExcelDocument();
+        document.setRows(createRowsForPrevedi(iscrizioni));
+        return  document;
+
+
+    }
+
     private ArrayOfExcelRow createRowsForIscrizioni(List<UiIscrizione> iscrizioni) {
         ArrayOfExcelRow rows = new ArrayOfExcelRow();
 
@@ -82,6 +169,52 @@ public class LiberiExcelExporter {
 
             ExcelRow row = new ExcelRow();
             row.setProperties(createPropertiesForIscrizione(lib));
+            rows.addExcelRow(row);
+
+        }
+
+
+        return rows;
+    }
+
+    private ArrayOfExcelRow createRowsForDeleghe(List<DelegaNazionale> iscrizioni) {
+        ArrayOfExcelRow rows = new ArrayOfExcelRow();
+
+        for (DelegaNazionale lib : iscrizioni) {
+
+            ExcelRow row = new ExcelRow();
+            row.setProperties(createPropertiesForDeleghe(lib));
+            rows.addExcelRow(row);
+
+        }
+
+
+        return rows;
+    }
+
+    private ArrayOfExcelRow createRowsForAltriSindacati(List<LiberoDbNazionale> iscrizioni) {
+        ArrayOfExcelRow rows = new ArrayOfExcelRow();
+
+        for (LiberoDbNazionale lib : iscrizioni) {
+
+            ExcelRow row = new ExcelRow();
+            row.setProperties(createPropertiesForAltriSindacati(lib));
+            rows.addExcelRow(row);
+
+        }
+
+
+        return rows;
+    }
+
+    private ArrayOfExcelRow createRowsForPrevedi(List<LavoratorePrevedi> iscrizioni) {
+        ArrayOfExcelRow rows = new ArrayOfExcelRow();
+
+        for (LavoratorePrevedi
+                lib : iscrizioni) {
+
+            ExcelRow row = new ExcelRow();
+            row.setProperties(createPropertiesForPrevedi(lib));
             rows.addExcelRow(row);
 
         }
@@ -170,6 +303,169 @@ public class LiberiExcelExporter {
         return props;
     }
 
+
+    private ArrayOfExcelProperty createPropertiesForDeleghe(DelegaNazionale lib) {
+        ArrayOfExcelProperty props = new ArrayOfExcelProperty();
+
+
+        ExcelProperty name1 = new ExcelProperty();
+        name1.setName("Provincia");
+        name1.setValue(lib.getProvince());
+        name1.setPriority(1);
+        props.addExcelProperty(name1);
+
+        ExcelProperty ente = new ExcelProperty();
+        ente.setName("Ente");
+        ente.setValue(lib.getEnte());
+        ente.setPriority(2);
+        props.addExcelProperty(ente);
+
+        ExcelProperty stato = new ExcelProperty();
+        stato.setName("Stato");
+        stato.setValue(lib.getState());
+        stato.setPriority(3);
+        props.addExcelProperty(stato);
+
+        ExcelProperty scan = new ExcelProperty();
+        scan.setName("Scansione");
+        scan.setValue(lib.getNomeattachment());
+        scan.setPriority(4);
+        props.addExcelProperty(scan);
+
+        ExcelProperty operatore = new ExcelProperty();
+        operatore.setName("Operatore");
+        operatore.setValue(lib.getOperator());
+        operatore.setPriority(5);
+        props.addExcelProperty(operatore);
+
+        ExcelProperty data_acc = new ExcelProperty();
+        data_acc.setName("Data Accreditamento");
+        String dtAcc = "";
+        if (lib.getAcceptDate() != null) {
+            SimpleDateFormat g = new SimpleDateFormat("dd/MM/yyyy");
+            dtAcc = g.format(lib.getAcceptDate());
+
+        }
+        data_acc.setValue(dtAcc);
+        data_acc.setPriority(6);
+        props.addExcelProperty(data_acc);
+
+
+        ExcelProperty data_canc = new ExcelProperty();
+        data_canc.setName("Data Cancellazione");
+        String dtCanc = "";
+        if(lib.getCancelDate() != null) {
+            SimpleDateFormat h = new SimpleDateFormat("dd/MM/yyyy");
+            dtCanc= h.format(lib.getCancelDate());
+        }
+        data_canc.setValue(dtCanc);
+        data_canc.setPriority(7);
+        props.addExcelProperty(data_canc);
+
+
+
+        ExcelProperty data_cess = new ExcelProperty();
+        data_cess.setName("Data Cessazione");
+        String dtCess = "";
+        if(lib.getRevokeDate() != null) {
+            SimpleDateFormat w = new SimpleDateFormat("dd/MM/yyyy");
+            dtCess= w.format(lib.getRevokeDate());
+        }
+        data_cess.setValue(dtCess);
+        data_cess.setPriority(8);
+        props.addExcelProperty(data_cess);
+
+        ExcelProperty ann = new ExcelProperty();
+        ann.setName("Annotazioni");
+        ann.setValue(String.valueOf(lib.getNotes()));
+        ann.setPriority(9);
+        props.addExcelProperty(ann);
+
+        return props;
+    }
+
+
+    private ArrayOfExcelProperty createPropertiesForAltriSindacati(LiberoDbNazionale lib) {
+        ArrayOfExcelProperty props = new ArrayOfExcelProperty();
+
+        SimpleDateFormat g = new SimpleDateFormat("dd/MM/yyyy");
+        String dte= g.format(lib.getLiberoAl());
+
+        ExcelProperty name = new ExcelProperty();
+        name.setName("Provincia");
+        name.setValue(lib.getNomeProvinciaFeneal());
+        name.setPriority(1);
+        props.addExcelProperty(name);
+
+        ExcelProperty ente = new ExcelProperty();
+        ente.setName("Ente");
+        ente.setValue(lib.getEnte());
+        ente.setPriority(2);
+        props.addExcelProperty(ente);
+
+        ExcelProperty azienda = new ExcelProperty();
+        azienda.setName("Azienda");
+        azienda.setValue(lib.getCurrentAzienda());
+        azienda.setPriority(3);
+        props.addExcelProperty(azienda);
+
+        ExcelProperty libero_al = new ExcelProperty();
+        libero_al.setName("Libero al");
+        if(StringUtils.isEmpty(dte)){
+            libero_al.setValue("");
+        }
+        else
+            libero_al.setValue(dte);
+        libero_al.setPriority(4);
+        props.addExcelProperty(libero_al);
+
+        ExcelProperty iscrittoA = new ExcelProperty();
+        iscrittoA.setName("Iscritto A");
+        iscrittoA.setValue(lib.getIscrittoA());
+        iscrittoA.setPriority(5);
+        props.addExcelProperty(iscrittoA);
+
+        return props;
+    }
+
+
+    private ArrayOfExcelProperty createPropertiesForPrevedi(LavoratorePrevedi lib) {
+        ArrayOfExcelProperty props = new ArrayOfExcelProperty();
+
+
+        ExcelProperty name = new ExcelProperty();
+        name.setName("Regione");
+        name.setValue(lib.getCassaEdileRegione());
+        name.setPriority(1);
+        props.addExcelProperty(name);
+
+        ExcelProperty name1 = new ExcelProperty();
+        name1.setName("Cassa Edille");
+        name1.setValue(lib.getCassaEdile());
+        name1.setPriority(2);
+        props.addExcelProperty(name1);
+
+        ExcelProperty inq = new ExcelProperty();
+        inq.setName("Inquadramento");
+        inq.setValue(lib.getInquadramento());
+        inq.setPriority(3);
+        props.addExcelProperty(inq);
+
+        ExcelProperty tipoA = new ExcelProperty();
+        tipoA.setName("Tipo Adesione");
+        tipoA.setValue(lib.getTipoAdesione());
+        tipoA.setPriority(4);
+        props.addExcelProperty(tipoA);
+
+        ExcelProperty anno = new ExcelProperty();
+        anno.setName("Anno");
+        anno.setValue(String.valueOf(lib.getAnno()));
+        anno.setPriority(5);
+        props.addExcelProperty(anno);
+
+
+        return props;
+    }
 
     private ArrayOfExcelProperty createProperties(UiLibero lib) {
         ArrayOfExcelProperty props = new ArrayOfExcelProperty();

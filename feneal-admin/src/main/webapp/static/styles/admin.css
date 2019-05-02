@@ -473,14 +473,12 @@ div[data-property=competenceSelection] {
 }
 
 
-.warning {
-    margin-bottom: 30px;
-}
-.warning h1, .warning p{
-    color: red;
-}
-.warning #next {
-    margin-top: 15px;
+#timeline.timeline-single {
+    margin-left: 6%;
+     max-width: 1200px;
 }
 
 
+.great-icon{
+    font-size: 32px
+}

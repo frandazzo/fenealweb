@@ -30,7 +30,8 @@ public class ApplicationOptionCrudConfig implements AppSetup {
                 .field("updateFirmasDuringImport", "Aggiorna aziende")
                 .field("updateWorkersDuringImport", "Aggiorna utenti")
                 .field("creaDelegaIfNotExistDuringImport", "Crea delega se non esiste")
-                .field("associaDelegaDuringImport", "Associa delega");
+                .field("associaDelegaDuringImport", "Associa delega")
+                .field("enableExclusiveLiberiQuery", "Abilita query esclusive su report non iscritti");
 
 
         GridConfigurator.configure(ApplicationOptions.class, "applicationoption")

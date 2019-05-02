@@ -1,11 +1,26 @@
 package applica.feneal.admin.viewmodel.lavoratori;
 
+import applica.feneal.admin.viewmodel.UiLavoratoreTimeLineItem;
+import applica.feneal.admin.viewmodel.UiLavoratoreTimelineYearGroup;
+import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
+import applica.feneal.domain.model.dbnazionale.Iscrizione;
+import applica.feneal.domain.model.dbnazionale.LavoratorePrevedi;
+import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
+
 import java.util.List;
 
 /**
  * Created by fgran on 06/04/2016.
  */
 public class UiCompleteLavoratoreSummary {
+
+
+    private List<DelegaNazionale> deleghe;
+    private List<LiberoDbNazionale> iscrizioniAltroSindacato;
+    private List<Iscrizione> iscrizioni;
+    private List<UiLavoratoreTimelineYearGroup> timelineList;
+    private List<LavoratorePrevedi> prevedi;
+
 
     public UiLavoratoreAnagraficaSummary getData() {
         return data;
@@ -48,4 +63,44 @@ public class UiCompleteLavoratoreSummary {
     private List<UiPrintedTessera> otherTessereData;
 
 
+    public void setDeleghe(List<DelegaNazionale> deleghe) {
+        this.deleghe = deleghe;
+    }
+
+    public List<DelegaNazionale> getDeleghe() {
+        return deleghe;
+    }
+
+    public void setIscrizioniAltroSindacato(List<LiberoDbNazionale> iscrizioniAltroSindacato) {
+        this.iscrizioniAltroSindacato = iscrizioniAltroSindacato;
+    }
+
+    public List<LiberoDbNazionale> getIscrizioniAltroSindacato() {
+        return iscrizioniAltroSindacato;
+    }
+
+    public void setIscrizioni(List<Iscrizione> iscrizioni) {
+        this.iscrizioni = iscrizioni;
+    }
+
+    public List<Iscrizione> getIscrizioni() {
+        return iscrizioni;
+    }
+
+
+    public void setTimelineList(List<UiLavoratoreTimelineYearGroup> timelineList) {
+        this.timelineList = timelineList;
+    }
+
+    public List<UiLavoratoreTimelineYearGroup> getTimelineList() {
+        return timelineList;
+    }
+
+    public void setPrevedi(List<LavoratorePrevedi> prevedi) {
+        this.prevedi = prevedi;
+    }
+
+    public List<LavoratorePrevedi> getPrevedi() {
+        return prevedi;
+    }
 }

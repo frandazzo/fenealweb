@@ -33,6 +33,7 @@ public class LiberoDbNazionale extends IEntity {
     private String telefono;
     private Date ultimaModifica;
     private String ultimaProvinciaAdAggiornare;
+    private List<LavoratorePrevedi> prevedi = new ArrayList<>();
 
 
     public boolean isDelegheOwner() {
@@ -45,7 +46,25 @@ public class LiberoDbNazionale extends IEntity {
 
     private transient boolean delegheOwner;
 
+    public List<LiberoDbNazionale> getIscrizioniAltroSindacato() {
+        return iscrizioniAltroSindacato;
+    }
 
+    public void setIscrizioniAltroSindacato(List<LiberoDbNazionale> iscrizioniAltroSindacato) {
+        this.iscrizioniAltroSindacato = iscrizioniAltroSindacato;
+    }
+
+    private transient List<LiberoDbNazionale> iscrizioniAltroSindacato = new ArrayList<>();
+    private transient List<Iscrizione> iscrizioni = new ArrayList<>();
+    private transient List<DelegaNazionale> deleghe = new ArrayList<>();
+
+    public List<DelegaNazionale> getDeleghe() {
+        return deleghe;
+    }
+
+    public void setDeleghe(List<DelegaNazionale> deleghe) {
+        this.deleghe = deleghe;
+    }
 
     private String currentAzienda;
     private String iscrittoA;
@@ -66,7 +85,7 @@ public class LiberoDbNazionale extends IEntity {
         this.idWorker = idWorker;
     }
 
-    private transient List<Iscrizione> iscrizioni = new ArrayList<>();
+
 
     public List<Iscrizione> getIscrizioni() {
         return iscrizioni;
@@ -290,5 +309,13 @@ public class LiberoDbNazionale extends IEntity {
 
     public void setEnte(String ente) {
         this.ente = ente;
+    }
+
+    public void setPrevedi(List<LavoratorePrevedi> prevedi) {
+        this.prevedi = prevedi;
+    }
+
+    public List<LavoratorePrevedi> getPrevedi() {
+        return prevedi;
     }
 }

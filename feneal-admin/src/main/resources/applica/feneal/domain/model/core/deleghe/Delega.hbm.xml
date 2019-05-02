@@ -36,5 +36,7 @@
 
 		<many-to-one name="firstAziendaEdile" class="applica.feneal.domain.model.core.aziende.Azienda" column="firstAziendaEdileId" lazy="false" />
 
+		<property name="attachment" />
+		<property name="nomeattachment"/>
 	</class>
 </hibernate-mapping>

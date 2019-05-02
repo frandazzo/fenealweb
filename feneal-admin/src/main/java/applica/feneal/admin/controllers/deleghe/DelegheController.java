@@ -200,6 +200,8 @@ public class DelegheController {
                 data.put("sector", d.getSector());
                 data.put("workerCompany", d.getWorkerCompany());
                 data.put("paritethic", d.getParitethic());
+                data.put("attachment", d.getAttachment());
+                data.put("nomeattachment", d.getNomeattachment());
                 switch (d.getState()) {
                     case Delega.state_accepted:
                         data.put("sendDate", new SimpleDateFormat("dd/MM/yyy").format(d.getSendDate()));

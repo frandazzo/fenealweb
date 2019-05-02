@@ -41,7 +41,7 @@ require([
     "deleghe/delegheLecceController",
     "inps/inpsLecceController",
     "reportnazionali/reportInviiDBNazionaleController",
-    "reportnazionali/stampaIscrittiController","analisi/analisiController"],
+    "reportnazionali/stampaIscrittiController","analisi/analisiController", "prevedi/importPrevediController"],
     function(fmodel,_p, core, ui, fviews, fcontrollers, fhelpers,
                                                  controllers, usercontroller, 
                                                  lavController, listeLavoroController, azController, azDocController,
@@ -60,7 +60,8 @@ require([
              inpsLecceController,
              reportInviiDBNazionaleController,
              stampaIscrittiController,
-             analisiController) {
+             analisiController,
+             importPrevediController) {
 
     $.datepicker.setDefaults( $.datepicker.regional[ "IT" ] );
 
@@ -76,6 +77,7 @@ require([
 
         //percorsi per il lavoratore 
         ui.Navigation.instance().registerController("searchworkers", function() { return new lavController.LavoratoriSearchController(); }, "singleton");
+        ui.Navigation.instance().registerController("searchworkersnew", function() { return new lavController.LavoratoriSearchNewController(); }, "singleton");
         ui.Navigation.instance().registerController("summaryworker", function() { return new lavController.LavoratoreSummaryController(); }, "singleton");
         ui.Navigation.instance().registerController("editworker", function() { return new lavController.LavoratoreEditController(); }, "singleton");
 
@@ -100,13 +102,18 @@ require([
 
         //percorso per i reports
         ui.Navigation.instance().registerController("reportiscritti", function() { return new iscrittiReportController.IscrittiReportController(); }, "singleton");
+        ui.Navigation.instance().registerController("reportlibericf", function() { return new liberiReportController.LiberiReportcfController(); }, "singleton");
+
         ui.Navigation.instance().registerController("reportliberi", function() { return new liberiReportController.LiberiReportController(); }, "singleton");
+
+        ui.Navigation.instance().registerController("reportliberisuper", function() { return new liberiReportController.NewLiberiReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportiqa", function() { return new iqaReportController.IncassiQuoteReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportdeleghe", function() { return new delController.DelegheReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportdocumenti", function() { return new docReportController.DocumentiReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportdocumentiazienda", function() { return new docAziendaReportController.DocumentiAziendaReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportcomunicazioni", function() { return new commReportController.ComunicazioniReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportrichieste", function() { return new richiesteReportController.RichiesteReportController(); }, "singleton");
+        ui.Navigation.instance().registerController("reportprevedi", function() { return new importPrevediController.ReportController(); }, "singleton");
 
 
         // Percorsi report nazionali
@@ -160,6 +167,7 @@ require([
         //importazioni massive
         ui.Navigation.instance().registerController("importanagrafichegenerali", function() { return new importController.ImportaAnagraficheController(); }, "singleton");
         ui.Navigation.instance().registerController("importdeleghegenerali", function() { return new importController.ImportaDelegheController(); }, "singleton");
+        ui.Navigation.instance().registerController("prevedi", function() { return new importPrevediController.ImportaController(); }, "singleton");
 
 
         //analisi
@@ -196,6 +204,7 @@ require([
 
         fileUploader.set({
             url: BASE + action,
+            maxFileSize : "100mb",
             button : uploadButton,
             progressBar: progress,
             data: { path: path },

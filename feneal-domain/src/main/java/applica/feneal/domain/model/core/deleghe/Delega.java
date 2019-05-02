@@ -39,6 +39,25 @@ public class Delega extends SecuredDomainEntity{
     private Date cancelDate;
     private Date revokeDate;
 
+    private String attachment;
+    private String nomeattachment;
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
+
+    public String getNomeattachment() {
+        return nomeattachment;
+    }
+
+    public void setNomeattachment(String nomeattachment) {
+        this.nomeattachment = nomeattachment;
+    }
+
     private Date validityDate;
 
     public Date getValidityDate() {

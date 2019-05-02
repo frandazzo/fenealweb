@@ -697,7 +697,7 @@ define(["framework/core"], function(core) {
             this.data = null;
             this.paramName = "file";
             this.filters = [];
-            this.maxFileSize = "10mb";
+            this.maxFileSize = "100mb";
             this.input = null;
             this.progressBar = null;
             this.filenameInput = null;

@@ -1,5 +1,7 @@
 package applica.feneal.admin.facade;
 
+import applica.feneal.admin.viewmodel.UiLavoratoreTimeLineItem;
+import applica.feneal.admin.viewmodel.UiLavoratoreTimelineYearGroup;
 import applica.feneal.admin.viewmodel.app.dashboard.lavoratori.*;
 import applica.feneal.admin.viewmodel.deleghe.UIDelega;
 import applica.feneal.admin.viewmodel.lavoratori.*;
@@ -22,9 +24,7 @@ import applica.feneal.domain.model.core.lavoratori.search.LavoratoreSearchParams
 import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
 import applica.feneal.domain.model.core.servizi.MagazzinoDelega;
 import applica.feneal.domain.model.core.tessere.Tessera;
-import applica.feneal.domain.model.dbnazionale.Iscrizione;
-import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
-import applica.feneal.domain.model.dbnazionale.UtenteDbNazionale;
+import applica.feneal.domain.model.dbnazionale.*;
 import applica.feneal.domain.model.geo.City;
 import applica.feneal.domain.model.geo.Country;
 import applica.feneal.domain.model.geo.Province;
@@ -47,6 +47,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by fgran on 06/04/2016.
@@ -91,7 +92,7 @@ public class LavoratoriFacade {
     private MagazzinoDelegheRepository magRep;
 
     @Autowired
-    private QuoteAssociativeService quoteService;
+    private ReportNonIscrittiSuper noniscrittiAnalisysService;
 
     @Autowired
     private VersamentiFacade verFac;
@@ -103,6 +104,10 @@ public class LavoratoriFacade {
         UiCompleteLavoratoreSummary s = new UiCompleteLavoratoreSummary();
 
         Lavoratore l = getLavoratoreById(id);
+        return prepareDto(id, s, l);
+    }
+
+    private UiCompleteLavoratoreSummary prepareDto(long id, UiCompleteLavoratoreSummary s, Lavoratore l) throws Exception {
         if (l == null)
             return null;
 
@@ -365,7 +370,9 @@ public class LavoratoriFacade {
     public void deleteLavoratore(long id) throws Exception {
         svc.delete(((User) security.getLoggedUser()).getLid(), id);
     }
-
+    public List<Lavoratore> findLavoratoriMultiTerritorioRegionale(LavoratoreSearchParams s) {
+        return svc.findLavoratoriMultiterritorio(((User) security.getLoggedUser()).getLid(), s);
+    }
     public List<Lavoratore> findLocalLavoratori(LavoratoreSearchParams s) {
         return svc.findLocalLavoratori(((User) security.getLoggedUser()).getLid(), s);
     }
@@ -973,5 +980,141 @@ public class LavoratoriFacade {
         l.setIscrizioneCorrente(calculateIscrizioneCorrente(lav.getLid()));
         l.setStampeTessera(calculateOtherStampe(lav));
         return l;
+    }
+
+    public UiCompleteLavoratoreSummary getLavoratoreSummaryMultiterriotrioById(long id) throws Exception {
+        UiCompleteLavoratoreSummary s = new UiCompleteLavoratoreSummary();
+
+        Lavoratore l = svc.getLavoratoreMultiterritorioById(((User) security.getLoggedUser()).getLid(), id);
+
+        //recupero inoltre i dati dellatimeline
+        LiberoDbNazionale f = noniscrittiAnalisysService.analyzeFiscaleCodeData(l.getFiscalcode(), false);
+
+
+        UiCompleteLavoratoreSummary summary = prepareDto(l.getLid(), s, l);
+        summary.setTimelineList(convertToTimelineGroups(convertToTimelineItems(f)));
+        summary.setDeleghe(f.getDeleghe());
+        summary.setIscrizioniAltroSindacato(f.getIscrizioniAltroSindacato());
+        summary.setIscrizioni(f.getIscrizioni());
+        summary.setPrevedi(f.getPrevedi());
+
+        return summary;
+    }
+
+    private List<UiLavoratoreTimelineYearGroup> convertToTimelineGroups(List<UiLavoratoreTimeLineItem> items) {
+
+
+        Map<Integer, List<UiLavoratoreTimeLineItem>> f = items.stream().collect(Collectors.groupingBy(UiLavoratoreTimeLineItem::getAnno));
+
+        List<UiLavoratoreTimelineYearGroup> result = new ArrayList<>();
+        for (Integer integer : f.keySet()) {
+            UiLavoratoreTimelineYearGroup ff = new UiLavoratoreTimelineYearGroup();
+            ff.setAnno(integer);
+            ff.setItem(f.get(integer));
+            result.add(ff);
+        }
+
+
+        Collections.sort(result, new Comparator<UiLavoratoreTimelineYearGroup>() {
+            @Override
+            public int compare(UiLavoratoreTimelineYearGroup o1, UiLavoratoreTimelineYearGroup o2) {
+                return -1 * new Integer(o1.getAnno()).compareTo(o2.getAnno());
+            }
+        });
+
+        return result;
+
+
+    }
+
+    private List<UiLavoratoreTimeLineItem> convertToTimelineItems(LiberoDbNazionale f) {
+
+        Company current = ((User) security.getLoggedUser()).getCompany();
+
+        List<UiLavoratoreTimeLineItem> result = new ArrayList<>();
+
+        for (Iscrizione iscrizione : f.getIscrizioni()) {
+            UiLavoratoreTimeLineItem i = new UiLavoratoreTimeLineItem();
+            i.setTipo("Iscritto");
+            i.setAnno(iscrizione.getAnno());
+            i.setAzienda(iscrizione.getAzienda());
+            i.setPiva(iscrizione.getPiva());
+            i.setContratto(iscrizione.getContratto());
+            i.setEnte(String.format("%s - %s",iscrizione.getSettore(), iscrizione.getEnte()));
+            i.setLivello(iscrizione.getLivello());
+            i.setPeriodo(String.valueOf(iscrizione.getPeriodo()));
+            i.setProvincia(iscrizione.getNomeProvincia());
+            i.setRegione(iscrizione.getNomeRegione());
+            i.setQuota(iscrizione.getQuota());
+            i.setOwner(current.containProvince(i.getProvincia()));
+            result.add(i);
+        }
+        for (LiberoDbNazionale libero : f.getIscrizioniAltroSindacato()) {
+            UiLavoratoreTimeLineItem i = new UiLavoratoreTimeLineItem();
+            i.setTipo("NonIscritto");
+            i.setData(libero.getLiberoAl());
+            i.setDataStringa(new SimpleDateFormat("dd/MM/yyyy").format(libero.getLiberoAl()));
+            GregorianCalendar c = new GregorianCalendar();
+            c.setTime(libero.getLiberoAl());
+            i.setAnno(c.get(Calendar.YEAR));
+            i.setAzienda(libero.getCurrentAzienda());
+            i.setOwner(current.containProvince(libero.getNomeProvinciaFeneal()));
+            i.setEnte(libero.getEnte());
+            i.setProvincia(libero.getNomeProvinciaFeneal());
+            i.setIscrittoA(libero.getIscrittoA());
+            result.add(i);
+        }
+        for (DelegaNazionale delega : f.getDeleghe()) {
+            UiLavoratoreTimeLineItem i = new UiLavoratoreTimeLineItem();
+            i.setTipo("Delega");
+            i.setOwner(current.containProvince(delega.getProvince()));
+            i.setData(delega.getDocumentDate());
+            GregorianCalendar c = new GregorianCalendar();
+            c.setTime(delega.getDocumentDate());
+            i.setAnno(c.get(Calendar.YEAR));
+            i.setDataStringa(new SimpleDateFormat("dd/MM/yyyy").format(delega.getDocumentDate()));
+            i.setAzienda("");
+            i.setEnte(String.format("%s - %s",delega.getSector(), delega.getEnte()));
+            i.setProvincia(delega.getProvince());
+            i.setIscrittoA(delega.getRegion());
+            i.setStato(delega.getState());
+            i.setIntStato(delega.getIntState());
+            i.setAnnotazioni(delega.getNotes());
+            i.setOperator(delega.getOperator());
+            i.setNomeAttachment(delega.getNomeattachment());
+            i.setAttachment(delega.getAttachment());
+            if (delega.getAcceptDate() != null)
+                i.setDataAccreditamento(new SimpleDateFormat("dd/MM/yyyy").format(delega.getAcceptDate()));
+            if (delega.getRevokeDate() != null)
+                i.setDataCessazione(new SimpleDateFormat("dd/MM/yyyy").format(delega.getRevokeDate()));
+            if (delega.getCancelDate() != null)
+                i.setDataCessazione(new SimpleDateFormat("dd/MM/yyyy").format(delega.getCancelDate()));
+            result.add(i);
+        }
+        for (LavoratorePrevedi prevedi : f.getPrevedi()) {
+            UiLavoratoreTimeLineItem i = new UiLavoratoreTimeLineItem();
+            i.setTipo("Prevedi");
+            i.setAnno(prevedi.getAnno());
+            i.setRegione(prevedi.getCassaEdileRegione());
+            i.setEnte(prevedi.getCassaEdile());
+            i.setContratto(prevedi.getTipoAdesione());
+            i.setLivello(prevedi.getInquadramento());
+            i.setOwner(false);
+            result.add(i);
+        }
+
+
+
+
+
+
+        Collections.sort(result, new Comparator<UiLavoratoreTimeLineItem>() {
+            @Override
+            public int compare(UiLavoratoreTimeLineItem o1, UiLavoratoreTimeLineItem o2) {
+                return -1 * new Integer(o1.getAnno()).compareTo(o2.getAnno());
+            }
+        });
+
+        return result;
     }
 }

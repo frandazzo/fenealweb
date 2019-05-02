@@ -12,6 +12,29 @@ define([
 
 
 
+    //controller che porta alla mascherina custom per la ricerca dei lavoratori
+    var LiberiReportcfController = fcontrollers.Controller.extend({
+        ctor: function(){
+            LiberiReportcfController.super.ctor.call(this);
+        },
+        index: function(params) {
+
+            var service = new fmodel.FormService();
+            service.set({
+                method: "GET",
+                url: BASE + "libericf",
+                data: {}
+            });
+
+
+
+            var view = new views.ReportLibericfAppView(service);
+            // view.set("title", "Ricerca lavoratori");
+
+            return view;
+        }
+
+    });
 
 
 
@@ -41,8 +64,32 @@ define([
     });
 
 
+    //controller che porta alla mascherina custom per la ricerca dei lavoratori
+    var NewLiberiReportController = fcontrollers.Controller.extend({
+        ctor: function(){
+            NewLiberiReportController.super.ctor.call(this);
+        },
+        index: function(params) {
 
+            var service = new fmodel.FormService();
+            service.set({
+                method: "GET",
+                url: BASE + "liberinew",
+                data: {}
+            });
+
+
+
+            var view = new views.ReportLiberiNewAppView(service);
+            // view.set("title", "Ricerca lavoratori");
+
+            return view;
+        }
+
+    });
+
+    exports.NewLiberiReportController = NewLiberiReportController;
     exports.LiberiReportController = LiberiReportController;
-
+    exports.LiberiReportcfController = LiberiReportcfController;
     return exports;
 });

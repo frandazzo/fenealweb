@@ -79,6 +79,9 @@ public class ReportNonIscrittiServiceImpl implements ReportNonIscrittiService {
 
 
 
+
+
+
     @Override
     public List<LiberoDbNazionale> retrieveLiberi(LiberoReportSearchParams params) {
 

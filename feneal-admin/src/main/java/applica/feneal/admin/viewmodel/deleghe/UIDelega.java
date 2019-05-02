@@ -22,6 +22,24 @@ public class UIDelega {
     private String revokeDate;
     private List<Integer> supportedNextStates = new ArrayList<>();
     private String validityDate;
+    private String attachment;
+    private String nomeattachment;
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
+
+    public String getNomeattachment() {
+        return nomeattachment;
+    }
+
+    public void setNomeattachment(String nomeattachment) {
+        this.nomeattachment = nomeattachment;
+    }
 
     public String getValidityDate() {
         return validityDate;

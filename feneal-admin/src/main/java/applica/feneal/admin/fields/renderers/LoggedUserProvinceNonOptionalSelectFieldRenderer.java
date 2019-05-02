@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.Writer;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by fgran on 11/05/2016.
@@ -27,7 +28,13 @@ public class LoggedUserProvinceNonOptionalSelectFieldRenderer extends SelectFiel
 
     @Override
     public List<SimpleItem> getItems() {
-        return SimpleItem.createList(((User) security.getLoggedUser()).getCompany().getProvinces(), "description", "id");
+
+
+
+        return SimpleItem.createList(((User) security.getLoggedUser()).getCompany().getProvinces(),
+                "description", "id");
+
+
     }
 
     @Override

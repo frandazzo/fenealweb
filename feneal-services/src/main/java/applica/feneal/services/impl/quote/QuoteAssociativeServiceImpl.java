@@ -1253,6 +1253,13 @@ public class QuoteAssociativeServiceImpl implements QuoteAssociativeService {
             //"Aziende" e "Lavoratori" prima di ciclare ed inserire tutte le quote
             ApplicationOptions appOpt = appOptRep.find(null).findFirst().orElse(null);
             //anagrafo le aziedne e i lavoratori
+
+            //se si tratta di bolzano disabilito l'aggiornamento degli utenti
+            if (user.getCompany().containProvince("Bolzano")){
+                if (appOpt != null)
+                    appOpt.setUpdateWorkersDuringImport(false);
+            }
+
             ImportCache cache = new ImportCache();
             importLavoratori(dto, cache, filename, appOpt);
             importAziende(dto, cache, filename , appOpt);

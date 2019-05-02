@@ -29,6 +29,7 @@ import applica.feneal.services.DelegheService;
 import applica.feneal.services.LavoratoreService;
 import applica.framework.*;
 import applica.framework.security.Security;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by fgran on 06/04/2016.
@@ -86,6 +88,105 @@ public class LavoratoriServiceImpl implements LavoratoreService {
     private AziendeRepository azRep;
 
     @Override
+    public Lavoratore getLavoratoreMultiterritorioById(long loggedUserId, long id) {
+        //in questa funzione la richiesta di un lavoratore non è
+        //necessariamente riferita ad un lavoratore anagrafato nel territorio
+        //dell'utente loggato pertanto è necessaria una verifica preliminare.
+
+        //se il lavoratore cercato per id afferisce al territorio dell'utente loggato allora
+        //lo restituisco senza problemi.
+
+        //altrimenti ne prendo il codice fiscale e verifico se esiste un utente con quel codice fiscale
+        //censito per il territorio delll'utente loggato
+        //se esiste prendo quell'utente (l'utente con un altro id) e lo restituisco (previa verifica del telefono
+        //e del cell rispetto all'utente indicato vedi sotto)
+
+        //se non esiste nel territorio dell'utente loggato un lavoratore con quel codice fiscale
+        //clono il lavoratore per il terriotrio e lo restituisco
+
+        //per prima cosa recupero l'utente per id disabilitando tutti i filtri
+        Lavoratore requiredLav = findLavoratoreMultiTerritorioBisablingOwnerShip(id);
+        //verifico se appartiene al territorio dell'utente loggato
+        if (((User) sec.getLoggedUser()).getCompany().getLid() == requiredLav.getCompanyId())
+            return requiredLav;
+
+        //se sono qui il lavoratore appartiene ad un altro territorio
+        //ricerco per codice fiscale
+        Lavoratore sameTerritorioLav = findLavoratoreByFiscalCode(requiredLav.getFiscalcode());
+        //se il lavoratore esiste verifica se è necessario aggiustarne i cellulari
+        if (sameTerritorioLav != null)
+        {
+            verifyCellNumbers(requiredLav, sameTerritorioLav);
+            return sameTerritorioLav;
+        }
+
+        //se sono giunto qui il lavoratore non esiste nel contesto del proprio terriotiro allora lo creo
+        //clonandolo
+        //mi basta prendere il lavoratore (requredLav)
+        //togliergli l'id e il company id e salvarlo!!!!!
+        requiredLav.setId(null);
+        requiredLav.setCompanyId(0);
+        requiredLav.setCe("");
+        requiredLav.setEc("");
+        lavRep.save(requiredLav);
+
+        //ritorno il lavoratore con il nuovo id
+        return requiredLav;
+    }
+
+    @Override
+    public void updateCellsForAll() {
+
+            lavRep.executeCommand(new Command() {
+                @Override
+                public void execute() {
+                    Session s = lavRep.getSession();
+
+
+                    try{
+
+                        SQLQuery query = null;
+                        query = s.createSQLQuery("{CALL aggiorna_lavoratori_recapiti() }");
+                        Object status =query.uniqueResult();
+                        System.out.println(status);
+
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+
+                    }
+                    finally{
+
+                        s.close();
+
+                    }
+                }
+            });
+
+    }
+
+    private void verifyCellNumbers(Lavoratore requiredLav, Lavoratore sameTerritorioLav) {
+        //devo verificare che esisteno i numeri di telefono e se non esistono li prendo dall'altra anagrafica
+        if (!StringUtils.isEmpty(sameTerritorioLav.getCellphone()))
+            return;
+        if (!StringUtils.isEmpty(sameTerritorioLav.getPhone()))
+            return;
+
+        if (StringUtils.isEmpty(sameTerritorioLav.getCellphone()))
+            sameTerritorioLav.setCellphone(requiredLav.getCellphone());
+        if (StringUtils.isEmpty(sameTerritorioLav.getPhone()))
+            sameTerritorioLav.setPhone(requiredLav.getPhone());
+
+        lavRep.save(sameTerritorioLav);
+
+    }
+
+    private Lavoratore findLavoratoreMultiTerritorioBisablingOwnerShip(long id) {
+        LoadRequest req = LoadRequest.build().disableOwnershipQuery().filter("id", id);
+        return lavRep.find(req).findFirst().get();
+    }
+
+    @Override
     public Lavoratore getLavoratoreById(long loggedUserId, long lavId) {
         return lavRep.get(lavId).orElse(null);
     }
@@ -130,18 +231,47 @@ public class LavoratoriServiceImpl implements LavoratoreService {
         lavRep.delete(idLav);
     }
 
+    private List<Company> findTerrirotiPerRegioneUtenteLoggato(){
+        User u = ((User) sec.getLoggedUser());
+        int regionId = u.getCompany().getRegionId();
+
+       return compRep.find(LoadRequest.build()).getRows().stream().filter(a -> a.getRegionId() == regionId).collect(Collectors.toList());
+    }
+
     @Override
-    public List<Lavoratore> findLocalLavoratori(long loggedUserId, LavoratoreSearchParams params) {
+    public List<Lavoratore> findLavoratoriMultiterritorio(long loggedUserId, LavoratoreSearchParams params) {
 
 //        if (params.isEmpty())
 //            return new ArrayList<>();
 
-      //  if (params.getPage() == null || params.getPage() == 0)
-            params.setPage(1);
+        //  if (params.getPage() == null || params.getPage() == 0)
+        params.setPage(1);
 
-        int rowsPerPage = 200;
+        int rowsPerPage = 500;
 
-        LoadRequest req = LoadRequest.build();
+        LoadRequest req = null;
+
+        if (StringUtils.isEmpty(params.getCompany())){
+            req = LoadRequest.build().disableOwnershipQuery();
+
+            List<Company> t = findTerrirotiPerRegioneUtenteLoggato();
+            Disjunction or = new Disjunction();
+            or.setChildren(new ArrayList<>());
+
+            for (Company company : t) {
+                Filter f = new Filter();
+                f.setProperty("companyId");
+                f.setType(Filter.EQ);
+                f.setValue(company.getLid());
+                or.getChildren().add(f);
+            }
+
+            req.getFilters().add(or);
+
+
+        }
+        else
+            req = LoadRequest.build().disableOwnershipQuery().filter("companyId", params.getCompany());
 
         if (StringUtils.hasLength(params.getNamesurname())){
             //ricerca dal tasto in alto nella barra di ricerca globale
@@ -209,8 +339,117 @@ public class LavoratoriServiceImpl implements LavoratoreService {
 
 
 
+        List<Lavoratore>  result =lavRep.find(req).getRows();
 
-        return lavRep.find(req).getRows();
+        //se ho fatto una ricerca multirterritorio aggijungo la proprietà comapnyname
+
+        List<Company> cc = compRep.find(null).getRows();
+
+        for (Lavoratore lavoratore : result) {
+            lavoratore.setCompanyName(cc.stream().filter(a -> a.getLid() == lavoratore.getCompanyId()).findFirst().get().getDescription());
+        }
+
+
+        return result;
+    }
+
+
+    @Override
+    public List<Lavoratore> findLocalLavoratori(long loggedUserId, LavoratoreSearchParams params) {
+
+//        if (params.isEmpty())
+//            return new ArrayList<>();
+
+      //  if (params.getPage() == null || params.getPage() == 0)
+            params.setPage(1);
+
+        int rowsPerPage = 200;
+
+        LoadRequest req = null;
+
+        if (StringUtils.isEmpty(params.getCompany()))
+            req = LoadRequest.build();
+        else
+            req = LoadRequest.build().disableOwnershipQuery().filter("companyId", params.getCompany());
+
+        if (StringUtils.hasLength(params.getNamesurname())){
+            //ricerca dal tasto in alto nella barra di ricerca globale
+
+            Disjunction or = new Disjunction();
+
+            Filter f = new Filter();
+            f.setProperty("namesurname");
+            f.setType(Filter.LIKE);
+            f.setValue(params.getNamesurname());
+
+
+            Filter f1 = new Filter();
+            f1.setProperty("surnamename");
+            f1.setType(Filter.LIKE);
+            f1.setValue(params.getNamesurname());
+
+            or.setChildren(Arrays.asList(f,f1));
+
+            req.getFilters().add(or);
+
+
+
+        }else{
+            Conjunction and = new Conjunction();
+
+            List<Filter> filters = new ArrayList<>();
+
+
+            Filter f1 = new Filter();
+            f1.setProperty("name");
+            f1.setType(Filter.LIKE);
+            f1.setValue(params.getName());
+            filters.add(f1);
+
+
+            Filter f2 = new Filter();
+            f2.setProperty("surname");
+            f2.setType(Filter.LIKE);
+            f2.setValue(params.getSurname());
+            filters.add(f2);
+
+            Filter f3 = new Filter();
+            f3.setProperty("fiscalcode");
+            f3.setType(Filter.LIKE);
+            f3.setValue(params.getFiscalcode());
+            filters.add(f3);
+
+            if (!StringUtils.isEmpty(params.getCell())){
+                Filter f4 = new Filter();
+                f4.setProperty("cellphone");
+                f4.setType(Filter.LIKE);
+                f4.setValue(params.getCell());
+                filters.add(f4);
+            }
+
+
+            and.setChildren(filters);
+
+            req.getFilters().add(and);
+        }
+
+        req.setPage(params.getPage());
+        req.setRowsPerPage(rowsPerPage);
+
+
+
+        List<Lavoratore>  result =lavRep.find(req).getRows();
+
+        //se ho fatto una ricerca multirterritorio aggijungo la proprietà comapnyname
+        if (!StringUtils.isEmpty(params.getCompany())){
+            List<Company> cc = compRep.find(null).getRows();
+
+            for (Lavoratore lavoratore : result) {
+                lavoratore.setCompanyName(cc.stream().filter(a -> a.getSid().equals(params.getCompany())).findFirst().get().getDescription());
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -240,11 +479,11 @@ public class LavoratoriServiceImpl implements LavoratoreService {
 
 
         }else{
-            if (StringUtils.isEmpty(params.getSurname())){
-                return new ArrayList<>();
-            }
-            if (params.getSurname().length() <4)
-                return new ArrayList<>();
+//            if (StringUtils.isEmpty(params.getSurname())){
+//                return new ArrayList<>();
+//            }
+//            if (params.getSurname().length() <4)
+//                return new ArrayList<>();
 
             if (!StringUtils.isEmpty(params.getSurname())){
                 Filter f1 = new Filter();
@@ -492,43 +731,79 @@ public class LavoratoriServiceImpl implements LavoratoreService {
         return libs;
     }
 
+    @Override
+    public List<String> getNumeriTelefono(String fiscalCode) {
 
 
 
 
-    private List<Lavoratore> getMockedWorkers() {
-        Lavoratore lav1 = new Lavoratore();
+        final String query = createQueryForNumeriTelefono(fiscalCode);
 
-        lav1.setId(1);
-        lav1.setName("Angelo");
-        lav1.setSurname("Dalco");
-        lav1.setBirthDate(new Date());
-        lav1.setNationality("1");
-        lav1.setLivingCity("5");
-        lav1.setAddress("Viale Europa");
-        lav1.setCap("76200");
-        lav1.setFiscalcode("DDDDDDDDDDDDDDDD");
 
-        Lavoratore lav2 = new Lavoratore();
+        final Box box = new Box();
 
-        lav2.setId(2);
-        lav2.setName("Ciccio");
-        lav2.setSurname("Randa");
-        lav2.setBirthDate(new Date());
-        lav2.setNationality("1");
-        lav2.setLivingCity("6");
-        lav2.setAddress("Via Giolitti");
-        lav2.setCap("56100");
-        lav2.setFiscalcode("EEEEEEEEEEEEEEEE");
+        lavRep.executeCommand(new Command() {
+            @Override
+            public void execute() {
+                Session s = lavRep.getSession();
+                Transaction tx = null;
 
-        return new ArrayList<Lavoratore>() {
-            {
-                add(lav1);
-                add(lav2);
+                try{
+
+                    tx = s.beginTransaction();
+
+                    List<Object[]> numTelefoni = createHibernateQueryForTelefoni(s,query).list();
+
+                    tx.commit();
+
+
+
+                    box.setValue(numTelefoni);
+
+
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                    tx.rollback();
+                }
+                finally{
+
+                    s.close();
+
+                }
             }
-        };
+
+
+        });
+
+        return (List<String>)box.getValue();
+
 
     }
+
+
+
+
+
+    private String createQueryForNumeriTelefono(String fiscalCode) {
+
+        return String.format("select l.Telefono  from lavoratori l where CodiceFiscale = '%s' and Telefono IS NOT NULL and Telefono <> '' and Telefono <> '-'\n" +
+                "UNION\n" +
+                "select l.Telefono from lavoratori_liberi l where CodiceFiscale = '%s' and Telefono IS NOT NULL and Telefono <> '' and Telefono <> '-'\n" +
+                "UNION\n" +
+                "select l.Telefono from lavoratori_liberi_copy l where CodiceFiscale = '%s' and Telefono IS NOT NULL and Telefono <> '' and Telefono <> '-'\n" +
+                "UNION\n" +
+                "select l.cellphone as Telefono from fenealweb_lavoratore l where fiscalcode = '%s' and cellphone IS NOT NULL and cellphone <> '' and cellphone <> '-'\n" +
+                "UNION\n" +
+                "select l.phone as Telefono from fenealweb_lavoratore l where fiscalcode = '%s'  and phone IS NOT NULL and phone <> '' and phone <> '-'",fiscalCode,fiscalCode,fiscalCode,fiscalCode, fiscalCode );
+
+    }
+    private SQLQuery createHibernateQueryForTelefoni(Session session, String query){
+        return session.createSQLQuery(query)
+                .addScalar("Telefono");
+    }
+
+
 
     public Lavoratore findLavoratoreForProvince(String provinceName, String fiscalcode) {
 
@@ -856,6 +1131,8 @@ public class LavoratoriServiceImpl implements LavoratoreService {
 
         return result;
     }
+
+
 
     private Iscrizione checkIfIscritto(List<Iscrizione> iscrizioni, boolean firstPartOfYear) {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);

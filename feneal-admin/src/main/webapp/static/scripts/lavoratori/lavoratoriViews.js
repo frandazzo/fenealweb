@@ -60,6 +60,11 @@ define([
 
             this.on("load", function(){
 
+                //se si tratta di timeline nella header ho i valori del codice fiscale  e dell'id
+                var id =$(".worker-summary-header").attr("data-worker-id");
+
+                if (id)
+                    self.workerId = id;
                 //alert("data loaded");
                 //qui inserisco tutto il codice di inizializzazione della vista
 
@@ -67,7 +72,6 @@ define([
                 if (window.appcontext.roleid != 3){
                     $(".versamenti").hide();
                 }
-
 
                 // Gestione pulsante Stampa tessera
                 $(".print").on("click",function(){
@@ -116,9 +120,8 @@ define([
 
                 });
 
-
                     // Gestione pulsante di Visualizza credito residuo SMS
-                    $("button.btn-residual-credit").click(function() {
+                $("button.btn-residual-credit").click(function() {
                         var svc = new  fmodel.AjaxService();
 
                         svc.set("data", {});
@@ -140,7 +143,6 @@ define([
 
                         svc.load();
                     });
-
 
                 // Gestione pulsante INVIA SMS
                 $("button.btn-send-sms").click(function() {
@@ -339,16 +341,11 @@ define([
                     $("button.deleghe-lecce").hide();
                 }
 
-
                 $("button.deleghe").click(function(){
                     ui.Navigation.instance().navigate("deleghehome", "index", {
                         workerId: self.workerId
                     })
                 });
-
-
-
-
 
                 if (window.appcontext.provinces.indexOf("chieti") > -1 ||
                     window.appcontext.provinces.indexOf("teramo") > -1 ||
@@ -366,12 +363,6 @@ define([
                     $("button.magazzino").hide();
                 }
 
-
-
-
-
-
-
                 $("button.archiviodocumenti").click(function(){
                     ui.Navigation.instance().navigate("documenticrud", "list", {
                         workerId: self.workerId,
@@ -379,15 +370,12 @@ define([
                     })
                 });
 
-
-
                 $("button.comunicazioni").click(function(){
                     ui.Navigation.instance().navigate("comunicazionicrud", "list", {
                         workerId: self.workerId,
                         e : "comunicazione"
                     })
                 });
-
 
                 $("button.richiesteinfo").click(function(){
                     ui.Navigation.instance().navigate("richiestecrud", "list", {
@@ -506,6 +494,36 @@ define([
             var self = this;
 
             return [
+
+                {
+                    text: "Verifica altri numeri di telefono",
+                    command: function() {
+
+                        var svc = new  fmodel.AjaxService();
+                        var fiscale = $('#span-fiscale').text();
+                        svc.set("data", {});
+                        svc.set("url", BASE + "wtelefoni/" + fiscale);
+                        svc.on("load", function(response){
+                            var container = $('<div class="telefoni">'+response.toString()+'</div>');
+
+                            var dialog = container.modalDialog({
+                                autoOpen: true,
+                                title: "Verifica altri contatti",
+                                destroyOnClose: true,
+                                height: 200,
+                                width: 340
+                            });
+                        });
+                        svc.on("error", function(error){
+                            $.notify.error(error);
+                        });
+
+                        svc.load();
+
+                    },
+                    icon: "pencil"
+                },
+
                 {
                     text: "Crea anagrafica",
                     command: function() {
@@ -524,6 +542,27 @@ define([
                             fs: this.fullScreenForm,
                             id: self.workerId
                         });
+                    },
+                    icon: "pencil"
+                },
+                {
+                    text: "Deleghe",
+                    command: function() {
+                        ui.Navigation.instance().navigate("deleghehome", "index", {
+                            workerId: self.workerId
+                        })
+
+                    },
+                    icon: "pencil"
+                },
+                {
+                    text: "Archivio documentale",
+                    command: function() {
+
+                        ui.Navigation.instance().navigate("documenticrud", "list", {
+                            workerId: self.workerId,
+                            e : "documento"
+                        })
                     },
                     icon: "pencil"
                 },
@@ -1036,6 +1075,9 @@ define([
             this.geoUtils = new geoUtils.GeoUtils();
             //questo paramttro indica se si tratta di ricerca locale o nel dbnazionale
             this.localSearch = true;
+            //questa variabile indica se la ricerca che sto facendo ha una natura regionale oppure locale e quindi
+            //direttamente legate ad un solo territorio
+            this.regional = false;
 
             var self = this;
 
@@ -1077,11 +1119,17 @@ define([
 
             var searchWorkerUrl = self.localSearch ? "localworkers" :"remoteworkers";
 
-            //resultsContainer
 
-            // var formatDate = function(date) {
-            //     return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-            // };
+            //una volta compresa la natura della ricerca devo verificare se regionale o effettivamente locale
+            if (self.localSearch ){
+                this.regional = $('[data-property="company"]').length > 0;
+                if (this.regional)
+                    searchWorkerUrl = searchWorkerUrl + "new";
+            }else{
+                this.regional = false;
+            }
+
+
 
             var svc = new fmodel.AjaxService();
             svc.url = BASE + searchWorkerUrl;
@@ -1095,53 +1143,6 @@ define([
                     self.initGrid(response);
 
 
-                    // if (response.length == 0) {
-                    //     $("div.no-results").show();
-                    //     return;
-                    // }
-                    //
-                    // $.each(response, function(i, o) {
-                    //     var newWorkerRow = self.rowCloned.clone();
-                    //
-                    //     $(newWorkerRow).attr("data-entity-id", o.id);
-                    //     $(newWorkerRow).find("[data-component=select_checkbox]").attr("data-entity-id", o.id);
-                    //
-                    //     // per capire se prendere l'oggetto di utenteDBNazionale o di Lavoratore
-                    //     if (o.nomeCompleto) {
-                    //         $(newWorkerRow).find("span.namesurname").text(o.cognome + " " + o.nome);
-                    //         $(newWorkerRow).find("[data-property=surname]").attr("data-property-value", o.cognome);
-                    //         $(newWorkerRow).find("span.birthDate").text(formatDate(new Date(o.dataNascita)));
-                    //         $(newWorkerRow).find("span.nationality").text(o.nomeNazione);
-                    //         $(newWorkerRow).find("span.phone").text(o.telefono);
-                    //         $(newWorkerRow).find("span.livingProvince").text(o.nomeProvinciaResidenza);
-                    //         $(newWorkerRow).find("span.livingCity").text(o.nomeComuneResidenza);
-                    //         $(newWorkerRow).find("span.address").text(o.indirizzo + ", " + o.cap);
-                    //     } else {
-                    //         $(newWorkerRow).find("span.namesurname").text(o.surname + " " + o.name);
-                    //         $(newWorkerRow).find("[data-property=surname]").attr("data-property-value", o.surname);
-                    //         $(newWorkerRow).find("span.birthDate").text(formatDate(new Date(o.birthDate)));
-                    //         $(newWorkerRow).find("span.nationality").text(o.nationality);
-                    //         $(newWorkerRow).find("span.phone").text(o.phone);
-                    //         $(newWorkerRow).find("span.livingProvince").text(o.livingProvince);
-                    //         $(newWorkerRow).find("span.livingCity").text(o.livingCity);
-                    //         $(newWorkerRow).find("span.address").text(o.address + ", " + o.cap);
-                    //     }
-                    //
-                    //     $(newWorkerRow).show();
-                    //     $(newWorkerRow).appendTo($(".tbody-workers"));
-                    // });
-                    // $("div.no-results").hide();
-                    //
-                    // //imposto l'handler per la navigazione verso l'utente selezionato
-                    // $("td a[data-property=surname]").click(function() {
-                    //     var workerId = $(this).parents("tr").attr("data-entity-id");
-                    //
-                    //     ui.Navigation.instance().navigate("summaryworker", "index", {
-                    //         id: workerId
-                    //     });
-                    //
-                    // });
-
                 },
                 error: function (error){
                     $.notify.error(error);
@@ -1154,10 +1155,96 @@ define([
         //inizializzazione della griglia dei risultati
         initGrid: function(responseData){
             var self = this;
-           
-            
+
+            //griglia dati regionali
+            if (self.regional){
+                console.log("griglia dati regionali");
+                $('#resultsContainer').dxDataGrid({
+                    dataSource:responseData,
+                    columns:[
+                        { dataField:"companyName", visible : true, visibleIndex: 0, caption:"Territorio"},
+                        { dataField:"surname", visible : true, visibleIndex: 1, caption:"Cognome",
+                            cellTemplate: function (container, options) {
+                                //container.addClass("img-container");
+                                var surname = options.data.surname;
+                                var id = options.data.id;
+
+                                $("<a />")
+                                    .text(surname)
+                                    .attr("href", "javascript:;")
+                                    .on('click', function(){
+
+                                        ui.Navigation.instance().navigate("summaryworker", "index", {
+                                            id:id
+                                        })
+
+                                    })
+                                    .appendTo(container);
+                            }
+                        },
+                        { dataField:"name", visible : true, caption:"Nome",visibleIndex: 2},
+                        { dataField:"birthDate", dataType:'date', visible : true, caption:"Data nascita" ,visibleIndex: 3},
+                        { dataField:"fiscalcode", visible : true, caption:"Codice fiscale",visibleIndex: 4},
+
+                        { dataField:"nationality", visible : true, caption:"Nazione nascita",visibleIndex: 5},
+                        { dataField:"livingProvince", visible : true, caption:"Prov. Residenza",visibleIndex: 6},
+                        { dataField:"livingCity", visible : true, caption:"Com. Residenza",visibleIndex: 7},
+                        { dataField:"address", visible : true, caption:"Indirizzo",visibleIndex: 8},
+                        { dataField:"cap", visible : true, caption:"Cap",visibleIndex: 9},
+                        { dataField:"cellphone", visible : true, caption:"Cellulare",visibleIndex: 10},
+                        { dataField:"phone", visible : true, caption:"Telefono",visibleIndex: 11},
+                        { dataField:"birthProvince", visible : true, caption:"Prov. nascita",visibleIndex: 12},
+                        { dataField:"birthPlace", visible : true, caption:"Com. nascita",visibleIndex: 13}
+
+
+                    ],
+                    headerFilter: {
+                        visible: true
+                    },
+                    summary: {
+                        totalItems: [{
+                            column: "surname",
+                            summaryType: "count",
+                            customizeText: function(data) {
+
+                                if (responseData.length <= 500)
+                                    return "Elementi trovati: " + data.value;
+                                else
+                                    return "Oltre 500 elementi";
+                            }
+                        }]
+                    },
+                    "export": {
+                        enabled: false,
+                        fileName: "anagrafiche",
+                        allowExportSelectedData: true
+                    },
+                    paging:{
+                        pageSize: 35
+                    },
+                    sorting:{
+                        mode:"multiple"
+                    },
+                    rowAlternationEnabled: true,
+                    showBorders: true,
+                    allowColumnReordering:true,
+                    allowColumnResizing:true,
+                    columnAutoWidth: true,
+                    selection:{
+                        mode:"none"
+                    },
+                    hoverStateEnabled: true
+
+                }).dxDataGrid("instance");
+
+                return;
+            }
+
+
+            //griglia dati locali
             if (self.localSearch){
                 //instanzio la griglia dei risultati locali...)
+                console.log("griglia dati locali");
                 $('#resultsContainer').dxDataGrid({
                     dataSource:responseData,
                     columns:[
@@ -1235,14 +1322,16 @@ define([
 
                 return;
             }
-            //griglia dati dbnazionale
 
+
+            //griglia dati dbnazionale
+            console.log("griglia dati nazionali");
             $('#resultsContainer').dxDataGrid({
                 dataSource:responseData,
                 columns:[
 
 
-                    { dataField:"nomeCompleto", fixed :true, fixedPosition:"left",visible : true, visibleIndex: 0,
+                    { dataField:"nomeCompleto", visible : true, visibleIndex: 0,
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
                             var completeName = options.data.nomeCompleto;
@@ -1444,10 +1533,385 @@ define([
         }
     });
 
+
+
+    var SearchWorkersNewAppView = fviews.FormAppView.extend({
+        ctor: function(formService, initialserachParams) {
+            SearchWorkersNewAppView.super.ctor.call(this, formService);
+            //se eseguo la ricerca dal tasto cerca nella toolbar inizializzo la griglia di ricerca con unaprericerca in base al nome
+            //e cognome specificati nel parametro initialsearchParms
+            this.workerName = initialserachParams;
+            this.geoUtils = new geoUtils.GeoUtils();
+            //questo paramttro indica se si tratta di ricerca locale o nel dbnazionale
+            this.localSearch = true;
+
+            var self = this;
+
+            self.formView.on("load", function(){
+                self.createToolbar();
+                self.createBreadcrumbs();
+
+                //self.rowCloned = $(".tbody-workers").find("tr.row-worker").first().clone();
+
+                var nationalityItalianId = 100;
+
+                if (self.workerName) {
+                    self.localSearch = true;
+                    self.searchWorkers({namesurname: self.workerName});
+                }
+
+                // Carico la lista delle province italiane
+                self.geoUtils.loadProvinces(nationalityItalianId, "", $('select[name="livingProvince"]'));
+
+                //qui attacco levento on change della select delle province
+                $('select[name="livingProvince"]').change(function(){
+
+                    var selectedVal = $(this).val();
+                    //carico la lista delle città
+                    if (selectedVal){
+                        self.geoUtils.loadCities(selectedVal, "", $('select[name="livingCity"]'));
+
+                    }
+                    else
+                        $('select[name="livingCity"]').empty().append("<option selected='selected' value=''>Select</option>");
+                });
+
+            });
+
+        },
+
+        searchWorkers: function(params) {
+            var self = this;
+
+            var searchWorkerUrl = self.localSearch ? "localworkersnew" :"remoteworkers";
+
+            //resultsContainer
+
+            // var formatDate = function(date) {
+            //     return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+            // };
+
+            var svc = new fmodel.AjaxService();
+            svc.url = BASE + searchWorkerUrl;
+            svc.set("method", "GET");
+            svc.set("data", params);
+
+            svc.on({
+                load: function(response){
+                    $.loader.hide({parent:'body'});
+
+                    self.initGrid(response);
+
+                },
+                error: function (error){
+                    $.notify.error(error);
+                }
+            });
+            svc.load();
+            $.loader.show({parent:'body'});
+
+        },
+        //inizializzazione della griglia dei risultati
+        initGrid: function(responseData){
+            var self = this;
+
+
+            if (self.localSearch){
+                //instanzio la griglia dei risultati locali...)
+                $('#resultsContainer').dxDataGrid({
+                    dataSource:responseData,
+                    columns:[
+                        { dataField:"companyName", visible : true, visibleIndex: 0, caption:"Territorio"},
+                        { dataField:"surname", visible : true, visibleIndex: 1, caption:"Cognome",
+                            cellTemplate: function (container, options) {
+                                //container.addClass("img-container");
+                                var surname = options.data.surname;
+                                var id = options.data.id;
+
+                                $("<a />")
+                                    .text(surname)
+                                    .attr("href", "javascript:;")
+                                    .on('click', function(){
+
+                                        ui.Navigation.instance().navigate("summaryworker", "multiterritorio", {
+                                            id:id
+                                        })
+
+                                    })
+                                    .appendTo(container);
+                            }
+                        },
+                        { dataField:"name", visible : true, caption:"Nome",visibleIndex: 2},
+                        { dataField:"birthDate", dataType:'date', visible : true, caption:"Data nascita" ,visibleIndex: 3},
+                        { dataField:"fiscalcode", visible : true, caption:"Codice fiscale",visibleIndex: 4},
+
+                        { dataField:"nationality", visible : true, caption:"Nazione nascita",visibleIndex: 5},
+                        { dataField:"livingProvince", visible : true, caption:"Prov. Residenza",visibleIndex: 6},
+                        { dataField:"livingCity", visible : true, caption:"Com. Residenza",visibleIndex: 7},
+                        { dataField:"address", visible : true, caption:"Indirizzo",visibleIndex: 8},
+                        { dataField:"cap", visible : true, caption:"Cap",visibleIndex: 9},
+                        { dataField:"cellphone", visible : true, caption:"Cellulare",visibleIndex: 10},
+                        { dataField:"phone", visible : true, caption:"Telefono",visibleIndex: 11},
+                        { dataField:"birthProvince", visible : true, caption:"Prov. nascita",visibleIndex: 12},
+                        { dataField:"birthPlace", visible : true, caption:"Com. nascita",visibleIndex: 13}
+
+
+                    ],
+                    headerFilter: {
+                        visible: true
+                    },
+                    summary: {
+                        totalItems: [{
+                            column: "surname",
+                            summaryType: "count",
+                            customizeText: function(data) {
+
+                                if (responseData.length <= 500)
+                                    return "Elementi trovati: " + data.value;
+                                else
+                                    return "Oltre 500 elementi";
+                            }
+                        }]
+                    },
+                    "export": {
+                        enabled: false,
+                        fileName: "anagrafiche",
+                        allowExportSelectedData: true
+                    },
+                    paging:{
+                        pageSize: 35
+                    },
+                    sorting:{
+                        mode:"multiple"
+                    },
+                    rowAlternationEnabled: true,
+                    showBorders: true,
+                    allowColumnReordering:true,
+                    allowColumnResizing:true,
+                    columnAutoWidth: true,
+                    selection:{
+                        mode:"none"
+                    },
+                    hoverStateEnabled: true
+
+                }).dxDataGrid("instance");
+
+                return;
+            }
+            //griglia dati dbnazionale
+
+            $('#resultsContainer').dxDataGrid({
+                dataSource:responseData,
+                columns:[
+
+
+                    { dataField:"nomeCompleto", visible : true, visibleIndex: 0,
+                        cellTemplate: function (container, options) {
+                            //container.addClass("img-container");
+                            var completeName = options.data.nomeCompleto;
+                            var fiscalCode = options.data.codiceFiscale;
+
+
+                            $("<a />")
+                                .text(completeName)
+                                .attr("href", "javascript:;")
+                                .on('click', function(){
+
+                                    ui.Navigation.instance().navigate("summaryworker", "remoteIndex", {
+                                        fiscalCode:fiscalCode
+                                    })
+
+                                })
+                                .appendTo(container);
+                        }
+
+
+                    },
+                    { dataField:"codiceFiscale", visible : true, caption:"Codice fiscale",visibleIndex: 3},
+
+                    { dataField:"nomeNazione", visible : true, caption:"Nazione nascita",visibleIndex: 4},
+                    { dataField:"nomeProvinciaResidenza", visible : true, caption:"Prov. Residenza",visibleIndex: 5},
+                    { dataField:"nomeComuneResidenza", visible : true, caption:"Com. Residenza",visibleIndex: 6},
+                    { dataField:"indirizzo", visible : true, caption:"Indirizzo",visibleIndex: 7},
+                    { dataField:"cap", visible : true, caption:"Cap",visibleIndex: 8},
+                    { dataField:"telefono", visible : true, caption:"Cellulare",visibleIndex: 9}
+
+
+                ],
+                summary: {
+                    totalItems: [{
+                        column: "nomeCompleto",
+                        summaryType: "count",
+                        customizeText: function(data) {
+
+                            if (responseData.length <= 500)
+                                return "Elementi trovati: " + data.value;
+                            else
+                                return "Verranno visualizzati i primi 500 elementi";
+                        }
+                    }]
+                },
+                "export": {
+                    enabled: false,
+                    fileName: "anagrafiche",
+                    allowExportSelectedData: true
+                },
+                paging:{
+                    pageSize: 35
+                },
+                sorting:{
+                    mode:"multiple"
+                },
+                rowAlternationEnabled: true,
+                showBorders: true,
+                allowColumnReordering:true,
+                allowColumnResizing:true,
+                columnAutoWidth: true,
+                selection:{
+                    mode:"none"
+                },
+                hoverStateEnabled: true,
+
+                masterDetail: {
+                    enabled: true,
+                    template: function(container, options) {
+                        var currentData = options.data;
+
+                        container.addClass("internal-grid-container");
+                        $("<div>").text("Iscrizioni lavoratore").appendTo(container);
+                        $("<div>")
+                            .addClass("internal-grid")
+                            .dxDataGrid({
+                                columnAutoWidth: true,
+                                columns: [
+                                    { dataField:"nomeRegione",  visible : true, visibleIndex: 0},
+                                    { dataField:"nomeProvincia",  visible : true, visibleIndex: 1},
+                                    { dataField:"settore",  visible : true, visibleIndex: 2},
+                                    { dataField:"ente",  visible : true, visibleIndex: 3},
+                                    { dataField:"periodo",  visible : true, visibleIndex: 4},
+                                    { dataField:"anno",  visible : true, visibleIndex: 5},
+                                    { dataField:"azienda", visible : true, visibleIndex: 6},
+                                    { dataField:"piva",  visible : true, visibleIndex: 7},
+                                    { dataField:"livello",  visible : true, visibleIndex: 8},
+                                    { dataField:"quota",  visible : true, visibleIndex: 9},
+                                    { dataField:"contratto",  visible : true, visibleIndex: 10}
+
+
+                                ],
+                                dataSource: currentData.iscrizioni
+                            }).appendTo(container);
+                    }
+                }
+
+            }).dxDataGrid("instance");
+
+        },
+        // Siccome il form di ricerca è costituito da due tab, vado a considerare solo i campi visibili dal tab selezionato
+        serializeWorkerSearchForm: function() {
+            var self = this;
+            var properties = self.form.serializeArray();
+
+            //tolgo dalla lista delle proprietà tutte quelle che non sono visibili
+            //(le filtro con la funzione grep di jquery
+            $.each(self.form.element.find("[data-component=field]"), function(i, o) {
+                if (!$(o).is(':visible')) {
+                    var property = $(o).data("property");
+                    //dammi tutte le prorietà che non si chiamano come la propriatà non visibile...
+                    properties = $.grep(properties, function(e) {
+                        return e.name != property;
+                    });
+                }
+            });
+
+            return properties;
+        },
+
+        submit: function(e){
+            var self = this;
+
+
+            $(".tbody-workers").html("");
+
+            // Imposto l'URL di ricerca in base al tipo di ricerca che sto eseguendo
+            if (self.form.element.find("input[name=surnameDB]").is(":visible")){
+                self.localSearch = false;
+            }else{
+                self.localSearch = true;
+            }
+
+
+            self.searchWorkers(self.serializeWorkerSearchForm());
+        },
+        close: function(){
+            alert("close");
+        },
+        getBreadcrumbItems: function() {
+            var self = this;
+            return [
+                {
+                    pageTitle: "Fenealweb"
+                },
+                {
+                    icon: "glyphicon glyphicon-home",
+                    href: BASE
+                },
+                {
+                    label: "Ricerca lavoratore"
+                    //href: ui.Navigation.instance().navigateUrl("editworker", "index", {})
+                }
+            ];
+        },
+        getToolbarButtons: function() {
+            var self = this;
+
+            return [
+                {
+                    text: "Crea anagrafica",
+                    command: function() {
+
+                        ui.Navigation.instance().navigate("editworker", "index", {
+                            fs: this.fullScreenForm
+                        });
+                    },
+                    icon: "pencil"
+                }
+
+            ];
+
+        },
+        createToolbar: function() {
+            var buttons = this.getToolbarButtons();
+
+            var $t = $("#toolbar");
+            if(!$t.toolbar("isToolbar")) {
+                $t.toolbar();
+            }
+
+            $t.toolbar("clear");
+            var size = buttons.length;
+            for(var i = 0; i < size; i++) {
+                var button = buttons[i];
+                $t.toolbar("add", button);
+            }
+        },
+        createBreadcrumbs: function() {
+            var items = this.getBreadcrumbItems();
+
+            var $b = $("#breadcrumbs");
+            if(!$b.breadcrumbs("isBreadcrumbs")) {
+                $b.breadcrumbs();
+            }
+
+            $b.breadcrumbs('clear');
+            $b.breadcrumbs('addAll', items);
+        }
+    });
+
+
     exports.EditWorkerAppView = EditWorkerAppView;
     exports.SearchWorkersAppView = SearchWorkersAppView;
     exports.WorkerSummaryRemoteView = WorkerSummaryRemoteView;
-
+    exports.SearchWorkersNewAppView =SearchWorkersNewAppView;
     return exports;
 
 });

@@ -162,10 +162,10 @@ define([
 
             service.on('load', function(response){
 
-                $('.file')
-                    .attr("href", response.inpsFiles[0].filepath)
-                    .attr("target", "_blank")
-                    .appendTo($(this).parent());
+                // $('.file')
+                //     .attr("href", response.inpsFiles[0].filepath)
+                //     .attr("target", "_blank")
+                //     .appendTo($(this).parent());
 
                 self.initTabsPanel();
                 self.initQuotePagateGrid(response);

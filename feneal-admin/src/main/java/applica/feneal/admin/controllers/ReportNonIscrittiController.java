@@ -2,10 +2,7 @@ package applica.feneal.admin.controllers;
 
 import applica.feneal.admin.facade.LiberiFacade;
 import applica.feneal.admin.facade.TraceFacade;
-import applica.feneal.admin.fields.renderers.AziendeSingleSearchFieldRenderer;
-import applica.feneal.admin.fields.renderers.LoggedUserProvinceNonOptionalSelectFieldRenderer;
-import applica.feneal.admin.fields.renderers.ParithericNonOptionalSelectFieldRenderer;
-import applica.feneal.admin.fields.renderers.SignedToSelectFieldRenderer;
+import applica.feneal.admin.fields.renderers.*;
 import applica.feneal.admin.fields.renderers.geo.OptionalCityFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalProvinceFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalStateFieldRenderer;
@@ -17,6 +14,7 @@ import applica.feneal.admin.viewmodel.reports.UiLibero;
 import applica.feneal.admin.viewmodel.reports.UiRequestInfoAiTerritori;
 import applica.feneal.domain.data.core.ParitheticRepository;
 import applica.feneal.domain.model.User;
+import applica.feneal.domain.model.core.ImportData;
 import applica.feneal.domain.model.core.Paritethic;
 import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.domain.model.dbnazionale.search.LiberoReportSearchParams;
@@ -36,6 +34,7 @@ import applica.framework.widgets.FormCreationException;
 import applica.framework.widgets.FormDescriptor;
 import applica.framework.widgets.fields.Params;
 import applica.framework.widgets.fields.Values;
+import applica.framework.widgets.fields.renderers.DefaultFieldRenderer;
 import applica.framework.widgets.fields.renderers.HiddenFieldRenderer;
 import applica.framework.widgets.fields.renderers.HtmlFieldRenderer;
 import applica.framework.widgets.fields.renderers.MailFieldRenderer;
@@ -49,6 +48,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -82,13 +83,47 @@ public class ReportNonIscrittiController {
     @Autowired
     private LiberiFacade liberiReportFac;
 
+
+    @RequestMapping(value = "/libericftemplate", method = RequestMethod.GET)
+    public void getAnagraficheTemplate(HttpServletResponse response) {
+        try {
+            // get your file as InputStream
+            InputStream is = getClass().getResourceAsStream("/templates/libericf.xlsx");
+            // copy it to response's OutputStream+
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException ex) {
+
+            throw new RuntimeException("IOError writing file to output stream");
+        }
+
+    }
+
     @RequestMapping(value="/liberi/report", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody
     SimpleResponse reportLiberi(@RequestBody LiberoReportSearchParams params){
         List<UiLibero> f;
         try{
-            f = liberiReportFac.reportNonIscritti(params);
+            //f = liberiReportFac.reportNonIscritti(params);
+            f = liberiReportFac.reportNonIscrittiWithNewAlgoritm(params);
+            manageActivityReportNonIscritti(params, "Report non iscritti", f);
+            return new ValueResponse(f);
+        }catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+
+
+    }
+
+    @RequestMapping(value="/liberi/reportnew", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse reportLiberinew(@RequestBody LiberoReportSearchParams params){
+        List<UiLibero> f;
+        try{
+            f = liberiReportFac.reportNonIscrittiNew(params);
             manageActivityReportNonIscritti(params, "Report non iscritti", f);
             return new ValueResponse(f);
         }catch(Exception ex){
@@ -137,18 +172,10 @@ public class ReportNonIscrittiController {
 
             FormDescriptor formDescriptor = new FormDescriptor(form);
 
-            formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggedUserProvinceNonOptionalSelectFieldRenderer.class))
+            formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggdUserExclusiveProvicesNonOptionalSelectFieldRenderer.class))
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt")
                     .putParam(Params.FORM_COLUMN, " ");
-//            formDescriptor.addField("date", String.class, "Da", null, applicationContext.getBean(DateFromMonthFieldRenderer.class))
-//                    .putParam(Params.COLS, Values.COLS_12)
-//                    .putParam(Params.ROW, "dt1")
-//                    .putParam(Params.FORM_COLUMN, " ");
-//            formDescriptor.addField("date", String.class, "a", null, applicationContext.getBean(DateToMonthFieldRenderer.class))
-//                    .putParam(Params.COLS, Values.COLS_12)
-//                    .putParam(Params.ROW, "dt2")
-//                    .putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("signedTo", String.class, "Iscritto a", null, applicationContext.getBean(SignedToSelectFieldRenderer.class))
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt3")
@@ -174,6 +201,103 @@ public class ReportNonIscrittiController {
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt7")
                     .putParam(Params.FORM_COLUMN, "  ");
+
+
+            FormResponse response = new FormResponse();
+
+            response.setContent(form.writeToString());
+            response.setTitle("Report liberi");
+
+            return response;
+        } catch (FormCreationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        } catch (CrudConfigurationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
+
+
+    @RequestMapping(value = "/libericf",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse searchviewcf(HttpServletRequest request) {
+        try{
+            Form form = new Form();
+            form.setRenderer(applicationContext.getBean(ReportsSearchFormRenderer.class));
+            form.setIdentifier("liberireportcf");
+
+            FormDescriptor formDescriptor = new FormDescriptor(form);
+
+
+            formDescriptor.addField("file1", String.class, "File codici fiscali", null,applicationContext.getBean(DocumetPrevediFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt1")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+
+            FormResponse response = new FormResponse();
+
+            response.setContent(form.writeToString());
+            response.setTitle("Report liberi per codice fiscale");
+
+            return response;
+        } catch (FormCreationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        } catch (CrudConfigurationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/importlibericf",method = RequestMethod.POST)
+    public @ResponseBody
+    SimpleResponse executeimportanagrafichePrevedi(@RequestBody ImportData file) {
+
+        try{
+
+
+            return new ValueResponse(liberiReportFac.incrociaCodiciFiscali(file));
+        }catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
+
+
+    @RequestMapping(value = "/liberinew",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse searchviewnew(HttpServletRequest request) {
+        try{
+            Form form = new Form();
+            form.setRenderer(applicationContext.getBean(ReportsSearchFormRenderer.class));
+            form.setIdentifier("liberireportnew");
+
+            FormDescriptor formDescriptor = new FormDescriptor(form);
+
+            formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggdUserRegionalProvicesNonOptionalSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+            formDescriptor.addField("parithetic", String.class, "Ente", null, applicationContext.getBean(ParithericNonOptionalSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt4")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+            //abilito solo per l'alta lombardia....
+            User u = ((User) security.getLoggedUser());
+            if (u.getCompany().containProvince("Varese")){
+
+                formDescriptor.addField("calculateCells", Boolean.class, "Carica numeri telefono (Attenzione l'impostazione di questo flag può richiedere un tempo di eleaborazione di diversi minuti!))", null, applicationContext.getBean(DefaultFieldRenderer.class))
+                        .putParam(Params.COLS, Values.COLS_12)
+                        .putParam(Params.ROW, "dt4")
+                        .putParam(Params.FORM_COLUMN, " ");
+            }
+
 
 
             FormResponse response = new FormResponse();
@@ -312,6 +436,21 @@ public class ReportNonIscrittiController {
     SimpleResponse retrievePathFileStampa(@RequestBody List<UiLibero> rows) throws Exception {
         try{
             String pathFile = liberiReportFac.printComplete(rows);
+            return new ValueResponse(pathFile);
+        } catch(Exception e) {
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+
+    @RequestMapping(value = "/liberi/retrievefilestampa/{type}", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse retrievePathFileStampa(@RequestBody List<UiLibero> rows, @PathVariable String type) throws Exception {
+        try{
+            String pathFile = liberiReportFac.printComplete(rows, type);
             return new ValueResponse(pathFile);
         } catch(Exception e) {
             return new ErrorResponse(e.getMessage());

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.dbnazionale.LavoratorePrevedi" table="fenealweb_lavoratoriprevedi" >
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        <property name="name" />
+        <property name="surname" />
+        <property name="fiscalcode" />
+        <property name="birthDate" />
+        <property name="livingProvince" />
+        <property name="livingCity" />
+        <property name="address" />
+        <property name="cap" />
+        <property name="cassaEdile" />
+        <property name="cassaEdileRegione" />
+        <property name="inquadramento" />
+        <property name="codCassa" />
+        <property name="tipoAdesione" />
+        <property name="anno" />
+    </class>
+</hibernate-mapping>
