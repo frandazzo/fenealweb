@@ -42,6 +42,7 @@ public class Delega extends SecuredDomainEntity{
     private String attachment;
     private String nomeattachment;
 
+
     public String getAttachment() {
         return attachment;
     }

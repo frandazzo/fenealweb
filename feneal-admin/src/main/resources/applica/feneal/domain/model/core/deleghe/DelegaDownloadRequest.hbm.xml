@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.core.deleghe.DelegaDownloadRequest" table="fenealweb_delegadownloadrequest" >
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        <many-to-one name="delega" class="applica.feneal.domain.model.core.deleghe.Delega" column="delegaId" lazy="false" />
+        <many-to-one name="applicant" class="applica.feneal.domain.model.User" column="applicantId" lazy="false" />
+        <property name="requestId" />
+        <property name="date" />
+        <property name="authorized" />
+        <property name="applicantCompanyId"/>
+    </class>
+</hibernate-mapping>

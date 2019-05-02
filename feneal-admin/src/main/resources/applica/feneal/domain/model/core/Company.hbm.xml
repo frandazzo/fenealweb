@@ -19,6 +19,7 @@
 		<property name="smsSenderAlias" />
 		<property name="notificationMail" />
 		<property name="automaticRipresaDati" />
+		<property name="segretarioCell"/>
 
 		<list name="visibleFunctions" table="fenealweb_visibleFunctions" lazy="false" cascade="all-delete-orphan">
 			<key column="companyId" />

@@ -36,6 +36,16 @@ public class Company extends AEntity {
     private String notificationMail;
 
 
+    private String segretarioCell;
+
+    public String getSegretarioCell() {
+        return segretarioCell;
+    }
+
+    public void setSegretarioCell(String segretarioCell) {
+        this.segretarioCell = segretarioCell;
+    }
+
     //campo per la gestione delle riprese dati
     private String automaticRipresaDati;
 

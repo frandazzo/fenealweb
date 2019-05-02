@@ -59,7 +59,6 @@ public interface DelegheService {
 
     List<Lavoratore> findLavoratoriConDelegaEdilePerAzienda(long id);
 
-    void requireAuthorizzationToDownloadDelega(long delegaId);
 
 
 
