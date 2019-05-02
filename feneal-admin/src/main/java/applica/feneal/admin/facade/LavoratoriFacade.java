@@ -993,11 +993,7 @@ public class LavoratoriFacade {
 
         UiCompleteLavoratoreSummary summary = prepareDto(l.getLid(), s, l);
         summary.setTimelineList(convertToTimelineGroups(convertToTimelineItems(f)));
-        List<DelegaNazionale> ddd = f.getDeleghe();
-
-
-
-        summary.setDeleghe(ddd);
+        summary.setDeleghe(f.getDeleghe());
         summary.setIscrizioniAltroSindacato(f.getIscrizioniAltroSindacato());
         summary.setIscrizioni(f.getIscrizioni());
         summary.setPrevedi(f.getPrevedi());
@@ -1087,6 +1083,12 @@ public class LavoratoriFacade {
             i.setOperator(delega.getOperator());
             i.setNomeAttachment(delega.getNomeattachment());
             i.setAttachment(delega.getAttachment());
+
+            // x Felice... aggiustateli come ti pare poi togli il commento
+            i.setAutorizzato(false);
+            i.setRichiestaInviata(true);
+
+
             if (delega.getAcceptDate() != null)
                 i.setDataAccreditamento(new SimpleDateFormat("dd/MM/yyyy").format(delega.getAcceptDate()));
             if (delega.getRevokeDate() != null)

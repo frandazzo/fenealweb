@@ -58,4 +58,9 @@ public interface DelegheService {
     Delega retrieveActivableWorkerDelega(long idLavoratore, int provinceId, String settore, String ente, long idAzienda);
 
     List<Lavoratore> findLavoratoriConDelegaEdilePerAzienda(long id);
+
+    void requireAuthorizzationToDownloadDelega(long delegaId);
+
+
+
 }

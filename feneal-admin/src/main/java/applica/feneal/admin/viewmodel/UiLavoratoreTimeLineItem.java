@@ -4,6 +4,27 @@ import java.util.Date;
 
 public class UiLavoratoreTimeLineItem {
 
+
+    private boolean autorizzato;
+    private boolean richiestaInviata;
+
+    public boolean isAutorizzato() {
+        return autorizzato;
+    }
+
+    public void setAutorizzato(boolean autorizzato) {
+        this.autorizzato = autorizzato;
+    }
+
+    public boolean isRichiestaInviata() {
+        return richiestaInviata;
+    }
+
+    public void setRichiestaInviata(boolean richiestaInviata) {
+        this.richiestaInviata = richiestaInviata;
+    }
+
+
     private String tipo;
     private Date data;
     private String dataStringa;
