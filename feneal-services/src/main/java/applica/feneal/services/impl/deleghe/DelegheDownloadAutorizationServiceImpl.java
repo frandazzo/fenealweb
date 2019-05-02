@@ -4,6 +4,7 @@ import applica.feneal.domain.data.core.deleghe.DelegaDownloadRequestRepository;
 import applica.feneal.domain.data.core.deleghe.DelegheRepository;
 import applica.feneal.domain.model.core.deleghe.Delega;
 import applica.feneal.domain.model.core.deleghe.DelegaDownloadRequest;
+import applica.feneal.services.ComunicazioniService;
 import applica.feneal.services.DelegheDownloadAutorizationService;
 import applica.framework.LoadRequest;
 import applica.framework.security.Security;
@@ -26,6 +27,9 @@ public class DelegheDownloadAutorizationServiceImpl implements DelegheDownloadAu
     @Autowired
     private DelegaDownloadRequestRepository delDownRep;
 
+    @Autowired
+    private ComunicazioniService tcFacade;
+
     @Override
     public void requireAuthorizzationToDownloadDelega(long delegaId) {
         Delega f = delRep.find(LoadRequest.build().disableOwnershipQuery().filter("id", delegaId)).findFirst().orElse(null);
@@ -44,7 +48,30 @@ public class DelegheDownloadAutorizationServiceImpl implements DelegheDownloadAu
 
         delDownRep.save(t);
 
-        //a qyuesto punto posso inviare una mail con il link
+
+        sendComunication(t);
+
+    }
+
+    private void sendComunication(DelegaDownloadRequest t) {
+        //a qyuesto punto posso inviare una mail o un sms con il link
+        //per prima cosa verifico se ho gli sms abilitati
+        if (tcFacade.existSmsCredentials()){
+
+
+
+        }
+
+        //invio comunique una mail
+    }
+
+    @Override
+    public void resendRequest(long delegaId) {
+        DelegaDownloadRequest d =  getDelegaDownloadRequest(delegaId);
+
+        if (d != null){
+            sendComunication(d);
+        }
 
     }
 

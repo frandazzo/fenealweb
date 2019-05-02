@@ -37,6 +37,15 @@ public class Company extends AEntity {
 
 
     private String segretarioCell;
+    private String segretarioMail;
+
+    public String getSegretarioMail() {
+        return segretarioMail;
+    }
+
+    public void setSegretarioMail(String segretarioMail) {
+        this.segretarioMail = segretarioMail;
+    }
 
     public String getSegretarioCell() {
         return segretarioCell;

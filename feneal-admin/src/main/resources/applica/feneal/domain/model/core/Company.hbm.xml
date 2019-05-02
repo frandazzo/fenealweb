@@ -20,7 +20,7 @@
 		<property name="notificationMail" />
 		<property name="automaticRipresaDati" />
 		<property name="segretarioCell"/>
-
+		<property name="segretarioMail"/>
 		<list name="visibleFunctions" table="fenealweb_visibleFunctions" lazy="false" cascade="all-delete-orphan">
 			<key column="companyId" />
 			<list-index column="idx" />

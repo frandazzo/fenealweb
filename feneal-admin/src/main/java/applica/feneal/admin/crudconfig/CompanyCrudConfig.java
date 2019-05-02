@@ -50,6 +50,7 @@ public class CompanyCrudConfig implements AppSetup {
                 .param("smsSenderAlias", Params.COLS, Values.COLS_6)
                 .fieldSet("Notifiche al segretario per mail")
                 .field("segretarioCell", "Cellulare segretario per notifiche")
+                .field("segretarioMail", "Mail segretario per notifiche")
                 .fieldSet(" ")
                 .field("visibleFunctions", "Funzionalità disponibili", FunctionsMultiSearchableFieldRenderer.class);
 

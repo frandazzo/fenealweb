@@ -141,19 +141,21 @@ public class LavoratoriServiceImpl implements LavoratoreService {
                 @Override
                 public void execute() {
                     Session s = lavRep.getSession();
+                    Transaction tx = null;
 
 
                     try{
 
+                        tx = s.beginTransaction();
                         SQLQuery query = null;
                         query = s.createSQLQuery("{CALL aggiorna_lavoratori_recapiti() }");
                         Object status =query.uniqueResult();
                         System.out.println(status);
-
+                        tx.commit();
                     }
                     catch(Exception e){
                         e.printStackTrace();
-
+                        tx.rollback();
                     }
                     finally{
 

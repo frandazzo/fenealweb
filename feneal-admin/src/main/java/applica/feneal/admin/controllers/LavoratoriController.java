@@ -110,7 +110,7 @@ public class LavoratoriController {
 
 
     //ogni minuto
-    @Scheduled(fixedDelay=60000)
+    @Scheduled(fixedDelay=120 * 60000)
     public void updatecellphones() {
 
 
