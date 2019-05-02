@@ -488,17 +488,73 @@
                                                                                         #end
                                                                                     </a>
                                                                                 </td>
+                                                                              #else
 
-                                                                              #elseif($item.autorizzato)
-                                                                                  <td><a onclick="request()" id=$item.delegaId>Richiedi Autorizzazione --$item.autorizzato</a></td>
-                                                                                  <script>
-                                                                                      function request() {
-                                                                                          alert("richesta");
-                                                                                          document.getElementById($item.delegaId).innerHTML = "Richiesta Effettuata!";
-                                                                                      }
-                                                                                  </script>
-                                                                               #else
-                                                                                  <td><a href="#">Controlla Richiesta</a> --$item.autorizzato</td>
+                                                                                  #if($item.autorizzato)
+                                                                                      <td>
+                                                                                          <a target="__blank" href="${wwwBase}$item.attachment">
+                                                                                              #if($item.nomeAttachment)
+                                                                                               $item.nomeAttachment
+                                                                                        #end
+                                                                                          </a>
+                                                                                      </td>
+
+                                                                                  #else
+
+                                                                                      #if($item.richiestaInviata)
+                                                                                      <td id="tipo-$item.delegaId"><a class="pointer" id=$item.delegaId >Reinvia Richiesta</a></td>
+                                                                                      <script>
+                                                                                          $("#$item.delegaId").click(function(){
+                                                                                              var id = $(this).attr("id");
+                                                                                              var url = "/retryRequireToDownload/" + id;
+
+                                                                                              var self = this;
+                                                                                              $.ajax({
+                                                                                                  type:"GET",
+                                                                                                  url: url,
+                                                                                                  success: function() {
+                                                                                                      $(self).remove();
+
+                                                                                                      $('<p> Richiesta reinviata</p>').appendTo($('#tipo-' + id));
+                                                                                                  },
+
+                                                                                                  error: function(jqXHR, errType, exception){
+                                                                                                      alert("si è verificato un errore!")
+                                                                                                  }
+                                                                                              })
+                                                                                              console.log(id);
+                                                                                          })
+                                                                                      </script>
+
+                                                                                      #else
+                                                                                      <td id="tipo-$item.delegaId"><a class="pointer" id=$item.delegaId >Richiedi Autorizzazione</a></td>
+                                                                                      <script>
+                                                                                          $("#$item.delegaId").click(function(){
+                                                                                              var id = $(this).attr("id");
+                                                                                              var url = "/requireauthorizationToDownload/" + id;
+
+                                                                                              var self = this;
+                                                                                              $.ajax({
+                                                                                                  type:"GET",
+                                                                                                  url: url,
+                                                                                                  success: function() {
+                                                                                                      $(self).remove();
+
+                                                                                                      $('<p> Richiesta inoltrata</p>').appendTo($('#tipo-' + id));
+                                                                                                  },
+
+                                                                                                  error: function(jqXHR, errType, exception){
+                                                                                                      alert("si è verificato un errore!")
+                                                                                                  }
+                                                                                              })
+                                                                                              console.log(id);
+                                                                                          })
+                                                                                      </script>
+
+                                                                                  #end
+
+                                                                                 #end
+
                                                                               #end
 
                                                                             <td>#if($item.operator)$item.operator#end</td>

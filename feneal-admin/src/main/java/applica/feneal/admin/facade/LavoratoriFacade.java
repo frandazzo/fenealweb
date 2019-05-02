@@ -1083,6 +1083,7 @@ public class LavoratoriFacade {
             i.setOperator(delega.getOperator());
             i.setNomeAttachment(delega.getNomeattachment());
             i.setAttachment(delega.getAttachment());
+            i.setDelegaId(delega.getDelegaId());
 
             // x Felice... aggiustateli come ti pare poi togli il commento
             i.setAutorizzato(false);
