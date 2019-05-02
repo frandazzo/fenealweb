@@ -16,7 +16,7 @@ public interface ComunicazioniService {
 
     boolean existSmsCredentials();
 
-
+    void sendSmsViaSkebby(String telNumber, String text) throws Exception;
     void sendSmsToMultipleWorkers(List<Lavoratore> lavoratori, String text, String province, String descrizioneCampagna) throws Exception;
 
 
