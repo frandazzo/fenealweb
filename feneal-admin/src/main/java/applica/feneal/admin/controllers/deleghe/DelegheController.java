@@ -78,6 +78,17 @@ public class DelegheController {
         }
     }
 
+    @RequestMapping(value = "/requireauthorizationToDownload/{id}",method = RequestMethod.GET)
+    public @ResponseBody
+    SimpleResponse requireauth(@PathVariable long id) {
+
+        try{
+            return new ValueResponse("ok");
+        }catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
+
 
     @RequestMapping(value = "/importadeleghe",method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")

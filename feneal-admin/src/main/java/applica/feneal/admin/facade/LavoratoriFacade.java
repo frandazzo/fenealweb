@@ -993,7 +993,11 @@ public class LavoratoriFacade {
 
         UiCompleteLavoratoreSummary summary = prepareDto(l.getLid(), s, l);
         summary.setTimelineList(convertToTimelineGroups(convertToTimelineItems(f)));
-        summary.setDeleghe(f.getDeleghe());
+        List<DelegaNazionale> ddd = f.getDeleghe();
+
+
+
+        summary.setDeleghe(ddd);
         summary.setIscrizioniAltroSindacato(f.getIscrizioniAltroSindacato());
         summary.setIscrizioni(f.getIscrizioni());
         summary.setPrevedi(f.getPrevedi());
