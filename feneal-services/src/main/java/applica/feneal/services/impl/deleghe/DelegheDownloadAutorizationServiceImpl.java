@@ -2,16 +2,22 @@ package applica.feneal.services.impl.deleghe;
 
 import applica.feneal.domain.data.core.deleghe.DelegaDownloadRequestRepository;
 import applica.feneal.domain.data.core.deleghe.DelegheRepository;
+import applica.feneal.domain.model.core.Company;
 import applica.feneal.domain.model.core.deleghe.Delega;
 import applica.feneal.domain.model.core.deleghe.DelegaDownloadRequest;
 import applica.feneal.services.ComunicazioniService;
 import applica.feneal.services.DelegheDownloadAutorizationService;
+import applica.feneal.services.MessageService;
+import applica.feneal.services.messages.MessageInput;
 import applica.framework.LoadRequest;
+import applica.framework.library.options.OptionsManager;
 import applica.framework.security.Security;
 import applica.framework.security.User;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -30,8 +36,14 @@ public class DelegheDownloadAutorizationServiceImpl implements DelegheDownloadAu
     @Autowired
     private ComunicazioniService tcFacade;
 
+    @Autowired
+    private MessageService msgServ;
+
+    @Autowired
+    private OptionsManager optMan;
+
     @Override
-    public void requireAuthorizzationToDownloadDelega(long delegaId) {
+    public void requireAuthorizzationToDownloadDelega(long delegaId) throws Exception {
         Delega f = delRep.find(LoadRequest.build().disableOwnershipQuery().filter("id", delegaId)).findFirst().orElse(null);
         if (f == null)
             return;
@@ -49,28 +61,67 @@ public class DelegheDownloadAutorizationServiceImpl implements DelegheDownloadAu
         delDownRep.save(t);
 
 
-        sendComunication(t);
+        trySendComunication(t);
 
     }
 
-    private void sendComunication(DelegaDownloadRequest t) {
+    private void trySendComunication(DelegaDownloadRequest t) throws Exception {
+        //verifico la presenza  di una mail e del cell del segretario
+        Company c = ((applica.feneal.domain.model.User) sec.getLoggedUser()).getCompany();
+
+        String mail = c.getSegretarioMail();
+        String cell = c.getSegretarioCell();
+
+
+        if (StringUtils.isEmpty(mail) && StringUtils.isEmpty(cell))
+            return;
+
+        //ors  che posso inviare un messaggio creo il testo della mail...
+        String url = optMan.get("feneal.downloadauthorizationpath") + t.getRequestId();
+        String currentUser = ((applica.feneal.domain.model.User) sec.getLoggedUser()).getCompleteName();
+        String currentCompany = c.getDescription();
+
+        String content = String.format("La %s () vorrebbe scaricare la delega di %s. Autorizza qui: %s",
+                 currentCompany, currentUser, t.getDelega().getWorker().getSurnamename(), url);
+
+
+        sendComunication(t,mail,cell, content);
+
+
+    }
+
+    private void sendComunication(DelegaDownloadRequest t, String mail, String cell, String content) throws Exception {
         //a qyuesto punto posso inviare una mail o un sms con il link
-        //per prima cosa verifico se ho gli sms abilitati
-        if (tcFacade.existSmsCredentials()){
-
-
+       //invio prima la mail e poi verifico se inviare anche il messaggio con cellulare
+        if (!StringUtils.isEmpty(mail)){
+            MessageInput mailInput = new MessageInput();
+            mailInput.setContent(content);
+            mailInput.setMailFrom("fenealgest@gmail.com");
+            mailInput.setRecipients(Arrays.asList(mail));
+            mailInput.setSubject("Richiesta autorizzazione per scaricare mail");
+            msgServ.sendSimpleMail(mailInput);
 
         }
 
-        //invio comunique una mail
+
+        if (!StringUtils.isEmpty(cell)){
+            if (tcFacade.existSmsCredentials()){
+
+                msgServ.sendSms(cell, content);
+
+            }
+        }
+
+
+
     }
 
     @Override
-    public void resendRequest(long delegaId) {
+    public void resendRequest(long delegaId) throws Exception {
         DelegaDownloadRequest d =  getDelegaDownloadRequest(delegaId);
 
         if (d != null){
-            sendComunication(d);
+            trySendComunication(d);
         }
 
     }
@@ -116,16 +167,15 @@ public class DelegheDownloadAutorizationServiceImpl implements DelegheDownloadAu
     }
 
     @Override
-    public void authorizeDownloadDelega(long delegaId, String requestId) {
-        //verifioc che la richiesta recuperata per l'utente sia la stessa recuperata per requestid
-        DelegaDownloadRequest a1 = getDelegaDownloadRequest(delegaId);
+    public void authorizeDownloadDelega( String requestId) {
+
         DelegaDownloadRequest a2 = getDelegaDownloadRequest(requestId);
 
-        if (a1 != null && a2 != null){
-            if (a1.getLid() == a2.getLid()){
-                a1.setAuthorized(true);
-                delDownRep.save(a1);
-            }
+        if (a2 != null){
+
+                a2.setAuthorized(true);
+                delDownRep.save(a2);
+
         }
 
 

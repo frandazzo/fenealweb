@@ -13,6 +13,7 @@ import applica.feneal.domain.model.core.deleghe.Delega;
 import applica.feneal.domain.model.core.deleghe.ImportDeleghe;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.setting.CausaleRevoca;
+import applica.feneal.services.DelegheDownloadAutorizationService;
 import applica.feneal.services.exceptions.FormNotFoundException;
 import applica.framework.library.responses.ErrorResponse;
 import applica.framework.library.responses.FormResponse;
@@ -64,6 +65,9 @@ public class DelegheController {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private DelegheDownloadAutorizationService delAuthServ;
+
 
     @RequestMapping(value = "/executeimportdeleghe",method = RequestMethod.POST)
     public @ResponseBody
@@ -78,11 +82,28 @@ public class DelegheController {
         }
     }
 
+
+    @RequestMapping(value = "/downloadauthorization/{id}",method = RequestMethod.GET)
+    public
+    @ResponseBody String authorizeDownloadDelega(@PathVariable String id) {
+
+        try{
+            delAuthServ.authorizeDownloadDelega(id);
+            return "Autorizzazione concessa";
+        }catch(Exception ex){
+            return String.format("Errore nel processo di autorizzazione: %s" , ex.getCause());
+        }
+    }
+
+
+
     @RequestMapping(value = "/requireauthorizationToDownload/{id}",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
     public @ResponseBody
     SimpleResponse requireauth(@PathVariable long id) {
 
         try{
+            delAuthServ.requireAuthorizzationToDownloadDelega(id);
             return new ValueResponse("ok");
         }catch(Exception ex){
             return new ErrorResponse(ex.getMessage());
@@ -91,11 +112,13 @@ public class DelegheController {
 
 
     @RequestMapping(value = "/retryRequireToDownload/{id}",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
     public @ResponseBody
     SimpleResponse retryreq(@PathVariable long id) {
 
         try{
-            return new ValueResponse("reinvia richiesta");
+            delAuthServ.resendRequest(id);
+            return new ValueResponse("ok");
         }catch(Exception ex){
             return new ErrorResponse(ex.getMessage());
         }

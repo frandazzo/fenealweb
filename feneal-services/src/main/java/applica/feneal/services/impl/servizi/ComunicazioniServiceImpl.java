@@ -107,8 +107,8 @@ public class ComunicazioniServiceImpl implements ComunicazioniService {
 
 
     }
-
-    private void sendSmsViaSkebby(String telNumber, String text) throws Exception {
+    @Override
+    public void sendSmsViaSkebby(String telNumber, String text) throws Exception {
         User u = ((User) sec.getLoggedUser());
         //valido il num di telefono rimuovendo tutti i caratteri
 
