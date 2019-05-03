@@ -41,6 +41,7 @@ public class MailSimple implements Runnable{
             tmail.put("content", content);
 
             tmail.send();
+
         } catch (MailException e) {
             e.printStackTrace();
         } catch (MessagingException e) {

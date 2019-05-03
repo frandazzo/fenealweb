@@ -199,7 +199,11 @@ public class CustomTemplatedMail {
                     t.sendMessage(message,message.getAllRecipients() );
                 }
                 catch(Exception ex){
-
+                    try {
+                        throw  new Exception(ex);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }finally{
                     t.close();
                 }

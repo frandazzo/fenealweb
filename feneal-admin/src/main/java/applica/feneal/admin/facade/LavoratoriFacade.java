@@ -56,6 +56,9 @@ import java.util.stream.Collectors;
 public class LavoratoriFacade {
 
     @Autowired
+    private DelegheDownloadAutorizationService authServ;
+
+    @Autowired
     private LavoratoreService svc;
 
     @Autowired
@@ -1085,9 +1088,9 @@ public class LavoratoriFacade {
             i.setAttachment(delega.getAttachment());
             i.setDelegaId(delega.getDelegaId());
 
-            // x Felice... aggiustateli come ti pare poi togli il commento
-            i.setAutorizzato(false);
-            i.setRichiestaInviata(true);
+
+            i.setAutorizzato(authServ.isAuthorizedToDownloadDelega(delega.getDelegaId()));
+            i.setRichiestaInviata(authServ.hasAuthorizationRequestSent(delega.getDelegaId()));
 
 
             if (delega.getAcceptDate() != null)

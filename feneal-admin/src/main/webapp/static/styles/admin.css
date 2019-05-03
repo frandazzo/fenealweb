@@ -482,3 +482,7 @@ div[data-property=competenceSelection] {
 .great-icon{
     font-size: 32px
 }
+
+.pointer{
+    cursor: pointer;
+}

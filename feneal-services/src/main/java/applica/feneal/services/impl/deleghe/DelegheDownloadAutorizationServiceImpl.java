@@ -56,7 +56,7 @@ public class DelegheDownloadAutorizationServiceImpl implements DelegheDownloadAu
         t.setApplicantCompanyId(((applica.feneal.domain.model.User) sec.getLoggedUser()).getCompany().getLid());
         t.setDate(new Date());
         t.setRequestId(UUID.randomUUID().toString());
-
+        t.setDelega(f);
 
         delDownRep.save(t);
 
@@ -81,7 +81,7 @@ public class DelegheDownloadAutorizationServiceImpl implements DelegheDownloadAu
         String currentUser = ((applica.feneal.domain.model.User) sec.getLoggedUser()).getCompleteName();
         String currentCompany = c.getDescription();
 
-        String content = String.format("La %s () vorrebbe scaricare la delega di %s. Autorizza qui: %s",
+        String content = String.format("La %s (%s) vorrebbe scaricare la delega di %s. Autorizza qui: %s",
                  currentCompany, currentUser, t.getDelega().getWorker().getSurnamename(), url);
 
 
