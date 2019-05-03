@@ -514,9 +514,11 @@
                                                                                                   url: url,
                                                                                                   success: function() {
                                                                                                       $(self).remove();
-
                                                                                                       $('<p> Richiesta reinviata</p>').appendTo($('#tipo-' + id));
                                                                                                   },
+
+
+
 
                                                                                                   error: function(jqXHR, errType, exception){
                                                                                                       alert("si è verificato un errore!")
