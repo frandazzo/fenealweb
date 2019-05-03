@@ -490,6 +490,7 @@
                                                                                 </td>
                                                                               #else
 
+
                                                                                   #if($item.autorizzato)
                                                                                       <td>
                                                                                           <a target="__blank" href="${wwwBase}$item.attachment">
