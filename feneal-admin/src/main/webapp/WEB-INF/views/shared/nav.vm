@@ -318,12 +318,22 @@
                         <span class="sidebar-title">Report iscritti</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#/reportliberi" class="framework-navigation">
-                        <span class="fa fa-bar-chart-o"></span>
-                        <span class="sidebar-title">Report non iscritti</span>
-                    </a>
-                </li>
+
+                #if($provinces == "bolzano")
+                    <li>
+                        <a href="#/reportliberibolzano" class="framework-navigation">
+                            <span class="fa fa-bar-chart-o"></span>
+                            <span class="sidebar-title">Report non iscritti Bolzano</span>
+                        </a>
+                    </li>
+                #else
+                    <li>
+                        <a href="#/reportliberi" class="framework-navigation">
+                            <span class="fa fa-bar-chart-o"></span>
+                            <span class="sidebar-title">Report non iscritti</span>
+                        </a>
+                    </li>
+                #end
                 <li>
                     <a href="#/reportlibericf" class="framework-navigation">
                         <span class="fa fa-bar-chart-o"></span>

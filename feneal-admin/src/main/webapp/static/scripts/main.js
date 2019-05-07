@@ -106,6 +106,13 @@ require([
 
         ui.Navigation.instance().registerController("reportliberi", function() { return new liberiReportController.LiberiReportController(); }, "singleton");
 
+
+        //REPORT LIBERI BOLZANO FELICE 06/05/2019
+        ui.Navigation.instance().registerController("reportliberibolzano", function() { return new liberiReportController.LiberiBolzanoReportController(); }, "singleton");
+
+
+
+
         ui.Navigation.instance().registerController("reportliberisuper", function() { return new liberiReportController.NewLiberiReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportiqa", function() { return new iqaReportController.IncassiQuoteReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportdeleghe", function() { return new delController.DelegheReportController(); }, "singleton");

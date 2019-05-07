@@ -10,8 +10,6 @@ define([
 
     var exports = {};
 
-
-
     //controller che porta alla mascherina custom per la ricerca dei lavoratori
     var LiberiReportcfController = fcontrollers.Controller.extend({
         ctor: function(){
@@ -37,8 +35,6 @@ define([
     });
 
 
-
-
     //controller che porta alla mascherina custom per la ricerca dei lavoratori
     var LiberiReportController = fcontrollers.Controller.extend({
         ctor: function(){
@@ -53,8 +49,6 @@ define([
                 data: {}
             });
 
-
-
             var view = new views.ReportLiberiAppView(service);
             // view.set("title", "Ricerca lavoratori");
 
@@ -62,7 +56,6 @@ define([
         }
 
     });
-
 
     //controller che porta alla mascherina custom per la ricerca dei lavoratori
     var NewLiberiReportController = fcontrollers.Controller.extend({
@@ -88,6 +81,33 @@ define([
 
     });
 
+    var LiberiBolzanoReportController = fcontrollers.Controller.extend({
+        ctor: function(){
+            LiberiBolzanoReportController.super.ctor.call(this);
+        },
+        index: function(params) {
+
+            var service = new fmodel.FormService();
+            service.set({
+                method: "GET",
+                url: BASE + "liberibolzano",
+                data: {}
+            });
+
+
+
+            var view = new views.ReportLiberiBolAppView(service);
+            // view.set("title", "Ricerca lavoratori");
+
+            return view;
+        }
+
+    });
+
+
+
+
+    exports.LiberiBolzanoReportController = LiberiBolzanoReportController;
     exports.NewLiberiReportController = NewLiberiReportController;
     exports.LiberiReportController = LiberiReportController;
     exports.LiberiReportcfController = LiberiReportcfController;
