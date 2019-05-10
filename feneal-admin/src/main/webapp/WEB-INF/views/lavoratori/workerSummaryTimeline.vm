@@ -483,9 +483,6 @@
                                                                               #if($item.owner)
                                                                                 <td>
                                                                                     <a target="__blank" href="${wwwBase}$item.attachment">
-                                                                                        #if($item.nomeAttachment)
-                                                                                               $item.nomeAttachment
-                                                                                        #end
                                                                                     </a>
                                                                                 </td>
                                                                               #else
@@ -529,29 +526,31 @@
                                                                                       </script>
 
                                                                                       #else
-                                                                                      <td id="tipo-$item.delegaId"><a class="pointer" id=$item.delegaId >Richiedi Autorizzazione</a></td>
-                                                                                      <script>
-                                                                                          $("#$item.delegaId").click(function(){
-                                                                                              var id = $(this).attr("id");
-                                                                                              var url = "/requireauthorizationToDownload/" + id;
+                                                                                          #if($item.nomeAttachment)
+                                                                                              <td id="tipo-$item.delegaId"><a class="pointer" id=$item.delegaId >Richiedi Autorizzazione</a></td>
+                                                                                              <script>
+                                                                                                  $("#$item.delegaId").click(function(){
+                                                                                                      var id = $(this).attr("id");
+                                                                                                      var url = "/requireauthorizationToDownload/" + id;
 
-                                                                                              var self = this;
-                                                                                              $.ajax({
-                                                                                                  type:"GET",
-                                                                                                  url: url,
-                                                                                                  success: function() {
-                                                                                                      $(self).remove();
+                                                                                                      var self = this;
+                                                                                                      $.ajax({
+                                                                                                          type:"GET",
+                                                                                                          url: url,
+                                                                                                          success: function() {
+                                                                                                              $(self).remove();
 
-                                                                                                      $('<p> Richiesta inoltrata</p>').appendTo($('#tipo-' + id));
-                                                                                                  },
+                                                                                                              $('<p> Richiesta inoltrata</p>').appendTo($('#tipo-' + id));
+                                                                                                          },
 
-                                                                                                  error: function(jqXHR, errType, exception){
-                                                                                                      alert("si è verificato un errore!")
-                                                                                                  }
-                                                                                              })
-                                                                                              console.log(id);
-                                                                                          })
-                                                                                      </script>
+                                                                                                          error: function(jqXHR, errType, exception){
+                                                                                                              alert("si è verificato un errore!")
+                                                                                                          }
+                                                                                                      })
+                                                                                                      console.log(id);
+                                                                                                  })
+                                                                                              </script>
+                                                                                          #end
 
                                                                                   #end
 
