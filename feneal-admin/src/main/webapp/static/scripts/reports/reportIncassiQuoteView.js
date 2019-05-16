@@ -102,8 +102,6 @@ define([
                 svc.load();
                 $.loader.show({parent:'body'});
 
-
-
             });
 
             self.formView.form.on("cancel", function() {

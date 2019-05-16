@@ -34,6 +34,33 @@ define([
 
     });
 
+    var LiberiReportcfCreController = fcontrollers.Controller.extend({
+        ctor: function(){
+            LiberiReportcfCreController.super.ctor.call(this);
+        },
+        index: function(params) {
+
+            var service = new fmodel.FormService();
+            service.set({
+                method: "GET",
+                url: BASE + "libericfcre",
+                data: {}
+            });
+
+
+
+            var view = new views.ReportLibericfcreAppView(service);
+            // view.set("title", "Ricerca lavoratori");
+
+            return view;
+        }
+
+    });
+
+
+
+
+
 
     //controller che porta alla mascherina custom per la ricerca dei lavoratori
     var LiberiReportController = fcontrollers.Controller.extend({
@@ -106,10 +133,10 @@ define([
 
 
 
-
     exports.LiberiBolzanoReportController = LiberiBolzanoReportController;
     exports.NewLiberiReportController = NewLiberiReportController;
     exports.LiberiReportController = LiberiReportController;
     exports.LiberiReportcfController = LiberiReportcfController;
+    exports.LiberiReportcfCreController = LiberiReportcfCreController;
     return exports;
 });
