@@ -135,7 +135,7 @@
                         <span class="sidebar-title">Report non iscritti per C.F.</span>
                     </a>
                 </li>
-               #if($provinces.contains("milano"))
+               #if($provinces.contains("milano") || $provinces.contains("brescia"))
                     <li>
                         <a href="#/reportlibericfcre" class="framework-navigation">
                             <span class="fa fa-bar-chart-o"></span>
