@@ -270,6 +270,16 @@ public class ReportNonIscrittiController {
                     .putParam(Params.ROW, "dt1")
                     .putParam(Params.FORM_COLUMN, " ");
 
+            formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggdUserRegionalProvicesNonOptionalSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt2")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+            formDescriptor.addField("parithetic", String.class, "Ente", null, applicationContext.getBean(ParithericNonOptionalSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt3")
+                    .putParam(Params.FORM_COLUMN, " ");
+
 
             FormResponse response = new FormResponse();
 
@@ -296,6 +306,17 @@ public class ReportNonIscrittiController {
 
         try{
 
+            return new ValueResponse(liberiReportFac.incrociaCodiciFiscali(file));
+        }catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/importlibericfCre",method = RequestMethod.POST)
+    public @ResponseBody
+    SimpleResponse executeimportanagrafichePrevediCre(@RequestBody ImportData file) {
+
+        try{
 
             return new ValueResponse(liberiReportFac.incrociaCodiciFiscali(file));
         }catch(Exception ex){

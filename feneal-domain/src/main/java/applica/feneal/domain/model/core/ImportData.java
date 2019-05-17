@@ -11,6 +11,15 @@ public class ImportData {
     private Integer updateAzienda;
     private Integer createLista;
     private String province;
+    private String parithetic;
+
+    public String getParithetic() {
+        return parithetic;
+    }
+
+    public void setParithetic(String parithetic) {
+        this.parithetic = parithetic;
+    }
 
     public String getAnno() {
         return anno;

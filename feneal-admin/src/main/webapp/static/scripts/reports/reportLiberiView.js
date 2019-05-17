@@ -14,6 +14,12 @@ define([
         ctor: function() {
             RepositoryServiceFactory.super.ctor.call(this);
         },
+        searchLibericfCre: function(searchParams){
+            var route = BASE + "importlibericfCre" ;
+
+            var svc =  this.__createService(true, route, searchParams);
+            return svc;
+        },
         searchLibericf: function(searchParams){
             var route = BASE + "importlibericf" ;
 
@@ -938,7 +944,7 @@ define([
                 var data = self.normalizeSubmitResult(self.formView.form);
 
                 var factory = new RepositoryServiceFactory();
-                var svc = factory.searchLibericf(data);
+                var svc = factory.searchLibericfCre(data);
 
 
                 svc.on("load", function(response){
