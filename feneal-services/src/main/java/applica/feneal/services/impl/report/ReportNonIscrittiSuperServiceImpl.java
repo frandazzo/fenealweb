@@ -298,6 +298,13 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
     @Override
     public List<LiberoDbNazionale> incrociaCodiciFiscali(ImportData file, boolean isOldStyleReport) throws Exception {
 
+        List<String> listaCf = getFiscalCodeList(file);
+
+        return incrociaListaCodiciFiscali(listaCf, isOldStyleReport);
+
+    }
+
+    private List<String> getFiscalCodeList(ImportData file) throws Exception {
         if (file == null || StringUtils.isEmpty(file.getFile1()))
             throw new Exception("File non presente");
 
@@ -306,10 +313,43 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         temp1.mkdir();
         ExcelInfo data = extractData(file, temp1);
 
-        List<String> listaCf = data.getOnlyValidRows().stream()
+        return data.getOnlyValidRows().stream()
                 .map(a -> a.getData().get("FISCALE")).collect(Collectors.toList());
+    }
 
-        return incrociaListaCodiciFiscali(listaCf, isOldStyleReport);
+    @Override
+    public List<LiberoDbNazionale> incrociaCodiciFiscaliPerTerritorioEdEnte(ImportData file, boolean isOldStyleReport) throws Exception {
+
+        LiberoReportSearchParams params = new LiberoReportSearchParams();
+        params.setProvince(file.getProvince());
+        params.setParithetic(file.getParithetic());
+        List<LiberoDbNazionale> liberi =  retrieveLiberi(params,isOldStyleReport);
+        List<String> listaCf = getFiscalCodeList(file);
+
+        //adesso per la modalità di lavoro richiesta lucinana di cremona
+        //devo creare un report che contenga tutte le informaizoni sui non icritti
+        //relativi ai codici fiscali. Tali codici fiscali sono i codici fiscali dei nuovi lavoratori
+        //non iscritti presenti all'interno della importaizone precedentemente fatta.
+        //E' fatta l'ipotesi che tali codici fiscali sono tutti ipresenti nella lista dei non iscritti
+        //precedentemente importata in maniera completa
+        //E' evidente che se non è stata fatta o aggiornata una precedente importazione dei dati tali codici
+        //fiscali non saranno trovati o potrebbero essere trovati parzialmente....quindi attenzione!!!
+
+        //la procedura consiste nel CANCELLARE i dati dei codici fiscali non presentti
+        //e presentare un incrocio parziale cosi come richiesto da luciana!!!!
+        for (LiberoDbNazionale liberoDbNazionale : liberi) {
+            if (listaCf.stream()
+                    .filter(a -> a.equals(liberoDbNazionale.getCodiceFiscale()))
+                    .findFirst()
+                    .orElse(null) == null ){
+                liberoDbNazionale.setIscrizioni(new ArrayList<>());
+
+            }
+        }
+
+
+        return liberi;
+
 
     }
 
@@ -334,7 +374,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 ff.setNomeProvincia(d.getNomeProvincia());
                 ff.setNomeProvinciaResidenza(d.getNomeProvinciaResidenza());
                 ff.setSesso("M");
-
+                ff.setUltimaProvinciaAdAggiornare(d.getUltimaProvinciaAdAggiornare());
                 result.add(ff);
             }
 
@@ -1044,7 +1084,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 "t.NomeProvinciaResidenza," +
                 "t.NomeComuneResidenza," +
                 "get_lavoratore_recapito(t.CodiceFiscale) as Telefono, " +
-                "a.ID as idWorker , t.Indirizzo, t.Cap from lavoratori_liberi t left join lavoratori a on t.CodiceFiscale = a.CodiceFiscale where NomeProvinciaFeneal = '%s' and ente = '%s' ",
+                "a.ID as idWorker , t.Indirizzo, t.Cap,  a.UltimaProvinciaAdAggiornare from lavoratori_liberi t left join lavoratori a on t.CodiceFiscale = a.CodiceFiscale where NomeProvinciaFeneal = '%s' and ente = '%s' ",
                 nomeProvincia.replace("'","''"), nomeEnte);
 
         return query;
@@ -1065,7 +1105,8 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 .addScalar("Telefono")
                 .addScalar("idWorker")
                 .addScalar("Indirizzo")
-                .addScalar("Cap");
+                .addScalar("Cap")
+                .addScalar("UltimaProvinciaAdAggiornare");
     }
     private LiberoDbNazionale materializeLiberi(Object[] object, String ente, String provincia){
         LiberoDbNazionale v = new LiberoDbNazionale();
@@ -1093,7 +1134,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         v.setIdWorker((Integer)object[11]);
         v.setIndirizzo((String)object[12]);
         v.setCap((String)object[13]);
-
+        v.setUltimaProvinciaAdAggiornare((String)object[14]);
         return v;
     }
 

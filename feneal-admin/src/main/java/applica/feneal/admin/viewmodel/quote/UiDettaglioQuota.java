@@ -23,10 +23,47 @@ public class UiDettaglioQuota {
     //dati lavoratore
     private String lavoratoreNomeCompleto;
     private String lavoratoreCodiceFiscale;
+    private String lavoratoreProvinciaResidenza;
+    private String lavoratoreComuneResidenza;
+    private String lavoratoreCap;
+    private String lavoratoreCell;
     private long lavoratoreId;
 
 
     private Double lavoratoreTotaleQuote;
+
+
+    public String getLavoratoreProvinciaResidenza() {
+        return lavoratoreProvinciaResidenza;
+    }
+
+    public void setLavoratoreProvinciaResidenza(String lavoratoreProvinciaResidenza) {
+        this.lavoratoreProvinciaResidenza = lavoratoreProvinciaResidenza;
+    }
+
+    public String getLavoratoreComuneResidenza() {
+        return lavoratoreComuneResidenza;
+    }
+
+    public void setLavoratoreComuneResidenza(String lavoratoreComuneResidenza) {
+        this.lavoratoreComuneResidenza = lavoratoreComuneResidenza;
+    }
+
+    public String getLavoratoreCap() {
+        return lavoratoreCap;
+    }
+
+    public void setLavoratoreCap(String lavoratoreCap) {
+        this.lavoratoreCap = lavoratoreCap;
+    }
+
+    public String getLavoratoreCell() {
+        return lavoratoreCell;
+    }
+
+    public void setLavoratoreCell(String lavoratoreCell) {
+        this.lavoratoreCell = lavoratoreCell;
+    }
 
     public Double getLavoratoreTotaleQuote() {
         return lavoratoreTotaleQuote;

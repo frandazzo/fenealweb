@@ -61,7 +61,7 @@ public class DelegheBariService {
 
     public List<DelegaBari> getAllWorkerDeleghe(long workerId) {
         LoadRequest req = LoadRequest.build()
-                .filter("worker", workerId);
+                .filter("worker", workerId).sort("protocolDate", true);
 
         return delRep.find(req).getRows();
     }

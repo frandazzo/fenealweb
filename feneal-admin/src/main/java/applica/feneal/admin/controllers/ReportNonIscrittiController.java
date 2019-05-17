@@ -318,7 +318,7 @@ public class ReportNonIscrittiController {
 
         try{
 
-            return new ValueResponse(liberiReportFac.incrociaCodiciFiscali(file));
+            return new ValueResponse(liberiReportFac.incrociaCodiciFiscaliWithLiberi(file));
         }catch(Exception ex){
             return new ErrorResponse(ex.getMessage());
         }

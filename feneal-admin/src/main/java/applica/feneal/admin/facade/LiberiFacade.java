@@ -135,7 +135,7 @@ public class LiberiFacade {
                 l.setLavoratoreCittaResidenza(liberoDbNazionale.getNomeComuneResidenza());
                 l.setLavoratoreCodiceFiscale(liberoDbNazionale.getCodiceFiscale());
                 l.setLavoratoreCognome(liberoDbNazionale.getCognome());
-
+                l.setUltimaProvinciaAdAggiornare(liberoDbNazionale.getUltimaProvinciaAdAggiornare());
                 l.setLavoratoreDataNascita(liberoDbNazionale.getDataNascita());
                 l.setLavoratoreIndirizzo(liberoDbNazionale.getIndirizzo());
                 l.setLavoratoreLuogoNascita(liberoDbNazionale.getNomeComune());
@@ -475,6 +475,11 @@ public class LiberiFacade {
     public List<UiLibero> incrociaCodiciFiscali(ImportData file) throws Exception {
         List<LiberoDbNazionale> lib = libServicenew.incrociaCodiciFiscali(file, true);
 
+        return convertLiberiToUiLiberi(lib);
+    }
+
+    public List<UiLibero> incrociaCodiciFiscaliWithLiberi(ImportData file) throws Exception {
+        List<LiberoDbNazionale> lib =  libServicenew.incrociaCodiciFiscaliPerTerritorioEdEnte(file,true);
         return convertLiberiToUiLiberi(lib);
     }
 }

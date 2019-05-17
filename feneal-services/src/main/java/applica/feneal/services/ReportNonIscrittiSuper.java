@@ -11,4 +11,7 @@ public interface ReportNonIscrittiSuper {
     LiberoDbNazionale analyzeFiscaleCodeData(String fiscalCode, boolean isOldStyleReport);
 
     List<LiberoDbNazionale> incrociaCodiciFiscali(ImportData file, boolean isOldStyleReport) throws Exception;
+
+    List<LiberoDbNazionale> incrociaCodiciFiscaliPerTerritorioEdEnte(ImportData file, boolean isOldStyleReport) throws Exception;
+
 }

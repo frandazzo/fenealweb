@@ -37,6 +37,15 @@ public class UiLibero {
     //*****************************************
     //dati lavoratore
     private String lavoratoreNomeCompleto;
+    private String ultimaProvinciaAdAggiornare;
+
+    public String getUltimaProvinciaAdAggiornare() {
+        return ultimaProvinciaAdAggiornare;
+    }
+
+    public void setUltimaProvinciaAdAggiornare(String ultimaProvinciaAdAggiornare) {
+        this.ultimaProvinciaAdAggiornare = ultimaProvinciaAdAggiornare;
+    }
 
     private String lavoratoreNome;
     private String lavoratoreCognome;

@@ -83,6 +83,10 @@ public class IqaFacade {
                 q.setLavoratoreNomeCompleto(String.format("%s %s", lav.getSurname(), lav.getName()));
                 q.setLavoratoreCodiceFiscale(lav.getFiscalcode());
                 q.setLavoratoreId(lav.getLid());
+                q.setLavoratoreCell(lav.getCellphone());
+                q.setLavoratoreCap(lav.getCap());
+                q.setLavoratoreComuneResidenza(lav.getLivingCity());
+                q.setLavoratoreProvinciaResidenza(lav.getLivingProvince());
             }
 
             Azienda az = azSvc.getAziendaById(((User) security.getLoggedUser()).getLid(), dettaglio.getIdAzienda());

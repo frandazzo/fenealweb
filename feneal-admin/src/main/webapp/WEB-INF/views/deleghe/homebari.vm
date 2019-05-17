@@ -18,6 +18,7 @@
                         <th>Revoca</th>
                         <th>Doppione</th>
                         <th>Anomalia</th>
+                        <th>Ultimo movimento</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -52,6 +53,9 @@
                             </td>
                             <td class="">
                                 $delega.anomaly
+                            </td>
+                            <td>
+                                $delega.lastMovement
                             </td>
                         </tr>
                         #end

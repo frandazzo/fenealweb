@@ -640,6 +640,7 @@ define([
                     { dataField:"lavoratoreNome", visible : false},
                     { dataField:"lavoratoreCognome", visible : false},
                     { dataField:"lavoratoreSesso", visible : false},
+                    { dataField:"ultimaProvinciaAdAggiornare", visible : false},
                     {dataField:"numIscrizioni", visible: true,visibleIndex: 1, caption:"Iscritto storico",
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
@@ -1477,6 +1478,7 @@ define([
                     { dataField:"lavoratoreNome", visible : false},
                     { dataField:"lavoratoreCognome", visible : false},
                     { dataField:"lavoratoreSesso", visible : false},
+                    { dataField:"ultimaProvinciaAdAggiornare", visible : false},
                     {dataField:"numIscrizioni", visible: true,visibleIndex: 1, caption:"Iscritto storico",
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
@@ -2336,6 +2338,7 @@ define([
                     { dataField:"lavoratoreNome", visible : false},
                     { dataField:"lavoratoreCognome", visible : false},
                     { dataField:"lavoratoreSesso", visible : false},
+                    { dataField:"ultimaProvinciaAdAggiornare", visible : false},
                     {dataField:"numIscrizioni", visible: true,visibleIndex: 1, caption:"Iscritto storico",
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
@@ -3290,6 +3293,7 @@ define([
                     { dataField:"lavoratoreNome", visible : false},
                     { dataField:"lavoratoreCognome", visible : false},
                     { dataField:"lavoratoreSesso", visible : false},
+                    { dataField:"ultimaProvinciaAdAggiornare", visible : false},
                     {dataField:"numIscrizioni", visible: true,visibleIndex: 1, caption:"Iscritto storico",
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
@@ -4313,7 +4317,7 @@ define([
                     { dataField:"lavoratoreNome", visible : false},
                     { dataField:"lavoratoreCognome", visible : false},
                     { dataField:"lavoratoreSesso", visible : false},
-
+                    { dataField:"ultimaProvinciaAdAggiornare", visible : false},
                     {dataField:"numIscrizioni", visible: true,visibleIndex: 1, caption:"Iscritto storico",
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");

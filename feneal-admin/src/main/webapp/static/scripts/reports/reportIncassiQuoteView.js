@@ -121,7 +121,10 @@ define([
                     // { dataField:"otherfiled", caption:"AAAA", visible : true, calculateCellValue:function(data){
                     //     return data.delegaSettore;
                     // }},
-
+                    { dataField:"lavoratoreProvinciaResidenza", visible : false},
+                    { dataField:"lavoratoreComuneResidenza", visible : false},
+                    { dataField:"lavoratoreCap", visible : false},
+                    { dataField:"lavoratoreCell", visible : false},
                     { dataField:"dataDocumento", visible : true, visibleIndex: 3, dataType:'date'},
                     { dataField:"dataInizio", visible : true, visibleIndex: 4, dataType:'date'},
                     { dataField:"dataFine", visible : true, visibleIndex: 5, dataType:'date'},
