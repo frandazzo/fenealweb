@@ -1179,7 +1179,9 @@ public class QuoteAssociativeServiceImpl implements QuoteAssociativeService {
     @Override
     public List<DettaglioQuotaAssociativa> getStoricoVersamenti(long workerId) {
 
-        return  dettRep.find(LoadRequest.build().filter("idLavoratore", workerId)).getRows();
+        return  dettRep.find(LoadRequest.build()
+                .sort("dataRegistrazione", true)
+                .filter("idLavoratore", workerId)).getRows();
 
 //        List<DettaglioQuotaAssociativa> dettQuoteLavoratoriSenzaDuplicati = new ArrayList<>();
 //        for (DettaglioQuotaAssociativa dett : dettagliQuoteWorker) {

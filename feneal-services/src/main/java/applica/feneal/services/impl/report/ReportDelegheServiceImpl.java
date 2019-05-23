@@ -1,19 +1,26 @@
 package applica.feneal.services.impl.report;
 
 import applica.feneal.domain.data.core.SectorRepository;
+import applica.feneal.domain.data.core.aziende.AziendeRepository;
 import applica.feneal.domain.data.core.deleghe.DelegheRepository;
 import applica.feneal.domain.data.core.servizi.ComunicazioniRepository;
 import applica.feneal.domain.model.Filters;
+import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.Sector;
+import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.domain.model.core.deleghe.Delega;
 import applica.feneal.domain.model.core.deleghe.UiDelegheReportSearchParams;
+import applica.feneal.domain.model.core.lavoratori.Lavoratore;
+import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
 import applica.feneal.domain.model.core.servizi.Comunicazione;
 import applica.feneal.domain.model.core.servizi.search.UiComunicazioneReportSearchParams;
+import applica.feneal.services.QuoteAssociativeService;
 import applica.feneal.services.ReportComunicazioniService;
 import applica.feneal.services.ReportDelegheService;
 import applica.framework.Disjunction;
 import applica.framework.Filter;
 import applica.framework.LoadRequest;
+import applica.framework.security.Security;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +42,14 @@ public class ReportDelegheServiceImpl implements ReportDelegheService {
     @Autowired
     private DelegheRepository delRep;
 
+    @Autowired
+    private QuoteAssociativeService qServ;
+
+    @Autowired
+    private AziendeRepository azRep;
+
+    @Autowired
+    private Security sec;
 
     @Autowired
     private SectorRepository secRep;
@@ -329,10 +344,38 @@ public class ReportDelegheServiceImpl implements ReportDelegheService {
         List<Delega> del = delRep.find(req).getRows();
 
 
+        if (((User) sec.getLoggedUser()).getCompany().containProvince("bolzano")){
+            //aggiunta per bolazno 23/05/2019
+            //maurizio d'aureli oha richiesto che per le dleeghe revocate venga indicata l'azienda
+            //per tentare di recuperare il lavoratore se qualcosa va storto
+            for (Delega delega : del) {
+                if (delega.getState() == Delega.state_revoked && delega.getSector().getType().equals(Sector.sector_edile)){
+
+                    //recupero tutte le quote associative del lavoratore ordinandole dalla più
+                    //recente a quella meno recente e cercando di trovare l'azienda li dove disponibile...
+                    delega.setWorkerCompany(retrieveCompany(delega.getWorker()));
+
+                }
+            }
+        }
+
+
+
+
+
         return del;
 
     }
 
+    private Azienda retrieveCompany(Lavoratore worker) {
+
+        List<DettaglioQuotaAssociativa> detts = qServ.getStoricoVersamenti(worker.getLid());
+        for (DettaglioQuotaAssociativa dett : detts) {
+            if (dett.getIdAzienda() > 0)
+                return azRep.get(dett.getIdAzienda()).get();
+        }
+        return null;
+    }
 
 
     @Override
