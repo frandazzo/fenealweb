@@ -482,7 +482,7 @@
                                                                             <td>$item.stato</td>
                                                                               #if($item.owner)
                                                                                 <td>
-                                                                                    <a target="__blank" href="${wwwBase}$item.attachment">
+                                                                                    <a target="__blank" href="${wwwBase}$item.attachment">$item.nomeAttachment
                                                                                     </a>
                                                                                 </td>
                                                                               #else

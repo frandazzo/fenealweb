@@ -68,8 +68,6 @@ public class IscrittiFacade {
 
         List<DettaglioQuotaAssociativa> iscrittiQuote = iscrittiSvc.retrieveQuoteIscritti(params);
 
-
-
         return convertQuoteIscrittiToUiIscritti(iscrittiQuote);
     }
 
