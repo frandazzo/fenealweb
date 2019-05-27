@@ -41,7 +41,7 @@ require([
     "deleghe/delegheLecceController",
     "inps/inpsLecceController",
     "reportnazionali/reportInviiDBNazionaleController",
-    "reportnazionali/stampaIscrittiController","analisi/analisiController", "prevedi/importPrevediController"],
+    "reportnazionali/stampaIscrittiController","analisi/analisiController", "prevedi/importPrevediController","reports/reportQuoteVareseController"],
     function(fmodel,_p, core, ui, fviews, fcontrollers, fhelpers,
                                                  controllers, usercontroller, 
                                                  lavController, listeLavoroController, azController, azDocController,
@@ -61,7 +61,8 @@ require([
              reportInviiDBNazionaleController,
              stampaIscrittiController,
              analisiController,
-             importPrevediController) {
+             importPrevediController,
+             quoteReportController) {
 
     $.datepicker.setDefaults( $.datepicker.regional[ "IT" ] );
 
@@ -113,6 +114,10 @@ require([
         //REPORT LIBERI BOLZANO FELICE 06/05/2019
         ui.Navigation.instance().registerController("reportliberibolzano", function() { return new liberiReportController.LiberiBolzanoReportController(); }, "singleton");
 
+
+
+        //REPORT QUOTE VARESE FELICE 23/05/2019
+        ui.Navigation.instance().registerController("reportquotevarese",function () {return new quoteReportController.QuoteVareseReportController(); } , "singleton");
 
 
 

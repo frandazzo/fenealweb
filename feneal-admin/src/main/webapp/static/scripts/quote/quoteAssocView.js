@@ -241,12 +241,6 @@ define([
     });
 
 
-
-
-
-
-
-
     var QuotaDettaglioRemoteView = fviews.RemoteContentView.extend({
         ctor: function(service, quotaId){
             QuotaDettaglioRemoteView.super.ctor.call(this, service);

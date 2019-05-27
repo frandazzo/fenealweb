@@ -165,7 +165,6 @@ public class RiepilogoQuoteAssociative extends SecuredDomainEntity {
         else
             a.setTipoDocumento(RiepilogoQuoteAssociative.IQA);
 
-
         return a;
     }
 

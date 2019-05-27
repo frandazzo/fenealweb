@@ -143,6 +143,18 @@
                         </a>
                     </li>
                 #end
+
+                #if($provinces.contains("varese"))
+                    <li>
+                        <a href="#/reportquotevarese" class="framework-navigation">
+                            <span class="fa fa-bar-chart-o"></span>
+                            <span class="sidebar-title">Report Quote Varese</span>
+                        </a>
+                    </li>
+                #end
+
+
+
                 #if ($roleid == 3) ##segretario
                     <li>
                         <a href="#/reportiqa" class="framework-navigation">
