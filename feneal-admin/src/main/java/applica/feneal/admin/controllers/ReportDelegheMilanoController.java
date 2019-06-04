@@ -97,10 +97,10 @@ public class ReportDelegheMilanoController {
     @PreAuthorize("isAuthenticated()")
     public
     @ResponseBody
-    SimpleResponse gridImportazioni(HttpServletRequest request) {
+    SimpleResponse gridImportazioni(@RequestBody List<DelegaMilano> deleghe) {
 
         try {
-            return null;
+            return new ValueResponse("ok");
 
         } catch (Exception e) {
             return new ErrorResponse(e.getMessage());

@@ -187,12 +187,15 @@ define([
                         cellTemplate: function (container, options) {
                             $("<div>").dxSelectBox({
                                 items: responseData.collaboratori,
-                                value:responseData.collaboratori[0],
+                                value: responseData.collaboratori.length > 0 ? responseData.collaboratori[0] : "",
                                 displayExpr: "description",
                                 acceptCustomValue: false,
                                 onCustomItemCreating: function(e) {
                                     if(!e.customItem) { e.customItem = e.text; }
-                                    }
+                                    },
+                                onValueChanged: function (e) {
+                                    options.data.collaborator = e.value.id;
+                                }
                             }).appendTo(container);
                         }
                     },

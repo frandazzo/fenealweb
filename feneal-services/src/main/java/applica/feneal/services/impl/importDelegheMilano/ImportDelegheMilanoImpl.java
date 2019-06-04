@@ -167,7 +167,7 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
         if (collaboratori.size() == 0)
             return "";
 
-        return collaboratori.get(0).getDescription();
+        return collaboratori.get(0).getSid();
 
     }
 
