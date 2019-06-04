@@ -10,8 +10,6 @@ define([
 
     var exports = {};
 
-
-
     var ImportaDelegheController = fcontrollers.Controller.extend({
         ctor: function(){
             ImportaDelegheController.super.ctor.call(this);
@@ -24,8 +22,6 @@ define([
                 url: BASE + "import/deleghe",
                 data: {}
             });
-
-
 
             var view = new views.ImportaDelegheAppView(service);
 
@@ -49,7 +45,6 @@ define([
             });
 
 
-
             var view = new views.ImportaAnagraficheAppView(service);
 
 
@@ -59,10 +54,8 @@ define([
     });
 
 
-
     exports.ImportaDelegheController = ImportaDelegheController;
     exports.ImportaAnagraficheController = ImportaAnagraficheController;
-
 
     return exports;
 });

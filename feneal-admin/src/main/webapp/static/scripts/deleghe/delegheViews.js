@@ -449,7 +449,6 @@ define([
         }
     });
 
-
     var ImportaDelegheAppView = fviews.FormAppView.extend({
         ctor: function(formService) {
             ImportaDelegheAppView.super.ctor.call(this, formService);

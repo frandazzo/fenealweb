@@ -195,13 +195,13 @@ define([
                 // },
                 "export": {
                     enabled: false,
-                    fileName: "deleghe",
+                    fileName: "reportquote",
                     allowExportSelectedData: true
                 },
                 stateStoring: {
                     enabled: false,
                     type: "localStorage",
-                    storageKey: "reportdeleghe"
+                    storageKey: "reportquote"
                 },
                 paging:{
                     pageSize: 35

@@ -29,7 +29,7 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
 
 
         String quota2= params.getQuota2();
-        String quota1= params.getQuota1();
+//        String quota1= params.getQuota1();
 
         LoadRequest req = LoadRequest.build().filter("idRiepilogoQuotaAssociativa", Long.parseLong(params.getQuota1()));
         List<DettaglioQuotaAssociativa> list1 =  dettRep.find(req).getRows();

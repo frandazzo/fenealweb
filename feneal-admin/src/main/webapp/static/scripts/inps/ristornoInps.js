@@ -154,6 +154,7 @@ define([
         init: function(){
             var self = this;
 
+
             var service = new  model.AjaxService();
             service.set("contentType", "application/json");
             var route = BASE + "ristorniquoteinpsfull/" + self.id ;

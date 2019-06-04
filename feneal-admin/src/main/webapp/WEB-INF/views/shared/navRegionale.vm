@@ -148,12 +148,10 @@
                     <li>
                         <a href="#/reportquotevarese" class="framework-navigation">
                             <span class="fa fa-bar-chart-o"></span>
-                            <span class="sidebar-title">Report Quote Varese</span>
+                            <span class="sidebar-title">Report quote Varese</span>
                         </a>
                     </li>
                 #end
-
-
 
                 #if ($roleid == 3) ##segretario
                     <li>
@@ -190,7 +188,15 @@
 ##                    </a>
 ##                </li>
 
-
+                #if($provinces.contains("milano"))
+                    <li class="sidebar-label pt15">Importazioni</li>
+                    <li>
+                        <a href="#/importadeleghemil" class="framework-navigation">
+                            <span class="glyphicons glyphicons-user"></span>
+                            <span class="sidebar-title">Importa deleghe milano</span>
+                        </a>
+                    </li>
+                #end
 
                 #if ($roleid == 3) ##segretario
                     <li class="sidebar-label pt15">Funzioni segretario</li>

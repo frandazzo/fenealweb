@@ -41,7 +41,11 @@ require([
     "deleghe/delegheLecceController",
     "inps/inpsLecceController",
     "reportnazionali/reportInviiDBNazionaleController",
-    "reportnazionali/stampaIscrittiController","analisi/analisiController", "prevedi/importPrevediController","reports/reportQuoteVareseController"],
+    "reportnazionali/stampaIscrittiController",
+        "analisi/analisiController",
+        "prevedi/importPrevediController",
+        "reports/reportQuoteVareseController",
+    "importDeleghe/importDelegheMilController"],
     function(fmodel,_p, core, ui, fviews, fcontrollers, fhelpers,
                                                  controllers, usercontroller, 
                                                  lavController, listeLavoroController, azController, azDocController,
@@ -62,7 +66,8 @@ require([
              stampaIscrittiController,
              analisiController,
              importPrevediController,
-             quoteReportController) {
+             quoteReportController,
+             delegheMilController) {
 
     $.datepicker.setDefaults( $.datepicker.regional[ "IT" ] );
 
@@ -114,11 +119,11 @@ require([
         //REPORT LIBERI BOLZANO FELICE 06/05/2019
         ui.Navigation.instance().registerController("reportliberibolzano", function() { return new liberiReportController.LiberiBolzanoReportController(); }, "singleton");
 
-
-
         //REPORT QUOTE VARESE FELICE 23/05/2019
         ui.Navigation.instance().registerController("reportquotevarese",function () {return new quoteReportController.QuoteVareseReportController(); } , "singleton");
 
+        //IMPORT MILANO DELEGHE
+        ui.Navigation.instance().registerController("importadeleghemil", function () {return new delegheMilController.ImportaDelegheMilController(); },"singleton")
 
 
         ui.Navigation.instance().registerController("reportliberisuper", function() { return new liberiReportController.NewLiberiReportController(); }, "singleton");
