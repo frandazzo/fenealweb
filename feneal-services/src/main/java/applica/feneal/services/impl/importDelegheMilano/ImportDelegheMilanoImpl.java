@@ -13,6 +13,7 @@ import applica.feneal.services.impl.importData.ImportCausaliService;
 import applica.framework.LoadRequest;
 import applica.framework.fileserver.FileServer;
 import applica.framework.security.Security;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -189,6 +190,8 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
     @Override
     public boolean existDelega(String fiscalCode, Date date) {
         Lavoratore lav = lavSvc.findLavoratoreByFiscalCode(fiscalCode);
+        if (lav == null)
+            return false;
         return delServ.getWorkerDelegheEdiliByDataAndEnte(lav.getLid(),date, "CASSA EDILE" ).size() > 0;
     }
 
@@ -276,7 +279,11 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
             del.setNumDelega(tempArray[23]);
             del.setNote(tempArray[28]);
             del.setFilename(tempArray[29]);
-            del.setImported(existDelega(del.getCodiceFiscale(), del.getDataConferma()));
+
+            if (!StringUtils.isEmpty(del.getCodiceFiscale()))
+                del.setImported(existDelega(del.getCodiceFiscale(), del.getDataConferma()));
+            else
+                del.setImported(false);
 
             if (!del.isImported())
             {

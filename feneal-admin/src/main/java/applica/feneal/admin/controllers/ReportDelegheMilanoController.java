@@ -100,6 +100,7 @@ public class ReportDelegheMilanoController {
     SimpleResponse gridImportazioni(@RequestBody List<DelegaMilano> deleghe) {
 
         try {
+            importDelegheMilanoService.executeImportDelegheMilano(deleghe);
             return new ValueResponse("ok");
 
         } catch (Exception e) {
