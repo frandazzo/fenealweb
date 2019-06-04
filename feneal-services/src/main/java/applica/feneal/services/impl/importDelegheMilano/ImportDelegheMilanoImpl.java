@@ -2,19 +2,24 @@ package applica.feneal.services.impl.importDelegheMilano;
 
 
 import applica.feneal.domain.data.core.CollaboratorRepository;
+import applica.feneal.domain.model.User;
+import applica.feneal.domain.model.core.deleghe.Delega;
 import applica.feneal.domain.model.core.deleghe.milano.DelegaMilano;
 import applica.feneal.domain.model.core.deleghe.milano.DelegheMilanoObject;
+import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.setting.Collaboratore;
-import applica.feneal.services.FileSearchPath;
-import applica.feneal.services.ImportDelegheMilanoService;
+import applica.feneal.services.*;
+import applica.feneal.services.impl.importData.ImportCausaliService;
 import applica.framework.LoadRequest;
 import applica.framework.fileserver.FileServer;
+import applica.framework.security.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -33,7 +38,23 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
     private FileServer fileServer;
 
     @Autowired
+    private ImportCausaliService cauServ;
+
+    @Autowired
+    private Security sec;
+
+    @Autowired
     private CollaboratorRepository collRep;
+
+    @Autowired
+    private DelegheService delServ;
+
+    @Autowired
+    private GeoService geo;
+
+
+    @Autowired
+    private LavoratoreService lavSvc;
 
     @Override
     public DelegheMilanoObject importDelegheMilano(String  importData) throws Exception{
@@ -41,7 +62,7 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
         InputStream fileStream = fileServer.getFile(importData);
 
         //creo la cartella temporanea dove andare a salvare il file.zip
-        File temp1 = File.createTempFile("import_deleghe_milano","",new File("C:/Users/felic/Desktop/"));
+        File temp1 = File.createTempFile("import_deleghe_milano","");
         temp1.delete();
         temp1.mkdir();
 
@@ -68,6 +89,107 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
 
 
         return obj;
+    }
+
+    @Override
+    public void executeImportDelegheMilano(List<DelegaMilano> deleghe) throws Exception {
+
+        //inserisco tutti i lavoratori
+
+        List<Lavoratore> lavs = new ArrayList<>();
+        for (DelegaMilano delega : deleghe) {
+            Lavoratore l = null;
+                l = constructLavoratore(delega);
+                lavs.add(l);
+        }
+
+        //inseriti tutti i lavoratori mi assicuro che ci sia almeno una causale dleega
+        cauServ.createIfNotExistCausaleIscrizioneDelega("NUOVA ISCRIZIONE");
+        //creo tutte le deleghe e le inserisco
+        for (DelegaMilano delegaMilano : deleghe) {
+            //se una delega nella stessa data non esiste allora la inserisco
+            if (!existDelega(delegaMilano.getCodiceFiscale(), delegaMilano.getDataConferma())){
+                Lavoratore lav = lavs.stream().filter(a -> a.getFiscalcode().equals(delegaMilano.getCodiceFiscale())).findFirst().get();
+                Delega d = createDelega(lav, delegaMilano);
+                delServ.saveOrUpdate(((User) sec.getLoggedUser()).getLid(), d);
+                delServ.acceptDelega(d.getDocumentDate(), d);
+            }
+        }
+
+    }
+
+    private Delega createDelega(Lavoratore l, DelegaMilano summary) throws Exception {
+        Delega d;
+        d = new Delega();        //creo la delega.....
+        d.setDocumentDate(summary.getDataConferma());
+
+        SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
+        d.setImportGuid(s.format(new Date()));
+        d.setWorker(l);
+        d.setProvince(geo.getProvinceByName("Milano"));
+        d.setSubscribeReason(cauServ.getCausaleIscrizione("NUOVA ISCRIZIONE"));
+        d.setSector(cauServ.getSettore("EDILE"));
+        d.setParitethic(cauServ.getEnte("CASSA EDILE"));
+        d.setCollaborator(retrieveCollaborator(summary.getCollaborator()));
+
+        //
+        d.setNomeattachment(summary.getFilename() + ".TIF");
+        d.setAttachment(summary.getFilePath());
+        d.setNotes(summary.getSummaryNotes());
+
+        return d;
+    }
+
+    private Collaboratore retrieveCollaborator(String collaboratorId) {
+        long i = 0;
+        try{
+            i = Long.parseLong(collaboratorId);
+        }catch(Exception e){
+
+        }
+        if (i == 0)
+            return null;
+
+
+        return collRep.get(i).get();
+    }
+
+
+    private Lavoratore constructLavoratore(DelegaMilano delega) throws Exception {
+        Lavoratore l = lavSvc.findLavoratoreByFiscalCode(delega.getCodiceFiscale());
+        if (l == null){
+
+            SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
+            //creo il lavoratore
+            l = new Lavoratore();
+            l.setSex("M");
+            l.setName(delega.getNome());
+            l.setSurname(delega.getCognome());
+            l.setBirthDate(delega.getDataNascita());
+            l.setFiscalcode(delega.getCodiceFiscale());
+            l.setCe(delega.getCodiceLavoratore());
+
+            lavSvc.saveOrUpdate(((User) sec.getLoggedUser()).getLid(),l);
+
+        }
+        else{
+            l.setCe(delega.getCodiceLavoratore());
+
+            lavSvc.saveOrUpdate(((User) sec.getLoggedUser()).getLid(),l);
+        }
+        return l;
+    }
+
+
+
+
+
+
+
+    @Override
+    public boolean existDelega(String fiscalCode, Date date) {
+        Lavoratore lav = lavSvc.findLavoratoreByFiscalCode(fiscalCode);
+        return delServ.getWorkerDelegheEdiliByDataAndEnte(lav.getLid(),date, "CASSA EDILE" ).size() > 0;
     }
 
 
@@ -135,6 +257,7 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
             DelegaMilano del = new DelegaMilano();
 
 
+
             del.setCollaborator(getFirtsCollaboratorIdIfExist(obj.getCollaboratori()));
             del.setNumProgressivo(tempArray[2]);
             del.setNumProtocollo(tempArray[3]);
@@ -153,9 +276,14 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
             del.setNumDelega(tempArray[23]);
             del.setNote(tempArray[28]);
             del.setFilename(tempArray[29]);
-            String path = retrieveFilePath(del.getFilename(), dir);
-            del.setFilePath(path);
-            if (!tempArray[14].isEmpty())
+            del.setImported(existDelega(del.getCodiceFiscale(), del.getDataConferma()));
+
+            if (!del.isImported())
+            {
+                String path = retrieveFilePath(del.getFilename(), dir);
+                del.setFilePath(path);
+            }
+            if (!del.getCodiceFiscale().isEmpty())
                 conCodici.add(del);
             else
                 senzaCiodici.add(del);

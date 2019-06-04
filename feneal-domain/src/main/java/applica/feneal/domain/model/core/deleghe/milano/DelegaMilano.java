@@ -13,6 +13,15 @@ public class DelegaMilano{
     private String cognome;
     private String nome;
 
+    private boolean imported;
+
+    public boolean isImported() {
+        return imported;
+    }
+
+    public void setImported(boolean imported) {
+        this.imported = imported;
+    }
 
     private String lavoratoreNomeCompleto;
     private String filename;
@@ -190,4 +199,12 @@ public class DelegaMilano{
         return filePath;
     }
 
+    public String getSummaryNotes() {
+
+        return String.format("Progressivo: %s; Num. Protocollo: %s; Numero delega: %s; Barcode: %s",
+                this.numProgressivo, this.numProtocollo, this.numDelega, this.barCode);
+
+
+
+    }
 }
