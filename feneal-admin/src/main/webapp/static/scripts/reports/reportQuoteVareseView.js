@@ -310,7 +310,6 @@ define([
             var grid = $('#senzaNumero').dxDataGrid({
                 dataSource:responseData.senzaNumero,
                 columns:[
-                    { dataField:"lavoratoreUltimaComunicazione", visible : true},
                     { allowEditing:false, dataField:"lavoratoreNomeCompleto", visible : true, caption:"Lavoratore",
 
                         cellTemplate: function (container, options) {
@@ -333,6 +332,7 @@ define([
 
 
                     },
+                    { dataField:"lavoratoreWrongCell", visible : true},
                     { dataField:"lavoratoreCodiceFiscale", visible : true},
                     { dataField:"lavoratoreProvinciaResidenza", visible : true},
                     { dataField:"lavoratoreComuneResidenza", visible : true},
@@ -390,10 +390,6 @@ define([
                 allowColumnReordering:true,
                 allowColumnResizing:true,
                 columnAutoWidth: true,
-                selection:{
-                    mode:"multiple",
-                    showCheckBoxesMode: "always"
-                },
                 hoverStateEnabled: true
 
                 // masterDetail: {
