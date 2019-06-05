@@ -59,12 +59,21 @@ public class Lavoratore extends SecuredDomainEntity {
     private Fondo fund;
     private String notes;
 
+    private String ultimaComunicazione;
+
     //proprieà che concatenanao in modi differenti il nome e cognome per farorie ricerche globali
     //con stringa unica
     //esse vengono impostate prima del salvataggio nel servizio che aggiorna l'anagrafica...
     private String namesurname;
     private String surnamename;
 
+    public String getUltimaComunicazione() {
+        return ultimaComunicazione;
+    }
+
+    public void setUltimaComunicazione(String ultimaComunicazione) {
+        this.ultimaComunicazione = ultimaComunicazione;
+    }
 
     public Lavoratore(){}
     public Lavoratore(UtenteDbNazionale prototype){

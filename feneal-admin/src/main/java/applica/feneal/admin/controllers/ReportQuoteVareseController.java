@@ -4,6 +4,7 @@ import applica.feneal.admin.facade.ReportQuoteVareseFacade;
 import applica.feneal.admin.fields.renderers.*;
 import applica.feneal.admin.form.renderers.ReportsSearchFormRenderer;
 import applica.feneal.admin.viewmodel.quote.UiDettaglioQuota;
+import applica.feneal.admin.viewmodel.quote.UiDettaglioQuotaVarese;
 import applica.feneal.domain.model.core.quote.UiQuoteVareseReportSearchParams;
 import applica.framework.library.responses.ErrorResponse;
 import applica.framework.library.responses.FormResponse;
@@ -43,7 +44,7 @@ public class ReportQuoteVareseController {
     SimpleResponse reportQuoteVar(@RequestBody UiQuoteVareseReportSearchParams params){
 
         try {
-            List<UiDettaglioQuota> f = reportQuoteVareseFacade.reportQuote(params);
+            List<UiDettaglioQuotaVarese> f = reportQuoteVareseFacade.reportQuote(params);
             return new ValueResponse(f);
         } catch(Exception ex){
             return new ErrorResponse(ex.getMessage());

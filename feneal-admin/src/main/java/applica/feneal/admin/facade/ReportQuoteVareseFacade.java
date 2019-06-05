@@ -1,6 +1,7 @@
 package applica.feneal.admin.facade;
 
 import applica.feneal.admin.viewmodel.quote.UiDettaglioQuota;
+import applica.feneal.admin.viewmodel.quote.UiDettaglioQuotaVarese;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
@@ -11,6 +12,7 @@ import applica.feneal.services.AziendaService;
 import applica.feneal.services.LavoratoreService;
 import applica.feneal.services.ReportQuoteVareseService;
 import applica.framework.security.Security;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,46 +34,44 @@ public class ReportQuoteVareseFacade {
     @Autowired
     private Security security;
 
-    private List<UiDettaglioQuota> convertToUiDettaglioQuota(List<DettaglioQuotaAssociativa> quoteDetails) {
+    private List<UiDettaglioQuotaVarese> convertToUiDettaglioQuota(List<DettaglioQuotaAssociativa> quoteDetails) {
 
-        List<UiDettaglioQuota> result = new ArrayList<>();
+        List<UiDettaglioQuotaVarese> result = new ArrayList<>();
 
         for (DettaglioQuotaAssociativa dettaglio : quoteDetails) {
-            UiDettaglioQuota q = new UiDettaglioQuota();
+            UiDettaglioQuotaVarese q = new UiDettaglioQuotaVarese();
 
             q.setId(dettaglio.getLid());
             q.setIdQuota(dettaglio.getIdRiepilogoQuotaAssociativa());
-            q.setEnte(dettaglio.getEnte());
-            q.setQuota(dettaglio.getQuota());
-            q.setLivello(dettaglio.getLivello());
-            q.setContratto(dettaglio.getContratto());
             q.setProvincia(dettaglio.getProvincia());
-            q.setDataRegistrazione(dettaglio.getDataRegistrazione());
-            q.setDataInizio(dettaglio.getDataInizio());
-            q.setDataFine(dettaglio.getDataFine());
-            q.setDataDocumento(dettaglio.getDataDocumento());
-            q.setTipoDocumento(dettaglio.getTipoDocumento());
-            q.setSettore(dettaglio.getSettore());
             Lavoratore lav = lavSvc.getLavoratoreById(((User) security.getLoggedUser()).getLid(), dettaglio.getIdLavoratore());
             if (lav != null) {
                 q.setLavoratoreNomeCompleto(String.format("%s %s", lav.getSurname(), lav.getName()));
                 q.setLavoratoreCodiceFiscale(lav.getFiscalcode());
+                if (!StringUtils.isEmpty(lav.getCellphone()))
+                    q.setLavoratoreCell(lav.getCellphone());
+                else
+                    q.setLavoratoreCell(lav.getPhone());
+
+                if (!StringUtils.isEmpty(q.getLavoratoreCell()))
+                    if (q.getLavoratoreCell().equals("0"))
+                        q.setLavoratoreCell("");
+
+
                 q.setLavoratoreId(lav.getLid());
+                q.setLavoratoreCap(lav.getCap());
+                q.setLavoratoreComuneResidenza(lav.getLivingCity());
+                q.setLavoratoreProvinciaResidenza(lav.getLivingProvince());
+                q.setLavoratoreIndirizzo(lav.getAddress());
+                q.setLavoratoreUltimaComunicazione(lav.getUltimaComunicazione());
             }
-
-            Azienda az = azSvc.getAziendaById(((User) security.getLoggedUser()).getLid(), dettaglio.getIdAzienda());
-            if (az != null) {
-                q.setAziendaRagioneSociale(az.getDescription());
-                q.setAziendaId(az.getLid());
-            }
-
             result.add(q);
         }
 
         return result;
     }
 
-    public List<UiDettaglioQuota> reportQuote(UiQuoteVareseReportSearchParams params) {
+    public List<UiDettaglioQuotaVarese> reportQuote(UiQuoteVareseReportSearchParams params) {
         List<DettaglioQuotaAssociativa> rpt = rptQuoteserv.retrieveQuoteVarese(params);
 
         return convertToUiDettaglioQuota(rpt);

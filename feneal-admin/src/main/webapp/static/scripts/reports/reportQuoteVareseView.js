@@ -122,6 +122,7 @@ define([
             var grid = $('#reportContainer').dxDataGrid({
                 dataSource:responseData,
                 columns:[
+                    { dataField:"lavoratoreUltimaComunicazione", visible : true},
                     { allowEditing:false, dataField:"lavoratoreNomeCompleto", visible : true, caption:"Lavoratore",
 
                         cellTemplate: function (container, options) {
@@ -144,35 +145,18 @@ define([
 
 
                     },
-                    { allowEditing:false, dataField:"aziendaRagioneSociale", visible : true, caption:"Azienda",
-                        cellTemplate: function (container, options) {
-                            //container.addClass("img-container");
-                            var name = options.data.aziendaRagioneSociale;
+                    { dataField:"lavoratoreCodiceFiscale", visible : true},
+                    { dataField:"lavoratoreCell", visible : true},
 
-                            $("<a />")
-                                .text(name)
-                                .attr("href", "javascript:;")
-                                .on('click', function(){
-                                    ui.Navigation.instance().navigate("summaryfirm", "index", {
-                                        id: options.data.aziendaId
-                                    });
-                                })
-                                .appendTo(container);
-                        }
+                    { dataField:"lavoratoreProvinciaResidenza", visible : true},
+                    { dataField:"lavoratoreComuneResidenza", visible : true},
+                    { dataField:"lavoratoreIndirizzo", visible : true},
+                    { dataField:"lavoratoreCap", visible : true},
 
-                    },
-                    { allowEditing:false, dataField:"id", visible : false},
-                    { allowEditing:false, dataField:"provincia", visible : true, dataType:'date', caption:"Provincia"},
-                    { allowEditing:false, dataField:"dataRegistrazione", visible : true, dataType:'date', caption:"Data registrazione"},
-                    { allowEditing:false, dataField:"dataDocumento", visible : true, dataType:'date', caption:"Data documento"},
-                    { allowEditing:false, dataField:"tipoDocumento", visible : true, visibleIndex: 5, caption:"Tipo documento"},
-                    { allowEditing:false, dataField:"settore", visible : true, caption:"Settore"},
-                    { allowEditing:false, dataField:"ente", visible : true, caption:"Ente"},
-                    { allowEditing:false, dataField:"dataInizio", visible : true, dataType:'date', caption:"Data inizio"},
-                    { allowEditing:false, dataField:"dataFine", visible : true, dataType:'date', caption:"Data fine"},
-                    { allowEditing:true, dataField:"quota", visible : true, caption:"Quota"},
-                    { allowEditing:true, dataField:"livello", visible : true, caption:"Livello"},
-                    { allowEditing:false, dataField:"contratto", visible : true, caption:"Contratto"}
+
+                    {  dataField:"id", visible : false},
+                    { dataField:"provincia", visible : false,  caption:"Provincia"},
+
                 ],
                 // searchPanel: {
                 //     visible: true
