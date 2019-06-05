@@ -47,23 +47,30 @@ public class ReportQuoteVareseFacade {
             q.setId(dettaglio.getLid());
             q.setIdQuota(dettaglio.getIdRiepilogoQuotaAssociativa());
             q.setProvincia(dettaglio.getProvincia());
+
             Lavoratore lav = lavSvc.getLavoratoreById(((User) security.getLoggedUser()).getLid(), dettaglio.getIdLavoratore());
-            if (lav != null) {
-                q.setLavoratoreNomeCompleto(String.format("%s %s", lav.getSurname(), lav.getName()));
-                q.setLavoratoreCodiceFiscale(lav.getFiscalcode());
-                q.setLavoratoreCell(lav.getNormalizedCellPhone());
-                q.setLavoratoreId(lav.getLid());
-                q.setLavoratoreCap(lav.getCap());
-                q.setLavoratoreComuneResidenza(lav.getLivingCity());
-                q.setLavoratoreProvinciaResidenza(lav.getLivingProvince());
-                q.setLavoratoreIndirizzo(lav.getAddress());
-                q.setLavoratoreUltimaComunicazione(lav.getUltimaComunicazione());
-            }
+
+            q.setLavoratoreNomeCompleto(String.format("%s %s", lav.getSurname(), lav.getName()));
+            q.setLavoratoreCodiceFiscale(lav.getFiscalcode());
+            q.setLavoratoreCell(lav.getNormalizedCellPhone());
+            q.setLavoratoreId(lav.getLid());
+            q.setLavoratoreCap(lav.getCap());
+            q.setLavoratoreComuneResidenza(lav.getLivingCity());
+            q.setLavoratoreProvinciaResidenza(lav.getLivingProvince());
+            q.setLavoratoreIndirizzo(lav.getAddress());
+            q.setLavoratoreUltimaComunicazione(lav.getUltimaComunicazione());
+
 
             if(!StringUtils.isEmpty(q.getLavoratoreCell())){
                 conNum.add(q);
             }
             else {
+
+                if (!StringUtils.isEmpty(lav.getCellphone()))
+                    q.setLavoratoreWrongCell(lav.getCellphone());
+                else
+                    q.setLavoratoreWrongCell(lav.getPhone());
+
                 senzaNum.add(q);
             }
 

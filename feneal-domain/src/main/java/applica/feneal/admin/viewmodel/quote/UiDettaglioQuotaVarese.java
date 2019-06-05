@@ -16,7 +16,16 @@ public class UiDettaglioQuotaVarese {
     private String lavoratoreComuneResidenza;
     private String lavoratoreCap;
     private String lavoratoreCell;
+    private String lavoratoreWrongCell;
     private long lavoratoreId;
+
+    public String getLavoratoreWrongCell() {
+        return lavoratoreWrongCell;
+    }
+
+    public void setLavoratoreWrongCell(String lavoratoreWrongCell) {
+        this.lavoratoreWrongCell = lavoratoreWrongCell;
+    }
 
     private String lavoratoreUltimaComunicazione;
     private String lavoratoreIndirizzo;
