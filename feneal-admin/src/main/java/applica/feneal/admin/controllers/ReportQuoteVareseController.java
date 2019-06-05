@@ -2,9 +2,10 @@ package applica.feneal.admin.controllers;
 
 import applica.feneal.admin.facade.ReportQuoteVareseFacade;
 import applica.feneal.admin.fields.renderers.*;
-import applica.feneal.admin.form.renderers.ReportsSearchFormRenderer;
-import applica.feneal.admin.viewmodel.quote.UiDettaglioQuota;
+import applica.feneal.admin.form.renderers.QuoteVareseSearchFormRenderer;
+
 import applica.feneal.admin.viewmodel.quote.UiDettaglioQuotaVarese;
+import applica.feneal.domain.model.core.quote.QuoteVareseObject;
 import applica.feneal.domain.model.core.quote.UiQuoteVareseReportSearchParams;
 import applica.framework.library.responses.ErrorResponse;
 import applica.framework.library.responses.FormResponse;
@@ -38,14 +39,18 @@ public class ReportQuoteVareseController {
     @Autowired
     private ReportQuoteVareseFacade reportQuoteVareseFacade;
 
+
+
+
+
     @RequestMapping(value="/quotevarese/report", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody
     SimpleResponse reportQuoteVar(@RequestBody UiQuoteVareseReportSearchParams params){
-
+        QuoteVareseObject obj;
         try {
-            List<UiDettaglioQuotaVarese> f = reportQuoteVareseFacade.reportQuote(params);
-            return new ValueResponse(f);
+            obj = reportQuoteVareseFacade.reportQuote(params);
+            return new ValueResponse(obj);
         } catch(Exception ex){
             return new ErrorResponse(ex.getMessage());
         }
@@ -58,7 +63,7 @@ public class ReportQuoteVareseController {
     SimpleResponse searchview(HttpServletRequest request) {
         try{
             Form form = new Form();
-            form.setRenderer(applicationContext.getBean(ReportsSearchFormRenderer.class));
+            form.setRenderer(applicationContext.getBean(QuoteVareseSearchFormRenderer.class));
             form.setIdentifier("quotevaresereport");
 
             FormDescriptor formDescriptor = new FormDescriptor(form);
@@ -86,5 +91,22 @@ public class ReportQuoteVareseController {
             e.printStackTrace();
             return new ErrorResponse(e.getMessage());
         }
+    }
+
+
+
+    @RequestMapping(value = "/inviaSMS", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse gridInvio(@RequestBody List<UiDettaglioQuotaVarese> quote) {
+
+        try {
+            return new ValueResponse("ok");
+
+        } catch (Exception e) {
+            return new ErrorResponse(e.getMessage());
+        }
+
     }
 }

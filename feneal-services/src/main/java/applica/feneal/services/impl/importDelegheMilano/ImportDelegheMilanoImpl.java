@@ -71,14 +71,11 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
         //creta in precedenza
         unzip(fileStream , temp1);
 
-
         File selec = new File(temp1.getCanonicalPath()+"/INDEX/Deleghe.bak");
-
 
         //una volta selezionato il file che mi interessa
         //lo vado a trasformare in una lista di String
         List<String> fileSelected = transformFile(selec);
-
 
         //creo le due liste per il lavoratori con e senza CF
         DelegheMilanoObject obj = new DelegheMilanoObject();
@@ -86,8 +83,6 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
         obj.setCollaboratori(collRep.find(LoadRequest.build()).getRows());
         //inserisco il lavoratori pervisualizzarli nel report
         convertToDelega(fileSelected, temp1, obj);
-
-
 
         return obj;
     }
@@ -180,12 +175,6 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
         }
         return l;
     }
-
-
-
-
-
-
 
     @Override
     public boolean existDelega(String fiscalCode, Date date) {

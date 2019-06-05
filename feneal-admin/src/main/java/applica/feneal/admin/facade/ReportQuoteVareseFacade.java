@@ -1,12 +1,13 @@
 package applica.feneal.admin.facade;
 
-import applica.feneal.admin.viewmodel.quote.UiDettaglioQuota;
+
 import applica.feneal.admin.viewmodel.quote.UiDettaglioQuotaVarese;
 import applica.feneal.domain.model.User;
-import applica.feneal.domain.model.core.aziende.Azienda;
+
+
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
-import applica.feneal.domain.model.core.quote.RiepilogoQuoteAssociative;
+import applica.feneal.domain.model.core.quote.QuoteVareseObject;
 import applica.feneal.domain.model.core.quote.UiQuoteVareseReportSearchParams;
 import applica.feneal.services.AziendaService;
 import applica.feneal.services.LavoratoreService;
@@ -34,9 +35,11 @@ public class ReportQuoteVareseFacade {
     @Autowired
     private Security security;
 
-    private List<UiDettaglioQuotaVarese> convertToUiDettaglioQuota(List<DettaglioQuotaAssociativa> quoteDetails) {
+    private QuoteVareseObject  convertToUiDettaglioQuota(List<DettaglioQuotaAssociativa> quoteDetails, QuoteVareseObject obj) {
 
-        List<UiDettaglioQuotaVarese> result = new ArrayList<>();
+        List<UiDettaglioQuotaVarese> conNum = obj.getConNumero();
+        List<UiDettaglioQuotaVarese> senzaNum = obj.getSenzaNumero();
+
 
         for (DettaglioQuotaAssociativa dettaglio : quoteDetails) {
             UiDettaglioQuotaVarese q = new UiDettaglioQuotaVarese();
@@ -65,15 +68,24 @@ public class ReportQuoteVareseFacade {
                 q.setLavoratoreIndirizzo(lav.getAddress());
                 q.setLavoratoreUltimaComunicazione(lav.getUltimaComunicazione());
             }
-            result.add(q);
+
+            if(!StringUtils.isEmpty(q.getLavoratoreCell())){
+                conNum.add(q);
+            }
+            else {
+                senzaNum.add(q);
+            }
+
         }
 
-        return result;
+        return obj;
     }
 
-    public List<UiDettaglioQuotaVarese> reportQuote(UiQuoteVareseReportSearchParams params) {
+    public QuoteVareseObject reportQuote(UiQuoteVareseReportSearchParams params) {
         List<DettaglioQuotaAssociativa> rpt = rptQuoteserv.retrieveQuoteVarese(params);
 
-        return convertToUiDettaglioQuota(rpt);
+        QuoteVareseObject obj = new QuoteVareseObject();
+
+        return convertToUiDettaglioQuota(rpt, obj);
     }
 }
