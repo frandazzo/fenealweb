@@ -1,4 +1,4 @@
-package applica.feneal.admin.viewmodel.quote;
+package applica.feneal.domain.model.core.quote.varese;
 
 public class UiDettaglioQuotaVarese {
 

@@ -1,6 +1,4 @@
-package applica.feneal.domain.model.core.quote;
-
-import applica.feneal.admin.viewmodel.quote.UiDettaglioQuotaVarese;
+package applica.feneal.domain.model.core.quote.varese;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,13 +1,13 @@
 package applica.feneal.admin.facade;
 
 
-import applica.feneal.admin.viewmodel.quote.UiDettaglioQuotaVarese;
+import applica.feneal.domain.model.core.quote.varese.UiDettaglioQuotaVarese;
 import applica.feneal.domain.model.User;
 
 
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
-import applica.feneal.domain.model.core.quote.QuoteVareseObject;
+import applica.feneal.domain.model.core.quote.varese.QuoteVareseObject;
 import applica.feneal.domain.model.core.quote.UiQuoteVareseReportSearchParams;
 import applica.feneal.services.AziendaService;
 import applica.feneal.services.LavoratoreService;
@@ -17,7 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component

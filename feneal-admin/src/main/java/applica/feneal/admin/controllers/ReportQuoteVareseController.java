@@ -4,8 +4,8 @@ import applica.feneal.admin.facade.ReportQuoteVareseFacade;
 import applica.feneal.admin.fields.renderers.*;
 import applica.feneal.admin.form.renderers.QuoteVareseSearchFormRenderer;
 
-import applica.feneal.admin.viewmodel.quote.UiDettaglioQuotaVarese;
-import applica.feneal.domain.model.core.quote.QuoteVareseObject;
+import applica.feneal.domain.model.core.quote.varese.UiDettaglioQuotaVarese;
+import applica.feneal.domain.model.core.quote.varese.QuoteVareseObject;
 import applica.feneal.domain.model.core.quote.UiQuoteVareseReportSearchParams;
 import applica.framework.library.responses.ErrorResponse;
 import applica.framework.library.responses.FormResponse;
