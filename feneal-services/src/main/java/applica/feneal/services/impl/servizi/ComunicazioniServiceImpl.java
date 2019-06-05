@@ -358,7 +358,7 @@ public class ComunicazioniServiceImpl implements ComunicazioniService {
                 cc.setData(new Date());
                 cc.setCausale(causCom);
                 cc.setTipo(c);
-                cc.setOggetto(text);
+                cc.setOggetto(executeMailMerge(text));
 
                 comRep.save(cc);
 
@@ -370,6 +370,10 @@ public class ComunicazioniServiceImpl implements ComunicazioniService {
         sendSmsViaSkebby(lavoratori, text);
 
 
+    }
+
+    private String executeMailMerge(String text) {
+        return text;
     }
 
     private CausaleComunicazione retrieveCausaleComunicazioneByDescription(String descrizioneCampagna) {

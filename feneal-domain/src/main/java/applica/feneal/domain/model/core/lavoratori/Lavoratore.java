@@ -108,6 +108,53 @@ public class Lavoratore extends SecuredDomainEntity {
 
     }
 
+
+
+    public String getNormalizedCellPhone(){
+
+        String telNumber = cellphone;
+        if (StringUtils.isEmpty(telNumber))
+            telNumber = phone;
+
+        if (StringUtils.isEmpty(telNumber))
+            return "";
+        if (StringUtils.isEmpty(telNumber.trim()))
+            return "";
+
+
+        //rimuovo il +39
+        telNumber = telNumber.replace("+39", "");
+
+        if (telNumber.length() < 9)
+            return "";
+        //rimuovo tutti i caratteri all'infouri dei nimeri
+        String telefono = telNumber.replaceAll("[^\\d.]", "").replace(".","");
+        if (telefono.length() > 10 && telefono.startsWith("39"))
+            telefono = telefono.substring(2);
+
+        if (telefono.length() > 10)return "";
+
+        String firstThreeDigits = telefono.substring(0,3);
+        try{
+
+            int d = Integer.parseInt(firstThreeDigits);
+            if (d < 320)
+                return "";
+
+            if (d >= 400)
+                return "";
+
+            return telNumber;
+        }catch (Exception e)
+        {
+            return "";
+        }
+
+
+
+
+    }
+
     private void calculateSplitNameAndSurname(Box box){
 
         String sur = box.getValue().toString().toUpperCase();

@@ -51,16 +51,7 @@ public class ReportQuoteVareseFacade {
             if (lav != null) {
                 q.setLavoratoreNomeCompleto(String.format("%s %s", lav.getSurname(), lav.getName()));
                 q.setLavoratoreCodiceFiscale(lav.getFiscalcode());
-                if (!StringUtils.isEmpty(lav.getCellphone()))
-                    q.setLavoratoreCell(lav.getCellphone());
-                else
-                    q.setLavoratoreCell(lav.getPhone());
-
-                if (!StringUtils.isEmpty(q.getLavoratoreCell()))
-                    if (q.getLavoratoreCell().equals("0"))
-                        q.setLavoratoreCell("");
-
-
+                q.setLavoratoreCell(lav.getNormalizedCellPhone());
                 q.setLavoratoreId(lav.getLid());
                 q.setLavoratoreCap(lav.getCap());
                 q.setLavoratoreComuneResidenza(lav.getLivingCity());
