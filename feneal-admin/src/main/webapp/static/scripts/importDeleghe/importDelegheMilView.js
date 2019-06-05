@@ -90,16 +90,17 @@ define([
                     self.initTabsPanel();
                     var grid = self.initGridconCodice(response);
                     var grid2 = self.initGridsenzaCodice(response);
-
+                    var grid3 = self.initGridlavImported(response);
 
                      $('html, body').animate({scrollTop: $('#conCodiceGrid').offset().top - 160}, 1400, "swing");
+
 
 
 
                     // aggiungo tasto IMPORTA DELEGHE
                     if ($(".elabora-richieste").length == 0) {
                         var delGeneration = '<div class="col-md-12 col-xs-3 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Invia dati al server">' +
-                            '<button type="button" class="btn btn-primary full-width elabora-richieste">' +
+                            '<button type="button" class="btn btn-primary full-width elabora-richieste" id="import">' +
                             '<span class="fa fa-reply" aria-hidden="true"></span>' +
                             '</button></div>';
 
@@ -107,6 +108,15 @@ define([
                         $(".elabora-richieste").parent().tooltip();
                         $(".elabora-richieste").click(function () {
                             var selectedrows = grid.getSelectedRowsData();
+
+
+                            var testoTabSelezionato =
+                                $('.dx-tab-selected  .dx-tab-text').text();
+                            if (testoTabSelezionato != "Lavoratori con CF"){
+                                $.notify.error("Riportati al tab'Lavoratore con CF' per eseguire l'operazione");
+                                return false;
+                            }
+
 
                             if (selectedrows.length == 0) {
                                 $.notify.error("Selezionare almeno un elemento");
@@ -136,8 +146,7 @@ define([
                                             svc.on("load", function(response){
                                                 $.loader.hide({parent:'body'});
                                                 dialog.modalDialog("close");
-
-
+                                                $.notify.success("Importazione avvenuta con successo");
                                             });
                                             svc.on("error", function(error){
                                                 $.loader.hide({parent:'body'});
@@ -150,6 +159,7 @@ define([
                                     }
                                 }
                             });
+
                         });
                     }
 
@@ -157,8 +167,11 @@ define([
                      var reportResultsConfigurer = new resultsConfigurer.ReportUiConfigurer(grid, "deleghemil", true);
                      reportResultsConfigurer.init();
 
-                    var reportResultsConfigurer2 = new resultsConfigurer.ReportUiConfigurer(grid2, "deleghemil", true);
-                    reportResultsConfigurer2.init();
+                    // var reportResultsConfigurer2 = new resultsConfigurer.ReportUiConfigurer(grid2, "deleghemil", true);
+                    // reportResultsConfigurer2.init();
+                    //
+                    // var reportResultsConfigurer3 = new resultsConfigurer.ReportUiConfigurer(grid3, "deleghemil", true);
+                    // reportResultsConfigurer3.init();
 
 
 
@@ -176,6 +189,8 @@ define([
             self.formView.form.on("cancel", function() {
                 self.close();
             });
+
+            this.dxTab = null;
 
         },
         initGridconCodice : function(responseData){
@@ -312,6 +327,9 @@ define([
 
             var grid = $('#senzaCodiceGrid').dxDataGrid({
                 dataSource:responseData.senzaCodici,
+                options: {
+                    elementAttr: { id: 'selectBox' }
+                },
                 columns:[
                     { allowEditing:false, dataField:"numProgressivo", visible : true, caption:"N.Progressivo"},
                     { allowEditing:false, dataField:"numProtocollo", visible : true, caption:"N.Protocollo"},
@@ -385,10 +403,107 @@ define([
                 allowColumnReordering:true,
                 allowColumnResizing:true,
                 columnAutoWidth: true,
-                selection:{
-                    mode:"multiple",
-                    showCheckBoxesMode: "always"
+                hoverStateEnabled: true
+
+                // masterDetail: {
+                //     enabled: true,
+                //     template: function(container, options) {
+                //         var currentData = options.data;
+                //         container.addClass("internal-grid-container");
+                //         $("<div>").text(currentData.delegaSettore  + " Dettagli:").appendTo(container);
+                //         $("<div>")
+                //             .addClass("internal-grid")
+                //             .dxDataGrid({
+                //                 columnAutoWidth: true,
+                //                 columns: [{
+                //                     dataField: "id"
+                //                 }, {
+                //                     dataField: "description",
+                //                     caption: "Description",
+                //                     calculateCellValue: function(rowData) {
+                //                         return rowData.description + "ciao ciao";
+                //                     }
+                //                 }],
+                //                 dataSource: currentData.details
+                //             }).appendTo(container);
+                //     }
+                // }
+
+            }).dxDataGrid("instance");
+
+            return grid;
+        },
+        initGridlavImported: function(responseData){
+
+            var grid = $('#lavImported').dxDataGrid({
+                dataSource:responseData.lavImported,
+                columns:[
+                    { allowEditing:false, dataField:"numProgressivo", visible : true, caption:"N.Progressivo"},
+                    { allowEditing:false, dataField:"numProtocollo", visible : true, caption:"N.Protocollo"},
+                    { allowEditing:false, dataField:"dataArchiviazione", visible : true, dataType:'date', caption:"Data Arch."},
+                    { allowEditing:false, dataField:"dataArrivo", visible : true, dataType:'date', caption:"Data Arrivo"},
+                    { allowEditing:false, dataField:"cognome", visible : true, caption:"Cognome"},
+                    { allowEditing:false, dataField:"nome", visible : true, caption:"Nome"},
+                    { allowEditing:false, dataField:"dataNascita", visible : true, dataType:'date', caption:"Data Nascita"},
+                    { allowEditing:false, dataField:"codiceLavoratore", visible : true, caption:"Cod.Lavoratore",},
+                    { allowEditing:false, dataField:"barCode", visible : true, caption:"Barcode"},
+                    { allowEditing:false, dataField:"codiceFiscale", visible : true, caption:"Cod.Fiscale"},
+                    { allowEditing:false, dataField:"codiceSind", width: 60,visible : true, caption:"Cod.Sindacato"},
+                    { allowEditing:false, dataField:"codiceCompr", width: 60,visible : true, caption:"Cod.Comprensorio"},
+                    { allowEditing:false, dataField:"dataConferma", visible : true, dataType:'date', caption:"Data Conferma"},
+                    { allowEditing:false, dataField:"dataAdesione", visible : true, dataType:'date', caption:"Data Adesione"},
+
+                    { allowEditing:true, dataField:"numDelega", visible : true, caption:"N.Delega"},
+                    { allowEditing:true, dataField:"note", visible : true, caption:"Note"}
+                ],
+                // searchPanel: {
+                //     visible: true
+                //
+                // },
+                summary: {
+                    totalItems: [{
+                        column: "numProgressivo",
+                        summaryType: "count",
+                        customizeText: function(data) {
+                            return "Deleghe trovate: " + data.value;
+                        }
+                    }]
                 },
+                // columnChooser: {
+                //     enabled: true
+                // },
+                // onCellClick: function (clickedCell) {
+                //     alert(clickedCell.column.dataField);
+                // },
+                "export": {
+                    enabled: false,
+                    fileName: "reportdelegheMil",
+                    allowExportSelectedData: true
+                },
+                stateStoring: {
+                    enabled: false,
+                    type: "localStorage",
+                    storageKey: "importdeleghemil"
+                },
+                paging:{
+                    pageSize: 35
+                },
+                sorting:{
+                    mode:"multiple"
+                },
+                onContentReady: function (e) {
+                    var columnChooserView = e.component.getView("columnChooserView");
+                    if (!columnChooserView._popupContainer) {
+                        columnChooserView._initializePopupContainer();
+                        columnChooserView.render();
+                        columnChooserView._popupContainer.option("dragEnabled", false);
+                    }
+                },
+                rowAlternationEnabled: true,
+                showBorders: true,
+                allowColumnReordering:true,
+                allowColumnResizing:true,
+                columnAutoWidth: true,
                 hoverStateEnabled: true
 
                 // masterDetail: {
@@ -420,11 +535,14 @@ define([
             return grid;
         },
         initTabsPanel: function(){
-            $("#tabpanel-container").dxTabPanel({
+            var self = this;
+
+            self.dxTab =$("#tabpanel-container").dxTabPanel({
                 loop: false,
                 animationEnabled: true,
                 swipeEnabled: true,
-                deferRendering: false
+                deferRendering: false,
+
             }).dxTabPanel("instance");
         },
         normalizeSubmitResult: function(form){

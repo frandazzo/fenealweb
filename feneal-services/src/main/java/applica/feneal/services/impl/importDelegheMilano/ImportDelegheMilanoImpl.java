@@ -252,6 +252,7 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
 
         List<DelegaMilano> conCodici = obj.getConCodici();
         List<DelegaMilano> senzaCiodici = obj.getSenzaCodici();
+        List<DelegaMilano> lavImported = obj.getLavImported();
 
         SimpleDateFormat d = new SimpleDateFormat("dd/MM/yyyy");
         for (String r : selectedRow) {
@@ -285,15 +286,19 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
             else
                 del.setImported(false);
 
+            if (del.getCodiceFiscale().isEmpty())
+                senzaCiodici.add(del);
+
             if (!del.isImported())
             {
                 String path = retrieveFilePath(del.getFilename(), dir);
                 del.setFilePath(path);
-            }
-            if (!del.getCodiceFiscale().isEmpty())
                 conCodici.add(del);
-            else
-                senzaCiodici.add(del);
+            }
+            else{
+                lavImported.add(del);
+            }
+
         }
     }
 

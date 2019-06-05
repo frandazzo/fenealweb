@@ -210,14 +210,18 @@
         <div id="reportContainer">
 
             <div id="tabpanel-container">
-                <div data-options="dxItem: { title: 'Lavoratori con CF'} ">
-                    <div id="conCodiceGrid"></div>
+                <div data-options="dxItem: { title: 'Lavoratori con CF'} " >
+                    <div id="conCodiceGrid" ></div>
                 </div>
                 <div data-options="dxItem: { title: 'Lavoratori senza CF' } ">
                     <div id="senzaCodiceGrid"></div>
                 </div>
+                <div data-options="dxItem: { title: 'Lavoratori Importati' } ">
+                    <div id="lavImported"></div>
                 </div>
+
             </div>
+        </div>
 
         </div>
 

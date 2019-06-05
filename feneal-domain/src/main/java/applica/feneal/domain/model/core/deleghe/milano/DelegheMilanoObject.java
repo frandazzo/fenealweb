@@ -8,7 +8,17 @@ import java.util.List;
 public class DelegheMilanoObject {
     private List<DelegaMilano> conCodici = new ArrayList<>();
     private List<DelegaMilano> senzaCodici = new ArrayList<>();
+    private List<DelegaMilano> lavImported = new ArrayList<>();
     private List<Collaboratore> collaboratori = new ArrayList<>();
+
+
+    public List<DelegaMilano> getLavImported() {
+        return lavImported;
+    }
+
+    public void setLavImported(List<DelegaMilano> lavImported) {
+        this.lavImported = lavImported;
+    }
 
     public List<DelegaMilano> getConCodici() {
         return conCodici;
