@@ -153,8 +153,6 @@ define([
                                                 $.notify.error(error);
                                             });
 
-
-
                                             svc.load();
                                             $.loader.show({parent:'body'});
                                         }
