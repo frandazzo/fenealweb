@@ -145,7 +145,7 @@ define([
 
                                             svc.on("load", function(response){
                                                 $.loader.hide({parent:'body'});
-                                                dialog.modalDialog("close");
+                                                //location.href = BASE;
                                                 $.notify.success("Importazione avvenuta con successo");
                                             });
                                             svc.on("error", function(error){
@@ -155,6 +155,7 @@ define([
 
                                             svc.load();
                                             $.loader.show({parent:'body'});
+                                            dialog.modalDialog("close");
                                         }
                                     }
                                 }

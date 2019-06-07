@@ -10,6 +10,7 @@
     <global-method-security pre-post-annotations="enabled" />
 
     <http use-expressions="true">
+        <intercept-url pattern="/c" access="permitAll" />
         <intercept-url pattern="/values/**" access="permitAll" />
         <intercept-url pattern="/widget/real/**" access="permitAll" />
         <intercept-url pattern="/static/**" access="permitAll" />

@@ -51,6 +51,7 @@ public class SkebbyNewApiSmsSender {
         }
         catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
 
         return userData;

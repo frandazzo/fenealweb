@@ -85,4 +85,9 @@ public class ReportQuoteVareseFacade {
 
         return convertToUiDettaglioQuota(rpt, obj);
     }
+
+
+    public String createFile(String a) throws Exception {
+        return rptQuoteserv.compileFileForLavoratore(a);
+    }
 }

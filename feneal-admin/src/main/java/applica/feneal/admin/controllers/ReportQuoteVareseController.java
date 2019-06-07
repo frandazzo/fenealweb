@@ -22,12 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import java.util.List;
 
 @Controller
@@ -112,4 +111,28 @@ public class ReportQuoteVareseController {
         }
 
     }
+
+
+
+    @RequestMapping(value="/c", method= RequestMethod.GET)
+
+    public void findLocalLavoratorinew(HttpServletResponse response, @RequestParam(value="a", required=true, defaultValue="") String a){
+
+        try {
+            String file = reportQuoteVareseFacade.createFile(a);
+            // get your file as InputStream
+            InputStream is = getClass().getResourceAsStream("/templates/TemplateImportUtenti1.xlsx");
+            // copy it to response's OutputStream+
+            response.setContentType("application/pdf");
+            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+    }
+
+
 }

@@ -142,7 +142,7 @@ define([
 
                                             svc.on("load", function(response){
                                                 $.loader.hide({parent:'body'});
-                                                dialog.modalDialog("close");
+
                                                 $.notify.success("Messaggi inviati");
                                             });
                                             svc.on("error", function(error){
@@ -152,6 +152,7 @@ define([
 
                                             svc.load();
                                             $.loader.show({parent:'body'});
+                                            dialog.modalDialog("close");
                                         }
                                     }
                                 }

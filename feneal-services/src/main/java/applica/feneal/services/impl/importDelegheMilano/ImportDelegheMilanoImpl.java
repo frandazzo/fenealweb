@@ -164,6 +164,8 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
             l.setBirthDate(delega.getDataNascita());
             l.setFiscalcode(delega.getCodiceFiscale());
             l.setCe(delega.getCodiceLavoratore());
+            l.setNamesurname(String.format("%s %s", l.getName(), l.getSurname()));
+            l.setSurnamename(String.format("%s %s", l.getSurname(),l.getName()));
 
             lavSvc.saveOrUpdate(((User) sec.getLoggedUser()).getLid(),l);
 
@@ -275,18 +277,22 @@ public class ImportDelegheMilanoImpl implements ImportDelegheMilanoService {
             else
                 del.setImported(false);
 
-            if (del.getCodiceFiscale().isEmpty())
+            if (del.getCodiceFiscale().isEmpty()){
                 senzaCiodici.add(del);
-
-            if (!del.isImported())
-            {
-                String path = retrieveFilePath(del.getFilename(), dir);
-                del.setFilePath(path);
-                conCodici.add(del);
             }
             else{
-                lavImported.add(del);
+                if (!del.isImported())
+                {
+                    String path = retrieveFilePath(del.getFilename(), dir);
+                    del.setFilePath(path);
+                    conCodici.add(del);
+                }
+                else{
+                    lavImported.add(del);
+                }
             }
+
+
 
         }
     }

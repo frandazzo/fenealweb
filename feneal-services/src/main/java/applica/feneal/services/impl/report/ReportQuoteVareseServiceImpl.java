@@ -1,5 +1,6 @@
 package applica.feneal.services.impl.report;
 
+import applica.feneal.domain.data.core.lavoratori.LavoratoriRepository;
 import applica.feneal.domain.data.core.quote.DettaglioQuoteAssociativeRepository;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
@@ -22,6 +23,8 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
 
     @Autowired
     private DettaglioQuoteAssociativeRepository dettRep;
+    @Autowired
+    private LavoratoriRepository lavRep;
 
 
     @Override
@@ -47,6 +50,28 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
         }
 
         return list1;
+    }
+
+    @Override
+    public String compileFileForLavoratore(String id) throws Exception {
+
+        //l'idi è costituito per le prime 16 cifre di codice fiscale e per le rimanenti l'id del lavoratore
+        String cf = id.substring(0,16);
+        String wi = id.substring(16);
+
+        LoadRequest req = LoadRequest.build()
+                .disableOwnershipQuery()
+                .filter("id", Long.parseLong(wi))
+                .filter("fiscalcode", cf);
+
+        Lavoratore ll = lavRep.find(req).findFirst().orElse(null);
+        if (ll == null)
+            throw new Exception("Lavoratore non trovato");
+
+        //qui eseguo il mail merge..... vai felix
+        //devi ritornare il path del file pdf generato
+        return "generatePdfPath.pdf";
+
     }
 
     private List<DettaglioQuotaAssociativa> intersectLists(List<DettaglioQuotaAssociativa> list1, List<DettaglioQuotaAssociativa> list2) {
