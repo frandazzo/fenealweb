@@ -7,12 +7,16 @@ import applica.feneal.domain.data.core.servizi.ComunicazioniRepository;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.Company;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
+import applica.feneal.domain.model.core.quote.varese.UiDettaglioQuotaVarese;
+import applica.feneal.domain.model.utils.skebby.ParametricSkebbySmsConfiguration;
+import applica.feneal.domain.model.utils.skebby.SkebbyParamtericRecipient;
 import applica.feneal.domain.model.core.servizi.Comunicazione;
 import applica.feneal.domain.model.geo.Province;
 import applica.feneal.domain.model.setting.CausaleComunicazione;
 import applica.feneal.domain.model.setting.TipoComunicazione;
 import applica.feneal.services.ComunicazioniService;
 import applica.feneal.services.GeoService;
+import applica.feneal.services.skebby.SkebbyNewApiSmsSender;
 import applica.feneal.services.skebby.SkebbySmsSender;
 import applica.framework.LoadRequest;
 import applica.framework.security.AuthenticationException;
@@ -31,12 +35,14 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by fgran on 02/06/2016.
@@ -370,6 +376,89 @@ public class ComunicazioniServiceImpl implements ComunicazioniService {
         sendSmsViaSkebby(lavoratori, text);
 
 
+    }
+
+    @Override
+    public void sendParametricSms(List<UiDettaglioQuotaVarese> quote ) throws Exception {
+        if (quote.size() == 0)
+            throw new Exception("Nessun lavoratore selezionato");
+
+        if (!existSmsCredentials())
+            throw new Exception("Funzionalità disabilitata: registrazione skebby non effettuata!");
+
+
+
+        //devo creare una comunicazione di tipo SMS verificando che il tipo di comunicazione sms esista
+        //se non esiste la creo
+        TipoComunicazione c = retrieveTipoComunicazioneForSMSOrCreateIt();
+        //la causale comunicazione deve essere "Campapgna del .... 10-10-2016"
+        SimpleDateFormat ff = new SimpleDateFormat("dd-MM-yyyy");
+        String descrizioneCampagna = "Comunicazione certificazione del " + ff.format(new Date());
+        //ricerco la causale per descrizione altrimenti ne creo una...
+        CausaleComunicazione causCom = retrieveCausaleComunicazioneByDescription(descrizioneCampagna);
+        String message = "Caro Lavoratore,\n" +
+                "scarica la certificazione per usufruire dei nostri servizi.\n" +
+                "Distinti Saluti,\n" +
+                "FENEALUIL Alta Lombardia\n" +
+                "http://fenealweb.it/c?a=${param1}";
+
+        for (UiDettaglioQuotaVarese ui : quote) {
+            Lavoratore l = lavRep.get(ui.getLavoratoreId()).get();
+            l.setUltimaComunicazione(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+            lavRep.save(l);
+            Comunicazione cc = new Comunicazione();
+            Province pp = getProvinceByName(ui.getProvincia());
+            if (pp == null)
+                throw new Exception("Provincia nulla");
+
+            cc.setProvince(pp);
+            cc.setLavoratore(l);
+            cc.setData(new Date());
+            cc.setCausale(causCom);
+            cc.setTipo(c);
+            cc.setOggetto(message.replace("${param1}",ui.getLavoratoreCodiceFiscale() + String.valueOf(ui.getLavoratoreId())));
+
+            comRep.save(cc);
+        }
+
+
+
+        //inizio a costruire il payload
+        sendSms(quote, message);
+
+
+
+    }
+
+    private void sendSms(List<UiDettaglioQuotaVarese> quote, String message) throws Exception {
+        ParametricSkebbySmsConfiguration payload =createPayload(quote, message);
+        User u = ((User) sec.getLoggedUser());
+        SkebbyNewApiSmsSender s = new SkebbyNewApiSmsSender();
+        s.sendSms(u.getCompany().getSmsUsername(), u.getCompany().getSmsPassword(),payload);
+    }
+
+    private ParametricSkebbySmsConfiguration createPayload(List<UiDettaglioQuotaVarese> quote, String message) {
+        ParametricSkebbySmsConfiguration d = new ParametricSkebbySmsConfiguration();
+        d.setMessage(message);
+        d.setMessage_type("TI");
+        d.setSender("");
+        d.setAllowInvalidRecipients(false);
+        d.setOrder_id("123456789");
+        d.setReturnCredits(true);
+        d.setReturnRemaining(false);
+
+        HashMap<String, SkebbyParamtericRecipient> hm = new HashMap<String, SkebbyParamtericRecipient>();
+        int i = 0;
+        for (UiDettaglioQuotaVarese uiDettaglioQuotaVarese : quote) {
+            String param1 = uiDettaglioQuotaVarese.getLavoratoreCodiceFiscale() + String.valueOf(uiDettaglioQuotaVarese.getLavoratoreId());
+            SkebbyParamtericRecipient r1 = new SkebbyParamtericRecipient();
+            r1.setParam1(param1);
+            r1.setRecipient("+39" + uiDettaglioQuotaVarese.getLavoratoreCell());
+            hm.put(String.valueOf(i), r1);
+            i++;
+        }
+        d.setRecipients(hm);
+        return d;
     }
 
     private String executeMailMerge(String text) {

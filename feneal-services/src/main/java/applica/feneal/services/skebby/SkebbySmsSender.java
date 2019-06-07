@@ -27,8 +27,6 @@ import java.util.List;
 public class SkebbySmsSender {
 
 
-
-
     public  void send(String skebbyUsername, String skebbyPwd, String smssenderNumber, String smsSenderAlias, String[] recs, String text) throws Exception {
 
         String [] recipients = recs;//new String[]{"391234567890","391234567891"};

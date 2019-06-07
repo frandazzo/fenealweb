@@ -3,7 +3,7 @@ package applica.feneal.domain.model.core.quote.varese;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuoteVareseObject {
+public class UiQuoteVareseObject {
     private List<UiDettaglioQuotaVarese> conNumero = new ArrayList<>();
     private List<UiDettaglioQuotaVarese> senzaNumero = new ArrayList<>();
 

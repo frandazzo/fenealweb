@@ -7,7 +7,7 @@ import applica.feneal.domain.model.User;
 
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
-import applica.feneal.domain.model.core.quote.varese.QuoteVareseObject;
+import applica.feneal.domain.model.core.quote.varese.UiQuoteVareseObject;
 import applica.feneal.domain.model.core.quote.UiQuoteVareseReportSearchParams;
 import applica.feneal.services.AziendaService;
 import applica.feneal.services.LavoratoreService;
@@ -34,7 +34,7 @@ public class ReportQuoteVareseFacade {
     @Autowired
     private Security security;
 
-    private QuoteVareseObject  convertToUiDettaglioQuota(List<DettaglioQuotaAssociativa> quoteDetails, QuoteVareseObject obj) {
+    private UiQuoteVareseObject convertToUiDettaglioQuota(List<DettaglioQuotaAssociativa> quoteDetails, UiQuoteVareseObject obj) {
 
         List<UiDettaglioQuotaVarese> conNum = obj.getConNumero();
         List<UiDettaglioQuotaVarese> senzaNum = obj.getSenzaNumero();
@@ -78,10 +78,10 @@ public class ReportQuoteVareseFacade {
         return obj;
     }
 
-    public QuoteVareseObject reportQuote(UiQuoteVareseReportSearchParams params) {
+    public UiQuoteVareseObject reportQuote(UiQuoteVareseReportSearchParams params) {
         List<DettaglioQuotaAssociativa> rpt = rptQuoteserv.retrieveQuoteVarese(params);
 
-        QuoteVareseObject obj = new QuoteVareseObject();
+        UiQuoteVareseObject obj = new UiQuoteVareseObject();
 
         return convertToUiDettaglioQuota(rpt, obj);
     }

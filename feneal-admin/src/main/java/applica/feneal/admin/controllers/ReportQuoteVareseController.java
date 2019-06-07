@@ -5,8 +5,9 @@ import applica.feneal.admin.fields.renderers.*;
 import applica.feneal.admin.form.renderers.QuoteVareseSearchFormRenderer;
 
 import applica.feneal.domain.model.core.quote.varese.UiDettaglioQuotaVarese;
-import applica.feneal.domain.model.core.quote.varese.QuoteVareseObject;
+import applica.feneal.domain.model.core.quote.varese.UiQuoteVareseObject;
 import applica.feneal.domain.model.core.quote.UiQuoteVareseReportSearchParams;
+import applica.feneal.services.ComunicazioniService;
 import applica.framework.library.responses.ErrorResponse;
 import applica.framework.library.responses.FormResponse;
 import applica.framework.library.responses.SimpleResponse;
@@ -39,7 +40,8 @@ public class ReportQuoteVareseController {
     @Autowired
     private ReportQuoteVareseFacade reportQuoteVareseFacade;
 
-
+    @Autowired
+    private ComunicazioniService comSvc;
 
 
 
@@ -47,7 +49,7 @@ public class ReportQuoteVareseController {
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody
     SimpleResponse reportQuoteVar(@RequestBody UiQuoteVareseReportSearchParams params){
-        QuoteVareseObject obj;
+        UiQuoteVareseObject obj;
         try {
             obj = reportQuoteVareseFacade.reportQuote(params);
             return new ValueResponse(obj);
@@ -100,8 +102,9 @@ public class ReportQuoteVareseController {
     public
     @ResponseBody
     SimpleResponse gridInvio(@RequestBody List<UiDettaglioQuotaVarese> quote) {
-
         try {
+
+            comSvc.sendParametricSms(quote);
             return new ValueResponse("ok");
 
         } catch (Exception e) {
