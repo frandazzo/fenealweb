@@ -115,7 +115,6 @@ public class ReportQuoteVareseController {
 
 
     @RequestMapping(value="/c", method= RequestMethod.GET)
-
     public void findLocalLavoratorinew(HttpServletResponse response, @RequestParam(value="a", required=true, defaultValue="") String a){
 
         try {

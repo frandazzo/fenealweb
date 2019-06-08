@@ -5,15 +5,25 @@ import applica.feneal.domain.data.core.quote.DettaglioQuoteAssociativeRepository
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
 import applica.feneal.domain.model.core.quote.UiQuoteVareseReportSearchParams;
+import applica.feneal.domain.model.core.quote.varese.dateParam;
+import applica.feneal.domain.model.core.quote.varese.workerParam;
 import applica.feneal.services.ReportQuoteVareseService;
 import applica.framework.Filter;
 import applica.framework.LoadRequest;
+import applica.framework.management.mailmerge.DocxToPdfConverter;
+import applica.framework.management.mailmerge.MailMergeFacade;
+import fr.opensagres.xdocreport.core.XDocReportException;
+import fr.opensagres.xdocreport.core.utils.Assert;
 import org.apache.commons.lang.StringUtils;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Stream;
 
 
@@ -28,7 +38,7 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
 
 
     @Override
-    public List<DettaglioQuotaAssociativa> retrieveQuoteVarese(UiQuoteVareseReportSearchParams params) {
+    public List<DettaglioQuotaAssociativa> retrieveQuoteVarese(UiQuoteVareseReportSearchParams params){
 
 
         String quota2= params.getQuota2();
@@ -68,10 +78,64 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
         if (ll == null)
             throw new Exception("Lavoratore non trovato");
 
-        //qui eseguo il mail merge..... vai felix
-        //devi ritornare il path del file pdf generato
+        String PdfPath = CreatePdfForSMSVarese(cf,wi);
+
+
         return "generatePdfPath.pdf";
 
+    }
+
+    private String CreatePdfForSMSVarese(String cf, String id) throws IOException, Docx4JException, XDocReportException {
+
+        URL url =  getClass().getResource("/templates/SMS NUOVI ISCRITTI FNLWEB.docx");
+        //creo una directory temporanea
+        File temp1 = File.createTempFile("test","");
+        temp1.delete();
+        temp1.mkdir();
+
+        String tempFolder=temp1.getAbsolutePath();
+
+        //entra qua dentro e si blocca
+        MailMergeFacade facade = new MailMergeFacade();
+
+
+        String templatePath = url.getPath();
+
+        //genero il pdf nella directory di test;
+        String outputFile = tempFolder + "/testConvertToPdf.pdf";
+
+        //imposto la tabella delle proprieà con cui fare il mail merge
+        Hashtable<String, Object> prop = new Hashtable<String, Object>();
+        //se guaro il file della documentazione vedo che richiede un oggetto doc, e una proprietà foter
+
+        workerParam lav = new workerParam();
+        lav.setCodFiscale(cf);
+
+        LoadRequest req = LoadRequest.build()
+                .disableOwnershipQuery()
+                .filter("id", Long.parseLong(id))
+                .filter("fiscalcode", cf);
+
+        Lavoratore ll = lavRep.find(req).findFirst().orElse(null);
+        if(ll != null)
+            lav.setNomeCompleto(ll.getSurname()+ll.getName());
+
+
+        SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
+        dateParam data = new dateParam();
+        data.setDataYear(Calendar.getInstance().get(Calendar.YEAR));
+        data.setDataDay(ff.format(new Date()));
+
+        //inserisco tutto nella mappa delle proprietà con i nomi specificati nel documento(vedi file documentazione nei campi merge field)
+        prop.put("data", data);
+        prop.put("lav", lav);
+
+        facade.executeMailMergeAndGeneratePdf(templatePath, outputFile, prop);
+
+        File createdFile = new File(outputFile);
+
+
+        return createdFile.getAbsolutePath();
     }
 
     private List<DettaglioQuotaAssociativa> intersectLists(List<DettaglioQuotaAssociativa> list1, List<DettaglioQuotaAssociativa> list2) {
