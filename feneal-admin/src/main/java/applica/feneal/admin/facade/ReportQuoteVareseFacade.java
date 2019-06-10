@@ -93,7 +93,7 @@ public class ReportQuoteVareseFacade {
 
 
     public String createFile(String a) throws Exception {
-        InputStream strurl =  getClass().getResourceAsStream("/templates/sms_certificazione_alta.docx");
+        InputStream strurl =  getClass().getResourceAsStream("/templates/sms_certificazione_alta - per unione.docx");
         String templatePath = createTempFile(strurl);
         return rptQuoteserv.compileFileForLavoratore(a, templatePath);
     }

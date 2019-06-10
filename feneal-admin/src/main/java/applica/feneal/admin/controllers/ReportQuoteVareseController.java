@@ -125,20 +125,18 @@ public class ReportQuoteVareseController {
             // get your file as InputStream
             InputStream is = new FileInputStream(new File(file));
 
-            String outputFile = "C:\\Users\\fgran\\Desktop\\Test1.pdf";
-
-
-            XWPFDocument document = new XWPFDocument(is);
-            File outFile =new File(outputFile);
-            OutputStream out = new FileOutputStream(outFile);
-            PdfOptions options = null;
-            PdfConverter.getInstance().convert(document, out, options);
-
-
+//            String outputFile = "C:\\Users\\felic\\Desktop\\Test1.pdf";
+//
+//
+//            XWPFDocument document = new XWPFDocument(is);
+//            File outFile =new File(outputFile);
+//            OutputStream out = new FileOutputStream(outFile);
+//            PdfOptions options = null;
+//            PdfConverter.getInstance().convert(document, out, options);
 
 
             // copy it to response's OutputStream+
-            response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            response.setContentType("application/pdf");
             org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
             response.flushBuffer();
 
