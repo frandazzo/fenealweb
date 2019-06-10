@@ -1,7 +1,7 @@
 package applica.feneal.domain.model.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 /**
  * Applica
@@ -12,15 +12,15 @@ import org.apache.logging.log4j.Logger;
  */
 public class LoggerClass {
 
-    private static final Logger logger = LogManager.getLogger();
+//    private static final Logger logger = LogManager.getLogger();
 
 
 
     public static void info(String message){
-        logger.info(message);
+//        logger.info(message);
     }
 
     public static void error(String message){
-        logger.error(message);
+//        logger.error(message);
     }
 }

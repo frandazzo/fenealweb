@@ -11,6 +11,6 @@ public interface ReportQuoteVareseService {
 
     List<DettaglioQuotaAssociativa> retrieveQuoteVarese(UiQuoteVareseReportSearchParams params);
 
-    String compileFileForLavoratore(String id) throws Exception;
+    String compileFileForLavoratore(String id, String templatePath) throws Exception;
 }
 

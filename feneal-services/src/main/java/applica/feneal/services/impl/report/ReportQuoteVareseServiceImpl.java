@@ -14,13 +14,16 @@ import applica.framework.management.mailmerge.DocxToPdfConverter;
 import applica.framework.management.mailmerge.MailMergeFacade;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import fr.opensagres.xdocreport.core.utils.Assert;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -63,7 +66,7 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
     }
 
     @Override
-    public String compileFileForLavoratore(String id) throws Exception {
+    public String compileFileForLavoratore(String id, String templatePath) throws Exception {
 
         //l'idi è costituito per le prime 16 cifre di codice fiscale e per le rimanenti l'id del lavoratore
         String cf = id.substring(0,16);
@@ -78,16 +81,17 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
         if (ll == null)
             throw new Exception("Lavoratore non trovato");
 
-        String PdfPath = CreatePdfForSMSVarese(cf,wi);
+        String PdfPath = CreatePdfForSMSVarese(cf,wi, ll, templatePath);
 
 
-        return "generatePdfPath.pdf";
+        return PdfPath;
 
     }
 
-    private String CreatePdfForSMSVarese(String cf, String id) throws IOException, Docx4JException, XDocReportException {
+    private String CreatePdfForSMSVarese(String cf, String id, Lavoratore ll, String templatePath) throws IOException, Docx4JException, XDocReportException {
 
-        URL url =  getClass().getResource("/templates/SMS NUOVI ISCRITTI FNLWEB.docx");
+
+
         //creo una directory temporanea
         File temp1 = File.createTempFile("test","");
         temp1.delete();
@@ -99,10 +103,8 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
         MailMergeFacade facade = new MailMergeFacade();
 
 
-        String templatePath = url.getPath();
-
         //genero il pdf nella directory di test;
-        String outputFile = tempFolder + "/testConvertToPdf.pdf";
+        String outputFile = tempFolder + "/certificazione.docx";
 
         //imposto la tabella delle proprieà con cui fare il mail merge
         Hashtable<String, Object> prop = new Hashtable<String, Object>();
@@ -110,33 +112,27 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
 
         workerParam lav = new workerParam();
         lav.setCodFiscale(cf);
-
-        LoadRequest req = LoadRequest.build()
-                .disableOwnershipQuery()
-                .filter("id", Long.parseLong(id))
-                .filter("fiscalcode", cf);
-
-        Lavoratore ll = lavRep.find(req).findFirst().orElse(null);
-        if(ll != null)
-            lav.setNomeCompleto(ll.getSurname()+ll.getName());
+        lav.setNomeCompleto(ll.getSurname()+ " " + ll.getName());
 
 
         SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
         dateParam data = new dateParam();
-        data.setDataYear(Calendar.getInstance().get(Calendar.YEAR));
+        data.setDataYear(Integer.parseInt(ll.getUltimaComunicazione()));
         data.setDataDay(ff.format(new Date()));
 
         //inserisco tutto nella mappa delle proprietà con i nomi specificati nel documento(vedi file documentazione nei campi merge field)
         prop.put("data", data);
         prop.put("lav", lav);
 
-        facade.executeMailMergeAndGeneratePdf(templatePath, outputFile, prop);
+        facade.executeMailMerge(templatePath, outputFile, prop);
 
         File createdFile = new File(outputFile);
 
 
         return createdFile.getAbsolutePath();
     }
+
+
 
     private List<DettaglioQuotaAssociativa> intersectLists(List<DettaglioQuotaAssociativa> list1, List<DettaglioQuotaAssociativa> list2) {
         List<DettaglioQuotaAssociativa> listApp = new ArrayList<>();

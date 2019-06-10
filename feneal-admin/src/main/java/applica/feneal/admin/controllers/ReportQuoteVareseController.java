@@ -18,6 +18,9 @@ import applica.framework.widgets.FormCreationException;
 import applica.framework.widgets.FormDescriptor;
 import applica.framework.widgets.fields.Params;
 import applica.framework.widgets.fields.Values;
+import org.apache.poi.xwpf.converter.pdf.PdfConverter;
+import org.apache.poi.xwpf.converter.pdf.PdfOptions;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
 @Controller
@@ -120,9 +123,22 @@ public class ReportQuoteVareseController {
         try {
             String file = reportQuoteVareseFacade.createFile(a);
             // get your file as InputStream
-            InputStream is = getClass().getResourceAsStream("/templates/TemplateImportUtenti1.xlsx");
+            InputStream is = new FileInputStream(new File(file));
+
+            String outputFile = "C:\\Users\\fgran\\Desktop\\Test1.pdf";
+
+
+            XWPFDocument document = new XWPFDocument(is);
+            File outFile =new File(outputFile);
+            OutputStream out = new FileOutputStream(outFile);
+            PdfOptions options = null;
+            PdfConverter.getInstance().convert(document, out, options);
+
+
+
+
             // copy it to response's OutputStream+
-            response.setContentType("application/pdf");
+            response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
             org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
             response.flushBuffer();
 

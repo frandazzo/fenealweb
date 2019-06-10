@@ -13,10 +13,15 @@ import applica.feneal.services.AziendaService;
 import applica.feneal.services.LavoratoreService;
 import applica.feneal.services.ReportQuoteVareseService;
 import applica.framework.security.Security;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Component
@@ -88,6 +93,21 @@ public class ReportQuoteVareseFacade {
 
 
     public String createFile(String a) throws Exception {
-        return rptQuoteserv.compileFileForLavoratore(a);
+        InputStream strurl =  getClass().getResourceAsStream("/templates/sms_certificazione_alta.docx");
+        String templatePath = createTempFile(strurl);
+        return rptQuoteserv.compileFileForLavoratore(a, templatePath);
+    }
+    private  String createTempFile(InputStream url) {
+        try {
+
+            File f = File.createTempFile("xxx", ".docx");
+            FileOutputStream output = new FileOutputStream(f);
+            IOUtils.copy(url, output);
+            output.close();
+            return f.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }
