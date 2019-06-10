@@ -128,6 +128,8 @@ public class ReportQuoteVareseController {
 //            String outputFile = "C:\\Users\\felic\\Desktop\\Test1.pdf";
 //
 //
+
+
 //            XWPFDocument document = new XWPFDocument(is);
 //            File outFile =new File(outputFile);
 //            OutputStream out = new FileOutputStream(outFile);
