@@ -45,7 +45,8 @@ require([
         "analisi/analisiController",
         "prevedi/importPrevediController",
         "reports/reportQuoteVareseController",
-    "importDeleghe/importDelegheMilController"],
+    "importDeleghe/importDelegheMilController",
+    "comunicazioni/comunicazioniController"],
     function(fmodel,_p, core, ui, fviews, fcontrollers, fhelpers,
                                                  controllers, usercontroller, 
                                                  lavController, listeLavoroController, azController, azDocController,
@@ -67,7 +68,8 @@ require([
              analisiController,
              importPrevediController,
              quoteReportController,
-             delegheMilController) {
+             delegheMilController,
+             comunicazioniController) {
 
     $.datepicker.setDefaults( $.datepicker.regional[ "IT" ] );
 
@@ -143,6 +145,8 @@ require([
 
         //Percorsi deleghe
         ui.Navigation.instance().registerController("deleghehome", function() { return new delegheController.DelegheHomeController(); }, "singleton");
+        ui.Navigation.instance().registerController("comunicazionihome", function() { return new comunicazioniController.ComunicazioniHomeController(); }, "singleton");
+
         ui.Navigation.instance().registerController("editdelega", function() { return new delegheController.EditDelegaController(); }, "singleton");
         ui.Navigation.instance().registerController("deletedelega", function() { return new delegheController.DeleteDelegaController(); }, "singleton");
         ui.Navigation.instance().registerController("delegastatecontroller", function() { return new delegheController.DelegaStateController(); }, "singleton");

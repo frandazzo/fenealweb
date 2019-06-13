@@ -4,6 +4,7 @@ import applica.feneal.domain.data.core.CommunicationReasonRepository;
 import applica.feneal.domain.data.core.CommunicationTypeRepository;
 import applica.feneal.domain.data.core.lavoratori.LavoratoriRepository;
 import applica.feneal.domain.data.core.servizi.ComunicazioniRepository;
+import applica.feneal.domain.model.Filters;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.Company;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
@@ -67,6 +68,9 @@ public class ComunicazioniServiceImpl implements ComunicazioniService {
 
     @Autowired
     private GeoService geoSvc;
+
+
+
 
 
     @Override
@@ -428,6 +432,11 @@ public class ComunicazioniServiceImpl implements ComunicazioniService {
 
 
 
+    }
+
+    @Override
+    public List<Comunicazione> getAllWorkerComunicazioni(long workerId) {
+        return comRep.find(LoadRequest.build().id(Filters.COMUNICAZONE_ID_LAVORATORE, workerId)).getRows();
     }
 
     private void sendSms(List<UiDettaglioQuotaVarese> quote, String message) throws Exception {

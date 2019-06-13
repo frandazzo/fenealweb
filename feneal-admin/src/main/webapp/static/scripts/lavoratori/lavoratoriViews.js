@@ -393,8 +393,15 @@ define([
                 });
 
 
+
+
                 self.createToolbar();
                 self.createBreadcrumbs();
+
+                $("a:contains('Comunicazioni')").hide();
+                if (window.appcontext.provinces.includes("varese")){
+                    $("a:contains('Comunicazioni')").show();
+                }
 
             });
 
@@ -494,7 +501,16 @@ define([
             var self = this;
 
             return [
-
+                    {
+                        text: "Comunicazioni",
+                        command:function () {
+                            ui.Navigation.instance().navigate("comunicazionicrud", "list", {
+                                workerId: self.workerId,
+                                e : "comunicazione"
+                            })
+                        },
+                        icon: "pencil"
+                    },
                 {
                     text: "Verifica altri numeri di telefono",
                     command: function() {
@@ -525,6 +541,7 @@ define([
                 },
 
                 {
+
                     text: "Crea anagrafica",
                     command: function() {
 
@@ -613,7 +630,6 @@ define([
                     icon: "a glyphicons glyphicons-delete"
                 }
             ];
-
         },
         getBreadcrumbItems: function() {
             var self = this;
@@ -638,9 +654,6 @@ define([
         }
 
     });
-
-
-
 
     var EditWorkerAppView = fviews.FormAppView.extend({
         ctor: function(formService, workerId) {
@@ -1048,6 +1061,9 @@ define([
                 var button = buttons[i];
                 $t.toolbar("add", button);
             }
+
+
+
         },
         createBreadcrumbs: function() {
             var items = this.getBreadcrumbItems();
@@ -1061,10 +1077,6 @@ define([
             $b.breadcrumbs('addAll', items);
         }
     });
-
-
-
-
 
     var SearchWorkersAppView = fviews.FormAppView.extend({
         ctor: function(formService, initialserachParams) {
@@ -1084,6 +1096,8 @@ define([
             self.formView.on("load", function(){
                 self.createToolbar();
                 self.createBreadcrumbs();
+
+
 
                 //self.rowCloned = $(".tbody-workers").find("tr.row-worker").first().clone();
 
@@ -1533,8 +1547,6 @@ define([
         }
     });
 
-
-
     var SearchWorkersNewAppView = fviews.FormAppView.extend({
         ctor: function(formService, initialserachParams) {
             SearchWorkersNewAppView.super.ctor.call(this, formService);
@@ -1550,6 +1562,7 @@ define([
             self.formView.on("load", function(){
                 self.createToolbar();
                 self.createBreadcrumbs();
+
 
                 //self.rowCloned = $(".tbody-workers").find("tr.row-worker").first().clone();
 

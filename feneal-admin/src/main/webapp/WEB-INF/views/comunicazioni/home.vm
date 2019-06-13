@@ -1,0 +1,48 @@
+#parse("/shared/framework.vm")
+
+<div class="panel">
+    <div class="panel-menu admin-form theme-primary">
+
+    </div>
+    <div class="panel-body pn">
+        <div class="table-responsive">
+            #if($comunicazioni.size() > 0)
+                <table class="table admin-form theme-warning tc-checkbox-1 fs13">
+                    <thead>
+                    <tr class="bg-light">
+                        <th>Tipo</th>
+                        <th class="">Data comunicazione</th>
+                        <th class="">Causale</th>
+                        <th>Provincia</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    #foreach($item in $comunicazioni)
+                    <tr>
+                        <td class="">
+                            $item.commTipo
+                        </td>
+                        <td class="">
+                            $item.commData
+                        </td>
+                        <td class="">
+                            $item.commTipoCausale
+                        </td>
+                        <td class="">
+                            $item.commProvince
+                        </td>
+                    </tr>
+                    #end
+
+                    </tbody>
+                </table>
+                #else
+                    <div class="alert alert-system alert-border-left alert-dismissable mv30">
+                        <b>Nessuna comunicazione presente:</b>
+                    </div>
+
+            #end
+
+        </div>
+    </div>
+</div>

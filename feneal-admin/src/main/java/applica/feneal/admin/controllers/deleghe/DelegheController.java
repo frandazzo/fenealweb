@@ -9,6 +9,7 @@ import applica.feneal.admin.viewmodel.app.dashboard.lavoratori.UiAppDelega;
 import applica.feneal.admin.viewmodel.deleghe.UIDelega;
 import applica.feneal.admin.viewmodel.deleghe.UiDelegaChangeState;
 import applica.feneal.domain.model.FenealEntities;
+import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.deleghe.Delega;
 import applica.feneal.domain.model.core.deleghe.ImportDeleghe;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
@@ -20,6 +21,7 @@ import applica.framework.library.responses.FormResponse;
 import applica.framework.library.responses.SimpleResponse;
 import applica.framework.library.responses.ValueResponse;
 import applica.framework.library.ui.PartialViewRenderer;
+import applica.framework.security.Security;
 import applica.framework.widgets.CrudConfigurationException;
 import applica.framework.widgets.Form;
 import applica.framework.widgets.FormCreationException;
@@ -49,6 +51,9 @@ import java.util.Map;
  */
 @Controller
 public class DelegheController {
+
+    @Autowired
+    private Security sec;
 
     @Autowired
     private DelegheFacade delegheFacade;

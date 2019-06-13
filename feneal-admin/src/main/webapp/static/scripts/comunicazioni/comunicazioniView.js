@@ -148,7 +148,106 @@ define([
 
     });
 
+    var ComunicazioniHomeRemoteView = fviews.RemoteContentView.extend({
+        ctor: function(service, workerId){
+            ComunicazioniHomeRemoteView.super.ctor.call(this, service);
 
+            var self = this;
+            this.workerId = workerId;
+
+            this.on("load", function(){
+
+                // alert("data loaded");
+                //qui inserisco tutto il codice di inizializzazione della vista
+                self.createToolbar();
+                self.createBreadcrumbs();
+
+            });
+
+        },
+        onServiceLoad: function(html) {
+            $.loader.hide({ parent: this.container });
+            this.content = _E("div").html(html);
+            this.container.empty().append(this.content);
+            this.invoke("load");
+
+        },
+        createToolbar: function() {
+            // var buttons = this.getToolbarButtons();
+
+            var $t = $("#toolbar");
+            if(!$t.toolbar("isToolbar")) {
+                $t.toolbar();
+            }
+
+            $t.toolbar("clear");
+            // var size = buttons.length;
+            // for(var i = 0; i < size; i++) {
+            //     var button = buttons[i];
+            //     $t.toolbar("add", button);
+            // }
+        },
+        createBreadcrumbs: function() {
+            var items = this.getBreadcrumbItems();
+
+            var $b = $("#breadcrumbs");
+            if(!$b.breadcrumbs("isBreadcrumbs")) {
+                $b.breadcrumbs();
+            }
+
+            $b.breadcrumbs('clear');
+            $b.breadcrumbs('addAll', items);
+        },
+
+
+        // getToolbarButtons: function() {
+        //     var self = this;
+        //
+        //     return [
+        //         {
+        //             text: "Nuova Com",
+        //             command: function() {
+        //
+        //                 ui.Navigation.instance().navigate("editdelega", "index", {
+        //                     fs: this.fullScreenForm,
+        //                     workerId : self.workerId
+        //                 });
+        //             },
+        //             icon: "plus"
+        //         },
+        //     ];
+        // },
+        getBreadcrumbItems: function() {
+            var self = this;
+            return [
+                {
+                    pageTitle: "Fenealweb"
+                },
+                {
+                    icon: "glyphicon glyphicon-home",
+                    href: BASE
+                },
+                {
+                    label: "Ricerca lavoratore",
+                    //vado alla ricerca dei lavoratori
+                    href: ui.Navigation.instance().navigateUrl("searchworkers", "index", {})
+                },
+                {
+                    label: "Anagrafica " + localStorage.getItem("workerName"),
+                    href: ui.Navigation.instance().navigateUrl("summaryworker", "index", {
+                        id: self.workerId
+                    })
+                },
+                {
+                    label: "Comunicazioni"
+                    //href: ui.Navigation.instance().navigateUrl("editworker", "index", {})
+                }
+            ];
+        }
+
+    });
+
+    exports.ComunicazioniHomeRemoteView = ComunicazioniHomeRemoteView;
     exports.ComunicazioniCrudGridAppView = ComunicazioniCrudGridAppView;
     exports.ComunicazioniCrudFormAppView = ComunicazioniCrudFormAppView;
     return exports;

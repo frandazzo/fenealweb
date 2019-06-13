@@ -15,5 +15,6 @@ public class Filters {
 
     public static final String ROLE_NAME = "role";
     public static final String DELEGA_ID_LAVORATORE = "worker.id";
+    public static final String COMUNICAZONE_ID_LAVORATORE = "lavoratore.id";
 
 }

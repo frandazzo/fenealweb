@@ -134,6 +134,9 @@ public class Lavoratore extends SecuredDomainEntity {
 
         if (telefono.length() > 10)return "";
 
+        //rieseguo dopo la scrematura
+        if (telefono.length() < 9)
+            return "";
         String firstThreeDigits = telefono.substring(0,3);
         try{
 
