@@ -1,5 +1,6 @@
 package applica.feneal.admin.viewmodel.reports;
 
+import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,7 +13,15 @@ public class UiComunicazione {
     private String commTipo;
     private String commTipoCausale;
     private String commProvince;
+    private String commOggetto;
 
+    public String getCommOggetto() {
+        return commOggetto;
+    }
+
+    public void setCommOggetto(String commOggetto) {
+        this.commOggetto = commOggetto;
+    }
 
     public String getLavoratoreNomeCompleto() {
         SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");

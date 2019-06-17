@@ -3808,7 +3808,13 @@ define([
                     $('.request-info').click(function(){
                         //ottengo la lista delle righe selezionate
                         var selectedrows = grid.getSelectedRowsData();
-                        var provinceSelected = $("select[name=provinceSelect]").val();
+                        var provinceSelected = $("select[name=enteSelect]").val();
+                        var infoTypeSelected = $("select[name=infoSelect]").val();
+
+                        if(infoTypeSelected == 2){
+                            $.notify.error("Selezionare la voce 'Iscritto storico' per proseguire con questa operazione");
+                            return false;
+                        }
 
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");
@@ -3977,41 +3983,38 @@ define([
 
             //visualizzo i filtri sui liberi solo se ne ho trovato qualcuno
 
-            if (response.length > 0){
+            if (response.length > 0) {
 
                 var infoSelect = searchTYpe;
                 var ente = [];
                 var province = [];
                 var anni = [];
 
-                if(infoSelect == 1){
+                if (infoSelect == 1) {
                     //devo ricercare tutte le provicne presenti nelle iscrizioni
                     // e tutti gli anni di iscrizione quando l'opzione 'iscritto storico'
                     //è selzionato tramite il val()
-                    $.each(response, function(index, elem){
+                    $.each(response, function (index, elem) {
                         var iscrizioni = elem.iscrizioni;
                         //ciclo su tutte le iscrizioni
-                        $.each(iscrizioni, function(index1, elem1){
+                        $.each(iscrizioni, function (index1, elem1) {
                             ente.push(elem1.nomeProvincia);
                             anni.push(elem1.anno);
                         })
                     });
-                }
-                else if(infoSelect == 2) {
+                } else if (infoSelect == 2) {
                     //ricerco le province e gli anni quando vengono
                     //selezionate le deleghe
-                    $.each(response, function(index, elem){
+                    $.each(response, function (index, elem) {
                         var deleghe = elem.delegheNazionali;
                         //ciclo su tutte le deleghe
-                        $.each(deleghe, function(index1, elem1){
+                        $.each(deleghe, function (index1, elem1) {
                             ente.push(elem1.ente);
                             var a = new Date(elem1.documentDate);
                             anni.push(a.getFullYear());
                         })
                     });
                 }
-                }
-
 
 
                 //devo ricercare tutte le provicne presenti nelle iscrizioni e tutti gli anni di iscrizione
@@ -4019,14 +4022,14 @@ define([
 
                 //per prima cosa eseguo una distinct su entrambi gli array per prendere le
                 // province ed gli anni una sola volta
-                var distinctEnte=ente.filter(function(current,index,ente){
-                    return index==ente.indexOf(current);
+                var distinctEnte = ente.filter(function (current, index, ente) {
+                    return index == ente.indexOf(current);
                 });
-                var distinctAnni=anni.filter(function(current,index,anni){
-                    return index==anni.indexOf(current);
+                var distinctAnni = anni.filter(function (current, index, anni) {
+                    return index == anni.indexOf(current);
                 });
 
-                distinctAnni.sort(function(a,b) {
+                distinctAnni.sort(function (a, b) {
                     return a - b;
                 });
 
@@ -4034,35 +4037,35 @@ define([
                 console.log(ente.length);
 
                 //adesso se uno dei due array è vuoto non mostro nulla perche non ci sono iscrizioni
-                if (ente.length > 0){
+                if (ente.length > 0) {
 
 
                     var bottombar = $('.bottom-form-bar');
 
-                    var yearSelect =$(
-                        '<select name="yearSelect"  style="margin-right: 5px">'+
+                    var yearSelect = $(
+                        '<select name="yearSelect"  style="margin-right: 5px">' +
                         '</select>');
 
                     yearSelect.append('<option selected="selected" value="">(Seleziona anno di iscrizione)</option>');
 
-                    $.each(distinctAnni, function(index, elem){
-                        yearSelect.append('<option value="'+ elem + '">'+ elem + '</option>');
+                    $.each(distinctAnni, function (index, elem) {
+                        yearSelect.append('<option value="' + elem + '">' + elem + '</option>');
                     });
 
 
-                    var enteSelect =$(
-                        '<select name="enteSelect"  style="margin-right: 5px">'+
+                    var enteSelect = $(
+                        '<select name="enteSelect"  style="margin-right: 5px">' +
                         '</select>');
 
-                    if(infoSelect == 2){
+                    if (infoSelect == 2) {
                         enteSelect.append('<option selected="selected" value="">(Seleziona ente)</option>');
-                    }else {
+                    } else {
                         enteSelect.append('<option selected="selected" value="">(Seleziona provincia)</option>');
                     }
 
-                    $.each(distinctEnte, function(index, elem){
-                        if(elem)
-                        enteSelect.append('<option value="'+ elem + '">'+ elem + '</option>');
+                    $.each(distinctEnte, function (index, elem) {
+                        if (elem)
+                            enteSelect.append('<option value="' + elem + '">' + elem + '</option>');
                     });
 
 
@@ -4070,10 +4073,10 @@ define([
                     var select2 = searchTYpe == 2 ? 'selected="selected"' : "";
 
 
-                    var infoSelect =$(
-                        '<select name="infoSelect" style="margin-right: 5px" id="ciccio">'+
-                        '<option ' + select1 + ' value="1">Iscritto storico</option>'+
-                        '<option '  + select2 + ' value="2">Deleghe</option>'+
+                    var infoSelect = $(
+                        '<select name="infoSelect" style="margin-right: 5px" id="ciccio">' +
+                        '<option ' + select1 + ' value="1">Iscritto storico</option>' +
+                        '<option ' + select2 + ' value="2">Deleghe</option>' +
                         '</select>');
 
 
@@ -4086,27 +4089,26 @@ define([
                     bottombar.append(topToolbar);
 
 
-
-
                     //adesso posso attaccare gli handlers dei
-                    yearSelect.change(function(){
+                    yearSelect.change(function () {
 
                         var selected = this.value;
-                        self.filterData(enteSelect.val(),selected, infoSelect.val());
+                        self.filterData(enteSelect.val(), selected, infoSelect.val());
 
                     });
-                    enteSelect.change(function(){
+                    enteSelect.change(function () {
                         var selected = this.value;
-                        self.filterData(selected,yearSelect.val(), infoSelect.val());
+                        self.filterData(selected, yearSelect.val(), infoSelect.val());
 
                     });
-                    infoSelect.change(function(){
+                    infoSelect.change(function () {
                         var selected = this.value;
                         self.initFilterOptions(response, selected);
                         // //procedo a filtrare solo se cè un valore
-                        self.filterData("","", selected);
+                        self.filterData("", "", selected);
                     });
                 }
+            }
         },
         filterData : function(ente, year, infoSelect){
 

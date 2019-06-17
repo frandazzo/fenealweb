@@ -149,7 +149,7 @@ define([
                         }
 
                     },
-
+                    {dataField:"commOggetto",visible: false, caption: "Oggetto Comunicazione",encodeHtml: false},
                     { dataField:"lavoratoreNome", visible : false},
                     { dataField:"lavoratoreCognome", visible : false},
                     { dataField:"lavoratoreSesso", visible : false},
@@ -170,6 +170,7 @@ define([
                     // { dataField:"lavoratoreFondo", visible : false},
                     // { dataField:"lavoratoreNote", visible : false},
                     { dataField:"lavoratoreId", visible : false},
+
 
                 ],
                 // searchPanel: {

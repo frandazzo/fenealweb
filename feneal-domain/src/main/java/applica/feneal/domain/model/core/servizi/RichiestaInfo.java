@@ -17,7 +17,15 @@ public class RichiestaInfo extends SecuredDomainEntity {
     private Province province;
     private String requestToProvince;
     private Lavoratore lavoratore;
+    private boolean sendMail;
 
+    public boolean isSendMail() {
+        return sendMail;
+    }
+
+    public void setSendMail(boolean sendMail) {
+        this.sendMail = sendMail;
+    }
 
     public Date getData() {
         return data;

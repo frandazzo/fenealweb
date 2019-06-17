@@ -11,7 +11,23 @@ define([
     var exports = {};
 
 
+    var ComunicazioniHomeController = fcontrollers.Controller.extend({
+        ctor: function(){
+            ComunicazioniHomeController.super.ctor.call(this);
+        },
+        index: function(params) {
 
+            var workerId = params.workerId;
+            var url = BASE + "comunicazioni/home/"+ workerId;
+            var service = new fmodel.AjaxService();
+            service.set({
+                url: url
+            });
+            return new views.ComunicazioniHomeRemoteView(service, workerId);
+
+        }
+
+    });
 
     //questo controller gestisce la visualizzazione di un riepilogo dati del lavoratore
     var ComunicazioniController = fcontrollers.Controller.extend({
@@ -160,6 +176,7 @@ define([
     });
 
 
+    exports.ComunicazioniHomeController = ComunicazioniHomeController;
     exports.ComunicazioniController = ComunicazioniController;
     return exports;
 });

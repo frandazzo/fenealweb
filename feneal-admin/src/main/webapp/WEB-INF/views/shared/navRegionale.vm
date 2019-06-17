@@ -151,6 +151,12 @@
                             <span class="sidebar-title">Report quote Varese</span>
                         </a>
                     </li>
+                <li>
+                    <a href="#/reportcomunicazioni" class="framework-navigation">
+                        <span class="fa fa-bar-chart-o"></span>
+                        <span class="sidebar-title">Report comunicazioni</span>
+                    </a>
+                </li>
                 #end
 
                 #if ($roleid == 3) ##segretario

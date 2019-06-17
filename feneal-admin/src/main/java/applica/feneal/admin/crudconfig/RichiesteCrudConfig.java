@@ -1,5 +1,6 @@
 package applica.feneal.admin.crudconfig;
 
+import applica.feneal.admin.data.RichiesteInfoRepositoryWrapper;
 import applica.feneal.admin.fields.renderers.*;
 import applica.feneal.domain.data.core.servizi.RichiesteInfoRepository;
 import applica.feneal.domain.model.core.servizi.RichiestaInfo;
@@ -25,18 +26,19 @@ public class RichiesteCrudConfig implements AppSetup {
     public void setup() {
 
         FormConfigurator.configure(RichiestaInfo.class, "richiesta")
-                .repository(RichiesteInfoRepository.class)
+                .repository(RichiesteInfoRepositoryWrapper.class)
                 .field("data", "Data", CurrentDateFieldRenderer.class)
                 .field("province", "Provincia", LoggedUserProvinceNonOptionalSelectFieldRenderer.class, GeoProvinceDataMapper.class)
                 .field("destinatario", "Destinatario")
                 .field("note", "Note", HtmlFieldRenderer.class)
+                .field("sendMail", "Invia mail al termine")
                 .field("requestToProvince", "Richiesta al territorio di", RichiesteTerrStringProvinceSelectRenderer.class)
                 .field("lavoratore", "lavoratore", HiddenFieldRenderer.class);
 
 
 
         GridConfigurator.configure(RichiestaInfo.class, "richiesta")
-                .repository(RichiesteInfoRepository.class)
+                .repository(RichiesteInfoRepositoryWrapper.class)
                 .column("lavoratore", "Lavoratore", true)
                 .column("data", "Data", false)
                 .column("requestToProvince", "Richiesta al territorio di", false)

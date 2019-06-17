@@ -104,7 +104,7 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
 
 
         //genero il pdf nella directory di test;
-        String outputFile = tempFolder + "/certificazione.docx";
+        String outputFile = tempFolder + "/certificazione.pdf";
 
         //imposto la tabella delle proprieà con cui fare il mail merge
         Hashtable<String, Object> prop = new Hashtable<String, Object>();
@@ -112,8 +112,16 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
 
         workerParam lav = new workerParam();
         lav.setCodFiscale(cf);
-        lav.setNomeCompleto(ll.getSurname()+ " " + ll.getName());
 
+        String nomCompleto = ll.getSurname()+ " " + ll.getName();
+        if(nomCompleto.length() < 22) {
+            lav.setNomeCompleto(nomCompleto);
+            lav.setSecondRiga("");
+        }
+        else {
+            lav.setNomeCompleto(ll.getSurname());
+            lav.setSecondRiga(ll.getName());
+        }
 
         SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
         dateParam data = new dateParam();
@@ -124,7 +132,7 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
         prop.put("data", data);
         prop.put("lav", lav);
 
-        facade.executeMailMerge(templatePath, outputFile, prop);
+        facade.executeMailMergeAndGeneratePdf(templatePath, outputFile, prop);
 
         File createdFile = new File(outputFile);
 

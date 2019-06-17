@@ -1,5 +1,6 @@
 package applica.feneal.admin.controllers;
 
+import applica.feneal.admin.facade.ComunicazioniFacade;
 import applica.feneal.admin.facade.NotificationsFacade;
 import applica.feneal.admin.fields.renderers.CausaleComunicazioneFieldRenderer;
 import applica.feneal.admin.fields.renderers.LoggedUserProvinceNonOptionalSelectFieldRenderer;
@@ -17,6 +18,7 @@ import applica.framework.library.responses.ErrorResponse;
 import applica.framework.library.responses.FormResponse;
 import applica.framework.library.responses.SimpleResponse;
 import applica.framework.library.responses.ValueResponse;
+import applica.framework.library.ui.PartialViewRenderer;
 import applica.framework.security.Security;
 import applica.framework.widgets.Form;
 import applica.framework.widgets.FormDescriptor;
@@ -26,9 +28,11 @@ import applica.framework.widgets.fields.renderers.*;
 import applica.framework.widgets.forms.renderers.DefaultFormRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ViewResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -39,6 +43,9 @@ import java.util.Map;
  */
 @Controller
 public class ComunicazioniController {
+
+    @Autowired
+    private ViewResolver viewResolver;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -63,6 +70,9 @@ public class ComunicazioniController {
 
     @Autowired
     private NotificationsFacade notFacade;
+
+    @Autowired
+    private ComunicazioniFacade comunicazioniFacade;
 
     @RequestMapping(value = "/comunicazioni/sms", method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
@@ -282,6 +292,28 @@ public class ComunicazioniController {
 
             return new ValueResponse("OK");
         } catch(Exception e) {
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
+
+
+    @RequestMapping(value = "comunicazioni/home/{workerId}", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse view(HttpServletRequest request, @PathVariable long workerId) {
+
+        try {
+
+            HashMap<String, Object> model = new HashMap<String, Object>();
+            model.put("comunicazioni", comunicazioniFacade.getAllWorkerComunicazioni(workerId));
+
+            PartialViewRenderer renderer = new PartialViewRenderer();
+            String content = renderer.render(viewResolver, "comunicazioni/home", model, LocaleContextHolder.getLocale(), request);
+            return new ValueResponse(content);
+        } catch (Exception e) {
+            e.printStackTrace();
             return new ErrorResponse(e.getMessage());
         }
     }

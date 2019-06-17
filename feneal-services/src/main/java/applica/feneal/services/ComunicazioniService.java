@@ -2,6 +2,7 @@ package applica.feneal.services;
 
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.quote.varese.UiDettaglioQuotaVarese;
+import applica.feneal.domain.model.core.servizi.Comunicazione;
 import applica.framework.security.AuthenticationException;
 
 import java.io.IOException;
@@ -21,5 +22,7 @@ public interface ComunicazioniService {
     void sendSmsToMultipleWorkers(List<Lavoratore> lavoratori, String text, String province, String descrizioneCampagna) throws Exception;
 
     void sendParametricSms(List<UiDettaglioQuotaVarese> quote) throws Exception;
+
+    List<Comunicazione> getAllWorkerComunicazioni(long workerId);
 
 }

@@ -4,7 +4,7 @@
          version="3.0"
          metadata-complete="true">
 
-<display-name>Applica Framework Admin Application</display-name>
+    <display-name>Applica Framework Admin Application</display-name>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
         <welcome-file>index.htm</welcome-file>
