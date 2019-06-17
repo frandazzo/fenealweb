@@ -110,7 +110,7 @@ public class Lavoratore extends SecuredDomainEntity {
 
 
 
-    public String getNormalizedCellPhone(){
+    public String calculateNormalizedCellphone(){
 
         String telNumber = cellphone;
         if (StringUtils.isEmpty(telNumber))

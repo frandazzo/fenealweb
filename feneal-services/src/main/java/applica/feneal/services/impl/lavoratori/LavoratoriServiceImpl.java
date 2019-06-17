@@ -600,9 +600,11 @@ public class LavoratoriServiceImpl implements LavoratoreService {
         //verifoco l'esistenza di una dleega attiva
         List<DettaglioQuotaAssociativa> ll = new ArrayList<>();
 
-        //ottengo la provincia di bolzano
+        //ottengo la provincia di bolzano o di salerno
         Company p = compRep.findCompanyByProvinceName("Bolzano");
-        if (((User) sec.getLoggedUser()).getCompany().getLid() == p.getLid()){
+        Company p1 = compRep.findCompanyByProvinceName("Salerno");
+        if (((User) sec.getLoggedUser()).getCompany().getLid() == p.getLid() ||
+                ((User) sec.getLoggedUser()).getCompany().getLid() == p1.getLid()){
             //eseguo la verifica della delega attiva
             for (DettaglioQuotaAssociativa dettaglioQuotaAssociativa : quoteIscrittiSenzaDuplicati) {
                 //se non ho selezionato una provincia nella ricerca... la recupero dalla quota
