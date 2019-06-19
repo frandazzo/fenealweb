@@ -47,11 +47,14 @@ public class LoggdUserRegionalProvicesNonOptionalSelectFieldRenderer extends Sel
 
 
         //se sono segretario prendo tutte le provicne
-        if (r.getLid() == 3){
+        if (r.getLid() == 3 || u.getUsername().equals("fenealmilanolodipaviaocchio") || u.getUsername().equals("fenealmilanolodipaviabotto")){
             return SimpleItem.createList(provinces,
                     "description", "id");
 
         }
+
+
+
 
         return SimpleItem.createList(((User) security.getLoggedUser()).getCompany().getProvinces(),
                 "description", "id");

@@ -46,7 +46,8 @@ require([
         "prevedi/importPrevediController",
         "reports/reportQuoteVareseController",
     "importDeleghe/importDelegheMilController",
-    "comunicazioni/comunicazioniController"],
+    "comunicazioni/comunicazioniController",
+    "reports/reportRisorseController"],
     function(fmodel,_p, core, ui, fviews, fcontrollers, fhelpers,
                                                  controllers, usercontroller, 
                                                  lavController, listeLavoroController, azController, azDocController,
@@ -69,7 +70,8 @@ require([
              importPrevediController,
              quoteReportController,
              delegheMilController,
-             comunicazioniController) {
+             comunicazioniController,
+             risorseController) {
 
     $.datepicker.setDefaults( $.datepicker.regional[ "IT" ] );
 
@@ -113,9 +115,9 @@ require([
         ui.Navigation.instance().registerController("reportlibericf", function() { return new liberiReportController.LiberiReportcfController(); }, "singleton");
         ui.Navigation.instance().registerController("reportlibericfcre", function() { return new liberiReportController.LiberiReportcfCreController(); }, "singleton");
 
-
-
         ui.Navigation.instance().registerController("reportliberi", function() { return new liberiReportController.LiberiReportController(); }, "singleton");
+        ui.Navigation.instance().registerController("reportrisorse", function() { return new risorseController.ReportRisorseController(); }, "singleton");
+
 
 
         //REPORT LIBERI BOLZANO FELICE 06/05/2019
