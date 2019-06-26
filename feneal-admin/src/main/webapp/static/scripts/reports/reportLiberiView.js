@@ -3714,6 +3714,7 @@ define([
         }
     });
 
+
     var ReportLiberiBolAppView = fviews.FormAppView.extend({
         ctor: function(formService) {
             ReportLiberiBolAppView.super.ctor.call(this, formService);

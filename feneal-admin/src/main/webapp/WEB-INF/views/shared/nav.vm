@@ -79,6 +79,13 @@
                         <span class="sidebar-title">Report Invii DB Nazionale</span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="#/reportrisorse" class="framework-navigation">
+                        <span class="glyphicon glyphicon-th-list"></span>
+                        <span class="sidebar-title">Report Risorse Umane 2019</span>
+                    </a>
+                </li>
                 
                 <li>
                     <a href="#/stampaiscritti" class="framework-navigation">

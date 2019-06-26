@@ -58,10 +58,6 @@ define([
     });
 
 
-
-
-
-
     //controller che porta alla mascherina custom per la ricerca dei lavoratori
     var LiberiReportController = fcontrollers.Controller.extend({
         ctor: function(){
@@ -130,7 +126,6 @@ define([
         }
 
     });
-
 
 
     exports.LiberiBolzanoReportController = LiberiBolzanoReportController;

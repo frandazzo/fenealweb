@@ -1,0 +1,241 @@
+<div class="p10 framework-form report">
+    <form action="javascript:;" method="POST" data-component="form">
+
+        <div class="content-header pb20">
+            <h2 style="text-align: center; font-size: 24px; font-weight: 600;">
+                <span class="text-primary" data-component="title">Risorse Umane 2019</span>
+            </h2>
+        </div>
+        <div class="panel form-blue col-md-12 col-div">
+
+            <div class="panel panel-primary">
+                <div class="heading-border ">
+                    <div class="content-header">
+                        <h2 style="font-size: 18px; font-weight: 500;">
+                            <span class="text-primary" ></span>
+                        </h2>
+                    </div>
+
+                </div>
+            </div>
+
+        ##contenuti della colonna
+            <div class="panel p20"  style="height: 80px;">
+                <div class="tab-content admin-form">
+                    <div class="section row" data-row="dt1">
+                        <div class=" col-md-12" data-component="field" data-property="date">
+                            <div class="row">
+                                <div class="col-md-4 field-label text-right">
+                                    <label for="id_date">Regione</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <label id="id_date" class="col-md-8 field select">
+
+
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <div class="col-md-12 mb20">
+            <div class="section align-right text-right bottom-form-bar">
+                <button  id="buttonSearch" class="btn btn-primary mrn" type="button" data-component="submit_button" ><i class="glyphicon glyphicon-save pr5"></i> Esegui la ricerca</button>
+            </div>
+        </div>
+</div>
+</form>
+
+
+<div class="col-xs-12 toolbox-seach-report-xs mt20 mb20" style="display: none">
+
+    <div class="col-md-12 col-xs-12 back-white">
+
+        <div class="col-md-12 col-xs-12 margin-top-20 margin-bottom-20 zero-padding">
+
+            <div class="col-md-12 col-xs-3 margin-bottom-10" data-toggle="tooltip" data-placement="top" title="Esporta in Excel">
+
+                <button type="button" class="btn btn-primary full-width excel-export">
+                    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+                </button>
+
+            </div>
+            <div class="col-md-12 col-xs-3 margin-bottom-10" data-toggle="tooltip" data-placement="top" title="Raggruppa">
+
+                <button type="button" class="btn btn-warning full-width group-report-data">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                </button>
+
+            </div>
+            <div class="col-md-12 col-xs-3 margin-bottom-10" data-toggle="tooltip" data-placement="top" title="Ricerca generale">
+
+                <button type="button" class="btn btn-warning full-width search-report-data">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+
+            </div>
+            <div class="col-md-12 col-xs-3 margin-bottom-10" data-toggle="tooltip" data-placement="top" title="Ricerca contestuale">
+
+                <button type="button" class="btn btn-warning full-width search-report-columns">
+                    <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                </button>
+
+            </div>
+            <div class="col-md-12 col-xs-3 margin-bottom-10" data-toggle="tooltip" data-placement="top" title="Filtra">
+
+                <button type="button" class="btn btn-warning full-width filter-report-data">
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                </button>
+
+            </div>
+            <div class="col-md-12 col-xs-3 margin-bottom-10" data-toggle="tooltip" data-placement="top" title="Seleziona colonne">
+
+                <button type="button" class="btn btn-warning full-width select-report-columns">
+                    <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<div class="col-md-11 col-sm-12 col-xs-12 report-style">
+    <div id="reportContainerRisorse">
+
+    </div>
+
+
+
+</div>
+
+<div class="col-md-1 toolbox-seach-report" style="display: none">
+
+    <div class="col-md-12 col-xs-12 back-white">
+
+        <div class="col-md-12 col-xs-12 toolbox-buttons-cnt margin-top-20 margin-bottom-20 zero-padding">
+
+            <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Esporta in Excel">
+
+                <button type="button" class="btn btn-primary full-width excel-export">
+                    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+                </button>
+
+            </div>
+            <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Raggruppa">
+
+                <button type="button" class="btn btn-warning full-width group-report-data">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                </button>
+
+            </div>
+            <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Ricerca generale">
+
+                <button type="button" class="btn btn-warning full-width search-report-data">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+
+            </div>
+            <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Ricerca contestuale">
+
+                <button type="button" class="btn btn-warning full-width search-report-columns">
+                    <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                </button>
+
+            </div>
+            <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Filtra">
+
+                <button type="button" class="btn btn-warning full-width filter-report-data">
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                </button>
+
+            </div>
+            <div class="col-md-12 col-xs-12 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Seleziona colonne">
+
+                <button type="button" class="btn btn-warning full-width select-report-columns">
+                    <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<div style="position: fixed;right: 20px;bottom: 17px;">
+    <img src="" class="buttonScrollTop" style="width: 60px;display: none;z-index:999;cursor: pointer">
+</div>
+
+</div>
+
+
+
+<script type="text/javascript">
+
+
+
+
+
+
+
+
+
+
+    $(document).ready(function(){
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+    })
+
+
+    $(document).ready(function(){
+        $.loader.show({parent:'body'});
+        var jsonData  = JSON.stringify( {request:{Key: "", Token: "23508d4b-a72e-4b20-be6c-90e1de7f6d71", Output: "json", Requests:[ {module: "surveysnapshot",method: "get", id:"166"} ]}});
+        $.ajax({
+            url: "https://www.fenealweb.it/sharetop/Services/Application/TurnigestService.asmx/MainService",
+            method : "POST",
+            data: jsonData,
+            contentType: "application/json; charset=utf-8"
+        })
+                .done(function(data, textStatus, jqXHR ) {
+
+                    //LISTA CONTATTI
+
+                    var select = $("<select data-component=\"select\" style=\"display: block;padding: 9px 10px;color: #626262;background: #FFF;border: 1px solid #DDD;height: 42px;width: 100%;\"></select>").attr("id", "idRisorse").attr("name", "nameRisorse");
+                    select.append($("<option></option>").attr("value","default").text("Mostra tutti gli elementi"));
+
+                    var l= data.d.Responses[0].Data[0].Contacts.length;
+                    for(var i=0;i< l;i++){
+                        select.append($("<option></option>").attr("value", data.d.Responses[0].Data[0].Contacts[i].ExternalToken).text(data.d.Responses[0].Data[0].Contacts[i].ContactName));
+                    };
+
+
+                    $("#id_date").html(select);
+                    $("#id_date").append("<i class=\"arrow double\" id=\"arrow\"></i>");
+                    $.loader.hide({parent:'body'});
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    alert( "error" );
+                });
+    });
+
+
+
+</script>
+
