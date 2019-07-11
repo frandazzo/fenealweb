@@ -21,12 +21,14 @@ import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
 import applica.feneal.domain.model.core.tessere.Tessera;
 import applica.feneal.domain.model.dbnazionale.Iscrizione;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
+import applica.feneal.domain.model.dbnazionale.TelefonoCodiceFiscaleDto;
 import applica.feneal.domain.model.dbnazionale.UtenteDbNazionale;
 import applica.feneal.domain.model.geo.Province;
 import applica.feneal.domain.utils.Box;
 import applica.feneal.domain.validation.LavoratoreValidator;
 import applica.feneal.services.DelegheService;
 import applica.feneal.services.LavoratoreService;
+import applica.feneal.services.ReportNonIscrittiSuper;
 import applica.framework.*;
 import applica.framework.security.Security;
 import org.hibernate.SQLQuery;
@@ -86,6 +88,9 @@ public class LavoratoriServiceImpl implements LavoratoreService {
     private DelegheService delServ;
     @Autowired
     private AziendeRepository azRep;
+
+    @Autowired
+    private ReportNonIscrittiSuper rptNonIsc;
 
     @Override
     public Lavoratore getLavoratoreMultiterritorioById(long loggedUserId, long id) {
@@ -693,7 +698,7 @@ public class LavoratoriServiceImpl implements LavoratoreService {
     public List<LiberoDbNazionale> findNonIscrizioniForAzienda(long firmId) {
         User u = ((User) sec.getLoggedUser());
 
-        //recupero la prpovincia di default dell'utente looggato altrimenti prendo la proima
+        //recupero la prpovincia di default dell'utente looggato altrimenti prendo la prima
         List<Province> p = u.getCompany().getProvinces();
 
 
@@ -725,12 +730,28 @@ public class LavoratoriServiceImpl implements LavoratoreService {
             lib.setIscrizioni(isRep.findIscrizioniByFiscalCode(lib.getCodiceFiscale()));
         }
 
-
         for (LiberoDbNazionale lib : libs) {
             //cerco il numeor di deleghe per ogni libero
             lib.setDelegheOwner(delRep.hasLavoratoreSomeDelegaForCompany(((User) sec.getLoggedUser()).getCompany().getLid(), lib.getCodiceFiscale()));
         }
 
+        List<String> cf = libs.stream().map(a1 -> a1.getCodiceFiscale()).collect(Collectors.toList());
+
+        String result = p.stream()
+                .map(n -> String.format(
+                        "'%s'", n.getDescription().replace("'","\'")))
+                .collect(Collectors.joining(","));
+
+        List<TelefonoCodiceFiscaleDto> listOfTelfono = rptNonIsc.retrieveTelefoniNonIscrittPerAzienda(result,a.getDescription());
+
+        for(TelefonoCodiceFiscaleDto tel : listOfTelfono){
+
+            for(LiberoDbNazionale lib : libs){
+                if(tel.getCodiceFiscale().equals(lib.getCodiceFiscale())){
+                    lib.setTelefono(tel.getTelefono());
+                }
+            }
+        }
 
         return libs;
     }

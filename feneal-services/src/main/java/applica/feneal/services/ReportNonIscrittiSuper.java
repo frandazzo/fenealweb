@@ -2,6 +2,7 @@ package applica.feneal.services;
 
 import applica.feneal.domain.model.core.ImportData;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
+import applica.feneal.domain.model.dbnazionale.TelefonoCodiceFiscaleDto;
 import applica.feneal.domain.model.dbnazionale.search.LiberoReportSearchParams;
 
 import java.util.List;
@@ -13,5 +14,9 @@ public interface ReportNonIscrittiSuper {
     List<LiberoDbNazionale> incrociaCodiciFiscali(ImportData file, boolean isOldStyleReport) throws Exception;
 
     List<LiberoDbNazionale> incrociaCodiciFiscaliPerTerritorioEdEnte(ImportData file, boolean isOldStyleReport) throws Exception;
+
+    List<TelefonoCodiceFiscaleDto> retrieveTelefoniNonIscrittPerAzienda(String nomeProvincia, String nomeAzienda);
+
+
 
 }

@@ -295,6 +295,8 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 
     }
 
+
+
     @Override
     public List<LiberoDbNazionale> incrociaCodiciFiscali(ImportData file, boolean isOldStyleReport) throws Exception {
 
@@ -351,6 +353,72 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
         return liberi;
 
 
+    }
+
+    @Override
+    public List<TelefonoCodiceFiscaleDto> retrieveTelefoniNonIscrittPerAzienda(String nomeProvincia, String nomeAzienda) {
+
+        String query =  String.format("select t.CodiceFiscale,\n" +
+                        "get_lavoratore_recapito(t.CodiceFiscale) as Telefono from lavoratori_liberi t \n" +
+                        "where NomeProvinciaFeneal in (%s) and \n" +
+                        "t.CurrentAzienda = '%s'", nomeProvincia, nomeAzienda);
+
+        final Box box = new Box();
+
+        enteRep.executeCommand(new Command() {
+            @Override
+            public void execute() {
+                Session s = enteRep.getSession();
+                Transaction tx = null;
+
+                try{
+
+                    tx = s.beginTransaction();
+
+                    List<Object[]> liberi = createHibernateQueryForTelefono(s,query).list();
+
+                    List<TelefonoCodiceFiscaleDto> resultTel = new ArrayList<>();
+                    for(Object[] obj : liberi){
+                        TelefonoCodiceFiscaleDto a = materializeTelefonoCodice(obj);
+
+                        resultTel.add(a);
+                    }
+
+                    tx.commit();
+
+                    box.setValue(resultTel);
+
+
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                    tx.rollback();
+                }
+                finally{
+
+                    s.close();
+
+                }
+            }
+        });
+
+        List<TelefonoCodiceFiscaleDto> result =  (List<TelefonoCodiceFiscaleDto>)box.getValue();
+
+        return result;
+    }
+
+    private TelefonoCodiceFiscaleDto materializeTelefonoCodice(Object[] object){
+        TelefonoCodiceFiscaleDto v = new TelefonoCodiceFiscaleDto();
+        v.setCodiceFiscale((String)object[0]);
+        v.setTelefono((String)object[1]);
+
+        return v;
+    }
+
+    private SQLQuery createHibernateQueryForTelefono(Session session, String query){
+        return session.createSQLQuery(query)
+                .addScalar("CodiceFiscale")
+                .addScalar("Telefono");
     }
 
     private List<LiberoDbNazionale> incrociaListaCodiciFiscali(List<String> listaCf, boolean isOldStyleReport) {

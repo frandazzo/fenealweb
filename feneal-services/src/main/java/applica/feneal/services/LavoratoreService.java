@@ -7,6 +7,7 @@ import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
 import applica.feneal.domain.model.core.tessere.Tessera;
 import applica.feneal.domain.model.dbnazionale.Iscrizione;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
+import applica.feneal.domain.model.dbnazionale.TelefonoCodiceFiscaleDto;
 import applica.feneal.domain.model.dbnazionale.UtenteDbNazionale;
 
 import java.text.ParseException;
@@ -30,8 +31,6 @@ public interface LavoratoreService {
 
     List<Lavoratore> findCurrentIscrizioniForAzienda(long firmId);
     List<LiberoDbNazionale> findNonIscrizioniForAzienda(long firmId);
-
-
 
     List<String> getNumeriTelefono(String fiscalCode);
 
