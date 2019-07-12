@@ -85,6 +85,15 @@ require([
         ui.Navigation.instance().registerController("tracelogins", function() { return new traceController.TraceLoginController(); }, "singleton");
         ui.Navigation.instance().registerController("traceactivities", function() { return new traceController.TraceActivityController(); }, "singleton");
 
+        //ESTRAI I NOMI DAL FILE
+
+        // ui.Navigation.instance().registerController("estraifile", function() { return new traceController.estraiFileController(); }, "singleton");
+        //a qui cancellare
+
+
+
+
+
         //percorsi per il lavoratore 
         ui.Navigation.instance().registerController("searchworkers", function() { return new lavController.LavoratoriSearchController(); }, "singleton");
         ui.Navigation.instance().registerController("searchworkersnew", function() { return new lavController.LavoratoriSearchNewController(); }, "singleton");
