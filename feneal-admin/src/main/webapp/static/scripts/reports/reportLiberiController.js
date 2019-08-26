@@ -80,6 +80,10 @@ define([
 
     });
 
+
+
+
+
     //controller che porta alla mascherina custom per la ricerca dei lavoratori
     var NewLiberiReportController = fcontrollers.Controller.extend({
         ctor: function(){

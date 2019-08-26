@@ -64,6 +64,19 @@ public class AziendeSearchForm implements Entity {
         return city;
     }
 
+    @FormField(description = "Partita iva.")
+    @Params({@Param(key = "row", value = "dt1"), @Param(key = "cols", value = "6")})
+    @SearchCriteria(Filter.LIKE)
+    private  String piva;
+
+    public String getPiva() {
+        return piva;
+    }
+
+    public void setPiva(String piva) {
+        this.piva = piva;
+    }
+
     public void setCity(String city) {
         this.city = city;
     }

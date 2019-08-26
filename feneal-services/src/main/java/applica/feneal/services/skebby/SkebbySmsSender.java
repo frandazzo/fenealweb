@@ -59,7 +59,7 @@ public class SkebbySmsSender {
             throw new IllegalArgumentException("Charset not supported.");
         }
 
-        String endpoint = "http://gateway.skebby.it/api/send/smseasy/advanced/http.php";
+        String endpoint = "https://gateway.skebby.it/api/send/smseasy/advanced/http.php";
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(params, 10*1000);
         DefaultHttpClient httpclient = new DefaultHttpClient(params);

@@ -20,9 +20,7 @@ import applica.framework.widgets.FormCreationException;
 import applica.framework.widgets.FormDescriptor;
 import applica.framework.widgets.fields.Params;
 import applica.framework.widgets.fields.Values;
-import org.apache.poi.xwpf.converter.pdf.PdfConverter;
-import org.apache.poi.xwpf.converter.pdf.PdfOptions;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;

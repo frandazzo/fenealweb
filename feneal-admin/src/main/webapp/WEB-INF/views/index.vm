@@ -528,6 +528,16 @@
                     $("li.magazzinodelegheabruzzo").show();
                 }
 
+                if (window.appcontext.provinces.indexOf("benevento") > -1 ||
+                        window.appcontext.provinces.indexOf("avellino") > -1 ||
+                        window.appcontext.provinces.indexOf("salerno") > -1 ||
+                        window.appcontext.provinces.indexOf("napoli") > -1 ||
+                window.appcontext.provinces.indexOf("caserta") > -1 ){
+
+                    $("li.reportliberisuper").show();
+                }else{
+                    $("li.reportliberisuper").remove();
+                }
 
 
 

@@ -440,19 +440,23 @@ public class ComunicazioniServiceImpl implements ComunicazioniService {
     }
 
     private void sendSms(List<UiDettaglioQuotaVarese> quote, String message) throws Exception {
-        ParametricSkebbySmsConfiguration payload =createPayload(quote, message);
         User u = ((User) sec.getLoggedUser());
+        ParametricSkebbySmsConfiguration payload =createPayload(quote, message, u.getCompany().getSmsSenderAlias());
+
         SkebbyNewApiSmsSender s = new SkebbyNewApiSmsSender();
         s.sendSms(u.getCompany().getSmsUsername(), u.getCompany().getSmsPassword(),payload);
     }
 
-    private ParametricSkebbySmsConfiguration createPayload(List<UiDettaglioQuotaVarese> quote, String message) {
+    private ParametricSkebbySmsConfiguration createPayload(List<UiDettaglioQuotaVarese> quote, String message, String sender) {
         ParametricSkebbySmsConfiguration d = new ParametricSkebbySmsConfiguration();
         d.setMessage(message);
         d.setMessage_type("TI");
-        d.setSender("");
+        if (StringUtils.isEmpty(sender))
+            d.setSender("");
+        else
+            d.setSender(sender.trim());
         d.setAllowInvalidRecipients(false);
-        d.setOrder_id("123456789");
+        d.setOrder_id("");
         d.setReturnCredits(true);
         d.setReturnRemaining(false);
 
