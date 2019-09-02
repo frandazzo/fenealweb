@@ -3240,7 +3240,7 @@ define([
                     { dataField:"liberoData", visible : false, dataType:'date', visibleIndex: 5},
                     { dataField:"liberoProvincia",  visible : false, visibleIndex: 1},
                     { dataField:"liberoEnteBilaterale", visible : false, visibleIndex: 2},
-                    { dataField:"liberoIscrittoA", visible : false , visibleIndex: 4},
+                    { dataField:"liberoIscrittoA", visible : true , visibleIndex: 4},
 
                     { dataField:"lavoratoreNomeCompleto",  visible : true, visibleIndex: 0,
                         cellTemplate: function (container, options) {
