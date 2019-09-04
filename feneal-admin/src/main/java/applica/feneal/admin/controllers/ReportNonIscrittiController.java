@@ -6,6 +6,7 @@ import applica.feneal.admin.fields.renderers.*;
 import applica.feneal.admin.fields.renderers.geo.OptionalCityFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalProvinceFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalStateFieldRenderer;
+import applica.feneal.admin.form.renderers.ReportLiberiNewFormRenderer;
 import applica.feneal.admin.form.renderers.ReportsSearchFormRenderer;
 import applica.feneal.admin.viewmodel.app.dashboard.report.UiAppReportNonIscrittiInput;
 import applica.feneal.admin.viewmodel.lavoratori.UiLiberiRichiediInfo;
@@ -331,7 +332,7 @@ public class ReportNonIscrittiController {
     SimpleResponse searchviewnew(HttpServletRequest request) {
         try{
             Form form = new Form();
-            form.setRenderer(applicationContext.getBean(ReportsSearchFormRenderer.class));
+            form.setRenderer(applicationContext.getBean(ReportLiberiNewFormRenderer.class));
             form.setIdentifier("liberireportnew");
 
             FormDescriptor formDescriptor = new FormDescriptor(form);

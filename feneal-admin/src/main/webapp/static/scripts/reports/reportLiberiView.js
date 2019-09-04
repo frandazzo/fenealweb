@@ -544,8 +544,6 @@ define([
         },
         initGrid : function(responseData){
 
-
-
             var viewFirm = false;
             if ($('input[name="firm"]').val())
                 viewFirm = true;
@@ -788,7 +786,6 @@ define([
             }).dxDataGrid("instance");
 
             return grid;
-
         },
         normalizeSubmitResult: function(form){
 
@@ -2410,6 +2407,7 @@ define([
                     type: "localStorage",
                     storageKey: "reportliberi"
                 },
+
                 paging:{
                     pageSize: 35
                 },
@@ -2627,7 +2625,7 @@ define([
                 self.createBreadcrumbs();
 
                 // Setto la lunghezza delle colonne del form report
-                $(".panel.col-div").css("height", "370px");
+                $(".panel.col-div").css("height", "220px");
 
 
             });
@@ -2654,6 +2652,8 @@ define([
                     $.loader.hide({parent:'body'});
 
                     //inizializzo la griglia devexpress
+
+
                     var grid = self.initGrid(response);
                     //una volta ottenuti i risultati la griglia devexpress mostra una loader
                     //di attesa per la renderizzazione degli stessi! in quel momento rendo
@@ -3197,7 +3197,170 @@ define([
         },
         initGrid : function(responseData){
 
+            var filter = [
+                 ],
+                fields = [
+                    { dataField:"liberoData", visible : false, dataType:'date', visibleIndex: 5},
+                    { dataField:"iscrizioniSummary", visible : false, visibleIndex: 5},
+                    { dataField:"delegheSummary", visible : false, visibleIndex: 5},
 
+                    { dataField:"liberoProvincia",  visible : false, visibleIndex: 1},
+                    { dataField:"liberoEnteBilaterale", visible : false, visibleIndex: 2},
+                    { dataField:"liberoIscrittoA", visible : true , visibleIndex: 4},
+
+                    { dataField:"lavoratoreNomeCompleto",  visible : true, visibleIndex: 0,
+                        cellTemplate: function (container, options) {
+                            //container.addClass("img-container");
+                            var completeName = options.data.lavoratoreNomeCompleto;
+                            var fiscalCode = options.data.lavoratoreCodiceFiscale;
+                            var province = options.data.liberoProvincia;
+                            var uri = encodeURI(BASE + "#/summaryworker/remoteIndex?fiscalCode=" + fiscalCode + "&province=" + province);
+                            $("<a />")
+                                .text(completeName)
+                                .attr("href", uri)
+                                .attr("target", "_blank")
+
+                                // .on('click', function(){
+                                //
+                                //     ui.Navigation.instance().navigate("summaryworker", "remoteIndex", {
+                                //         fiscalCode:fiscalCode,
+                                //         province: province
+                                //     })
+                                //
+                                // })
+                                .appendTo(container);
+                        }
+
+
+
+                    },
+                    { dataField:"lavoratoreCellulare", visible : true},
+                    // { dataField:"lavoratoreDelegheOwner", caption:"Possiede delega", visible : viewFirm,
+                    //     cellTemplate: function (container, options) {
+                    //         //container.addClass("img-container");
+                    //         var lavoratoreDelegheOwner = options.data.lavoratoreDelegheOwner;
+                    //         // <span class="color-black">
+                    //         //     <i class="material-icons">sentiment_satisfied</i>
+                    //         //     </span>
+                    //         if (lavoratoreDelegheOwner){
+                    //             var span =$("<span style='color:green' />");
+                    //             span.append($('<i class="material-icons" style=" text-align: center;display: block;">done</i>'));
+                    //             span.appendTo(container);
+                    //         }
+                    //
+                    //     }},
+
+                    { dataField:"lavoratoreCodiceFiscale", visible : false},
+                    { dataField:"lavoratoreDataNascita", dataType:'date', visible : false},
+                    { dataField:"lavoratoreProvinciaResidenza", visible : false},
+                    { dataField:"lavoratoreCittaResidenza", visible : false},
+                    { dataField:"lavoratoreIndirizzo", visible : false},
+                    { dataField:"lavoratoreCap", visible : false},
+                    { dataField:"lavoratoreNome", visible : false},
+                    { dataField:"lavoratoreCognome", visible : false},
+                    { dataField:"lavoratoreSesso", visible : false},
+                    { dataField:"ultimaProvinciaAdAggiornare", visible : false},
+                    {dataField:"numIscrizioni", visible: true,visibleIndex: 1, caption:"Iscritto storico",
+                        cellTemplate: function (container, options) {
+                            //container.addClass("img-container");
+                            var numIscrizioni = options.data.numIscrizioni;
+                            // <span class="color-black">
+                            //     <i class="material-icons">sentiment_satisfied</i>
+                            //     </span>
+                            if (numIscrizioni){
+                                var span =$("<span style='color:green' />");
+                                span.append($('<i class="material-icons" style=" text-align: center;display: block;">sentiment_satisfied</i>'));
+                                span.appendTo(container);
+                            }
+
+                        }
+                    },
+                    {dataField:"numDeleghe", visible: true,visibleIndex: 1, caption:"Deleghe",
+                        cellTemplate: function (container, options) {
+                            //container.addClass("img-container");
+                            var numIscrizioni = options.data.numDeleghe;
+                            // <span class="color-black">
+                            //     <i class="material-icons">sentiment_satisfied</i>
+                            //     </span>
+                            if (numIscrizioni){
+                                var span =$("<span style='color:green' />");
+                                span.append($('<i class="material-icons" style=" text-align: center;display: block;">sentiment_satisfied</i>'));
+                                span.appendTo(container);
+                            }
+
+                        }
+                    },
+                    {dataField:"numNonIscrizioni", visible: true,visibleIndex: 1, caption:"Iscrizioni ad altri",
+                        cellTemplate: function (container, options) {
+                            //container.addClass("img-container");
+                            var numIscrizioni = options.data.numNonIscrizioni;
+                            // <span class="color-black">
+                            //     <i class="material-icons">sentiment_satisfied</i>
+                            //     </span>
+                            if (numIscrizioni){
+                                var span =$("<span style='color:red' />");
+                                span.append($('<i class="material-icons" style=" text-align: center;display: block;">sentiment_neutral</i>'));
+                                span.appendTo(container);
+                            }
+
+                        }
+                    },
+                    {dataField:"numPrevedi", visible: true,visibleIndex: 1, caption:"Iscrizioni prevedi",
+                        cellTemplate: function (container, options) {
+                            //container.addClass("img-container");
+                            var numIscrizioni = options.data.numPrevedi;
+                            // <span class="color-black">
+                            //     <i class="material-icons">sentiment_satisfied</i>
+                            //     </span>
+                            if (numIscrizioni){
+                                var span =$("<span style='color:green' />");
+                                span.append($('<i class="material-icons" style=" text-align: center;display: block;">sentiment_satisfied</i>'));
+                                span.appendTo(container);
+                            }
+
+                        }
+                    },
+                    { dataField:"aziendaRagioneSociale", visible : true, visibleIndex: 5,
+
+                        cellTemplate: function (container, options) {
+                            //container.addClass("img-container");
+                            var name = options.data.aziendaRagioneSociale;
+
+                            if (!name)
+                                return;
+
+                            var uri = encodeURI(BASE + "#/summaryfirm/remoteIndex?description=" + name.replace("&", "*_").replace("'", "~_"));
+
+                            $("<a />")
+                                .text(name)
+                                .attr("href", uri)
+                                .attr("target", "_blank")
+                                // .on('click', function(){
+                                //     ui.Navigation.instance().navigate("summaryfirm", "remoteIndex", {
+                                //         description:name
+                                //     });
+                                // })
+                                .appendTo(container);
+                        }
+                    },
+                    { dataField:"lavoratoreNazionalita", visible : false}
+                ];
+            ;
+
+
+            $("#filterBuilder").dxFilterBuilder({
+                fields: fields,
+                value: filter
+            });
+
+            $("#apply").dxButton({
+                text: "Applica Filtro",
+                type: "default",
+                onClick: function() {
+                    var filter = $("#filterBuilder").dxFilterBuilder("instance").option("value");
+                    $("#reportContainer").dxDataGrid("instance").option("filterValue", filter);
+                },
+            });
 
             var viewFirm = false;
             if ($('input[name="firm"]').val())
@@ -3206,38 +3369,11 @@ define([
             var grid = $('#reportContainer').dxDataGrid({
                 dataSource:responseData,
                 columns:[
-                    // {
-                    //     visibleIndex: 0,
-                    //     type: "buttons",
-                    //     width: 110,
-                    //     buttons: [{
-                    //         hint: "Verifica numeri di telefono",
-                    //         icon: "tel",
-                    //
-                    //         onClick: function(e) {
-                    //
-                    //
-                    //
-                    //             var svc = new  fmodel.AjaxService();
-                    //             var fiscale = e.row.data.lavoratoreCodiceFiscale;
-                    //             svc.set("data", {});
-                    //             svc.set("url", BASE + "wtelefoni/" + fiscale);
-                    //             svc.on("load", function(response){
-                    //                 e.row.data.lavoratoreCellulare = response.toString()
-                    //
-                    //                 e.component.refresh(true);
-                    //                 e.event.preventDefault();
-                    //             });
-                    //             svc.on("error", function(error){
-                    //                 $.notify.error(error);
-                    //             });
-                    //
-                    //             svc.load();
-                    //
-                    //         }
-                    //     }]
-                    // },
+
                     { dataField:"liberoData", visible : false, dataType:'date', visibleIndex: 5},
+                    { dataField:"iscrizioniSummary", visible : false, visibleIndex: 5},
+                    { dataField:"delegheSummary", visible : false, visibleIndex: 5},
+
                     { dataField:"liberoProvincia",  visible : false, visibleIndex: 1},
                     { dataField:"liberoEnteBilaterale", visible : false, visibleIndex: 2},
                     { dataField:"liberoIscrittoA", visible : true , visibleIndex: 4},
@@ -3413,6 +3549,7 @@ define([
                 paging:{
                     pageSize: 35
                 },
+                filterValue: filter,
                 sorting:{
                     mode:"multiple"
                 },

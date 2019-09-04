@@ -12,6 +12,7 @@ import applica.feneal.domain.model.core.ImportData;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.lavoratori.ListaLavoro;
 import applica.feneal.domain.model.core.servizi.RichiestaInfo;
+import applica.feneal.domain.model.dbnazionale.DelegaNazionale;
 import applica.feneal.domain.model.dbnazionale.Iscrizione;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 import applica.feneal.domain.model.dbnazionale.search.LiberoReportSearchParams;
@@ -23,6 +24,7 @@ import applica.feneal.services.messages.MessageInput;
 import applica.framework.Filter;
 import applica.framework.LoadRequest;
 import applica.framework.security.Security;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -167,6 +169,18 @@ public class LiberiFacade {
                 l.setNumNonIscrizioni(l.getNonIscrizioni().size());
                 l.setPrevedi(liberoDbNazionale.getPrevedi());
                 l.setNumPrevedi(liberoDbNazionale.getPrevedi().size());
+
+                if(l.getNumIscrizioni() >0){
+                    l.setIscrizioniSummary(createIscrizioniSummry(l.getIscrizioni()));
+                }else{
+                 l.setIscrizioniSummary("");
+                }
+
+                if(l.getNumDeleghe() >0){
+                 l.setDelegheSummary(createDelegheSummary(l.getDelegheNazionali()));
+                }else{
+                    l.setDelegheSummary("");
+                }
                 result.add(l);
         }
 
@@ -174,6 +188,30 @@ public class LiberiFacade {
 
 
         return result;
+    }
+
+    private String createDelegheSummary(List<DelegaNazionale> delegheNazionali) {
+        List<String> list = new ArrayList<>();
+        for(DelegaNazionale del: delegheNazionali){
+            String a = del.getProvince();
+            if(!list.contains(a))
+                list.add(a);
+        }
+
+        String summary = StringUtils.join(list, ", ");
+        return summary;
+    }
+
+    private String createIscrizioniSummry(List<UiIscrizione> iscrizioni) {
+        List<String> list = new ArrayList<>();
+        for(UiIscrizione iscr: iscrizioni){
+            String a = iscr.getNomeProvincia() + "-" + iscr.getAnno();
+            if(!list.contains(a))
+                list.add(a);
+        }
+
+        String summary = StringUtils.join(list, ", ");
+        return summary;
     }
 
     public List<UiIscrizione> convertIscrizioniToUiiscrizioni(List<Iscrizione> iscrizioni) {

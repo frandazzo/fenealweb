@@ -13,6 +13,26 @@ import java.util.List;
  */
 public class UiLibero {
 
+
+    private String iscrizioniSummary;
+    private String delegheSummary;
+
+    public String getIscrizioniSummary() {
+        return iscrizioniSummary;
+    }
+
+    public void setIscrizioniSummary(String iscrizioniSummary) {
+        this.iscrizioniSummary = iscrizioniSummary;
+    }
+
+    public String getDelegheSummary() {
+        return delegheSummary;
+    }
+
+    public void setDelegheSummary(String delegheSummary) {
+        this.delegheSummary = delegheSummary;
+    }
+
     private String liberoProvincia;
     private String liberoEnteBilaterale;
     private String liberoIscrittoA;
