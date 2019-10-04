@@ -59,6 +59,23 @@
                             <span class="sidebar-title">Tracciatura Login</span>
                         </a>
                     </li>
+
+                    <li>
+                        <a href="#/provacustom" class="framework-navigation">
+                            <span class="glyphicon glyphicon-th-list"></span>
+                            <span class="sidebar-title">Tracciatura Login</span>
+                        </a>
+                    </li>
+
+##                    ESTRAI FILE
+##                    <li>
+##                        <a href="#/estraifile" class="framework-navigation">
+##                            <span class="glyphicon glyphicon-th-list"></span>
+##                            <span class="sidebar-title">Estrai File</span>
+##                        </a>
+##                    </li>
+
+
                 #else  ##roleid 2
                     <li>
                         <a href="#/crud?e=applicationoption" class="framework-navigation">

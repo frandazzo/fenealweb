@@ -28,6 +28,7 @@ import applica.feneal.domain.model.dbnazionale.*;
 import applica.feneal.domain.model.geo.City;
 import applica.feneal.domain.model.geo.Country;
 import applica.feneal.domain.model.geo.Province;
+import applica.feneal.domain.model.geo.Region;
 import applica.feneal.domain.model.setting.Fondo;
 import applica.feneal.services.*;
 import applica.feneal.services.messages.MessageInput;
@@ -102,6 +103,9 @@ public class LavoratoriFacade {
 
     @Autowired
     private ReportNonIscrittiService libService;
+
+    @Autowired
+    private GeoService geo;
 
     public UiCompleteLavoratoreSummary getLavoratoreSummaryById(long id) throws Exception {
         UiCompleteLavoratoreSummary s = new UiCompleteLavoratoreSummary();
@@ -1070,6 +1074,7 @@ public class LavoratoriFacade {
         for (DelegaNazionale delega : f.getDeleghe()) {
             UiLavoratoreTimeLineItem i = new UiLavoratoreTimeLineItem();
             i.setTipo("Delega");
+
             i.setOwner(current.containProvince(delega.getProvince()));
             i.setData(delega.getDocumentDate());
             GregorianCalendar c = new GregorianCalendar();
@@ -1088,8 +1093,12 @@ public class LavoratoriFacade {
             i.setAttachment(delega.getAttachment());
             i.setDelegaId(delega.getDelegaId());
 
+            if(((User) security.getLoggedUser()).getUsername().equals("fenealmilanolodipavia")){
+                i.setAutorizzato(true);
+            }else{
+                i.setAutorizzato(authServ.isAuthorizedToDownloadDelega(delega.getDelegaId()));
 
-            i.setAutorizzato(authServ.isAuthorizedToDownloadDelega(delega.getDelegaId()));
+            }
             i.setRichiestaInviata(authServ.hasAuthorizationRequestSent(delega.getDelegaId()));
 
 

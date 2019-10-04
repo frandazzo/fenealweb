@@ -46,6 +46,28 @@ define([
         }
     });
 
+    // ESTRAI I NOMI DAL FILE
+
+    // var estraiFileController = fcontrollers.Controller.extend({
+    //     ctor: function(){
+    //         estraiFileController.super.ctor.call(this);
+    //     },
+    //     index: function(params) {
+    //
+    //         var url = BASE + "estraifile";
+    //         var service = new fmodel.AjaxService();
+    //         service.set({
+    //             url: url
+    //         });
+    //         return new views.estraifileRemoteView(service);
+    //     }
+    // });
+
+
+
+//
+//     exports.estraiFileController = estraiFileController;
+
     exports.TraceLoginController = TraceLoginController;
     exports.TraceActivityController = TraceActivityController;
 

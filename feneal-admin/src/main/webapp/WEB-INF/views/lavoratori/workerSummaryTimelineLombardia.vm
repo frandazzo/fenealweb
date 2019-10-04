@@ -469,9 +469,7 @@
                                                                             <th>Provincia</th>
                                                                             <th>Ente</th>
                                                                             <th>Stato</th>
-                                                                            #if($item.provincia != "Napoli" && $item.provincia != "Caserta" && $item.provincia != "Salerno" && $item.provincia != "Benevento" && $item.provincia != "Avellino")
-                                                                                <th>Scansione</th>
-                                                                            #end
+                                                                            <th>Scansione</th>
                                                                             <th>Operatore</th>
                                                                         </tr>
                                                                         </thead>
@@ -483,89 +481,42 @@
                                                                             <td>$item.ente</td>
                                                                             <td>$item.stato</td>
 
-                                                                            #if($item.provincia != "Napoli" && $item.provincia != "Caserta" && $item.provincia != "Salerno" && $item.provincia != "Benevento" && $item.provincia != "Avellino")
-                                                                                #if($item.owner)
-                                                                                    <td>
-                                                                                        #if($item.nomeAttachment)
-                                                                                            <a target="__blank" href="${wwwBase}$item.attachment">
-                                                                                                $item.nomeAttachment
-                                                                                            </a>
-                                                                                        #else
-                                                                                            Delega non presente
-                                                                                        #end
-                                                                                    </td>
-                                                                                #else
+                                                                                #if($username != "fenealmilanolodipavia")
 
-                                                                                    #if($item.autorizzato)
+                                                                                    #if($item.owner)
                                                                                         <td>
-                                                                                            <a target="__blank" href="${wwwBase}$item.attachment">
-                                                                                                #if($item.nomeAttachment)
-                                                                                               $item.nomeAttachment
-                                                                                        #end
-                                                                                            </a>
-                                                                                        </td>
-
-                                                                                    #else
-
-                                                                                        #if($item.richiestaInviata)
-                                                                                            <td id="tipo-$item.delegaId"><a class="pointer" id=$item.delegaId >Reinvia Richiesta</a></td>
-                                                                                            <script>
-                                                                                                $("#$item.delegaId").click(function(){
-                                                                                                    var id = $(this).attr("id");
-                                                                                                    var url = "/retryRequireToDownload/" + id;
-
-                                                                                                    var self = this;
-                                                                                                    $.ajax({
-                                                                                                        type:"GET",
-                                                                                                        url: url,
-                                                                                                        success: function() {
-                                                                                                            $(self).remove();
-                                                                                                            $('<p> Richiesta reinviata</p>').appendTo($('#tipo-' + id));
-                                                                                                        },
-
-                                                                                                        error: function(jqXHR, errType, exception){
-                                                                                                            alert("si è verificato un errore!")
-                                                                                                        }
-                                                                                                    })
-                                                                                                })
-                                                                                            </script>
-
-                                                                                        #else
                                                                                             #if($item.nomeAttachment)
-                                                                                                <td id="tipo-$item.delegaId"><a class="pointer" id=$item.delegaId >Richiedi Autorizzazione</a></td>
-                                                                                                <script>
-                                                                                                    $("#$item.delegaId").click(function(){
-                                                                                                        var id = $(this).attr("id");
-                                                                                                        var url = "/requireauthorizationToDownload/" + id;
-
-                                                                                                        var self = this;
-                                                                                                        $.ajax({
-                                                                                                            type:"GET",
-                                                                                                            url: url,
-                                                                                                            success: function() {
-                                                                                                                $(self).remove();
-
-                                                                                                                $('<p> Richiesta inoltrata</p>').appendTo($('#tipo-' + id));
-                                                                                                            },
-
-                                                                                                            error: function(jqXHR, errType, exception){
-                                                                                                                alert("si è verificato un errore!")
-                                                                                                            }
-                                                                                                        })
-                                                                                                        console.log(id);
-                                                                                                    })
-                                                                                                </script>
+                                                                                                <a target="__blank" href="${wwwBase}$item.attachment">
+                                                                                                    $item.nomeAttachment
+                                                                                                </a>
+                                                                                            #else
+                                                                                                Delega non presente
                                                                                             #end
-
-                                                                                        #end
+                                                                                        </td>
+                                                                                    #elseif($item.nomeAttachment)
+                                                                                        <td>
+                                                                                            Delega presente
+                                                                                        </td>
+                                                                                    #else
+                                                                                        <td>Delega non presente</td>
 
                                                                                     #end
 
+                                                                                #else
+
+                                                                                    <td>
+                                                                                        #if($item.nomeAttachment)
+                                                                                            <a targt="__blank" href="${wwwBase}$item.attachment">
+                                                                                                $item.nomeAttachment
+                                                                                            </a>
+
+                                                                                        #else
+                                                                                            Delega non presente
+                                                                                        #end
+
+                                                                                    </td>
+
                                                                                 #end
-                                                                            #end
-
-
-
                                                                             <td>#if($item.operator)$item.operator#end</td>
                                                                         </tr>
                                                                         <tr>

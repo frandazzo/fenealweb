@@ -242,6 +242,14 @@ public class DelegheFacade {
 
     public UISaveDelegaResponse saveDelega(UIDelega delega) throws Exception {
         Delega l = convertUIDelegaToModelEntity(delega);
+        //se sono utent elombardo
+
+        User u = ((User) security.getLoggedUser());
+
+        if(u.getCompany().getRegionId() == 30){
+            if (StringUtils.isEmpty(l.getNomeattachment()))
+                throw new Exception("La scansione della delega è obbligatoria");
+        }
 
         delegheService.saveOrUpdate(((User) security.getLoggedUser()).getLid(),l);
 

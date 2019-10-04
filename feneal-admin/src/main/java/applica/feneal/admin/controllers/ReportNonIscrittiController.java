@@ -561,7 +561,7 @@ public class ReportNonIscrittiController {
         try {
             liberiReportFac.downloadFileLiberi(path, response);
         } catch (Exception e) {
-            e.printStackTrace();
+                e.printStackTrace();
             response.setStatus(500);
         }
 

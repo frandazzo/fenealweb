@@ -17,6 +17,8 @@ import applica.feneal.domain.model.setting.CausaleIscrizioneDelega;
 import applica.feneal.domain.model.setting.Collaboratore;
 import applica.feneal.services.AziendaService;
 import applica.feneal.services.GeoService;
+import applica.framework.LoadRequest;
+import applica.framework.library.SimpleItem;
 import applica.framework.library.responses.ErrorResponse;
 import applica.framework.library.responses.FormResponse;
 import applica.framework.library.responses.SimpleResponse;
@@ -99,10 +101,21 @@ public class ReportDelegheController {
 
             FormDescriptor formDescriptor = new FormDescriptor(form);
 
-            formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggedUserProvinceSelectFieldRenderer.class))
-                    .putParam(Params.COLS, Values.COLS_12)
-                    .putParam(Params.ROW, "dt")
-                    .putParam(Params.FORM_COLUMN, " ");
+            User u = ((User) security.getLoggedUser());
+            if(u.getUsername().equals("fenealmilanolodipavia")){
+                formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggedUserDelegheLombardiaOptionalSelectFIeldRenderer.class))
+                        .putParam(Params.COLS, Values.COLS_12)
+                        .putParam(Params.ROW, "dt")
+                        .putParam(Params.FORM_COLUMN, " ");
+            }else{
+                formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggedUserProvinceSelectFieldRenderer.class))
+                        .putParam(Params.COLS, Values.COLS_12)
+                        .putParam(Params.ROW, "dt")
+                        .putParam(Params.FORM_COLUMN, " ");
+            }
+
+
+
 
             formDescriptor.addField("sector", String.class, "Settore", null, applicationContext.getBean(SectorTypeWithoutInpsSelectRenderer.class))
                     .putParam(Params.COLS, Values.COLS_12)

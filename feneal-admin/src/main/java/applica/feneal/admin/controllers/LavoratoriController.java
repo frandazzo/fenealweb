@@ -440,6 +440,7 @@ public class LavoratoriController {
             UiCompleteLavoratoreSummary c = tcFacade.getLavoratoreSummaryMultiterriotrioById(id);
             HashMap<String, Object> model = new HashMap<String, Object>();
             model.put("summary", c);
+            model.put("username", security.getLoggedUser().getUsername());
 
             model.put("displaySignalUser", false);
 
@@ -452,7 +453,13 @@ public class LavoratoriController {
 
 
             PartialViewRenderer renderer = new PartialViewRenderer();
-            String content = renderer.render(viewResolver, "lavoratori/workerSummaryTimeline", model, LocaleContextHolder.getLocale(), request);
+
+            String content;
+            if(((User) security.getLoggedUser()).getCompany().getRegionId() != 30) {
+                content = renderer.render(viewResolver, "lavoratori/workerSummaryTimeline", model, LocaleContextHolder.getLocale(), request);
+            }else {
+                content = renderer.render(viewResolver, "lavoratori/workerSummaryTimelineLombardia", model, LocaleContextHolder.getLocale(), request);
+            }
             return new ValueResponse(content);
         } catch(Exception e) {
             e.printStackTrace();

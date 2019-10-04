@@ -1,11 +1,14 @@
 package applica.feneal.services.impl.report;
 
+import applica.feneal.domain.data.core.CompanyRepository;
 import applica.feneal.domain.data.core.SectorRepository;
 import applica.feneal.domain.data.core.aziende.AziendeRepository;
 import applica.feneal.domain.data.core.deleghe.DelegheRepository;
 import applica.feneal.domain.data.core.servizi.ComunicazioniRepository;
+import applica.feneal.domain.data.geo.ProvinceRepository;
 import applica.feneal.domain.model.Filters;
 import applica.feneal.domain.model.User;
+import applica.feneal.domain.model.core.Company;
 import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.domain.model.core.deleghe.Delega;
@@ -14,12 +17,16 @@ import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
 import applica.feneal.domain.model.core.servizi.Comunicazione;
 import applica.feneal.domain.model.core.servizi.search.UiComunicazioneReportSearchParams;
+import applica.feneal.domain.model.geo.Province;
+import applica.feneal.domain.model.geo.Region;
+import applica.feneal.services.GeoService;
 import applica.feneal.services.QuoteAssociativeService;
 import applica.feneal.services.ReportComunicazioniService;
 import applica.feneal.services.ReportDelegheService;
 import applica.framework.Disjunction;
 import applica.framework.Filter;
 import applica.framework.LoadRequest;
+import applica.framework.builders.LoadRequestBuilder;
 import applica.framework.security.Security;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +60,15 @@ public class ReportDelegheServiceImpl implements ReportDelegheService {
 
     @Autowired
     private SectorRepository secRep;
+
+    @Autowired
+    private CompanyRepository compRep;
+
+    @Autowired
+    private GeoService geo;
+
+    @Autowired
+    private ProvinceRepository provRep;
 
     @Override
     public List<Delega> retrieveDeleghe(UiDelegheReportSearchParams params) {
@@ -340,6 +356,35 @@ public class ReportDelegheServiceImpl implements ReportDelegheService {
             req.getFilters().add(f18);
         }
 
+        if (((User) sec.getLoggedUser()).getUsername().equals("fenealmilanolodipavia"))
+        {
+
+            Region l =geo.getREgionByName("Lombardia");
+            List<Province> p = provRep.find(LoadRequest.build().filter("idRegion", l.getIid())).getRows();
+
+            List<Company> terrLombardi = claculateTerritory(p);
+
+            Disjunction d1 = new Disjunction();
+            List<Filter> orFiltersLomb = new ArrayList<>();
+
+            for (Company t : terrLombardi) {
+                Filter f = new Filter();
+                f.setProperty("companyId");
+                f.setType(Filter.EQ);
+                f.setValue(t.getLid());
+                orFiltersLomb.add(f);
+            }
+
+            d1.setChildren(orFiltersLomb);
+
+            if (orFiltersLomb.size() > 0){
+                req.getFilters().add(d1);
+                ((LoadRequestBuilder) req).disableOwnershipQuery();
+            }
+
+
+        }
+
 
         List<Delega> del = delRep.find(req).getRows();
 
@@ -365,6 +410,15 @@ public class ReportDelegheServiceImpl implements ReportDelegheService {
 
         return del;
 
+    }
+
+    private List<Company> claculateTerritory(List<Province> p) {
+        List<Company> f = new ArrayList<>();
+
+        for (Province d : p) {
+            f.add(compRep.findCompanyByProvinceName(d.getDescription()));
+        }
+        return f;
     }
 
     private Azienda retrieveCompany(Lavoratore worker) {

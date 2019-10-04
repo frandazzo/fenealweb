@@ -356,6 +356,158 @@ define([
         }
     });
 
+// ESTRAI FILE
+//     var estraifileRemoteView = fviews.RemoteContentView.extend({
+//         ctor: function(service){
+//             estraifileRemoteView.super.ctor.call(this, service);
+//
+//             var self = this;
+//
+//             self.lavFile = null;
+//
+//             self.on("load", function(){
+//
+//                 //qui inserisco tutto il codice di inizializzazione della vista
+//                 self.createToolbar();
+//                 self.createBreadcrumbs();
+//
+//
+//                 $.loader.hide({parent:'body'});
+//
+//                 //inizializzo la griglia devexpress
+//                 var grid = self.initGrid(self.lavFile);
+//                 //una volta ottenuti i risultati la griglia devexpress mostra una loader
+//                 //di attesa per la renderizzazione degli stessi! in quel momento rendo
+//                 //visibile l'intera area
+//                 //scrollando fino a rendere visibile la griglia
+//                 $('html, body').animate({scrollTop: $('#reportContainer').offset().top - 160}, 1400, "swing");
+//
+//                 //configuro la navigabilità e la toolbar delle actions del report che visualizza la tracciatura login
+//                 var reportResultsConfigurer = new resultsConfigurer.ReportUiConfigurer(grid, "estrai file", false);
+//                 reportResultsConfigurer.init();
+//
+//
+//                 //$.loader.show({parent:'body'});
+//
+//
+//             });
+//
+//         },
+//
+//         initGrid : function(responseData) {
+//
+//
+//             var grid = $('#reportContainer').dxDataGrid({
+//                 dataSource:responseData,
+//                 columns:[
+//                     { dataField:"nominativo", visible : true, caption:"Nominativo"},
+//                     { dataField:"data", visible : true, caption:"Data"}
+//                 ],
+//                 "export": {
+//                     enabled: false,
+//                     fileName: "file_estratti",
+//                     allowExportSelectedData: true
+//                 },
+//                 stateStoring: {
+//                     enabled: false,
+//                     type: "localStorage",
+//                     storageKey: "tracelogins"
+//                 },
+//                 paging:{
+//                     pageSize: 35
+//                 },
+//                 sorting:{
+//                     mode:"multiple"
+//                 },
+//                 onContentReady: function (e) {
+//                     var columnChooserView = e.component.getView("columnChooserView");
+//                     if (!columnChooserView._popupContainer) {
+//                         columnChooserView._initializePopupContainer();
+//                         columnChooserView.render();
+//                         columnChooserView._popupContainer.option("dragEnabled", false);
+//                     }
+//                 },
+//                 summary: {
+//                     totalItems: [{
+//                         column: "nominativo",
+//                         summaryType: "count",
+//                         customizeText: function(data) {
+//                             return "Elementi trovati: " + data.value;
+//                         }
+//                     }]
+//                 },
+//                 rowAlternationEnabled: true,
+//                 showBorders: true,
+//                 allowColumnReordering:true,
+//                 allowColumnResizing:true,
+//                 columnAutoWidth: true,
+//                 selection:{
+//                     mode:"none"
+//                 },
+//                 hoverStateEnabled: true
+//
+//             }).dxDataGrid("instance");
+//
+//             return grid;
+//
+//         },
+//
+//         onServiceLoad: function(traceLoginsViewResponse) {
+//             var self = this;
+//
+//             self.lavFile = traceLoginsViewResponse.lavFile;
+//
+//             $.loader.hide({ parent: this.container });
+//             this.content = _E("div").html(traceLoginsViewResponse.content);
+//             this.container.empty().append(this.content);
+//             this.invoke("load");
+//         },
+//
+//         createToolbar: function() {
+//             var self = this;
+//             var $t = $("#toolbar");
+//
+//             if(!$t.toolbar("isToolbar")) {
+//                 $t.toolbar();
+//             }
+//
+//             $t.toolbar("clear");
+//         },
+//
+//         createBreadcrumbs: function() {
+//             var items = this.getBreadcrumbItems();
+//
+//             var $b = $("#breadcrumbs");
+//             if(!$b.breadcrumbs("isBreadcrumbs")) {
+//                 $b.breadcrumbs();
+//             }
+//
+//             $b.breadcrumbs('clear');
+//             $b.breadcrumbs('addAll', items);
+//         },
+//
+//         getBreadcrumbItems: function() {
+//             var self = this;
+//             return [
+//                 {
+//                     pageTitle: "Fenealweb"
+//                 },
+//                 {
+//                     icon: "glyphicon glyphicon-home",
+//                     href: BASE
+//                 },
+//                 {
+//                     label: "Estari File"
+//                 }
+//             ];
+//         }
+//     });
+
+// calcellare
+//     exports.estraifileRemoteView = estraifileRemoteView;
+
+
+
     exports.TraceLoginRemoteView = TraceLoginRemoteView;
     exports.TraceActivityRemoteView = TraceActivityRemoteView;
 
