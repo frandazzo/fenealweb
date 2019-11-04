@@ -351,18 +351,33 @@
                         </a>
                     </li>
                 #else
-                    <li>
-                        <a href="#/reportliberi" class="framework-navigation">
-                            <span class="fa fa-bar-chart-o"></span>
-                            <span class="sidebar-title">Report non iscritti</span>
-                        </a>
-                    </li>
-                    <li class="reportliberisuper" style="display:none">
-                        <a href="#/reportliberisuper" class="framework-navigation ">
-                            <span class="fa fa-bar-chart-o"></span>
-                            <span class="sidebar-title">Report non iscr. regionale</span>
-                        </a>
-                    </li>
+                    #if($provinces == "cagliari" ||
+                        $provinces == "sassari" ||
+                        $provinces == "nuoro" ||
+                        $provinces == "oristano")
+                        <li>
+                            <a href="#/reportliberisuper" class="framework-navigation ">
+                                <span class="fa fa-bar-chart-o"></span>
+                                <span class="sidebar-title">Report non iscr. regionale</span>
+                            </a>
+                        </li>
+
+                    #else
+                            <li>
+                                <a href="#/reportliberi" class="framework-navigation">
+                                    <span class="fa fa-bar-chart-o"></span>
+                                    <span class="sidebar-title">Report non iscritti</span>
+                                </a>
+                            </li>
+                            <li class="reportliberisuper" style="display:none">
+                                <a href="#/reportliberisuper" class="framework-navigation ">
+                                    <span class="fa fa-bar-chart-o"></span>
+                                    <span class="sidebar-title">Report non iscr. regionale</span>
+                                </a>
+                            </li>
+
+                    #end
+
                 #end
                 <li>
                     <a href="#/reportlibericf" class="framework-navigation">
