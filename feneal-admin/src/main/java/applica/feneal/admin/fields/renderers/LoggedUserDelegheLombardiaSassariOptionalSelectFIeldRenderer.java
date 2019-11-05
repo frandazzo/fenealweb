@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class LoggedUserDelegheLombardiaOptionalSelectFIeldRenderer extends OptionalSelectFieldRenderer {
+public class LoggedUserDelegheLombardiaSassariOptionalSelectFIeldRenderer extends OptionalSelectFieldRenderer {
 
     @Autowired
     private Security security;

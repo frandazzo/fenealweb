@@ -51,6 +51,7 @@ public class DocumentiCrudConfig implements AppSetup {
                 .column("lavoratore", "Lavoratore", true)
                 .column("data", "Data", false)
                 .column("tipo", "Tipo documento", false)
+                .column("notes","Note",false)
                 .column("id", "Num. allegati", false, AttachmentsDocumentCellRenderer.class);
     }
 }

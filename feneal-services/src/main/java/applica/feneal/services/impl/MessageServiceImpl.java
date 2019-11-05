@@ -32,6 +32,7 @@ public class MessageServiceImpl implements MessageService {
 
         /* EMAIL */
 
+
         ExecutorService executor = Executors.newFixedThreadPool(5);
 
         for (String recipient : input.getRecipients()) {
@@ -47,8 +48,11 @@ public class MessageServiceImpl implements MessageService {
 
     }
 
+
+
     @Override
     public MessageResult sendSimpleMail(MessageInput input) {
+
         ExecutorService executor = Executors.newFixedThreadPool(5);
 
         for (String recipient : input.getRecipients()) {
@@ -93,5 +97,6 @@ public class MessageServiceImpl implements MessageService {
     public String getResidualCredit() throws IOException, AuthenticationException {
        return comServ.getResidualCredit();
     }
+
 
 }

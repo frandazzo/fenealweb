@@ -102,12 +102,12 @@ public class ReportDelegheController {
 
             User u = ((User) security.getLoggedUser());
             if(u.getUsername().equals("fenealmilanolodipavia")){
-                formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggedUserDelegheLombardiaOptionalSelectFIeldRenderer.class))
+                formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggedUserDelegheLombardiaSassariOptionalSelectFIeldRenderer.class))
                         .putParam(Params.COLS, Values.COLS_12)
                         .putParam(Params.ROW, "dt")
                         .putParam(Params.FORM_COLUMN, " ");
             }else if(u.getUsername().equals("fenealsassari")) {
-                formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggedUserDelegheLombardiaOptionalSelectFIeldRenderer.class))
+                formDescriptor.addField("province", String.class, "Provincia", null, applicationContext.getBean(LoggedUserDelegheLombardiaSassariOptionalSelectFIeldRenderer.class))
                         .putParam(Params.COLS, Values.COLS_12)
                         .putParam(Params.ROW, "dt")
                         .putParam(Params.FORM_COLUMN, " ");
