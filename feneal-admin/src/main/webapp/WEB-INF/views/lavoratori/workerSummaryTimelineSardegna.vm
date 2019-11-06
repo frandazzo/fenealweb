@@ -481,7 +481,7 @@
                                                                         <td>$item.ente</td>
                                                                         <td>$item.stato</td>
 
-                                                                        #if($username != "fenealsassari")
+##                                                                        #if($username != "fenealsassari")
 
                                                                             #if($item.owner)
                                                                                 <td>
@@ -502,21 +502,21 @@
 
                                                                             #end
 
-                                                                        #else
-
-                                                                            <td>
-                                                                                #if($item.nomeAttachment != "")
-                                                                                    <a targt="__blank" href="${wwwBase}$item.attachment">
-                                                                                        $item.nomeAttachment
-                                                                                    </a>
-
-                                                                                #else
-                                                                                    Delega non presente
-                                                                                #end
-
-                                                                            </td>
-
-                                                                        #end
+##                                                                        #else
+##
+##                                                                            <td>
+##                                                                                #if($item.nomeAttachment != "")
+##                                                                                    <a targt="__blank" href="${wwwBase}$item.attachment">
+##                                                                                        $item.nomeAttachment
+##                                                                                    </a>
+##
+##                                                                                #else
+##                                                                                    Delega non presente
+##                                                                                #end
+##
+##                                                                            </td>
+##
+##                                                                        #end
                                                                         <td>#if($item.operator)$item.operator#end</td>
                                                                     </tr>
                                                                     <tr>
