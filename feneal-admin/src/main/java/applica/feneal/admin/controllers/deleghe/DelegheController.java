@@ -31,6 +31,7 @@ import applica.framework.widgets.fields.Values;
 import applica.framework.widgets.fields.renderers.DatePickerRenderer;
 import applica.framework.widgets.fields.renderers.FileFieldRenderer;
 import applica.framework.widgets.forms.renderers.DefaultFormRenderer;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -251,8 +252,15 @@ public class DelegheController {
                 data.put("sector", d.getSector());
                 data.put("workerCompany", d.getWorkerCompany());
                 data.put("paritethic", d.getParitethic());
-                data.put("attachment", d.getAttachment());
-                data.put("nomeattachment", d.getNomeattachment());
+                if(!StringUtils.isEmpty(d.getAttachment())){
+                    data.put("attachment", d.getAttachment());
+                    data.put("nomeattachment", d.getNomeattachment());
+                }
+                else{
+                    data.put("attachment", d.getAttachment());
+                    data.put("nomeattachment", "");
+                }
+
                 switch (d.getState()) {
                     case Delega.state_accepted:
                         data.put("sendDate", new SimpleDateFormat("dd/MM/yyy").format(d.getSendDate()));

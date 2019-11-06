@@ -356,10 +356,17 @@ public class ReportDelegheServiceImpl implements ReportDelegheService {
             req.getFilters().add(f18);
         }
 
-        if (((User) sec.getLoggedUser()).getUsername().equals("fenealmilanolodipavia"))
+        if (((User) sec.getLoggedUser()).getUsername().equals("fenealmilanolodipavia") ||
+                ((User) sec.getLoggedUser()).getUsername().equals("fenealsassari"))
         {
+            String userName = ((User) sec.getLoggedUser()).getUsername();
+            Region l = new Region();
 
-            Region l =geo.getREgionByName("Lombardia");
+            if(userName.equals("fenealmilanolodipavia"))
+                 l =geo.getREgionByName("Lombardia");
+            else if(userName.equals("fenealsassari"))
+                 l = geo.getREgionByName("Sardegna");
+
             List<Province> p = provRep.find(LoadRequest.build().filter("idRegion", l.getIid())).getRows();
 
             List<Company> terrLombardi = claculateTerritory(p);
@@ -384,6 +391,35 @@ public class ReportDelegheServiceImpl implements ReportDelegheService {
 
 
         }
+
+//        if ()
+//        {
+//
+//            Region l =geo.getREgionByName("Sardegna");
+//            List<Province> p = provRep.find(LoadRequest.build().filter("idRegion", l.getIid())).getRows();
+//
+//            List<Company> terrLombardi = claculateTerritory(p);
+//
+//            Disjunction d1 = new Disjunction();
+//            List<Filter> orFiltersLomb = new ArrayList<>();
+//
+//            for (Company t : terrLombardi) {
+//                Filter f = new Filter();
+//                f.setProperty("companyId");
+//                f.setType(Filter.EQ);
+//                f.setValue(t.getLid());
+//                orFiltersLomb.add(f);
+//            }
+//
+//            d1.setChildren(orFiltersLomb);
+//
+//            if (orFiltersLomb.size() > 0){
+//                req.getFilters().add(d1);
+//                ((LoadRequestBuilder) req).disableOwnershipQuery();
+//            }
+//
+//
+//        }
 
 
         List<Delega> del = delRep.find(req).getRows();
@@ -416,7 +452,9 @@ public class ReportDelegheServiceImpl implements ReportDelegheService {
         List<Company> f = new ArrayList<>();
 
         for (Province d : p) {
-            f.add(compRep.findCompanyByProvinceName(d.getDescription()));
+            Company a = compRep.findCompanyByProvinceName(d.getDescription());
+            if(a != null)
+                f.add(a);
         }
         return f;
     }

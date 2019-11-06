@@ -405,24 +405,24 @@
                         <blockquote class="blockquote-danger">
                             <p> Nessun dato trovato</p>
                         </blockquote>
-                        #else
-                            #foreach($a in $summary.timelineList)
-                                <div class="col-md-12 col-xs-12">
+                    #else
+                        #foreach($a in $summary.timelineList)
+                            <div class="col-md-12 col-xs-12">
 
-                                    <div class="mt30 timeline-single" id="timeline">
+                                <div class="mt30 timeline-single" id="timeline">
 
-                                        <div class="timeline-divider mtn">
-                                            <div class="divider-label">$a.anno</div>
-                                        </div>
+                                    <div class="timeline-divider mtn">
+                                        <div class="divider-label">$a.anno</div>
+                                    </div>
 
-                                        <div class="row">
+                                    <div class="row">
 
-                                            <div class="col-sm-6 left-column">
+                                        <div class="col-sm-6 left-column">
 
-                                                #foreach($item in $a.item)
-                                                    #if($item.tipo == 'Delega')
-                                                        <div class="timeline-item delega">
-                                                            <div class="timeline-icon">
+                                            #foreach($item in $a.item)
+                                                #if($item.tipo == 'Delega')
+                                                    <div class="timeline-item delega">
+                                                        <div class="timeline-icon">
                                                                 <span class="glyphicons
                                                                 glyphicons-edit
 
@@ -434,316 +434,316 @@
                                                                     text-warning
                                                                 #end
                                                                 great-icon"></span>
-                                                            </div>
-                                                            <div class="panel "
-                                                                 #if($item.owner == true)
-                                                                 style="border-style: dashed; border-width: 2px;border-color: blue;"
-                                                                 #end>
-                                                                <div class="panel-heading">
-                                                                    #if($item.owner == true)
-                                                                        <span class="glyphicon glyphicon-user"></span>
-                                                                    #end
-                                                                    <span class="panel-title">Delega</span>
+                                                        </div>
+                                                        <div class="panel "
+                                                            #if($item.owner == true)
+                                                             style="border-style: dashed; border-width: 2px;border-color: blue;"
+                                                            #end>
+                                                            <div class="panel-heading">
+                                                                #if($item.owner == true)
+                                                                    <span class="glyphicon glyphicon-user"></span>
+                                                                #end
+                                                                <span class="panel-title">Delega</span>
 
-                                                                    <div class="panel-header-menu pull-right mr10 text-muted fs12">
-                                                                    ##                                                              #foreach($item in $a.item)
+                                                                <div class="panel-header-menu pull-right mr10 text-muted fs12">
+                                                                ##                                                              #foreach($item in $a.item)
 ##                                                                  #if($item.tipo == 'Delega')
                                                                   $localization.formatDate($item.data)
 ##                                                                  #end
 ##                                                                 #end
-                                                                    </div>
-
                                                                 </div>
-                                                                <div class="panel-body">
-                                                                    <table class="table">
-                                                                        <thead>
-                                                                        <tr
-                                                                            #if($item.stato == 'Accreditata')
+
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <table class="table">
+                                                                    <thead>
+                                                                    <tr
+                                                                        #if($item.stato == 'Accreditata')
                                                                                 class="success"
-                                                                            #elseif($item.stato == 'Revocata')
+                                                                        #elseif($item.stato == 'Revocata')
                                                                                 class="danger"
-                                                                            #else
+                                                                        #else
                                                                                 class="warning"
-                                                                            #end
-                                                                        >
-                                                                            <th>Provincia</th>
-                                                                            <th>Ente</th>
-                                                                            <th>Stato</th>
-                                                                            <th>Scansione</th>
-                                                                            <th>Operatore</th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                    ##                                                                #foreach($item in $a.item)
-                                                                    ##                                                                    #if($item.tipo == 'Delega')
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td>$item.provincia</td>
-                                                                            <td>$item.ente</td>
-                                                                            <td>$item.stato</td>
+                                                                        #end
+                                                                    >
+                                                                        <th>Provincia</th>
+                                                                        <th>Ente</th>
+                                                                        <th>Stato</th>
+                                                                        <th>Scansione</th>
+                                                                        <th>Operatore</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                ##                                                                #foreach($item in $a.item)
+                                                                ##                                                                    #if($item.tipo == 'Delega')
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td>$item.provincia</td>
+                                                                        <td>$item.ente</td>
+                                                                        <td>$item.stato</td>
 
-                                                                                #if($username != "fenealmilanolodipavia")
+                                                                        #if($username != "fenealsassari")
 
-                                                                                    #if($item.owner)
-                                                                                        <td>
-                                                                                            #if($item.nomeAttachment != "")
-                                                                                                <a target="__blank" href="${wwwBase}$item.attachment">
-                                                                                                    $item.nomeAttachment
-                                                                                                </a>
-                                                                                            #else
-                                                                                                Delega non presente
-                                                                                            #end
-                                                                                        </td>
-                                                                                    #elseif($item.nomeAttachment != "")
-                                                                                        <td>
-                                                                                            Delega presente
-                                                                                        </td>
+                                                                            #if($item.owner)
+                                                                                <td>
+                                                                                    #if($item.nomeAttachment != "")
+                                                                                        <a target="__blank" href="${wwwBase}$item.attachment">
+                                                                                            $item.nomeAttachment
+                                                                                        </a>
                                                                                     #else
-                                                                                        <td>Delega non presente</td>
-
+                                                                                        Delega non presente
                                                                                     #end
+                                                                                </td>
+                                                                            #elseif($item.nomeAttachment != "")
+                                                                                <td>
+                                                                                    Delega presente
+                                                                                </td>
+                                                                            #else
+                                                                                <td>Delega non presente</td>
+
+                                                                            #end
+
+                                                                        #else
+
+                                                                            <td>
+                                                                                #if($item.nomeAttachment != "")
+                                                                                    <a targt="__blank" href="${wwwBase}$item.attachment">
+                                                                                        $item.nomeAttachment
+                                                                                    </a>
 
                                                                                 #else
-
-                                                                                    <td>
-                                                                                        #if($item.nomeAttachment != "")
-                                                                                            <a targt="__blank" href="${wwwBase}$item.attachment">
-                                                                                                $item.nomeAttachment
-                                                                                            </a>
-
-                                                                                        #else
-                                                                                            Delega non presente
-                                                                                        #end
-
-                                                                                    </td>
-
+                                                                                    Delega non presente
                                                                                 #end
-                                                                            <td>#if($item.operator)$item.operator#end</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="5">
-                                                                                <blockquote
 
-                                                                                    #if($item.stato == 'Accreditata')
-                                                                                        class="blockquote-success"
-                                                                                    #elseif($item.stato == 'Revocata')
-                                                                                        class="blockquote-danger"
-                                                                                    #else
-                                                                                        class="blockquote-warning"
-                                                                                    #end
-                                                                                        style="font-size: 12px">
-                                                                                    <dl class="dl-horizontal">
-                                                                                        <dt>Data accreditamento</dt>
-                                                                                        <dd>
-                                                                                            #if( $item.dataAccreditamento)
-                                                                                                $item.dataAccreditamento
-                                                                                            #else
-                                                                                                -
-                                                                                            #end
-                                                                                        </dd>
-                                                                                        <dt>Data cessazione</dt>
-                                                                                        <dd>
-                                                                                            #if( $item.dataCessazione)
-                                                                                                $item.dataCessazione
-                                                                                            #else
-                                                                                                -
-                                                                                            #end
-                                                                                        </dd>
-                                                                                        <dt>Annotazioni</dt>
-                                                                                        <dd>
-
-                                                                                            #if( $item.annotazioni)
-                                                                                                $item.annotazioni
-                                                                                            #else
-                                                                                                Nessun annotazione
-                                                                                            #end
-                                                                                        </dd>
-                                                                                    </dl>
-                                                                                </blockquote>
                                                                             </td>
-                                                                        </tr>
 
-                                                                        </tbody>
-                                                                    ##                                                                    #end
-                                                                    ##                                                                #end
-                                                                    </table>
-                                                                </div>
+                                                                        #end
+                                                                        <td>#if($item.operator)$item.operator#end</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="5">
+                                                                            <blockquote
+
+                                                                                #if($item.stato == 'Accreditata')
+                                                                                        class="blockquote-success"
+                                                                                #elseif($item.stato == 'Revocata')
+                                                                                        class="blockquote-danger"
+                                                                                #else
+                                                                                        class="blockquote-warning"
+                                                                                #end
+                                                                                        style="font-size: 12px">
+                                                                                <dl class="dl-horizontal">
+                                                                                    <dt>Data accreditamento</dt>
+                                                                                    <dd>
+                                                                                        #if( $item.dataAccreditamento)
+                                                                                            $item.dataAccreditamento
+                                                                                        #else
+                                                                                            -
+                                                                                        #end
+                                                                                    </dd>
+                                                                                    <dt>Data cessazione</dt>
+                                                                                    <dd>
+                                                                                        #if( $item.dataCessazione)
+                                                                                            $item.dataCessazione
+                                                                                        #else
+                                                                                            -
+                                                                                        #end
+                                                                                    </dd>
+                                                                                    <dt>Annotazioni</dt>
+                                                                                    <dd>
+
+                                                                                        #if( $item.annotazioni)
+                                                                                            $item.annotazioni
+                                                                                        #else
+                                                                                            Nessun annotazione
+                                                                                        #end
+                                                                                    </dd>
+                                                                                </dl>
+                                                                            </blockquote>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    </tbody>
+                                                                ##                                                                    #end
+                                                                ##                                                                #end
+                                                                </table>
                                                             </div>
                                                         </div>
+                                                    </div>
 
-                                                    #elseif($item.tipo == 'Iscritto')
-                                                        <div class="timeline-item iscritto">
-                                                                <div class="timeline-icon">
-                                                                    <span class="glyphicon glyphicon-ok-circle text-success great-icon"></span>
-                                                                </div>
-                                                                <div class="panel"
-                                                                    #if($item.owner == true)
-                                                                     style="border-style: dashed; border-width: 2px;border-color: blue;"
-                                                                    #end>
-                                                                    <div class="panel-heading">
-                                                                        #if($item.owner == true)
-                                                                            <span class="glyphicon glyphicon-user"></span>
-                                                                        #end
-                                                                     <span class="panel-title">
+                                                #elseif($item.tipo == 'Iscritto')
+                                                    <div class="timeline-item iscritto">
+                                                        <div class="timeline-icon">
+                                                            <span class="glyphicon glyphicon-ok-circle text-success great-icon"></span>
+                                                        </div>
+                                                        <div class="panel"
+                                                            #if($item.owner == true)
+                                                             style="border-style: dashed; border-width: 2px;border-color: blue;"
+                                                            #end>
+                                                            <div class="panel-heading">
+                                                                #if($item.owner == true)
+                                                                    <span class="glyphicon glyphicon-user"></span>
+                                                                #end
+                                                                <span class="panel-title">
 ##                                            <span class="glyphicon glyphicon-comment"></span>
                                                                           Database nazionale </span>
 
-                                                                        <div class="panel-header-menu pull-right mr10 text-muted fs12">
-##                                                                            #foreach($item in $a.item)
-##                                                                                #if($item.tipo == 'Iscritto')
-                                                                                    Sem $item.periodo - $a.anno
-##                                                                                #end
-##                                                                            #end
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="panel-body">
-                                                                        <table class="table">
-                                                                            <thead>
-                                                                            <tr class="success">
-                                                                                <th>Regione</th>
-                                                                                <th>Provincia</th>
-                                                                                <th>Ente</th>
-                                                                                <th>Azienda</th>
-                                                                                <th>Periodo</th>
-                                                                                <th>Quota</th>
-                                                                                <th>Livello</th>
-                                                                                <th>Contratto</th>
-                                                                            </tr>
-                                                                            </thead>
-##                                                                            #foreach($item in $a.item)
-##                                                                                #if($item.tipo == 'Iscritto')
-                                                                                    <tbody>
-                                                                                    <tr>
-                                                                                        <td>$item.regione</td>
-                                                                                        <td>$item.provincia</td>
-                                                                                        <td>$item.ente</td>
-                                                                                        <td>
-                                                                                            $item.azienda
-                                                                                        </td>
-                                                                                        <td>$item.periodo</td>
-                                                                                        <td>$item.quota</td>
-                                                                                        <td>$item.livello</td>
-                                                                                        <td>$item.contratto</td>
-                                                                                    </tr>
-                                                                                    </tbody>
-##                                                                                #end
-##                                                                            #end
-                                                                        </table>
-                                                                    </div>
-                                                                ##                            <div class="panel-footer p15">
-                                                                ##                                footer
-                                                                ##                            </div>
-                                                                    <!-- end .form-footer section -->
-
+                                                                <div class="panel-header-menu pull-right mr10 text-muted fs12">
+                                                                ##                                                                            #foreach($item in $a.item)
+                                                                ##                                                                                #if($item.tipo == 'Iscritto')
+                                                                    Sem $item.periodo - $a.anno
+                                                                ##                                                                                #end
+                                                                ##                                                                            #end
                                                                 </div>
                                                             </div>
-
-                                                    #elseif($item.tipo == 'NonIscritto')
-                                                        <div class="timeline-item noniscritto">
-                                                            <div class="timeline-icon">
-                                                                <span class="glyphicons glyphicons-remove text-danger great-icon"></span>
+                                                            <div class="panel-body">
+                                                                <table class="table">
+                                                                    <thead>
+                                                                    <tr class="success">
+                                                                        <th>Regione</th>
+                                                                        <th>Provincia</th>
+                                                                        <th>Ente</th>
+                                                                        <th>Azienda</th>
+                                                                        <th>Periodo</th>
+                                                                        <th>Quota</th>
+                                                                        <th>Livello</th>
+                                                                        <th>Contratto</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                ##                                                                            #foreach($item in $a.item)
+                                                                ##                                                                                #if($item.tipo == 'Iscritto')
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td>$item.regione</td>
+                                                                        <td>$item.provincia</td>
+                                                                        <td>$item.ente</td>
+                                                                        <td>
+                                                                            $item.azienda
+                                                                        </td>
+                                                                        <td>$item.periodo</td>
+                                                                        <td>$item.quota</td>
+                                                                        <td>$item.livello</td>
+                                                                        <td>$item.contratto</td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                ##                                                                                #end
+                                                                ##                                                                            #end
+                                                                </table>
                                                             </div>
-                                                            <div class="panel" #if($item.owner == true)
-                                                                 style="border-style: dashed; border-width: 2px;border-color: blue;"
-                                                            #end>
-                                                                <div class="panel-heading">
-                                                                    #if($item.owner == true)
-                                                                        <span class="glyphicon glyphicon-user"></span>
-                                                                    #end
+                                                        ##                            <div class="panel-footer p15">
+                                                        ##                                footer
+                                                        ##                            </div>
+                                                            <!-- end .form-footer section -->
+
+                                                        </div>
+                                                    </div>
+
+                                                #elseif($item.tipo == 'NonIscritto')
+                                                    <div class="timeline-item noniscritto">
+                                                        <div class="timeline-icon">
+                                                            <span class="glyphicons glyphicons-remove text-danger great-icon"></span>
+                                                        </div>
+                                                        <div class="panel" #if($item.owner == true)
+                                                             style="border-style: dashed; border-width: 2px;border-color: blue;"
+                                                        #end>
+                                                            <div class="panel-heading">
+                                                                #if($item.owner == true)
+                                                                    <span class="glyphicon glyphicon-user"></span>
+                                                                #end
                                                                 <span class="panel-title">
                                                                      Iscrizione altro sindacato </span>
 
-                                                                </div>
-                                                                <div class="panel-body">
-                                                                    <table class="table">
-                                                                        <thead>
-                                                                        <tr class="danger">
-                                                                        ##                                        <th>Regione</th>
-                                                                            <th>Provincia</th>
-                                                                            <th>Ente</th>
-                                                                            <th>Azienda</th>
-                                                                            <th>Libero al</th>
-                                                                            <th>Iscritto a</th>
-                                                                        </tr>
-                                                                        </thead>
-##                                                                        #foreach($item in $a.item)
-##                                                                            #if($item.tipo == 'NonIscritto')
-                                                                                <tbody>
-                                                                                <tr>
-                                                                                ##                                        <td>Lombardia</td>
-                                                                                    <td>$item.provincia</td>
-                                                                                    <td>$item.ente</td>
-                                                                                    <td>
-                                                                                        $item.azienda
-                                                                                    </td>
-                                                                                    <td>$localization.formatDate($item.data)</td>
-                                                                                    <td><strong>$item.iscrittoA</strong></td>
-                                                                                </tr>
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <table class="table">
+                                                                    <thead>
+                                                                    <tr class="danger">
+                                                                    ##                                        <th>Regione</th>
+                                                                        <th>Provincia</th>
+                                                                        <th>Ente</th>
+                                                                        <th>Azienda</th>
+                                                                        <th>Libero al</th>
+                                                                        <th>Iscritto a</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                ##                                                                        #foreach($item in $a.item)
+                                                                ##                                                                            #if($item.tipo == 'NonIscritto')
+                                                                    <tbody>
+                                                                    <tr>
+                                                                    ##                                        <td>Lombardia</td>
+                                                                        <td>$item.provincia</td>
+                                                                        <td>$item.ente</td>
+                                                                        <td>
+                                                                            $item.azienda
+                                                                        </td>
+                                                                        <td>$localization.formatDate($item.data)</td>
+                                                                        <td><strong>$item.iscrittoA</strong></td>
+                                                                    </tr>
 
-                                                                                </tbody>
-##                                                                            #end
-##                                                                        #end
-                                                                    </table>
-                                                                </div>
+                                                                    </tbody>
+                                                                ##                                                                            #end
+                                                                ##                                                                        #end
+                                                                </table>
                                                             </div>
                                                         </div>
+                                                    </div>
 
-                                                    #elseif($item.tipo == 'Prevedi')
-                                                        <div class="timeline-item prevedi">
-                                                            <div class="timeline-icon">
-                                                                <span class="glyphicons glyphicons-new_window text-info great-icon"></span>
-                                                            </div>
-                                                            <div class="panel" #if($item.owner == true)
-                                                                 style="border-style: dashed; border-width: 2px;border-color: blue;"
-                                                            #end>
-                                                                <div class="panel-heading">
-                                                                    #if($item.owner == true)
-                                                                        <span class="glyphicon glyphicon-user"></span>
-                                                                    #end
-                                        <span class="panel-title">
+                                                #elseif($item.tipo == 'Prevedi')
+                                                    <div class="timeline-item prevedi">
+                                                        <div class="timeline-icon">
+                                                            <span class="glyphicons glyphicons-new_window text-info great-icon"></span>
+                                                        </div>
+                                                        <div class="panel" #if($item.owner == true)
+                                                             style="border-style: dashed; border-width: 2px;border-color: blue;"
+                                                        #end>
+                                                            <div class="panel-heading">
+                                                                #if($item.owner == true)
+                                                                    <span class="glyphicon glyphicon-user"></span>
+                                                                #end
+                                                                <span class="panel-title">
                                              Iscrizione Prevedi </span>
 
-                                                                </div>
-                                                                <div class="panel-body">
-                                                                    <table class="table">
-                                                                        <thead>
-                                                                        <tr class="info">
-                                                                        ##                                        <th>Regione</th>
-                                                                            <th>Cassa Edile Regione</th>
-                                                                            <th>Cassa Edile</th>
-                                                                            <th>Inquadramento</th>
-                                                                            <th>Tipo Adesione</th>
-                                                                            <th>Anno</th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                    ##                                                                        #foreach($item in $a.item)
-                                                                    ##                                                                            #if($item.tipo == 'NonIscritto')
-                                                                        <tbody>
-                                                                        <tr>
-                                                                        ##                                        <td>Lombardia</td>
-                                                                            <td>Cassa Edile $item.regione</td>
-                                                                            <td>$item.ente</td>
-                                                                            <td>#if($item.livello)$item.livello#end</td>
-                                                                            <td>#if($item.contratto)$item.contratto#end</td>
-                                                                            <td>$item.anno</td>
-                                                                        </tr>
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <table class="table">
+                                                                    <thead>
+                                                                    <tr class="info">
+                                                                    ##                                        <th>Regione</th>
+                                                                        <th>Cassa Edile Regione</th>
+                                                                        <th>Cassa Edile</th>
+                                                                        <th>Inquadramento</th>
+                                                                        <th>Tipo Adesione</th>
+                                                                        <th>Anno</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                ##                                                                        #foreach($item in $a.item)
+                                                                ##                                                                            #if($item.tipo == 'NonIscritto')
+                                                                    <tbody>
+                                                                    <tr>
+                                                                    ##                                        <td>Lombardia</td>
+                                                                        <td>Cassa Edile $item.regione</td>
+                                                                        <td>$item.ente</td>
+                                                                        <td>#if($item.livello)$item.livello#end</td>
+                                                                        <td>#if($item.contratto)$item.contratto#end</td>
+                                                                        <td>$item.anno</td>
+                                                                    </tr>
 
-                                                                        </tbody>
-                                                                    ##                                                                            #end
-                                                                    ##                                                                        #end
-                                                                    </table>
-                                                                </div>
+                                                                    </tbody>
+                                                                ##                                                                            #end
+                                                                ##                                                                        #end
+                                                                </table>
                                                             </div>
                                                         </div>
-                                                    #end
-
+                                                    </div>
                                                 #end
 
-                                            </div>
+                                            #end
 
                                         </div>
+
                                     </div>
                                 </div>
-                            #end
+                            </div>
+                        #end
                     #end
                 </div>
                 <div id="tab15_2" class="tab-pane">
@@ -812,14 +812,14 @@
                                     #end
                                     #foreach($item in $summary.deleghe)
                                         #if($item.state == 'Accreditata')
-                                                class="success"
+                                            class="success"
                                         #elseif($item.state == 'Revocata')
-                                                class="danger"
+                                            class="danger"
                                         #else
-                                                class="warning"
+                                            class="warning"
                                         #end
                                     #end
-                                    >
+                                >
                                     <th>Regione</th>
                                     <th>Provincia</th>
                                     <th>Data</th>
@@ -855,8 +855,8 @@
                                     #end
                                 </tbody>
                             </table>
-                           </div>
                         </div>
+                    </div>
                     <div class="panel">
                         <div class="panel-heading">
                             <span class="panel-title">Iscrizione altro sindacato</span>

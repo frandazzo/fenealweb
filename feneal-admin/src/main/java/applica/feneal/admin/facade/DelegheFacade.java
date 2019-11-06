@@ -268,8 +268,14 @@ public class DelegheFacade {
     private Delega convertUIDelegaToModelEntity(UIDelega uiDelega) {
         Delega delega = new Delega();
         delega.setId(uiDelega.getId());
-        delega.setAttachment(uiDelega.getAttachment());
-        delega.setNomeattachment(uiDelega.getNomeattachment());
+        if(!StringUtils.isEmpty(uiDelega.getAttachment())){
+            delega.setAttachment(uiDelega.getAttachment());
+            delega.setNomeattachment(uiDelega.getNomeattachment());
+        }else{
+            delega.setAttachment(uiDelega.getAttachment());
+            delega.setNomeattachment("");
+        }
+
 
         try {
             delega.setValidityDate(StringUtils.hasLength(uiDelega.getValidityDate()) ? FenealDateUtils.getDateFromString(uiDelega.getValidityDate(), FenealDateUtils.FORMAT_DATE_DATEPICKER): null);
