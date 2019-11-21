@@ -60,6 +60,10 @@ public class AziendeRepositoryWrapper implements Repository<Azienda> {
                 finalRequest.getFilters().add(new Filter("city", geoSvc.getCityById(Integer.valueOf((String)filter.getValue())),Filter.EQ));
         });
 
+        request.popFilter("piva").ifPresent(filter -> {
+            if (StringUtils.hasLength(String.valueOf(filter.getValue())))
+                finalRequest.getFilters().add(new Filter("piva", filter.getValue(),Filter.LIKE));
+        });
 
         LoadResponse<Azienda> res = aziendeRepository.find(request);
 
