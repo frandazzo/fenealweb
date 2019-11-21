@@ -485,7 +485,7 @@
 
                                                                                     #if($item.owner)
                                                                                         <td>
-                                                                                            #if($item.nomeAttachment != "")
+                                                                                            #if($item.nomeAttachment && $item.nomeAttachment != "")
                                                                                                 <a target="__blank" href="${wwwBase}$item.attachment">
                                                                                                     $item.nomeAttachment
                                                                                                 </a>
@@ -493,7 +493,7 @@
                                                                                                 Delega non presente
                                                                                             #end
                                                                                         </td>
-                                                                                    #elseif($item.nomeAttachment != "")
+                                                                                    #elseif($item.nomeAttachment && $item.nomeAttachment != "")
                                                                                         <td>
                                                                                             Delega presente
                                                                                         </td>
@@ -505,7 +505,7 @@
                                                                                 #else
 
                                                                                     <td>
-                                                                                        #if($item.nomeAttachment != "")
+                                                                                        #if($item.nomeAttachment && $item.nomeAttachment != "")
                                                                                             <a targt="__blank" href="${wwwBase}$item.attachment">
                                                                                                 $item.nomeAttachment
                                                                                             </a>
