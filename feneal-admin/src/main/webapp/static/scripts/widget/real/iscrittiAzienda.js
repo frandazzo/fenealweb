@@ -222,7 +222,7 @@ define([
                     allowExportSelectedData: true
                 },
                 stateStoring: {
-                    enabled: false,
+                    enabled: true,
                     type: "localStorage",
                     storageKey: "iscrittiazienda"
                 },
@@ -302,8 +302,8 @@ define([
 
 
                     },
-                    { dataField:"lavoratoreCodiceFiscale", visible : false},
-                    { dataField:"lavoratoreDelegheOwner", caption:"Possiede delega", visible : true, 
+                    { dataField:"lavoratoreCodiceFiscale",caption:"Codice fiscale", visible : false,visibleIndex: 8},
+                    { dataField:"lavoratoreDelegheOwner", caption:"Possiede delega", visible : true,visibleIndex: 6,
                         cellTemplate: function (container, options) {
                         //container.addClass("img-container");
                         var lavoratoreDelegheOwner = options.data.lavoratoreDelegheOwner;
@@ -317,17 +317,17 @@ define([
                         }
 
                     }},
-                    { dataField:"lavoratoreDataNascita", dataType:'date', visible : false},
-                    { dataField:"lavoratoreLuogoNascita", visible : false},
-                    { dataField:"lavoratoreCittaResidenza", visible : false},
-                    { dataField:"lavoratoreCellulare", visible : true, visibleIndex: 3},
-                    { dataField:"lavoratoreTelefono", visible : false},
-                    { dataField:"lavoratoreIndirizzo", visible : false},
-                    { dataField:"lavoratoreCap", visible : false},
+                    { dataField:"lavoratoreDataNascita",caption:"Data nascita", dataType:'date', visible : false,visibleIndex: 9},
+                    { dataField:"lavoratoreLuogoNascita", caption:"Com. nascita",visible : false,visibleIndex: 11},
+                    { dataField:"lavoratoreCittaResidenza",  caption:"Com. residenza",visible : false,visibleIndex: 12},
+                    { dataField:"lavoratoreCellulare", caption:"Cellulare",visible : false, visibleIndex: 15},
+                    { dataField:"lavoratoreTelefono", caption:"Telefono",visible : false,visibleIndex: 16},
+                    { dataField:"lavoratoreIndirizzo",  caption:"Indirizzo",visible : false,visibleIndex: 13},
+                    { dataField:"lavoratoreCap", caption:"Cap",visible : false,visibleIndex: 14},
                     { dataField:"lavoratoreNome", visible : false},
                     { dataField:"lavoratoreCognome", visible : false},
                     { dataField:"lavoratoreSesso", visible : false},
-                    {dataField:"numIscrizioni",  visible: true, caption:"Iscritto storico",
+                    {dataField:"numIscrizioni",  visible: true,visibleIndex: 7, caption:"Iscritto storico",
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");
                             var numIscrizioni = options.data.numIscrizioni;
@@ -361,7 +361,7 @@ define([
                                 .appendTo(container);
                         }
                     },
-                    { dataField:"lavoratoreNazionalita", visible : false},
+                    { dataField:"lavoratoreNazionalita",caption:"Nazione nascita", visible : false,visibleIndex: 10},
                     { dataField:"lavoratoreProvinciaNascita", visible : false},
                     { dataField:"lavoratoreProvinciaResidenza", visible : false},
                     { dataField:"lavoratoreCellulare", visible : false}
@@ -392,7 +392,7 @@ define([
                     allowExportSelectedData: true
                 },
                 stateStoring: {
-                    enabled: false,
+                    enabled: true,
                     type: "localStorage",
                     storageKey: "reportnoniscirttiazienda"
                 },
