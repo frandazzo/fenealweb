@@ -39,6 +39,7 @@ public class UiDelega {
     private String delegaNote;
     private String firstAziendaEdile;
     private Date validityDate;
+    private String delegaScansione;
 
 
     public String getDelegaNote() {
@@ -460,5 +461,13 @@ public class UiDelega {
 
     public Date getValidityDate() {
         return validityDate;
+    }
+
+    public void setDelegaScansione(String delegaScansione) {
+        this.delegaScansione = delegaScansione;
+    }
+
+    public String getDelegaScansione() {
+        return delegaScansione;
     }
 }

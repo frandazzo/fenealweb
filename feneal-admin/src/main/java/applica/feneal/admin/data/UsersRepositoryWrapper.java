@@ -6,7 +6,7 @@ import applica.feneal.domain.model.User;
 import applica.framework.*;
 import applica.framework.security.Security;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+//import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.util.StringUtils;
 
 import java.util.*;

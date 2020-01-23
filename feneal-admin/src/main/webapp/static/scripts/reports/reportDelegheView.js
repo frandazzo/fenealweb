@@ -213,7 +213,7 @@ define([
                     { dataField:"aziendaIndirizzo", visible : false},
                     { dataField:"aziendaNote", visible : false},
                     { dataField:"aziendaId", visible : false},
-
+                    {dataField:"delegaScansione", visible:true},
                     { dataField:"lavoratoreNomeCompleto", fixed :true, visible : true, visibleIndex: 0,
                         cellTemplate: function (container, options) {
                             //container.addClass("img-container");

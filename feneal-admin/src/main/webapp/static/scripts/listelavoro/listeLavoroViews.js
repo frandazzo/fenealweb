@@ -112,7 +112,7 @@ define([
                                     key: "fiscalcode"
                                 })
                             })
-                            dataSource.load().done((r)=>{
+                            dataSource.load().done(function(r){
                                 selectedrows = r;
 
                             })
@@ -461,7 +461,7 @@ define([
                                 key: "fiscalcode"
                             })
                         })
-                        dataSource.load().done((r)=>{
+                        dataSource.load().done(function(r){
                             selectedrows = r;
 
                         })
@@ -630,7 +630,7 @@ define([
                                 key: "fiscalcode"
                             })
                         })
-                        dataSource.load().done((r)=>{
+                        dataSource.load().done(function(r){
                             selectedrows = r;
 
                         })
