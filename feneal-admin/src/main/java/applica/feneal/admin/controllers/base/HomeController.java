@@ -42,6 +42,14 @@ public class HomeController {
     private UsersFacade usersFacade;
 
 
+    @RequestMapping(value = "/ciccio", method = RequestMethod.GET)
+    public String trySelectedRows(Model model) {
+
+       return "/ciccio";
+    }
+
+
+
 
     @RequestMapping("/")
     @PreAuthorize("isAuthenticated()")

@@ -1,0 +1,236 @@
+#parse("/shared/framework.vm")
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <title>feneal: Administration</title>
+
+
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.1.0.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.5/cldr.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.5/cldr/event.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.5/cldr/supplemental.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.5/cldr/unresolved.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/globalize/1.1.1/globalize.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/globalize/1.1.1/globalize/message.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/globalize/1.1.1/globalize/number.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/globalize/1.1.1/globalize/currency.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/globalize/1.1.1/globalize/date.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.6.0/jszip.min.js"></script>
+
+
+    <script src="https://cdn3.devexpress.com/jslib/18.2.4/js/dx.all.js" integrity="sha384-TXgVLCw/FpsXG6ePnU306Qb0MbJBSbbRGuVGXqbn0y5L64zodzzY9W02UDg//AMF sha512-KQ4z8VL+RWqelcvJqgs3Odpw/fEbemd9jkukGfO2jGwFgzbLkw9MNoMzTS0Eux0jewbsXBQOuk46qRBX5eTCwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="${wwwBase}static/scripts/plugins/devexpress18.2/dx.aspnet.data.js"></script>
+    <script type="text/javascript" src="${wwwBase}static/scripts/plugins/devexpress18.2/dx.vectormaputils.js"></script>
+
+    #parse("/shared/resources.vm")
+
+
+</head>
+
+<body >
+
+
+<div >
+
+
+            <h1 >
+                TEST DevExpress
+            </h1>
+
+<button id="eseguiricerca" > Load data</button>
+    <button id="countselectedrows" > Count selected rows</button>
+
+</div>
+
+
+
+    <div id="reportContainer">
+
+    </div>
+
+
+
+
+
+<!-- End: Main -->
+
+
+
+<!-- BEGIN: PAGE SCRIPTS -->
+<script type="text/javascript">
+    window.BASE = "$wwwBase";
+    window.FILES_BASE = "$filesBase";
+    window.STATIC_BASE = "$staticBase";
+    window.COUNTRY_CODE = "$countryCode";
+</script>
+
+
+<script type="text/javascript" src="${wwwBase}framework-resources/admin/theme/vendor/jquery/jquery_ui/jquery-ui.min.js"></script>
+
+
+
+<!-- Page Javascript -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+
+        var grid = null;
+
+        $("#countselectedrows").click(function () {
+
+            var selectedRows = grid.getSelectedRowsData();
+
+            alert(selectedRows.length);
+        });
+        "use strict";
+
+        // Init Theme Core
+        $("#eseguiricerca").click(function () {
+           console.log("ciao");
+            var jsonData  = JSON.stringify(
+                {
+                    request:
+                            {province: "Grosseto",
+                                datefromMonthReport: "1",
+                                datefromYearReport: "2018",
+                                datetoMonthReport: "1",
+                                datetoYearReport: "2020",
+                                typeQuoteCash: "IQA",
+                                sector: "EDILE",
+                                parithetic: "CASSA EDILE",
+                                firm: ""}});
+
+            $.ajax({
+               url: "/ciccio/ciccio",
+               method : "POST",
+               data: jsonData,
+               contentType: "application/json; charset=utf-8"
+           }).done(function(data, textStatus, jqXHR ) {
+
+                 grid = $('#reportContainer').dxDataGrid({
+                    dataSource:data.value,
+                    columns:[
+
+                        { dataField:"aziendaRagioneSociale", visible : true,
+                        },
+
+                        { dataField:"lavoratoreNomeCompleto", fixed :true, visible : true, visibleIndex: 0,
+                        },
+                    ],
+                    // searchPanel: {
+                    //     visible: true
+                    //
+                    // },
+                    summary: {
+                        totalItems: [{
+                            column: "lavoratoreNomeCompleto",
+                            summaryType: "count",
+                            customizeText: function(data) {
+                                return "Iscritti trovati: " + data.value;
+                            }
+                        }]
+                    },
+                    // columnChooser: {
+                    //     enabled: true
+                    // },
+                    // onCellClick: function (clickedCell) {
+                    //     alert(clickedCell.column.dataField);
+                    // },
+                    "export": {
+                        enabled: false,
+                        fileName: "iscritti",
+                        allowExportSelectedData: true
+                    },
+                    stateStoring: {
+                        enabled: false,
+                        type: "localStorage",
+                        storageKey: "reportiscritti"
+                    },
+                    paging:{
+                        pageSize:5
+                    },
+                    headerFilter: {
+                        allowSearch:false,
+                        height:325,
+                        searchTimeout:500,
+                        texts: {},
+                        visible:true,
+                        width:252
+                    },
+                    sorting:{
+                        mode:"multiple"
+                    },
+                    onContentReady: function (e) {
+                        var columnChooserView = e.component.getView("columnChooserView");
+                        if (!columnChooserView._popupContainer) {
+                            columnChooserView._initializePopupContainer();
+                            columnChooserView.render();
+                            columnChooserView._popupContainer.option("dragEnabled", false);
+                        }
+                    },
+                    rowAlternationEnabled: true,
+                    showBorders: true,
+                    allowColumnReordering:true,
+                    allowColumnResizing:true,
+                    columnAutoWidth: true,
+                    selection:{
+                        allowSelectAll:true,
+                        deferred:false,
+                        mode:"multiple",
+                        selectAllMode:"allPages",
+                        showCheckBoxesMode:"always"
+                    },
+                    hoverStateEnabled: true
+
+                    // masterDetail: {
+                    //     enabled: true,
+                    //     template: function(container, options) {
+                    //         var currentData = options.data;
+                    //         container.addClass("internal-grid-container");
+                    //         $("<div>").text(currentData.delegaSettore  + " Dettagli:").appendTo(container);
+                    //         $("<div>")
+                    //             .addClass("internal-grid")
+                    //             .dxDataGrid({
+                    //                 columnAutoWidth: true,
+                    //                 columns: [{
+                    //                     dataField: "id"
+                    //                 }, {
+                    //                     dataField: "description",
+                    //                     caption: "Description",
+                    //                     calculateCellValue: function(rowData) {
+                    //                         return rowData.description + "ciao ciao";
+                    //                     }
+                    //                 }],
+                    //                 dataSource: currentData.details
+                    //             }).appendTo(container);
+                    //     }
+                    // }
+
+                }).dxDataGrid("instance");
+
+
+
+            })
+             .fail(function(jqXHR, textStatus, errorThrown) {
+                        alert( "error" );
+           });
+        });
+
+    });
+</script>
+
+<script type="text/javascript">
+
+
+</script>
+
+<script type="text/javascript" src="/static/scripts/reports/TestDevExpress.js"> </script>
+
+<!-- END: PAGE SCRIPTS -->
+
+</body>
+
+</html>
