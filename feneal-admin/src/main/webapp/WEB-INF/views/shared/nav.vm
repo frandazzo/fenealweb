@@ -274,8 +274,42 @@
                     </a>
                 </li>
 
+
+                ##solo segretario feneal bari
+##                <li class="sidebar-label pt20 ristorni-puglia" style="display: none">RISTORNI EDILIZIA</li>
+##
+##                <li class="ristorni-puglia" style="display: none">
+##                    <a href="#/storicoristorni" class="framework-navigation">
+##                        <span class="fa fa-reply"></span>
+##                        <span class="sidebar-title">Storico ristorni</span>
+##                    </a>
+##                </li>
+##                <li class="ristorni-puglia" style="display: none">
+##                    <a href="#/ristorniquotecassaedile" class="framework-navigation">
+##                        <span class="fa fa-check-square-o"></span>
+##                        <span class="sidebar-title">Ristorni quote CASSA EDILE</span>
+##                    </a>
+##                </li>
+##
+##                <li class="ristorni-puglia" style="display: none">
+##                    <a href="#/crud?e=referenti" class="framework-navigation">
+##                        <span class="glyphicons glyphicons-group"></span>
+##                        <span class="sidebar-title">Referenti comunali</span>
+##                    </a>
+##                </li>
+
             #end
 
+
+            #if( $userId == 227)
+                <li class="sidebar-label pt20">Quote</li>
+                <li class="">
+                    <a href="#/renewquoteimpianti" class="framework-navigation">
+                        <span class="fa fa-tasks"></span>
+                        <span class="sidebar-title">Rinnova quote impianti fissi</span>
+                    </a>
+                </li>
+            #end
 
 
             ##la gestione delle quote è relativa solo al segretario

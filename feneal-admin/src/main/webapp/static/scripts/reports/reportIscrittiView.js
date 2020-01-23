@@ -121,6 +121,23 @@ define([
                                 result = res;
                             })
 
+
+                            var filterExpression =  grid.getCombinedFilter(true);
+                            if(selectedrows.length) {
+                                var dataSource = new DevExpress.data.DataSource({
+                                    filter:filterExpression,
+                                    paginate: false,
+                                    store: new DevExpress.data.ArrayStore({
+                                        data: selectedrows,
+                                        key: "lavoratoreNomeCompleto"
+                                    })
+                                })
+                                dataSource.load().done((r)=>{
+                                    selectedrows = r;
+
+                                })
+                            }
+
                             console.log(result);
 
 
@@ -566,8 +583,11 @@ define([
                 allowColumnResizing:true,
                 columnAutoWidth: true,
                 selection:{
+                    allowSelectAll:true,
+                    deferred:false,
                     mode:"multiple",
-                    showCheckBoxesMode: "always"
+                    selectAllMode:"allPages",
+                    showCheckBoxesMode:"always"
                 },
                 hoverStateEnabled: true
 

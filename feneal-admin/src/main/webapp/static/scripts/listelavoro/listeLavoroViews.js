@@ -102,6 +102,22 @@ define([
                         console.log(result);
 
 
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "fiscalcode"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
+
 
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");
@@ -435,6 +451,23 @@ define([
                     //ottengo la lista delle righe selezionate
                     var selectedrows = grid.getSelectedRowsData();
 
+                    var filterExpression =  grid.getCombinedFilter(true);
+                    if(selectedrows.length) {
+                        var dataSource = new DevExpress.data.DataSource({
+                            filter:filterExpression,
+                            paginate: false,
+                            store: new DevExpress.data.ArrayStore({
+                                data: selectedrows,
+                                key: "fiscalcode"
+                            })
+                        })
+                        dataSource.load().done((r)=>{
+                            selectedrows = r;
+
+                        })
+                    }
+
+
                     if (selectedrows.length == 0) {
                         $.notify.error("Selezionare almeno un elemento");
                         return false;
@@ -586,6 +619,22 @@ define([
 
                     //ottengo la lista delle righe selezionate
                     var selectedrows = grid.getSelectedRowsData();
+
+                    var filterExpression =  grid.getCombinedFilter(true);
+                    if(selectedrows.length) {
+                        var dataSource = new DevExpress.data.DataSource({
+                            filter:filterExpression,
+                            paginate: false,
+                            store: new DevExpress.data.ArrayStore({
+                                data: selectedrows,
+                                key: "fiscalcode"
+                            })
+                        })
+                        dataSource.load().done((r)=>{
+                            selectedrows = r;
+
+                        })
+                    }
 
                     if (selectedrows.length == 0) {
                         $.notify.error("Selezionare almeno un elemento");

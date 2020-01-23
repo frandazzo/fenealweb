@@ -5,9 +5,27 @@
 
     $("#countselectedrows").click(function () {
 
-    var selectedRows = grid.getSelectedRowsData();
+    var data = grid.getSelectedRowsData();
 
-    alert(selectedRows.length);
+        var filterExpression =  grid.getCombinedFilter(true);
+        if(data.length) {
+            var dataSource = new DevExpress.data.DataSource({
+                filter:filterExpression,
+                paginate: false,
+                store: new DevExpress.data.ArrayStore({
+                    data: data,
+                    key: "lavoratoreNomeCompleto"
+                })
+            })
+            dataSource.load().done((r)=>{
+                data = r;
+
+            })
+        }
+
+    alert(data.length);
+
+
 });
     "use strict";
 

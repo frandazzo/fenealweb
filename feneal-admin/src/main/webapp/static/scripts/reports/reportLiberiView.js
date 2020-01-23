@@ -165,6 +165,23 @@ define([
                         var selectedrows = grid.getSelectedRowsData();
                         var provinceSelected = $("select[name=provinceSelect]").val();
 
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "lavoratoreNomeCompleto"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
+
+
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");
                             return false;
@@ -178,7 +195,7 @@ define([
                         var container = $('<div class="request-info-territori-container"></div>');
 
                         var data = {};
-                        var selectedrows = grid.getSelectedRowsData();
+                         // selectedrows = grid.getSelectedRowsData();
                         data.selectedLiberi = selectedrows;
                         data.province = provinceSelected;
 
@@ -264,6 +281,22 @@ define([
 
                         //ottengo la lista delle righe selezionate
                         var selectedrows = grid.getSelectedRowsData();
+
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "lavoratoreNomeCompleto"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
 
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");
@@ -1000,6 +1033,22 @@ define([
                         var selectedrows = grid.getSelectedRowsData();
                         var provinceSelected = $("select[name=provinceSelect]").val();
 
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "lavoratoreNomeCompleto"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
+
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");
                             return false;
@@ -1013,7 +1062,7 @@ define([
                         var container = $('<div class="request-info-territori-container"></div>');
 
                         var data = {};
-                        var selectedrows = grid.getSelectedRowsData();
+                        // selectedrows = grid.getSelectedRowsData();
                         data.selectedLiberi = selectedrows;
                         data.province = provinceSelected;
 
@@ -1099,6 +1148,22 @@ define([
 
                         //ottengo la lista delle righe selezionate
                         var selectedrows = grid.getSelectedRowsData();
+
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "lavoratoreNomeCompleto"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
 
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");
@@ -1860,6 +1925,22 @@ define([
                         var selectedrows = grid.getSelectedRowsData();
                         var provinceSelected = $("select[name=provinceSelect]").val();
 
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "lavoratoreNomeCompleto"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
+
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");
                             return false;
@@ -1873,7 +1954,7 @@ define([
                         var container = $('<div class="request-info-territori-container"></div>');
 
                         var data = {};
-                        var selectedrows = grid.getSelectedRowsData();
+                        // var selectedrows = grid.getSelectedRowsData();
                         data.selectedLiberi = selectedrows;
                         data.province = provinceSelected;
 
@@ -1959,6 +2040,22 @@ define([
 
                         //ottengo la lista delle righe selezionate
                         var selectedrows = grid.getSelectedRowsData();
+
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "lavoratoreNomeCompleto"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
 
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");
@@ -2709,6 +2806,22 @@ define([
                         var selectedrows = grid.getSelectedRowsData();
                         var provinceSelected = $("select[name=provinceSelect]").val();
 
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "lavoratoreNomeCompleto"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
+
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");
                             return false;
@@ -2722,7 +2835,7 @@ define([
                         var container = $('<div class="request-info-territori-container"></div>');
 
                         var data = {};
-                        var selectedrows = grid.getSelectedRowsData();
+                        // var selectedrows = grid.getSelectedRowsData();
                         data.selectedLiberi = selectedrows;
                         data.province = provinceSelected;
 
@@ -2810,6 +2923,22 @@ define([
 
                         //ottengo la lista delle righe selezionate
                         var selectedrows = grid.getSelectedRowsData();
+
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "lavoratoreNomeCompleto"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
 
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");
@@ -3949,6 +4078,22 @@ define([
                         var provinceSelected = $("select[name=enteSelect]").val();
                         var infoTypeSelected = $("select[name=infoSelect]").val();
 
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "lavoratoreNomeCompleto"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
+
                         if(infoTypeSelected == 2){
                             $.notify.error("Selezionare la voce 'Iscritto storico' per proseguire con questa operazione");
                             return false;
@@ -3967,7 +4112,7 @@ define([
                         var container = $('<div class="request-info-territori-container"></div>');
 
                         var data = {};
-                        var selectedrows = grid.getSelectedRowsData();
+                        // var selectedrows = grid.getSelectedRowsData();
                         data.selectedLiberi = selectedrows;
                         data.province = provinceSelected;
 
@@ -4055,6 +4200,22 @@ define([
 
                         //ottengo la lista delle righe selezionate
                         var selectedrows = grid.getSelectedRowsData();
+
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "lavoratoreNomeCompleto"
+                                })
+                            })
+                            dataSource.load().done((r)=>{
+                                selectedrows = r;
+
+                            })
+                        }
 
                         if (selectedrows.length == 0) {
                             $.notify.error("Selezionare almeno un elemento");

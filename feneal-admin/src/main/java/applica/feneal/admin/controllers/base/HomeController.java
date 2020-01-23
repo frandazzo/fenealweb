@@ -60,6 +60,7 @@ public class HomeController {
         model.addAttribute("roleid", u.retrieveUserRole().getLid());
         model.addAttribute("user", ((User) sec.getLoggedUser()).getCompleteName());
         model.addAttribute("rolename", u.retrieveUserRole().getRole());
+        model.addAttribute("userId", ((User) sec.getLoggedUser()).getLid());
         model.addAttribute("userInitials", String.format("%s%s",((User) sec.getLoggedUser()).getName().charAt(0), ((User) sec.getLoggedUser()).getSurname().charAt(0)));
 
 
