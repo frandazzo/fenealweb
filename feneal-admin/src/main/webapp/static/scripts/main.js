@@ -187,6 +187,11 @@ require([
         ui.Navigation.instance().registerController("proiettadeleghebari", function() { return new delegheBariController.ProiettaDelegheController(); }, "singleton");
         ui.Navigation.instance().registerController("deleghebarihome", function() { return new delegheBariController.DelegheHomeController(); }, "singleton");
 
+        //ristorni deleghe bari
+        ui.Navigation.instance().registerController("ristorniquotedeleghebari",function (){ return new delegheBariController.RistorniDelegheCasseEdileController(); },"singleton");
+
+
+
 
         //Percorsi quote
         ui.Navigation.instance().registerController("quoteimpianti", function() { return new quoteImpiantiController.QuoteImpiantiController(); }, "singleton");

@@ -116,6 +116,8 @@ public class CrudConfSetup implements AppSetup {
     @Autowired
     private MagazzineDelegheLecceCrudConfig magSDelLecceCrud;
 
+    @Autowired
+    private ReferentiComunaliCrudConfig referentiComunaliCrudConfig;
 
     @Override
     public void setup() {
@@ -148,6 +150,7 @@ public class CrudConfSetup implements AppSetup {
         magazzDelConf.setup();
         magSDelLecceCrud.setup();
         compUsrcrudConf1.setup();
+        referentiComunaliCrudConfig.setup();
 
 
         permisisonSetup.setup();

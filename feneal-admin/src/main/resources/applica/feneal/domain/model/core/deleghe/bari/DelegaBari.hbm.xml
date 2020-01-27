@@ -10,6 +10,7 @@
         <property name="protocolNumber" />
         <property name="signup" />
         <property name="revocation" />
+        <many-to-one name="managementContact" class="applica.feneal.domain.model.core.ristorniEdilizia.Referenti" column="contactId" lazy="false" />
         <property name="duplicate" />
         <property name="lastMovement"/>
          <many-to-one name="workerCompany" class="applica.feneal.domain.model.core.aziende.Azienda" column="workerCompanyId" lazy="false" />

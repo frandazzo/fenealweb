@@ -65,6 +65,15 @@
             #end
 
 
+            #if($userId == 227)
+                <li class="sidebar-label pt20">Quote</li>
+                <li class="">
+                    <a href="#/renewquoteimpianti" class="framework-navigation">
+                        <span class="fa fa-tasks"></span>
+                        <span class="sidebar-title">Rinnova quote impianti fissi</span>
+                    </a>
+                </li>
+            #end
 
 
 

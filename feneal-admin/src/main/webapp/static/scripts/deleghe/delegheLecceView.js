@@ -554,6 +554,7 @@ define([
     });
 
 
+
     exports.ReportDelegheAppView = ReportDelegheAppView;
     exports.MagazzinoCrudFormAppView = MagazzinoCrudFormAppView;
     exports.MagazzinoCrudGridAppView = MagazzinoCrudGridAppView;

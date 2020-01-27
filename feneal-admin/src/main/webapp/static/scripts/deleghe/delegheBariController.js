@@ -70,7 +70,32 @@ define([
 
     });
 
+    var RistorniDelegheCasseEdileController = fcontrollers.Controller.extend({
+        ctor: function(){
+            RistorniDelegheCasseEdileController.super.ctor.call(this);
+        },
+        index: function(params) {
 
+            var service = new fmodel.FormService();
+            service.set({
+                method: "GET",
+                url: BASE + "ristornideleghebaricassaedile",
+                data: {}
+            });
+
+
+
+            var view = new views.RistorniDelegheBariCassaEdileAppView(service);
+            // view.set("title", "Ricerca lavoratori");
+
+            return view;
+        }
+
+    });
+
+
+
+    exports.RistorniDelegheCasseEdileController = RistorniDelegheCasseEdileController;
     exports.DelegheHomeController = DelegheHomeController;
     exports.ReportDelegheController = ReportDelegheController;
     exports.ProiettaDelegheController= ProiettaDelegheController;

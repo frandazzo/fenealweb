@@ -20,6 +20,12 @@ define([
             var svc =  this.__createService(true, route, searchParams);
             return svc;
         },
+        searchRistorniDelegheCassaEdile: function(searchParams){
+            var route = BASE + "deleghe/ristornibaricassaedile" ;
+
+            var svc =  this.__createService(true, route, searchParams);
+            return svc;
+        },
         proiettaDeleghe: function(searchParams){
 
             var prevDateStartParam = 'prevDateStart=' + encodeURIComponent(searchParams.prevDateStart);
@@ -611,6 +617,122 @@ define([
 //qui inserisco tutto il codice di inizializzazione della vista
                 self.createToolbar();
                 self.createBreadcrumbs();
+
+
+
+                // Gestione cambio referente
+                $("a.gestione-referente").click(function() {
+
+
+                    var formService = new fmodel.FormService();
+                    formService.set("method", "GET");
+                    formService.set("data", {});
+                    formService.set("url", BASE + "deleghebari/referente");
+
+
+
+
+
+
+                    var container = $('<div class="management-contact-cnt"></div>');
+
+                    var formView = new fviews.FormView(formService);
+                    formView.container = container;
+
+                    formView.on("render", function() {
+                        $(".management-contact-cnt").find(".panel-footer, .panel-heading").hide();
+                        $(".panel-body").css("overflow", "hidden");
+                    });
+
+                    formView.show();
+
+                    var delegaId = $(this).parents("tr").data("delega-id");
+                    var dialog = container.modalDialog({
+                        autoOpen: true,
+                        title: "Gestione Referente",
+                        destroyOnClose: true,
+                        height: 120,
+                        width: 450,
+                        buttons:{
+                            Cambia: {
+                                primary: true,
+                                command: function() {
+                                    var referente = $(".management-contact-cnt").find("select[name=referente]").val();
+
+                                    var svc = new  fmodel.AjaxService();
+                                    svc.set("url", BASE + "delegabari/" + delegaId +"/managementcontact");
+                                    svc.set("data", { newManagement: referente });
+                                    svc.set("method", "POST");
+
+                                    svc.on("load", function(response){
+                                        $.loader.hide({parent:'body'});
+                                        dialog.modalDialog("close");
+                                        $.notify.success("Il referente della delega &#232; stato modificato correttamente");
+
+                                        ui.Navigation.instance()
+                                            .navigate("deleghebarihome", "index", {
+                                              workerId: workerId
+                                              });
+                                    });
+                                    svc.on("error", function(error){
+                                        $.loader.hide({parent:'body'});
+                                        $.notify.error(error);
+                                    });
+
+                                    svc.load();
+                                    $.loader.show({parent:'body'});
+                                }
+                            }
+                        }
+                    });
+                });
+
+
+                //elimina singolo referente
+                $("a.elimina-referente").click(function() {
+
+                    var container2 = $('<div class="delete-contact-cnt"><span>Eliminare il referente per la delega selezionata?</span></div>');
+
+                    var delegaId = $(this).parents("tr").data("delega-id");
+                    var dialog = container2.modalDialog({
+                        autoOpen: true,
+                        title: "Elimina Referente",
+                        destroyOnClose: true,
+                        height: 120,
+                        width: 450,
+                        buttons:{
+                            Elimina: {
+                                primary: true,
+                                command: function() {
+
+                                    var svc = new  fmodel.AjaxService();
+                                    svc.set("url", BASE + "delegabari/" + delegaId +"/deletecontact");
+                                    svc.set("data", { });
+                                    svc.set("method", "POST");
+
+                                    svc.on("load", function(response){
+                                        $.loader.hide({parent:'body'});
+                                        dialog.modalDialog("close");
+                                        $.notify.success("Il referente della delega &#232; stato eliminato correttamente");
+
+                                        ui.Navigation.instance()
+                                            .navigate("deleghebarihome", "index", {
+                                                workerId: workerId
+                                            });
+                                    });
+                                    svc.on("error", function(error){
+                                        $.loader.hide({parent:'body'});
+                                        $.notify.error(error);
+                                    });
+
+                                    svc.load();
+                                    $.loader.show({parent:'body'});
+                                }
+                            }
+                        }
+                    });
+                });
+
 
             });
 
@@ -1279,6 +1401,338 @@ define([
 
     });
 
+    var RistorniDelegheBariCassaEdileAppView = fviews.FormAppView.extend({
+        ctor: function(formService) {
+            RistorniDelegheBariCassaEdileAppView.super.ctor.call(this, formService);
+
+            var self = this;
+
+
+            self.formView.on("load", function(){
+                self.createCharts();
+                self.createToolbar();
+                self.createBreadcrumbs();
+            });
+
+            self.formView.on("submit", function(){
+                var data = self.normalizeSubmitResult(self.formView.form);
+
+                var factory = new RepositoryServiceFactory();
+                var svc = factory.searchRistorniDelegheCassaEdile(data);
+
+
+                svc.on("load", function(response){
+                    console.log(response);
+
+                    $.loader.hide({parent:'body'});
+
+                    //inizializzo la griglia devexpress
+                    var grid = self.initGrid(response);
+                    //una volta ottenuti i risultati la griglia devexpress mostra una loader
+                    //di attesa per la renderizzazione degli stessi! in quel momento rendo
+                    //visibile l'intera area
+                    //scrollando fino a rendere visibile la griglia
+                    $('html, body').animate({scrollTop: $('#reportContainer').offset().top - 160}, 1400, "swing");
+
+
+                    // aggiungo tasto SALVA RISTORNO
+                    if ($(".save-ristorno").length == 0) {
+                        var delGeneration = '<div class="col-md-12 col-xs-3 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Salva Ristorno">' +
+                            '<button type="button" class="btn btn-primary full-width save-ristorno">' +
+                            '<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>' +
+                            '</button></div>';
+
+                        $(".toolbox-buttons-cnt").append($(delGeneration));
+                        $(".save-ristorno").parent().tooltip();
+                        $(".save-ristorno").click(function() {
+
+                            var container2 = $('<div class="save-ristorno-ctn"><span>Salvare il ristorno?</span></div>');
+
+
+                            var dialog = container2.modalDialog({
+                                autoOpen: true,
+                                title: "Salva Ristorno",
+                                destroyOnClose: true,
+                                height: 120,
+                                width: 450,
+                                buttons:{
+                                    Salva: {
+                                        primary: true,
+                                        command: function() {
+
+                                            dialog.modalDialog("close");
+                                            $.notify.success("SIMULAZIONE SALVATAGGIO REFERENTE");
+
+                                            // var svc = new  fmodel.AjaxService();
+                                            // svc.set("url", BASE + "delegabari/" + delegaId +"/deletecontact");
+                                            // svc.set("data", { });
+                                            // svc.set("method", "POST");
+                                            //
+                                            // svc.on("load", function(response){
+                                            //     $.loader.hide({parent:'body'});
+                                            //     dialog.modalDialog("close");
+                                            //     $.notify.success("Il referente della delega &#232; stato eliminato correttamente");
+                                            //
+                                            //     ui.Navigation.instance()
+                                            //         .navigate("deleghebarihome", "index", {
+                                            //             workerId: workerId
+                                            //         });
+                                            // });
+                                            // svc.on("error", function(error){
+                                            //     $.loader.hide({parent:'body'});
+                                            //     $.notify.error(error);
+                                            // });
+                                            //
+                                            // svc.load();
+                                            // $.loader.show({parent:'body'});
+                                        }
+                                    }
+                                }
+                            });
+
+                        });
+                    }
+
+                    //configuro la navigabilità e la toolbar delle actions del report
+                    var reportResultsConfigurer = new resultsConfigurer.ReportUiConfigurer(grid, "magazzino deleghe", false);
+                    reportResultsConfigurer.init();
+
+
+
+                });
+                svc.on("error", function(error){
+                    $.loader.hide({parent:'body'});
+                    alert("Errore: "  + error);
+                });
+
+                svc.load();
+                $.loader.show({parent:'body'});
+
+
+
+            });
+
+            self.formView.form.on("cancel", function() {
+                self.close();
+            });
+
+
+
+        },
+        initGrid : function(responseData){
+
+
+
+            var grid = $('#reportContainer').dxDataGrid({
+                dataSource:responseData,
+                columns:[
+                    { dataField:"nominativo",  caption: "Nominativo referente",visible : true,visibleIndex: 1},
+                    { dataField:"comune", caption: "Comune referente",visible : true,visibleIndex: 2},
+                    { dataField:"importoTot",  caption: "Importo Totale",visible : true,visibleIndex: 3}
+                ],
+
+                summary: {
+                    totalItems: [{
+                        column: "nominativo",
+                        summaryType: "count",
+                        customizeText: function(data) {
+                            return "Referenti totali: " + data.value;
+                        }
+                    }]
+                },
+                // columnChooser: {
+                //     enabled: true
+                // },
+                // onCellClick: function (clickedCell) {
+                //     alert(clickedCell.column.dataField);
+                // },
+                "export": {
+                    enabled: false,
+                    fileName: "Referenti",
+                    allowExportSelectedData: true
+                },
+                stateStoring: {
+                    enabled: false,
+                    type: "localStorage",
+                    storageKey: "referentiDelegheCassaEdile"
+                },
+                paging:{
+                    pageSize: 35
+                },
+                sorting:{
+                    mode:"multiple"
+                },
+                onContentReady: function (e) {
+                    var columnChooserView = e.component.getView("columnChooserView");
+                    if (!columnChooserView._popupContainer) {
+                        columnChooserView._initializePopupContainer();
+                        columnChooserView.render();
+                        columnChooserView._popupContainer.option("dragEnabled", false);
+                    }
+                },
+                onRowPrepared: function (e) {
+                    if (e.rowType == 'data' && e.data.giorni >= 40) {
+                        e.rowElement[0].style.backgroundColor = '#70ca63';
+                    }
+                },
+                showBorders: true,
+                allowColumnReordering:true,
+                allowColumnResizing:true,
+                columnAutoWidth: true,
+                selection:{
+                    mode:"multiple",
+                    showCheckBoxesMode: "always"
+                },
+                hoverStateEnabled: true
+
+                // masterDetail: {
+                //     enabled: true,
+                //     template: function(container, options) {
+                //         var currentData = options.data;
+                //         container.addClass("internal-grid-container");
+                //         $("<div>").text(currentData.delegaSettore  + " Dettagli:").appendTo(container);
+                //         $("<div>")
+                //             .addClass("internal-grid")
+                //             .dxDataGrid({
+                //                 columnAutoWidth: true,
+                //                 columns: [{
+                //                     dataField: "id"
+                //                 }, {
+                //                     dataField: "description",
+                //                     caption: "Description",
+                //                     calculateCellValue: function(rowData) {
+                //                         return rowData.description + "ciao ciao";
+                //                     }
+                //                 }],
+                //                 dataSource: currentData.details
+                //             }).appendTo(container);
+                //     }
+                // }
+
+            }).dxDataGrid("instance");
+
+            return grid;
+
+        },
+
+        normalizeSubmitResult: function(form){
+
+            //metto tutto in un data array....
+            var dataArray = [];
+            var formData = form.serializeArray();
+
+            for(var i=0; i<formData.length; i++) {
+                dataArray.push({
+                    property: formData[i].name,
+                    value: formData[i].value
+                });
+            }
+
+            //tiro fuori un oggetto javascript correttamente serializzato
+
+
+            //devo ciclare tra tutti gli oggetti  e verificare se ci sono proprietà con lo stesso nome
+            // che provvedero' ad inserire in un array
+            //questo buffer conterrà il nome della proprietà e una lista che conterrà tutti gli oggetti con lo stesso nome di proprietà
+            var propertyBuffer = {};
+
+            //ciclo adesso sugli oggetti della load request
+            for (var prop in dataArray){
+
+
+                //se la proprietà non cè nel buffer la aggiungo creando una nuova lista a cui aggiungo il valore della proprietà stessa
+
+                //prendo il nome della proprietà che farà da key nel buffer
+                var propName =  dataArray[prop].property;
+                if (!propertyBuffer[propName]){
+                    propertyBuffer[propName] = [];
+                    propertyBuffer[propName].push(dataArray[prop]);
+                }else{
+                    propertyBuffer[propName].push(dataArray[prop]);
+                }
+
+
+
+
+            }
+
+
+            //adesso faccio l'inverso: ricostruisco l'oggetto a partire dal buffer
+            var data = {};
+            for(var propName in propertyBuffer){
+
+                if (propertyBuffer[propName].length == 1) //se ce n'è solo una ne riprendo la property
+                {
+                    data[propName] =  propertyBuffer[propName][0].value;
+                }else{
+                    data[propName] = this.__constructArrayOfValues(propertyBuffer[propName]);
+
+                }
+            }
+            return data;
+        },
+        submit: function(e){
+
+        },
+        close: function(){
+            alert("close");
+        },
+        getBreadcrumbItems: function() {
+            var self = this;
+            return [
+                {
+                    pageTitle: "Fenealweb"
+                },
+                {
+                    icon: "glyphicon glyphicon-home",
+                    href: BASE
+                },
+                {
+                    label: "Ristroni quote CASSA EDILE"
+                    //href: ui.Navigation.instance().navigateUrl("editworker", "index", {})
+                }
+            ];
+        },
+        getToolbarButtons: function() {
+            return [
+            ];
+
+        },
+        createToolbar: function() {
+            var buttons = this.getToolbarButtons();
+
+            var $t = $("#toolbar");
+            if(!$t.toolbar("isToolbar")) {
+                $t.toolbar();
+            }
+
+            $t.toolbar("clear");
+            var size = buttons.length;
+            for(var i = 0; i < size; i++) {
+                var button = buttons[i];
+                $t.toolbar("add", button);
+            }
+        },
+        createBreadcrumbs: function() {
+            var items = this.getBreadcrumbItems();
+
+            var $b = $("#breadcrumbs");
+            if(!$b.breadcrumbs("isBreadcrumbs")) {
+                $b.breadcrumbs();
+            }
+
+            $b.breadcrumbs('clear');
+            $b.breadcrumbs('addAll', items);
+        },
+        createCharts: function() {
+            var graps = $('<div style="display: none" class="panel panel-primary row top-graphs p20 mb20"></div>').insertBefore($('#reportContainer'));
+            var thirdDiv = graps.append('<div class="col-xl-4"><div id="contatore-operazione"></div></div>');
+            var firstDiv = graps.append('<div class="col-xl-4"><div id="contatore"></div></div>');
+            var secondDiv = graps.append('<div class="col-xl-4"><div id="contatore-stato"></div></div>');
+        }
+    });
+
+    exports.RistorniDelegheBariCassaEdileAppView = RistorniDelegheBariCassaEdileAppView;
     exports.DelegheBariHomeRemoteView = DelegheBariHomeRemoteView;
     exports.ReportDelegheAppView = ReportDelegheAppView;
     exports.ProiettaDelegheAppView = ProiettaDelegheAppView;

@@ -19,11 +19,13 @@
                         <th>Doppione</th>
                         <th>Anomalia</th>
                         <th>Ultimo movimento</th>
+                        <th>Referente comunale</th>
+                        <th>Gestione Referente</th>
                     </tr>
                     </thead>
                     <tbody>
                         #foreach($delega in $deleghe)
-                        <tr data-delega-id="$delega.id">
+                        <tr data-delega-id="$delega.id"  class="$delega.managementContact">
                             <td class="">
                                 $delega.toDate($delega.protocolDate)
                             </td>
@@ -56,6 +58,17 @@
                             </td>
                             <td>
                                 $delega.lastMovement
+                            </td>
+                            <td>
+                                #if($delega.managementContact.completeName && $delega.managementContact.completeName != "")
+                                  $delega.managementContact.completeName
+                                #else
+                                    (Nessun referente)
+                                #end
+                            </td>
+                            <td>
+                                <a href="#" class="gestione-referente" style="text-decoration: underline;">Cambia&nbsp;<span class="glyphicon glyphicon-refresh"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="#" class="elimina-referente" style="text-decoration: underline;">Elimina&nbsp;<span class="glyphicon glyphicon-trash"></span></a>
                             </td>
                         </tr>
                         #end

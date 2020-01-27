@@ -77,6 +77,10 @@ public class ReportIscrittiController {
         }
     }
 
+
+
+
+
     @RequestMapping(value="/iscritti/reportforapp", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody

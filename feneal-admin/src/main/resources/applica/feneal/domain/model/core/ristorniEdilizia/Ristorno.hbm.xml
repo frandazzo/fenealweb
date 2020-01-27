@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.core.ristorniEdilizia.Ristorno" table="fenealweb_ristorni" >
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        <property name="dataRistorno" />
+        <property name="anno" />
+        <property name="ente" />
+        <property name="attachment" />
+        <property name="nomeAttachement" />
+
+
+    </class>
+</hibernate-mapping>

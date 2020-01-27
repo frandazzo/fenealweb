@@ -79,12 +79,12 @@
 
         var grid = null;
 
-        $("#countselectedrows").click(function () {
-
-            var selectedRows = grid.getSelectedRowsData();
-
-            alert(selectedRows.length);
-        });
+        // $("#countselectedrows").click(function () {
+        //
+        //     var selectedRows = grid.getSelectedRowsData();
+        //
+        //
+        // });
         "use strict";
 
         // Init Theme Core

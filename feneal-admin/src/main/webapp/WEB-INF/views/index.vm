@@ -506,6 +506,9 @@
                 if (window.appcontext.provinces.includes("bari"))
                     $("li.proietta-deleghe").show();
 
+                if (window.appcontext.provinces.includes("bari"))
+                    $("li.ristorni-puglia").show();
+
 
                 if (window.appcontext.provinces.includes("lecce"))
                     $("li.genera-deleghe").show();

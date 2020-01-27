@@ -44,6 +44,14 @@ table thead .sorting_desc { background: url('../../framework-resources/admin/the
     font-weight: bold;
 }
 
+.elimina-referente {
+    color: #d84c3b;
+}
+
+a.elimina-referente:hover {
+    color: red;
+}
+
 .full-width {
     width: 100%;
 }

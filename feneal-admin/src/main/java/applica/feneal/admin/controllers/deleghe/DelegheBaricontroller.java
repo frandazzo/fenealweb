@@ -1,11 +1,17 @@
 package applica.feneal.admin.controllers.deleghe;
 
 import applica.feneal.admin.fields.renderers.*;
+
 import applica.feneal.admin.form.renderers.ReportsSearchFormRenderer;
-import applica.feneal.admin.viewmodel.reports.UiDelega;
-import applica.feneal.domain.model.core.deleghe.UiDelegheReportSearchParams;
+
+
 import applica.feneal.domain.model.core.deleghe.bari.DelegaBari;
 import applica.feneal.domain.model.core.deleghe.bari.ProjectionDelegheFilter;
+import applica.feneal.domain.model.core.deleghe.bari.RistornoCassaEdileFilter;
+
+import applica.feneal.domain.model.core.ristorniEdilizia.RiepilogoRistornoPerLavoratore;
+
+import applica.feneal.services.impl.deleghe.DelegheBariRistorniService;
 import applica.feneal.services.impl.deleghe.DelegheBariService;
 import applica.framework.library.responses.ErrorResponse;
 import applica.framework.library.responses.FormResponse;
@@ -19,6 +25,9 @@ import applica.framework.widgets.FormDescriptor;
 import applica.framework.widgets.fields.Params;
 import applica.framework.widgets.fields.Values;
 import applica.framework.widgets.fields.renderers.DatePickerRenderer;
+
+import applica.framework.widgets.fields.renderers.FileFieldRenderer;
+import applica.framework.widgets.forms.renderers.DefaultFormRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -29,10 +38,7 @@ import org.springframework.web.servlet.ViewResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class DelegheBaricontroller {
@@ -43,6 +49,9 @@ public class DelegheBaricontroller {
     @Autowired
     private DelegheBariService delegheBariService;
 
+    @Autowired
+    private DelegheBariRistorniService delRistorniService;
+
     @RequestMapping(value="/deleghe/reportbari", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody
@@ -52,6 +61,18 @@ public class DelegheBaricontroller {
             List<DelegaBari> f =  delegheBariService.findDelegheBari(params.getLastDateStart(),params.getLastDateEnd(),params.getCompanyId());
 
             return new ValueResponse(delegheBariService.ConstructReportDelegheBari(f));
+        } catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
+
+    @RequestMapping(value="/deleghe/ristornibaricassaedile", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse ristorniDelegheCassaEdile(@RequestBody RistornoCassaEdileFilter params){
+        try {
+            List<RiepilogoRistornoPerLavoratore> r = delRistorniService.retriveListaRiepilogoRistorni(params);
+            return new ValueResponse(r);
         } catch(Exception ex){
             return new ErrorResponse(ex.getMessage());
         }
@@ -76,6 +97,76 @@ public class DelegheBaricontroller {
             e.printStackTrace();
             return new ErrorResponse(e.getMessage());
         }
+    }
+
+
+    @RequestMapping(value = "/deleghebari/referente", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse showPrintTessera(HttpServletRequest request) {
+
+        try {
+
+            Form form = new Form();
+            form.setRenderer(applicationContext.getBean(DefaultFormRenderer.class));
+            form.setIdentifier("referentedelegabari");
+
+            FormDescriptor formDescriptor = new FormDescriptor(form);
+            formDescriptor.addField("referente", String.class, "Referente", null, applicationContext.getBean(ReferenteForDelegaBariOptionalSelectorRenderer.class))
+                    .putParam(Params.ROW, "dt1")
+                    .putParam(Params.COLS, Values.COLS_12);
+
+
+            Map<String, Object> data = new HashMap<>();
+
+            form.setData(data);
+
+            FormResponse response = new FormResponse();
+
+            response.setContent(form.writeToString());
+
+            return response;
+        } catch (Exception e) {
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+    @RequestMapping(value = "/delegabari/{id}/managementcontact", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse managementContact(@PathVariable("id") Long delegaId, String newManagement, HttpServletRequest request) {
+
+        try {
+            delegheBariService.addContactForDelegaBari(delegaId, newManagement);
+
+            return new ValueResponse();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+
+
+    @RequestMapping(value = "/delegabari/{id}/deletecontact", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse deleteContact(@PathVariable("id") Long delegaId, HttpServletRequest request) {
+
+        try {
+            delegheBariService.deleteContactForDelegaBari(delegaId);
+
+            return new ValueResponse();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+
     }
 
 
@@ -116,6 +207,50 @@ public class DelegheBaricontroller {
 
             response.setContent(form.writeToString());
             response.setTitle("Report deleghe");
+
+            return response;
+        } catch (FormCreationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        } catch (CrudConfigurationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/ristornideleghebaricassaedile",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse searchviewDelegheBariCassaEdile(HttpServletRequest request) {
+        try{
+            Form form = new Form();
+            form.setRenderer(applicationContext.getBean(ReportsSearchFormRenderer.class));
+            form.setIdentifier("deleghebaricassaedilereport");
+
+            FormDescriptor formDescriptor = new FormDescriptor(form);
+
+            formDescriptor.addField("competenceYear", String.class, "Anno di competenza", null, applicationContext.getBean(YearSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_4)
+                    .putParam(Params.ROW, "dt8")
+                    .putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("period", String.class, "Periodo", null, applicationContext.getBean(PeriodSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_4)
+                    .putParam(Params.ROW, "dt8")
+                    .putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("parithetic", String.class, "Ente", null, applicationContext.getBean(ParitheticRistorniDelegheBariSelectFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_4)
+                    .putParam(Params.ROW, "dt8")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+            formDescriptor.addField("file1", Date.class, "File Deleghe", null,applicationContext.getBean(FileFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt1")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+            FormResponse response = new FormResponse();
+
+            response.setContent(form.writeToString());
+            response.setTitle("Ristorni deleghe Bari");
 
             return response;
         } catch (FormCreationException e) {

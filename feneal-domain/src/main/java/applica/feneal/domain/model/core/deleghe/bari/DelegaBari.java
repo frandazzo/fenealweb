@@ -3,6 +3,7 @@ package applica.feneal.domain.model.core.deleghe.bari;
 import applica.feneal.domain.model.core.Semester;
 import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
+import applica.feneal.domain.model.core.ristorniEdilizia.Referenti;
 import applica.feneal.domain.model.utils.SecuredDomainEntity;
 import org.springframework.util.StringUtils;
 
@@ -24,7 +25,15 @@ public class DelegaBari extends SecuredDomainEntity {
     private Azienda workerCompany;
     private Lavoratore worker;
     private String lastMovement;
+    private Referenti managementContact;
 
+    public Referenti getManagementContact() {
+        return managementContact;
+    }
+
+    public void setManagementContact(Referenti managementContact) {
+        this.managementContact = managementContact;
+    }
 
     public boolean checkIfCanBePresentedUntilSemesterEnd(){
 

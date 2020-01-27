@@ -124,6 +124,9 @@ public class PermissionsSetup implements AppSetup {
         configureCrudSecurityConfigurer("importationsreport", PermissionMap.staticPermissions("importationsreport"));
 
 
+        registerPermissions("referenti");
+        configureCrudSecurityConfigurer("referenti", PermissionMap.staticPermissions("referenti"));
+
 //        registerPermissions("clinicalcategory");
 //        registerPermissions("clinicalcenter");
 //        registerPermissions("teleconsulto");
