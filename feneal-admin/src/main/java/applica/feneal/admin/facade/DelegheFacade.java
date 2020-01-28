@@ -141,6 +141,8 @@ public class DelegheFacade {
             if (delega.getCancelReason() != null)
                 d.setDelegaCausaleAnnullamento(delega.getCancelReason().getDescription());
 
+            if (!StringUtils.isEmpty(delega.getNomeattachment()))
+                d.setDelegaScansione(delega.getNomeattachment());
 
             d.setValidityDate(delega.getValidityDate());
             d.setDelegaDataDocumento(delega.getDocumentDate());

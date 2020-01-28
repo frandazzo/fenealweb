@@ -175,7 +175,7 @@ define([
                                     key: "lavoratoreNomeCompleto"
                                 })
                             })
-                            dataSource.load().done((r)=>{
+                            dataSource.load().done(function(r){
                                 selectedrows = r;
 
                             })
@@ -292,7 +292,7 @@ define([
                                     key: "lavoratoreNomeCompleto"
                                 })
                             })
-                            dataSource.load().done((r)=>{
+                            dataSource.load().done(function(r){
                                 selectedrows = r;
 
                             })
@@ -1043,7 +1043,7 @@ define([
                                     key: "lavoratoreNomeCompleto"
                                 })
                             })
-                            dataSource.load().done((r)=>{
+                            dataSource.load().done(function(r){
                                 selectedrows = r;
 
                             })
@@ -1159,10 +1159,7 @@ define([
                                     key: "lavoratoreNomeCompleto"
                                 })
                             })
-                            dataSource.load().done((r)=>{
-                                selectedrows = r;
-
-                            })
+                            dataSource.load().done(function(r){selectedrows=r;})
                         }
 
                         if (selectedrows.length == 0) {
@@ -1935,7 +1932,7 @@ define([
                                     key: "lavoratoreNomeCompleto"
                                 })
                             })
-                            dataSource.load().done((r)=>{
+                            dataSource.load().done(function(r){
                                 selectedrows = r;
 
                             })
@@ -2051,7 +2048,7 @@ define([
                                     key: "lavoratoreNomeCompleto"
                                 })
                             })
-                            dataSource.load().done((r)=>{
+                            dataSource.load().done(function(r){
                                 selectedrows = r;
 
                             })
@@ -2816,7 +2813,7 @@ define([
                                     key: "lavoratoreNomeCompleto"
                                 })
                             })
-                            dataSource.load().done((r)=>{
+                            dataSource.load().done(function(r){
                                 selectedrows = r;
 
                             })
@@ -2934,9 +2931,8 @@ define([
                                     key: "lavoratoreNomeCompleto"
                                 })
                             })
-                            dataSource.load().done((r)=>{
+                            dataSource.load().done(function(r){
                                 selectedrows = r;
-
                             })
                         }
 
@@ -4088,7 +4084,7 @@ define([
                                     key: "lavoratoreNomeCompleto"
                                 })
                             })
-                            dataSource.load().done((r)=>{
+                            dataSource.load().done(function(r){
                                 selectedrows = r;
 
                             })
@@ -4211,7 +4207,7 @@ define([
                                     key: "lavoratoreNomeCompleto"
                                 })
                             })
-                            dataSource.load().done((r)=>{
+                            dataSource.load().done(function(r){
                                 selectedrows = r;
 
                             })

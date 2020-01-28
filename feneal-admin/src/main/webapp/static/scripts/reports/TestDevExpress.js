@@ -17,7 +17,7 @@
                     key: "lavoratoreNomeCompleto"
                 })
             })
-            dataSource.load().done((r)=>{
+            dataSource.load().done(function(r){
                 data = r;
 
             })
