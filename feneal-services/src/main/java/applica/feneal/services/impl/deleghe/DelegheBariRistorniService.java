@@ -53,8 +53,12 @@ public class DelegheBariRistorniService {
         File temp2 = File.createTempFile("import_ristorni_cassaedile","");
         temp2.delete();
         temp2.mkdir();
+
+
         //creo una cartella corrente temporanea che alla fine sarà zippata
         //e restituita
+
+
         File temp = File.createTempFile("LogImportazioneRistornoCassaEdileBari","");
         temp.delete();
         temp.mkdir();

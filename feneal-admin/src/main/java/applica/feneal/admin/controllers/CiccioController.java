@@ -31,8 +31,8 @@ public class CiccioController {
         try{
             Security.manualLogin("fenealgrosseto","1_3_5grossetofeneal");
 
-            params.setDatefromMonthReport("10");
-            params.setDatefromYearReport("2019");
+            params.setDatefromMonthReport("1");
+            params.setDatefromYearReport("2018");
             params.setDatetoMonthReport("1");
             params.setDatetoYearReport("2020");
             params.setFirm("");
