@@ -29,5 +29,6 @@
 		<property name="surnamename" />
 		<property name="companyId" type="long" />
 		<property name="ultimaComunicazione"/>
+		<property name="surnamenamebirth"/>
 	</class>
 </hibernate-mapping>

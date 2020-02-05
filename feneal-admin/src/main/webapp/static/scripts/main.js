@@ -47,7 +47,8 @@ require([
         "reports/reportQuoteVareseController",
     "importDeleghe/importDelegheMilController",
     "comunicazioni/comunicazioniController",
-    "reports/reportRisorseController"],
+    "reports/reportRisorseController",
+    "ristorniBari/storicoRistorniBariController"],
     function(fmodel,_p, core, ui, fviews, fcontrollers, fhelpers,
                                                  controllers, usercontroller, 
                                                  lavController, listeLavoroController, azController, azDocController,
@@ -71,7 +72,8 @@ require([
              quoteReportController,
              delegheMilController,
              comunicazioniController,
-             risorseController
+             risorseController,
+             storicoRistorniBariController
              ) {
 
     $.datepicker.setDefaults( $.datepicker.regional[ "IT" ] );
@@ -189,6 +191,8 @@ require([
 
         //ristorni deleghe bari
         ui.Navigation.instance().registerController("ristorniquotedeleghebari",function (){ return new delegheBariController.RistorniDelegheCasseEdileController(); },"singleton");
+        ui.Navigation.instance().registerController("storicoristorni", function() { return new storicoRistorniBariController.StoricoRistorniBariController(); }, "singleton");
+        ui.Navigation.instance().registerController("dettaglioristornobari", function() { return new storicoRistorniBariController.RistornoBariDettaglioController; }, "singleton");
 
 
 

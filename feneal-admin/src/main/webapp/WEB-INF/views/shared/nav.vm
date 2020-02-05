@@ -282,14 +282,14 @@
 ##
 ##                <li class="ristorni-puglia" style="display: none">
 ##                    <a href="#/storicoristorni" class="framework-navigation">
-##                        <span class="fa fa-reply"></span>
-##                        <span class="sidebar-title">Storico ristorni</span>
+##                        <span class="fa fa-check-square-o"></span>
+##                        <span class="sidebar-title">Storico ristorni edilizia</span>
 ##                    </a>
 ##                </li>
 ##                <li class="ristorni-puglia" style="display: none">
 ##                    <a href="#/ristorniquotedeleghebari" class="framework-navigation">
-##                        <span class="fa fa-check-square-o"></span>
-##                        <span class="sidebar-title">Ristorni quote</span>
+##                        <span class="fa fa-reply"></span>
+##                        <span class="sidebar-title">Ristorni quote EDILIZIA</span>
 ##                    </a>
 ##                </li>
 ##

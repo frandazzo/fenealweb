@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="applica.feneal.domain.model.core.ristorniEdilizia.Ristorno" table="fenealweb_ristorni" >
+    <class name="applica.feneal.domain.model.core.ristorniEdilizia.Ristorno" table="fenealweb_ristornibari" >
         <id name="id" type="long">
             <generator class="native" />
         </id>
@@ -9,7 +9,9 @@
         <property name="anno" />
         <property name="ente" />
         <property name="attachment" />
-        <property name="nomeAttachement" />
+        <property name="attachmentName" />
+        <property name="quoteserialaized"  type="text" length="2099999999"/>
+        <property name="companyId" type="long" />
 
 
     </class>

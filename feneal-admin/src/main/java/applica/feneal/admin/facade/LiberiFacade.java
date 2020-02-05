@@ -347,6 +347,27 @@ public class LiberiFacade {
         outStream.close();
     }
 
+    public void downloadRistorniDeleghe(String pathFile, HttpServletResponse response) throws IOException {
+
+        InputStream is = new FileInputStream(pathFile);
+
+        response.setHeader("Content-Disposition", "attachment;filename=stampaRistorniDeleghe.xlsx");
+        //response.setContentType("application/zip");
+        response.setStatus(200);
+
+        OutputStream outStream = response.getOutputStream();
+
+        byte[] buffer = new byte[4096];
+        int bytesRead = -1;
+
+        while ((bytesRead = is.read(buffer)) != -1) {
+            outStream.write(buffer, 0, bytesRead);
+        }
+
+        is.close();
+        outStream.close();
+    }
+
     public ListaLavoro createListalavoro(List<UiLibero> liberi, String description) throws Exception {
         List<LiberoDbNazionale> com = convertUiToLiberi(liberi);
         return lSrv.createListaFromLiberi(com, description);

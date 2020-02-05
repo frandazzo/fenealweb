@@ -2,21 +2,14 @@ package applica.feneal.services.impl.deleghe;
 
 import applica.feneal.domain.data.core.deleghe.DelegaBariRepository;
 import applica.feneal.domain.data.core.ristorniEdilizia.ReferentiRepository;
-import applica.feneal.domain.model.core.deleghe.ImportDeleghe;
-import applica.feneal.domain.model.core.deleghe.ImportDelegheValidatorForBari;
 import applica.feneal.domain.model.core.deleghe.bari.*;
 import applica.feneal.domain.model.core.ristorniEdilizia.Referenti;
-import applica.feneal.domain.model.core.ristorniEdilizia.RiepilogoRistornoPerLavoratore;
 import applica.feneal.domain.model.core.ristorniEdilizia.UiReferenti;
 import applica.framework.Filter;
 import applica.framework.LoadRequest;
-import applica.framework.management.excel.ExcelInfo;
-import applica.framework.management.excel.ExcelReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 @Service

@@ -1,13 +1,17 @@
 package applica.feneal.domain.model.core.ristorniEdilizia;
 
 import applica.feneal.domain.model.utils.SecuredDomainEntity;
+import applica.feneal.domain.model.utils.SerializableDomainEntity;
 import applica.framework.AEntity;
 
-public class Referenti extends AEntity {
+public class Referenti extends SerializableDomainEntity {
 
     private String completeName;
     private String city;
     private int proRataShare;
+
+
+
 
     public String getCompleteName() {
         return completeName;

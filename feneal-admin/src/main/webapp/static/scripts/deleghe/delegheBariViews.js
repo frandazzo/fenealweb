@@ -1417,6 +1417,11 @@ define([
             self.formView.on("submit", function(){
                 var data = self.normalizeSubmitResult(self.formView.form);
 
+                var errors = self.validate(data);
+                if (errors.errors && errors.errors.length){
+                    self.formView.form.handleValidationErrors(errors);
+                    return;
+                }
                 var factory = new RepositoryServiceFactory();
                 var svc = factory.searchRistorniDelegheCassaEdile(data);
 
@@ -1427,12 +1432,12 @@ define([
                     $.loader.hide({parent:'body'});
 
                     //inizializzo la griglia devexpress
-                    var grid = self.initGrid(response);
-                    //una volta ottenuti i risultati la griglia devexpress mostra una loader
-                    //di attesa per la renderizzazione degli stessi! in quel momento rendo
-                    //visibile l'intera area
-                    //scrollando fino a rendere visibile la griglia
-                    $('html, body').animate({scrollTop: $('#reportContainer').offset().top - 160}, 1400, "swing");
+                    self.initTabsPanel();
+                    var grid = self.initGridReferenti(response.listaReferenti);
+                    var grid2 = self.initGridQuote(response.listaQuote);
+
+
+                    $('html, body').animate({scrollTop: $('#riepilogoReferenti').offset().top - 160}, 1400, "swing");
 
 
                     // aggiungo tasto SALVA RISTORNO
@@ -1448,6 +1453,7 @@ define([
 
                             var container2 = $('<div class="save-ristorno-ctn"><span>Salvare il ristorno?</span></div>');
 
+                            var params = {};
 
                             var dialog = container2.modalDialog({
                                 autoOpen: true,
@@ -1461,30 +1467,109 @@ define([
                                         command: function() {
 
                                             dialog.modalDialog("close");
-                                            $.notify.success("SIMULAZIONE SALVATAGGIO REFERENTE");
 
-                                            // var svc = new  fmodel.AjaxService();
-                                            // svc.set("url", BASE + "delegabari/" + delegaId +"/deletecontact");
-                                            // svc.set("data", { });
-                                            // svc.set("method", "POST");
-                                            //
-                                            // svc.on("load", function(response){
-                                            //     $.loader.hide({parent:'body'});
-                                            //     dialog.modalDialog("close");
-                                            //     $.notify.success("Il referente della delega &#232; stato eliminato correttamente");
-                                            //
-                                            //     ui.Navigation.instance()
-                                            //         .navigate("deleghebarihome", "index", {
-                                            //             workerId: workerId
-                                            //         });
-                                            // });
-                                            // svc.on("error", function(error){
-                                            //     $.loader.hide({parent:'body'});
-                                            //     $.notify.error(error);
-                                            // });
-                                            //
-                                            // svc.load();
-                                            // $.loader.show({parent:'body'});
+                                            var listReferenti = response.listaReferenti;
+                                            var listQuote = response.listaQuote;
+
+                                            var data1 = self.normalizeSubmitResult(self.formView.form);
+
+                                             params = {
+                                                competenceYear:data1.competenceYear,
+                                                period:data1.period,
+                                                parithetic:data1.parithetic,
+                                                file1:data1.file1,
+                                                attachmentName: data1.nomefile1,
+                                                referentiList: listReferenti,
+                                                quoteAssocList: listQuote
+                                            }
+
+
+                                            var svc = new  fmodel.AjaxService();
+                                            svc.set("url", BASE + "deleghe/importristorni");
+                                            svc.set("contentType", "application/json");
+                                            svc.set("data", JSON.stringify( params));
+                                            svc.set("method", "POST");
+
+                                            svc.on("load", function(response){
+                                                $.loader.hide({parent:'body'});
+                                                dialog.modalDialog("close");
+                                                $.notify.success("Il ristorno è stato salvato correttamente");
+
+
+
+                                            });
+                                            svc.on("error", function(error){
+                                                $.loader.hide({parent:'body'});
+                                                $.notify.error(error);
+
+                                            });
+
+                                            svc.load();
+                                            $.loader.show({parent:'body'});
+                                        }
+                                    }
+                                }
+                            });
+
+                        });
+                    }
+
+                    // aggiungo tasto SALVA RISTORNO
+                    if ($(".print-tessera").length == 0) {
+                        var delGeneration = '<div class="col-md-12 col-xs-3 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Stampa tessera">' +
+                            '<button type="button" class="btn btn-primary full-width print-tessera">' +
+                            '<span class="glyphicon glyphicon-print" aria-hidden="true"></span>' +
+                            '</button></div>';
+
+                        $(".toolbox-buttons-cnt").append($(delGeneration));
+                        $(".print-tessera").parent().tooltip();
+                        $(".print-tessera").click(function() {
+
+                            var container2 = $('<div class="save-ristorno-ctn"><span>Stampare il ristorno?</span></div>');
+
+                            var params = {};
+
+                            var dialog = container2.modalDialog({
+                                autoOpen: true,
+                                title: "Stampa Dettaglio Ristorno",
+                                destroyOnClose: true,
+                                height: 120,
+                                width: 450,
+                                buttons:{
+                                    Salva: {
+                                        primary: true,
+                                        command: function() {
+
+                                            dialog.modalDialog("close");
+                                            var listQuote = response.listaQuote;
+
+                                            params = {
+
+                                                listQuote: listQuote
+                                            }
+
+
+                                            var svc = new  fmodel.AjaxService();
+                                            svc.set("url", BASE + "deleghe/stamparistorni");
+                                            svc.set("contentType", "application/json");
+                                            svc.set("data", JSON.stringify( params));
+                                            svc.set("method", "POST");
+
+                                            svc.on("load", function(response){
+                                                $.loader.hide({parent:'body'});
+
+                                                location.href = BASE + "deleghe/print?path="+encodeURIComponent(response);
+                                                dialog.modalDialog("close");
+
+                                            });
+                                            svc.on("error", function(error){
+                                                $.loader.hide({parent:'body'});
+                                                $.notify.error(error);
+
+                                            });
+
+                                            svc.load();
+                                            $.loader.show({parent:'body'});
                                         }
                                     }
                                 }
@@ -1519,11 +1604,22 @@ define([
 
 
         },
-        initGrid : function(responseData){
+        initTabsPanel: function(){
+            var self = this;
+
+            self.dxTab =$("#tabpanel-container").dxTabPanel({
+                loop: false,
+                animationEnabled: true,
+                swipeEnabled: true,
+                deferRendering: false,
+
+            }).dxTabPanel("instance");
+        },
+        initGridReferenti : function(responseData){
 
 
 
-            var grid = $('#reportContainer').dxDataGrid({
+            var grid = $('#riepilogoReferenti').dxDataGrid({
                 dataSource:responseData,
                 columns:[
                     { dataField:"nominativo",  caption: "Nominativo referente",visible : true,visibleIndex: 1},
@@ -1579,35 +1675,134 @@ define([
                 allowColumnReordering:true,
                 allowColumnResizing:true,
                 columnAutoWidth: true,
-                selection:{
-                    mode:"multiple",
-                    showCheckBoxesMode: "always"
-                },
-                hoverStateEnabled: true
+                hoverStateEnabled: true,
 
-                // masterDetail: {
-                //     enabled: true,
-                //     template: function(container, options) {
-                //         var currentData = options.data;
-                //         container.addClass("internal-grid-container");
-                //         $("<div>").text(currentData.delegaSettore  + " Dettagli:").appendTo(container);
-                //         $("<div>")
-                //             .addClass("internal-grid")
-                //             .dxDataGrid({
-                //                 columnAutoWidth: true,
-                //                 columns: [{
-                //                     dataField: "id"
-                //                 }, {
-                //                     dataField: "description",
-                //                     caption: "Description",
-                //                     calculateCellValue: function(rowData) {
-                //                         return rowData.description + "ciao ciao";
-                //                     }
-                //                 }],
-                //                 dataSource: currentData.details
-                //             }).appendTo(container);
-                //     }
-                // }
+                masterDetail: {
+                    enabled: true,
+                    template: function(container, options) {
+                        var currentData = options.data;
+
+                        container.addClass("internal-grid-container");
+                        $("<div>").text("Quote Associative").appendTo(container);
+                        $("<div>")
+                            .addClass("internal-grid")
+                            .dxDataGrid({
+                                columnAutoWidth: true,
+                                columns: [
+                                    { dataField:"lavoratore.surname",caption:"Cognome",  visible : true, visibleIndex: 0},
+                                    { dataField:"lavoratore.name", caption:"Nome", visible : true, visibleIndex: 1},
+                                    { dataField:"ultimaDelega.protocolDate", caption:"Data protocollo", visible : true, visibleIndex: 2},
+                                    { dataField:"ultimaDelega.protocolNumber", caption:"Numero protocollo", visible : true, visibleIndex: 3},
+                                    { dataField:"ultimaDelega.workerCompany.description", caption:"Azienda", visible : true, visibleIndex: 4},
+                                    { dataField:"quotaAssoc", caption:"Quota", visible : true, visibleIndex: 9}
+                                ],
+                                dataSource: currentData.listQuote
+                            }).appendTo(container);
+                    }
+                }
+
+            }).dxDataGrid("instance");
+
+            return grid;
+
+        },
+        initGridQuote : function(responseData){
+
+
+
+            var grid = $('#riepilogoQuote').dxDataGrid({
+                dataSource:responseData,
+                columns:[
+                    { dataField:"lavoratore.surname",  caption: "Cognome",visible : true,visibleIndex: 1},
+                    { dataField:"lavoratore.name", caption: "Nome",visible : true,visibleIndex: 2},
+                    { dataField:"lavoratore.fiscalcode",  caption: "Codice Fiscale",visible : true,visibleIndex: 3},
+                    { dataField:"quotaAssoc",  caption: "Importo Quota",visible : true,visibleIndex: 4}
+
+                ],
+
+                summary: {
+                    totalItems: [{
+                        column: "nominativo",
+                        summaryType: "count",
+                        customizeText: function(data) {
+                            return "Referenti totali: " + data.value;
+                        }
+                    }]
+                },
+                // columnChooser: {
+                //     enabled: true
+                // },
+                // onCellClick: function (clickedCell) {
+                //     alert(clickedCell.column.dataField);
+                // },
+                "export": {
+                    enabled: true,
+                    fileName: "Riepilogo Quote Associative",
+                    allowExportSelectedData: true
+                },
+                stateStoring: {
+                    enabled: false,
+                    type: "localStorage",
+                    storageKey: "riepilogoQuoteAssociativeBari"
+                },
+                paging:{
+                    pageSize: 35
+                },
+                sorting:{
+                    mode:"multiple"
+                },
+                onContentReady: function (e) {
+                    var columnChooserView = e.component.getView("columnChooserView");
+                    if (!columnChooserView._popupContainer) {
+                        columnChooserView._initializePopupContainer();
+                        columnChooserView.render();
+                        columnChooserView._popupContainer.option("dragEnabled", false);
+                    }
+                },
+                onRowPrepared: function (e) {
+                    if (e.rowType == 'data' && e.data.giorni >= 40) {
+                        e.rowElement[0].style.backgroundColor = '#70ca63';
+                    }
+                },
+                showBorders: true,
+                allowColumnReordering:true,
+                allowColumnResizing:true,
+                columnAutoWidth: true,
+                hoverStateEnabled: true,
+
+                masterDetail: {
+                    enabled: true,
+                    template: function(container, options) {
+                        var currentData = options.data;
+
+                        container.addClass("internal-grid-container");
+                        $("<div>").text("Dettagli Quote Associative").appendTo(container);
+                        $("<div>")
+                            .addClass("internal-grid")
+                            .dxDataGrid({
+                                columnAutoWidth: true,
+                                columns: [
+                                    { dataField:"workerCompany.description", visible : true, caption:"Azienda"},
+                                    { dataField:"protocolDate", dataType:'date', visible : true, caption:"Data protocollo"},
+                                    { dataField:"protocolNumber", visible : true, caption:"Num. Protocollo"},
+                                    { dataField:"signup", visible : true, caption:"Iscrizione"},
+                                    { dataField:"revocation", visible : true, caption:"Revoca"},
+                                    { dataField:"duplicate", visible : true, caption:"Doppione"},
+                                    { dataField:"anomaly", visible : false, caption:"Anomalia"},
+                                    { dataField:"effectDate", visible : true,dataType:'date', caption:"Decorrenza"},
+                                    { dataField:"lastMovement", visible : true, caption:"Ult. mov."},
+                                    { dataField:"managementContact.completeName", visible : true, caption:"Referente"}
+
+                                ],
+                                onRowPrepared: function (e) {
+                                    if (e.rowType == 'data' &&  e.rowIndex == 0) {
+                                        e.rowElement[0].style.backgroundColor = '#FFFF00';
+                                    }
+                                },
+                                dataSource: currentData.delegheBari
+                            }).appendTo(container);
+                    }
+                }
 
             }).dxDataGrid("instance");
 
@@ -1673,6 +1868,29 @@ define([
         },
         submit: function(e){
 
+        },
+        validate:function(data){
+
+            var result = {};
+            result.errors = [];
+
+                if (!data.competenceYear )
+                    result.errors.push(
+                        {
+                            property: "competenceYear",
+                            message: "Anno mancante"
+                        }
+                    );
+
+            if (!data.file1 )
+                result.errors.push(
+                    {
+                        property: "file1",
+                        message: "File mancante"
+                    }
+                );
+
+            return result;
         },
         close: function(){
             alert("close");

@@ -6,15 +6,24 @@ import applica.framework.AEntity;
 
 public class RistornoItem extends AEntity {
 
-    private Ristorno idRistorno;
+    private long idRistorno;
     private Referenti referente;
     private float importoTot;
+    private String listQuote;
 
-    public Ristorno getIdRistorno() {
+    public String getListQuote() {
+        return listQuote;
+    }
+
+    public void setListQuote(String listQuote) {
+        this.listQuote = listQuote;
+    }
+
+    public long getIdRistorno() {
         return idRistorno;
     }
 
-    public void setIdRistorno(Ristorno idRistorno) {
+    public void setIdRistorno(long idRistorno) {
         this.idRistorno = idRistorno;
     }
 

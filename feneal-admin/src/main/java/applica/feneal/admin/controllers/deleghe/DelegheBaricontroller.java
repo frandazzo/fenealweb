@@ -1,15 +1,19 @@
 package applica.feneal.admin.controllers.deleghe;
 
+import applica.feneal.admin.facade.DelegheBariFacade;
+import applica.feneal.admin.facade.LiberiFacade;
 import applica.feneal.admin.fields.renderers.*;
 
+import applica.feneal.admin.fields.renderers.empty.EmptyFieldRenderer;
 import applica.feneal.admin.form.renderers.ReportsSearchFormRenderer;
 
 
-import applica.feneal.domain.model.core.deleghe.bari.DelegaBari;
-import applica.feneal.domain.model.core.deleghe.bari.ProjectionDelegheFilter;
-import applica.feneal.domain.model.core.deleghe.bari.RistornoCassaEdileFilter;
+import applica.feneal.admin.form.renderers.RistorniBariFormRenderer;
+import applica.feneal.domain.model.core.deleghe.bari.*;
 
-import applica.feneal.domain.model.core.ristorniEdilizia.RiepilogoRistornoPerLavoratore;
+
+import applica.feneal.domain.model.core.ristorniEdilizia.QuotaAssociativaBari;
+import applica.feneal.domain.model.core.ristorniEdilizia.RistornoBariObject;
 
 import applica.feneal.services.impl.deleghe.DelegheBariRistorniService;
 import applica.feneal.services.impl.deleghe.DelegheBariService;
@@ -26,7 +30,7 @@ import applica.framework.widgets.fields.Params;
 import applica.framework.widgets.fields.Values;
 import applica.framework.widgets.fields.renderers.DatePickerRenderer;
 
-import applica.framework.widgets.fields.renderers.FileFieldRenderer;
+
 import applica.framework.widgets.forms.renderers.DefaultFormRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -37,6 +41,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ViewResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -51,6 +56,46 @@ public class DelegheBaricontroller {
 
     @Autowired
     private DelegheBariRistorniService delRistorniService;
+
+    @Autowired
+    private DelegheBariFacade delBariFac;
+
+    @Autowired
+    private LiberiFacade liberiReportFac;
+
+
+
+
+    @RequestMapping(value="/deleghe/stamparistorni", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse stampaDettaglioRistorni(@RequestBody StampaRistorniBariParams params){
+
+        try {
+
+            String path = delBariFac.printRistorno(params.getListQuote());
+
+            return new ValueResponse(path);
+        } catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/deleghe/print", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public void printDettaglioRistorni(String path, HttpServletResponse response) {
+        try {
+            liberiReportFac.downloadRistorniDeleghe(path, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(500);
+        }
+
+    }
+
+
+
+
 
     @RequestMapping(value="/deleghe/reportbari", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
@@ -71,8 +116,21 @@ public class DelegheBaricontroller {
     public @ResponseBody
     SimpleResponse ristorniDelegheCassaEdile(@RequestBody RistornoCassaEdileFilter params){
         try {
-            List<RiepilogoRistornoPerLavoratore> r = delRistorniService.retriveListaRiepilogoRistorni(params);
+            RistornoBariObject r = delRistorniService.retriveListaRiepilogoRistorni(params);
             return new ValueResponse(r);
+        } catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
+
+    @RequestMapping(value="/deleghe/importristorni", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse importRistorniDelegheBari(@RequestBody ImportRistorniDelegheBari params){
+        try {
+
+           String a =delRistorniService.importRistorno(params);
+            return new ValueResponse(a);
         } catch(Exception ex){
             return new ErrorResponse(ex.getMessage());
         }
@@ -224,7 +282,7 @@ public class DelegheBaricontroller {
     SimpleResponse searchviewDelegheBariCassaEdile(HttpServletRequest request) {
         try{
             Form form = new Form();
-            form.setRenderer(applicationContext.getBean(ReportsSearchFormRenderer.class));
+            form.setRenderer(applicationContext.getBean(RistorniBariFormRenderer.class));
             form.setIdentifier("deleghebaricassaedilereport");
 
             FormDescriptor formDescriptor = new FormDescriptor(form);
@@ -242,7 +300,11 @@ public class DelegheBaricontroller {
                     .putParam(Params.ROW, "dt8")
                     .putParam(Params.FORM_COLUMN, " ");
 
-            formDescriptor.addField("file1", Date.class, "File Deleghe", null,applicationContext.getBean(FileFieldRenderer.class))
+            formDescriptor.addField("file1", Date.class, "File Deleghe", null,applicationContext.getBean(DocumentFileRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt1")
+                    .putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("nomefile1", Date.class, "", null,applicationContext.getBean(EmptyFieldRenderer.class))
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt1")
                     .putParam(Params.FORM_COLUMN, " ");

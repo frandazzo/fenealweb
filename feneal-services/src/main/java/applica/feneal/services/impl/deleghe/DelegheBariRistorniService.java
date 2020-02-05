@@ -1,26 +1,35 @@
 package applica.feneal.services.impl.deleghe;
 
+import applica.feneal.domain.data.Command;
+import applica.feneal.domain.data.core.ristorniEdilizia.ReferentiRepository;
+import applica.feneal.domain.data.core.ristorniEdilizia.RistornoRepository;
 import applica.feneal.domain.model.core.deleghe.ImportDeleghe;
 import applica.feneal.domain.model.core.deleghe.ImportRistorniCassaEdileValidatorForBari;
 import applica.feneal.domain.model.core.deleghe.ImportRistorniEdilCassaValidatorFoBari;
 import applica.feneal.domain.model.core.deleghe.bari.DelegaBari;
+import applica.feneal.domain.model.core.deleghe.bari.ImportRistorniDelegheBari;
 import applica.feneal.domain.model.core.deleghe.bari.RistornoCassaEdileFilter;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
-import applica.feneal.domain.model.core.ristorniEdilizia.RiepilogoRistornoPerLavoratore;
+import applica.feneal.domain.model.core.ristorniEdilizia.*;
 import applica.feneal.services.LavoratoreService;
+import applica.feneal.services.impl.quote.ErrorsCounter;
+import applica.framework.LoadRequest;
 import applica.framework.fileserver.FileServer;
 import applica.framework.management.excel.ExcelInfo;
 import applica.framework.management.excel.ExcelReader;
 import applica.framework.management.csv.RowData;
 import applica.feneal.domain.model.User;
 import applica.framework.security.Security;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +48,15 @@ public class DelegheBariRistorniService {
     private DelegheBariService delBariServ;
 
     @Autowired
+    private RistornoRepository ristornoRep;
+
+    @Autowired
     private Security sec;
 
-    public List<RiepilogoRistornoPerLavoratore> retriveListaRiepilogoRistorni(RistornoCassaEdileFilter params) throws Exception {
+    @Autowired
+    private ReferentiRepository refRep;
+
+    public RistornoBariObject retriveListaRiepilogoRistorni(RistornoCassaEdileFilter params) throws Exception {
         ImportDeleghe file1 = new ImportDeleghe();
         file1.setFile1(params.getFile1());
         String ente = params.getParithetic();
@@ -62,7 +77,7 @@ public class DelegheBariRistorniService {
         File temp = File.createTempFile("LogImportazioneRistornoCassaEdileBari","");
         temp.delete();
         temp.mkdir();
-        List<RiepilogoRistornoPerLavoratore> list = new ArrayList<>();
+        List<QuotaAssociativaBari> list = new ArrayList<>();
         ExcelInfo data = new ExcelInfo();
 
 
@@ -80,9 +95,78 @@ public class DelegheBariRistorniService {
             
             list = createListEdilcassa(data);
         }
-       
 
-        return list;
+       //CREO LA LISTA DELLE DELEGHE "VINCENTI",
+        // OVVERO LE DELEGHE SU SUI VERRANO CALCOLATE LE VARIE QUOTE DA IMPORTARE
+
+        List<QuotaAssociativaBari> quoteSelezionate = new ArrayList<>();
+
+            for( QuotaAssociativaBari del : list){
+                if(del.getUltimaDelega() != null && del.getUltimaDelega().getManagementContact() != null)
+                    quoteSelezionate.add(del);
+            }
+
+        //CREO LA LISTA DEI REFERENTI DA MOSTRARE NELLA VIEW
+            List<UiReferenti> listReferenti = new ArrayList<>();
+
+            for(QuotaAssociativaBari del : quoteSelezionate){
+
+                    Referenti ref = del.getUltimaDelega().getManagementContact();
+                    float quotaAssoc = del.getQuotaAssoc();
+                    boolean exist = isCurrentReferenteInList(ref, listReferenti);
+
+                    if(exist){
+                        for(UiReferenti listRef : listReferenti){
+                            String r = listRef.getNominativo();
+
+                            if(r.equals(ref.getCompleteName())){
+                                float currentImp = listRef.getImportoTot();
+                                listRef.setImportoTot(currentImp + getNewImport(ref, quotaAssoc));
+
+                                List<QuotaAssociativaBari> d = listRef.getListQuote();
+                                d.add(del);
+                                listRef.setListQuote(d);
+                            }
+                        }
+                    }else {
+                        UiReferenti newRef = new UiReferenti();
+
+                        List<QuotaAssociativaBari> d = new ArrayList<>();
+                        d.add(del);
+
+                        newRef.setNominativo(ref.getCompleteName());
+                        newRef.setListQuote(d);
+                        newRef.setComune(ref.getCity());
+                        newRef.setImportoTot(getNewImport(ref,quotaAssoc));
+                        listReferenti.add(newRef);
+                    }
+            }
+
+
+         RistornoBariObject obj = new RistornoBariObject();
+            obj.setListaQuote(list);
+            obj.setListaReferenti(listReferenti);
+
+        return obj;
+    }
+
+    private float getNewImport(Referenti ref, float quotaAssoc) {
+        float NewImpot = ((quotaAssoc*ref.getProRataShare())/100);
+        return NewImpot;
+    }
+
+    private boolean isCurrentReferenteInList(Referenti ref, List<UiReferenti> listReferenti) {
+        boolean flag = false;
+
+        for(UiReferenti lista : listReferenti){
+            String r = lista.getNominativo();
+
+            if(r.equals(ref.getCompleteName())){
+                flag = true;
+            }
+        }
+
+        return flag;
     }
 
 
@@ -149,8 +233,8 @@ public class DelegheBariRistorniService {
 
 
     //CREA LISTA PER CASSAEDILE
-    private List<RiepilogoRistornoPerLavoratore> createListCassaEdile(ExcelInfo data) throws Exception {
-        List<RiepilogoRistornoPerLavoratore> list = new ArrayList<>();
+    private List<QuotaAssociativaBari> createListCassaEdile(ExcelInfo data) throws Exception {
+        List<QuotaAssociativaBari> list = new ArrayList<>();
 
         for(RowData row : data.getOnlyValidRows()){
             SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
@@ -179,7 +263,9 @@ public class DelegheBariRistorniService {
             }
 
             List<DelegaBari> delBar = delBariServ.getAllWorkerDeleghe(l.getLid());
-            RiepilogoRistornoPerLavoratore r = new RiepilogoRistornoPerLavoratore();
+            QuotaAssociativaBari r = new QuotaAssociativaBari();
+            if(delBar.size() > 0)
+                r.setUltimaDelega(delBar.get(0));
             r.setLavoratore(l);
             r.setDelegheBari(delBar);
             r.setQuotaAssoc(quota);
@@ -192,9 +278,6 @@ public class DelegheBariRistorniService {
 
 
 
-
-
-
     //IMPORT DATA FOR EDILCASSSA
     private ExcelInfo importDataEdilCassa(ImportDeleghe importData, File temp) throws IOException {
         String file = getTempFile(importData.getFile1(), temp);
@@ -203,9 +286,6 @@ public class DelegheBariRistorniService {
 
         return reader.readFile();
     }
-
-
-
 
 
     //VALIDATORE EXCEL DATA PER EDILCASSA
@@ -252,11 +332,9 @@ public class DelegheBariRistorniService {
     }
 
 
-
-
     //CREA LISTA PER EDILCASSA
-    private List<RiepilogoRistornoPerLavoratore> createListEdilcassa(ExcelInfo data) throws Exception {
-        List<RiepilogoRistornoPerLavoratore> list = new ArrayList<>();
+    private List<QuotaAssociativaBari> createListEdilcassa(ExcelInfo data) throws Exception {
+        List<QuotaAssociativaBari> list = new ArrayList<>();
 
         for(RowData row : data.getOnlyValidRows()){
             SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
@@ -285,7 +363,9 @@ public class DelegheBariRistorniService {
             }
 
             List<DelegaBari> delBar = delBariServ.getAllWorkerDeleghe(l.getLid());
-            RiepilogoRistornoPerLavoratore r = new RiepilogoRistornoPerLavoratore();
+            QuotaAssociativaBari r = new QuotaAssociativaBari();
+            if(delBar.size() > 0)
+                r.setUltimaDelega(delBar.get(0));
             r.setLavoratore(l);
             r.setDelegheBari(delBar);
             r.setQuotaAssoc(quota);
@@ -295,9 +375,6 @@ public class DelegheBariRistorniService {
 
         return list;
     }
-
-
-
 
 
     //FUNZIONI PER INSERIRE IL FILE ED OTTENERE IL PATH
@@ -371,9 +448,6 @@ public class DelegheBariRistorniService {
     }
 
 
-
-
-
     private String headersContainsTemplate(List<String> headers, List<String> template) {
         String errors = "";
         for (String s : template) {
@@ -384,4 +458,99 @@ public class DelegheBariRistorniService {
         return errors;
 
     }
+
+
+
+    public String importRistorno(ImportRistorniDelegheBari impotazioneRistorno) throws Exception {
+        final ErrorsCounter errors = new ErrorsCounter();
+
+        LoadRequest req = LoadRequest.build().
+                filter("ente", impotazioneRistorno.getParithetic())
+                .filter("anno", impotazioneRistorno.getCompetenceYear());
+
+        Ristorno r = ristornoRep.find(req)
+                .findFirst().orElse(null);
+        if (r != null)
+            throw new Exception("Ristorno già importato per il l'anno scelto");
+
+//        List<UiReferenti> list = impotazioneRistorno.getReferentiList();
+
+        final ObjectMapper mapper = new ObjectMapper();
+        String serialized = mapper.writeValueAsString(impotazioneRistorno.getQuoteAssocList());
+        int a = serialized.length();
+
+        Ristorno ristorno = Ristorno.createFromImportazione(impotazioneRistorno,((User) sec.getLoggedUser()).getCompany().getLid(), serialized);
+
+        List<RistornoItem> list = retriveListaRistornoItem(impotazioneRistorno.getReferentiList());
+
+
+
+        ristornoRep.executeCommand(new Command() {
+            @Override
+            public void execute() {
+
+                Session s = ristornoRep.getSession();
+                Transaction tx = s.beginTransaction();
+                try {
+
+                    //inserisco tutto nel db
+                    s.saveOrUpdate(ristorno);
+
+                    for (RistornoItem dettaglioRefente : list) {
+
+                        dettaglioRefente.setIdRistorno(ristorno.getLid());
+                    }
+
+                    //imposto la chiave esterna per ogni dettaglio
+                    for (RistornoItem dettaglioRefente : list) {
+                        try{
+                            s.saveOrUpdate(dettaglioRefente);
+                        }catch(Exception ex){
+                            errors.incrementErrorNumber();
+                            ex.printStackTrace();
+                        }
+                    }
+
+                    tx.commit();
+
+                } catch (Exception ex) {
+                    errors.incrementErrorNumber();
+                    ex.printStackTrace();
+                    try {
+//                        logger.log(filename, "", "Errore in importazione : " + ex.getMessage() );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    tx.rollback();
+                } finally {
+                    s.close();
+                }
+
+
+
+
+            }
+        });
+        return "Importazione terminata con " + errors.getErrors() + " errori";
+
+    }
+
+    private List<RistornoItem> retriveListaRistornoItem(List<UiReferenti> referentiList) throws JsonProcessingException {
+        List<RistornoItem> lista = new ArrayList<>();
+        for(UiReferenti ref : referentiList){
+            Referenti r = refRep.find(LoadRequest.build().filter("completeName", ref.getNominativo())).findFirst().orElse(null);
+
+            RistornoItem item = new RistornoItem();
+            item.setImportoTot(ref.getImportoTot());
+            item.setReferente(r);
+            final ObjectMapper mapper = new ObjectMapper();
+            String serialized = mapper.writeValueAsString(ref.getListQuote());
+            item.setListQuote(serialized);
+
+            lista.add(item);
+        }
+       return lista;
+    }
+
+
 }

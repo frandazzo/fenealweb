@@ -5,6 +5,15 @@ public class RistornoCassaEdileFilter {
     private String period;
     private String parithetic;
     private String file1;
+   private String nomefile1;
+
+    public String getNomefile1() {
+        return nomefile1;
+    }
+
+    public void setNomefile1(String nomefile1) {
+        this.nomefile1 = nomefile1;
+    }
 
     public String getCompetenceYear() {
         return competenceYear;

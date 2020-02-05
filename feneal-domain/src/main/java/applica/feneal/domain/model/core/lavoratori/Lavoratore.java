@@ -66,6 +66,11 @@ public class Lavoratore extends SecuredDomainEntity {
     //esse vengono impostate prima del salvataggio nel servizio che aggiorna l'anagrafica...
     private String namesurname;
     private String surnamename;
+    private String surnamenamebirth;
+
+    public void setSurnamenamebirth(String surnamenamebirth) {
+        this.surnamenamebirth = surnamenamebirth;
+    }
 
     public String getUltimaComunicazione() {
         return ultimaComunicazione;

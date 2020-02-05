@@ -5,10 +5,20 @@ import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 
 import java.util.List;
 
-public class RiepilogoRistornoPerLavoratore {
+public class QuotaAssociativaBari {
     private Lavoratore lavoratore;
     private List<DelegaBari> delegheBari;
     private float quotaAssoc;
+
+    public DelegaBari getUltimaDelega() {
+        return ultimaDelega;
+    }
+
+    public void setUltimaDelega(DelegaBari ultimaDelega) {
+        this.ultimaDelega = ultimaDelega;
+    }
+
+    private DelegaBari ultimaDelega;
 
     public Lavoratore getLavoratore() {
         return lavoratore;
