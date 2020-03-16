@@ -146,8 +146,6 @@ public class AuthController extends LocalizedController {
                 d.setSurname(((applica.feneal.domain.model.User)u).getSurname());
                 d.setProvinces(((applica.feneal.domain.model.User)u).getCompany().getProvinces().stream().map(f -> f.getDescription()).collect(Collectors.toList()));
 
-
-
                 try{
                     Company company = ((applica.feneal.domain.model.User)u).getCompany();
                     String loggedUserCompany = company.getDescription();
@@ -159,16 +157,6 @@ public class AuthController extends LocalizedController {
                 }catch(Exception e){
 
                 }
-
-
-
-
-
-
-
-
-
-
 
                 return new ValueResponse(d);
             } catch (TokenGenerationException e) {

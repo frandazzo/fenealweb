@@ -23,6 +23,15 @@ public class CiccioController {
     @Autowired
     private IscrittiFacade iscrittiReportFac;
 
+    @RequestMapping(value="/test", method = RequestMethod.GET)
+    public @ResponseBody
+    SimpleResponse rrrrr(){
+        try{
+            return new ValueResponse("ciaooooo");
+        }catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
 
     @RequestMapping(value="/ciccio/ciccio", method = RequestMethod.POST)
     public @ResponseBody

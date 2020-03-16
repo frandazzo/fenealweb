@@ -1,5 +1,6 @@
 package applica.feneal.admin.crudconfig;
 
+import applica.feneal.admin.data.DocumentiRepositoryWrapper;
 import applica.feneal.admin.fields.renderers.*;
 import applica.feneal.admin.fields.renderers.empty.EmptyFieldRenderer;
 import applica.feneal.domain.data.core.servizi.DocumentiRepository;
@@ -24,7 +25,7 @@ public class DocumentiCrudConfig implements AppSetup {
     public void setup() {
 
         FormConfigurator.configure(Documento.class, "documento")
-                .repository(DocumentiRepository.class)
+                .repository(DocumentiRepositoryWrapper.class)
                 .field("data", "Data", CurrentDateFieldRenderer.class)
                 .field("tipo", "Tipo", TipoDocumentoFieldRenderer.class)
                 .field("notes", "Note")
@@ -47,7 +48,7 @@ public class DocumentiCrudConfig implements AppSetup {
 
 
         GridConfigurator.configure(Documento.class, "documento")
-                .repository(DocumentiRepository.class)
+                .repository(DocumentiRepositoryWrapper.class)
                 .column("lavoratore", "Lavoratore", true)
                 .column("data", "Data", false)
                 .column("tipo", "Tipo documento", false)
