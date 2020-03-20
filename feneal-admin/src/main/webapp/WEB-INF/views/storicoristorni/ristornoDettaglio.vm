@@ -88,7 +88,9 @@
                             </div>
                             <div class="col-md-8 field-label text-left">
                                 <label for="id_file1" style="font-size: 18px">
+                                    <a href="$ristorno.attachment">
                                     $ristorno.attachmentName
+                                    </a>
                                 </label>
                             </div>
                         </div>

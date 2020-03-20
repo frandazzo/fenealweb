@@ -12,7 +12,7 @@ import applica.feneal.admin.form.renderers.RistorniBariFormRenderer;
 import applica.feneal.domain.model.core.deleghe.bari.*;
 
 
-import applica.feneal.domain.model.core.ristorniEdilizia.QuotaAssociativaBari;
+
 import applica.feneal.domain.model.core.ristorniEdilizia.RistornoBariObject;
 
 import applica.feneal.services.impl.deleghe.DelegheBariRistorniService;
@@ -65,6 +65,22 @@ public class DelegheBaricontroller {
 
 
 
+    @RequestMapping(value = "/deleghe/deleteristorno/{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse delete(@PathVariable long id) {
+
+        try {
+            delBariFac.deleteRistorno(id);
+            return new ValueResponse("ok");
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+
 
     @RequestMapping(value="/deleghe/stamparistorni", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
@@ -73,7 +89,7 @@ public class DelegheBaricontroller {
 
         try {
 
-            String path = delBariFac.printRistorno(params.getListQuote());
+            String path = delBariFac.printRistorno(params);
 
             return new ValueResponse(path);
         } catch(Exception ex){
@@ -83,7 +99,7 @@ public class DelegheBaricontroller {
 
     @RequestMapping(value = "/deleghe/print", method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
-    public void printDettaglioRistorni(String path, HttpServletResponse response) {
+    public void printDettaglioRistorni(String path,String type, HttpServletResponse response) {
         try {
             liberiReportFac.downloadRistorniDeleghe(path, response);
         } catch (Exception e) {

@@ -1493,7 +1493,7 @@ define([
                                             svc.on("load", function(response){
                                                 $.loader.hide({parent:'body'});
                                                 dialog.modalDialog("close");
-                                                $.notify.success("Il ristorno è stato salvato correttamente");
+                                                $.notify.success("Ristorno  salvato correttamente");
 
 
 
@@ -1516,7 +1516,7 @@ define([
 
                     // aggiungo tasto SALVA RISTORNO
                     if ($(".print-tessera").length == 0) {
-                        var delGeneration = '<div class="col-md-12 col-xs-3 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Stampa tessera">' +
+                        var delGeneration = '<div class="col-md-12 col-xs-3 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Stampa Ristorno">' +
                             '<button type="button" class="btn btn-primary full-width print-tessera">' +
                             '<span class="glyphicon glyphicon-print" aria-hidden="true"></span>' +
                             '</button></div>';
@@ -1542,10 +1542,13 @@ define([
 
                                             dialog.modalDialog("close");
                                             var listQuote = response.listaQuote;
+                                            var listReferenti = response.listaReferenti;
+                                            var v = $('[aria-selected="true"]').find('span.dx-tab-text').text();
 
                                             params = {
-
-                                                listQuote: listQuote
+                                                listQuote: listQuote,
+                                                listReferenti: listReferenti,
+                                                type: v
                                             }
 
 

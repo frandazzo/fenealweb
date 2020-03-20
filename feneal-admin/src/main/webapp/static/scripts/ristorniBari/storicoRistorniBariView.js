@@ -230,7 +230,7 @@ define([
                 $('html, body').animate({scrollTop: $('#reportContainer').offset().top - 160}, 1400, "swing");
 
                 if ($(".print-tessera").length == 0) {
-                    var delGeneration = '<div class="col-md-12 col-xs-3 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Stampa tessera">' +
+                    var delGeneration = '<div class="col-md-12 col-xs-3 margin-bottom-10 p0" data-toggle="tooltip" data-placement="top" title="Stampa Ristorno">' +
                         '<button type="button" class="btn btn-primary full-width print-tessera">' +
                         '<span class="glyphicon glyphicon-print" aria-hidden="true"></span>' +
                         '</button></div>';
@@ -242,6 +242,7 @@ define([
                         var container2 = $('<div class="save-ristorno-ctn"><span>Stampare il ristorno?</span></div>');
 
                         var params = {};
+
 
                         var dialog = container2.modalDialog({
                             autoOpen: true,
@@ -255,11 +256,15 @@ define([
                                     command: function() {
 
                                         dialog.modalDialog("close");
+                                        var v = $('[aria-selected="true"]').find('span.dx-tab-text').text();
+
                                         var listQuote = self.quoteDetails;
+                                        var listReferenti = self.ristornoDetails;
 
                                         params = {
-
-                                            listQuote: listQuote
+                                            listQuote: listQuote,
+                                            listRefrenti: listReferenti,
+                                            type: v
                                         }
 
 
@@ -704,7 +709,51 @@ define([
             return data;
         },
         createToolbar: function() {
-            var buttons = this.getToolbarButtons();
+
+            var self = this;
+            var button = {
+                text: "Elimina ristorno",
+                command: function() {
+
+                    var dialog = $("<p>Sicuro di voler il ristorno la quota?</p>").modalDialog({
+                        autoOpen: true,
+                        title: "Elimina",
+                        destroyOnClose: true,
+                        height: 100,
+                        width:  400,
+                        buttons: {
+                            send: {
+                                label: "OK",
+                                primary: true,
+                                command: function () {
+
+                                    var svc = new fmodel.AjaxService();
+                                    svc.url = BASE + "deleghe/deleteristorno/" + self.quotaId;
+                                    svc.set("method", "DELETE");
+                                    svc.on({
+                                        load: function(response){
+
+                                            $(dialog).modalDialog("close");
+                                            $.notify.success("Operazione completata");
+
+                                            ui.Navigation.instance().navigate("storicoristorni", "index", {
+                                                fs: this.fullScreenForm
+                                            });
+                                        },
+                                        error: function (error){
+                                            $.notify.error(error);
+                                        }
+                                    });
+                                    svc.load();
+
+                                }
+
+                            }
+                        }
+                    });
+                },
+                icon: "a glyphicons glyphicons-delete"
+            };
 
             var $t = $("#toolbar");
             if(!$t.toolbar("isToolbar")) {
@@ -712,11 +761,7 @@ define([
             }
 
             $t.toolbar("clear");
-            var size = buttons.length;
-            for(var i = 0; i < size; i++) {
-                var button = buttons[i];
-                $t.toolbar("add", button);
-            }
+            $t.toolbar("add", button);
         },
 
         getToolbarButtons: function() {

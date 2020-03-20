@@ -3,7 +3,6 @@ package applica.feneal.admin.controllers.ristorni;
 
 
 import applica.feneal.admin.facade.StoricoRistorniBariFacade;
-import applica.feneal.admin.viewmodel.quote.UiDettaglioQuotaView;
 import applica.feneal.admin.viewmodel.ristornibari.UiDettaglioRistornoBari;
 import applica.feneal.admin.viewmodel.ristornibari.UiStoricoRistorniBariView;
 import applica.feneal.domain.data.core.ristorniEdilizia.RistornoRepository;

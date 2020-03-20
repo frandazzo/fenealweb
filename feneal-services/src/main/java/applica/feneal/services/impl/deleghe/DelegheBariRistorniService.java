@@ -10,6 +10,7 @@ import applica.feneal.domain.model.core.deleghe.bari.DelegaBari;
 import applica.feneal.domain.model.core.deleghe.bari.ImportRistorniDelegheBari;
 import applica.feneal.domain.model.core.deleghe.bari.RistornoCassaEdileFilter;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
+import applica.feneal.domain.model.core.quote.RiepilogoQuoteAssociative;
 import applica.feneal.domain.model.core.ristorniEdilizia.*;
 import applica.feneal.services.LavoratoreService;
 import applica.feneal.services.impl.quote.ErrorsCounter;
@@ -551,6 +552,44 @@ public class DelegheBariRistorniService {
         }
        return lista;
     }
+
+
+    public void deleteRistorno(long idRiepilogoRistorno) {
+
+//        ottengo il ristorno
+        Ristorno r = ristornoRep.get(idRiepilogoRistorno).orElse(null);
+        if (r != null){
+            //procedo alla cancellazione
+            ristornoRep.executeCommand(new Command() {
+                @Override
+                public void execute() {
+                    Session s = ristornoRep.getSession();
+                    Transaction tx = s.beginTransaction();
+                    try {
+                        //rimuovo tutti i dettagli per un determinato ristorno
+                        s.createSQLQuery(String.format("Delete from fenealweb_ristornibari where id = %d", idRiepilogoRistorno)).executeUpdate();
+
+                        s.createSQLQuery(String.format("Delete from fenealweb_ristornobariitem where idRistorno = %d", idRiepilogoRistorno)).executeUpdate();
+
+
+
+                        tx.commit();
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        tx.rollback();
+                    } finally {
+                        s.close();
+                    }
+                }
+            });
+        }
+
+
+    }
+
+
+
 
 
 }

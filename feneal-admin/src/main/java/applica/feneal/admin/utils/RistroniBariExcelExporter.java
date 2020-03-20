@@ -1,11 +1,10 @@
 package applica.feneal.admin.utils;
 
-
-import applica.feneal.admin.viewmodel.reports.UiIscrizione;
-import applica.feneal.admin.viewmodel.reports.UiLibero;
 import applica.feneal.domain.model.core.deleghe.bari.DelegaBari;
+import applica.feneal.domain.model.core.deleghe.bari.StampaRistorniBariParams;
 import applica.feneal.domain.model.core.ristorniEdilizia.QuotaAssociativaBari;
-import applica.feneal.domain.model.core.ristorniEdilizia.Referenti;
+
+import applica.feneal.domain.model.core.ristorniEdilizia.UiReferenti;
 import applica.framework.library.options.OptionsManager;
 import it.fenealgestweb.www.*;
 import org.apache.axis2.AxisFault;
@@ -23,7 +22,7 @@ public class RistroniBariExcelExporter {
     @Autowired
     private OptionsManager optMan;
 
-    public   String createExcelFile(List<QuotaAssociativaBari> listaQuote) throws IOException {
+    public   String createExcelFile(StampaRistorniBariParams params) throws IOException {
 
 
 
@@ -32,7 +31,7 @@ public class RistroniBariExcelExporter {
 
         ExportDocumentToExcel f = null;
 
-        f = createExcelDocument(listaQuote);
+        f = createExcelDocument(params);
 
         ExportDocumentToExcelResponse result = svc.exportDocumentToExcel(f);
 
@@ -86,33 +85,52 @@ public class RistroniBariExcelExporter {
         return nn.getAbsolutePath();
     }
 
-    private ExportDocumentToExcel createExcelDocument(List<QuotaAssociativaBari> listaQuote) {
+    private ExportDocumentToExcel createExcelDocument(StampaRistorniBariParams params) {
         ExportDocumentToExcel doc = new ExportDocumentToExcel();
 
         ExcelDocument document = new ExcelDocument();
-        document.setRows(createRows(listaQuote));
+        document.setRows(createRows(params));
 
         doc.setDocument(document);
         return  doc;
     }
 
-    private ArrayOfExcelRow createRows(List<QuotaAssociativaBari> listaQuote) {
+    private ArrayOfExcelRow createRows(StampaRistorniBariParams params) {
         ArrayOfExcelRow rows = new ArrayOfExcelRow();
 
-        for (QuotaAssociativaBari q : listaQuote) {
 
-            ExcelRow row = new ExcelRow();
-            row.setProperties(createProperties(q));
-                row.setDocument(createRistorniSubDocument(q));
-            rows.addExcelRow(row);
 
+
+        if(params.getType().equals("Riepilogo Quote Associative")){
+            for (QuotaAssociativaBari q : params.getListQuote()) {
+
+                ExcelRow row = new ExcelRow();
+                row.setProperties(createQuoteAssocProperties(q));
+                row.setDocument(createQuoteAssocSubDocument(q));
+                rows.addExcelRow(row);
+
+            }
         }
+
+        if(params.getType().equals("Riepilogo Referenti")){
+            for (UiReferenti q : params.getListRefrenti()) {
+
+                ExcelRow row = new ExcelRow();
+                row.setProperties(createReferentiProperties(q));
+                row.setDocument(createReferentiSubDocument(q));
+                rows.addExcelRow(row);
+
+            }
+        }
+
+
+
 
 
         return rows;
     }
 
-    private ExcelDocument createRistorniSubDocument(QuotaAssociativaBari quota) {
+    private ExcelDocument createQuoteAssocSubDocument(QuotaAssociativaBari quota) {
         if (quota.getUltimaDelega() == null)
             return null;
 
@@ -121,6 +139,19 @@ public class RistroniBariExcelExporter {
 
         ExcelDocument document = new ExcelDocument();
         document.setRows(createRowsForDettaglioRistorno(quota));
+        return  document;
+
+
+    }
+    private ExcelDocument createReferentiSubDocument(UiReferenti dett) {
+        if (dett.getListQuote() == null)
+            return null;
+
+        if (dett.getListQuote().size() == 0)
+            return null;
+
+        ExcelDocument document = new ExcelDocument();
+        document.setRows(createRowsForDettaglioReferente(dett));
         return  document;
 
 
@@ -142,6 +173,22 @@ public class RistroniBariExcelExporter {
 
         return rows;
     }
+    private ArrayOfExcelRow createRowsForDettaglioReferente(UiReferenti dett) {
+        ArrayOfExcelRow rows = new ArrayOfExcelRow();
+
+        List<QuotaAssociativaBari> list = dett.getListQuote();
+
+        for (QuotaAssociativaBari l : list) {
+
+            ExcelRow row = new ExcelRow();
+            row.setProperties(createPropertiesForDettaglioReferenti(l));
+            rows.addExcelRow(row);
+
+        }
+
+
+        return rows;
+    }
 
     private ArrayOfExcelProperty createPropertiesForDelegaBari(DelegaBari l) {
         ArrayOfExcelProperty props = new ArrayOfExcelProperty();
@@ -149,7 +196,7 @@ public class RistroniBariExcelExporter {
 
         ExcelProperty firm = new ExcelProperty();
         firm.setName("Azienda");
-        firm.setValue(l.getWorkerCompany() != null ? l.getWorkerCompany().getCity() : "");
+        firm.setValue(l.getWorkerCompany() != null ? l.getWorkerCompany().getDescription() : "");
         firm.setPriority(1);
         props.addExcelProperty(firm);
 
@@ -211,8 +258,61 @@ public class RistroniBariExcelExporter {
 
         return props;
     }
+    private ArrayOfExcelProperty createPropertiesForDettaglioReferenti(QuotaAssociativaBari l) {
+        ArrayOfExcelProperty props = new ArrayOfExcelProperty();
 
-    private ArrayOfExcelProperty createProperties(QuotaAssociativaBari lib) {
+
+        ExcelProperty cogn = new ExcelProperty();
+        cogn.setName("Cognome");
+        cogn.setValue(l.getLavoratore().getSurname());
+        cogn.setPriority(1);
+        props.addExcelProperty(cogn);
+
+        SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
+
+        ExcelProperty name = new ExcelProperty();
+        name.setName("Nome");
+        name.setValue(l.getLavoratore().getName());
+        name.setPriority(2);
+        props.addExcelProperty(name);
+
+        ExcelProperty dateProtocol = new ExcelProperty();
+        dateProtocol.setName("Data protocollo");
+        dateProtocol.setValue(l.getUltimaDelega().getProtocolDate() != null ? ff.format(l.getUltimaDelega().getProtocolDate()) : "");
+        dateProtocol.setPriority(3);
+        props.addExcelProperty(dateProtocol);
+
+
+        ExcelProperty numProtocollo = new ExcelProperty();
+        numProtocollo.setName("Num. Protocollo");
+        numProtocollo.setValue(l.getUltimaDelega().getProtocolNumber());
+        numProtocollo.setPriority(4);
+        props.addExcelProperty(numProtocollo);
+
+
+
+
+
+        ExcelProperty ultMov = new ExcelProperty();
+        ultMov.setName("Azienda");
+        ultMov.setValue(l.getUltimaDelega().getWorkerCompany() != null ? l.getUltimaDelega().getWorkerCompany().getDescription() : "" );
+        ultMov.setPriority(5);
+        props.addExcelProperty(ultMov);
+
+
+        ExcelProperty referente = new ExcelProperty();
+        referente.setName("Quota");
+        referente.setValue(String.valueOf(l.getQuotaAssoc()));
+        referente.setPriority(6);
+        props.addExcelProperty(referente);
+
+
+
+
+        return props;
+    }
+
+    private ArrayOfExcelProperty createQuoteAssocProperties(QuotaAssociativaBari lib) {
         ArrayOfExcelProperty props = new ArrayOfExcelProperty();
 
 
@@ -247,9 +347,32 @@ public class RistroniBariExcelExporter {
 
         return props;
     }
+    private ArrayOfExcelProperty createReferentiProperties(UiReferenti lib) {
+        ArrayOfExcelProperty props = new ArrayOfExcelProperty();
 
 
+        ExcelProperty name = new ExcelProperty();
+        name.setName("Nominativo referente");
+        name.setValue(lib.getNominativo());
+        name.setPriority(1);
+        props.addExcelProperty(name);
 
+        ExcelProperty name1 = new ExcelProperty();
+        name1.setName("Comune referente");
+        name1.setValue(lib.getComune());
+        name1.setPriority(2);
+        props.addExcelProperty(name1);
+
+
+        ExcelProperty fisclaCode = new ExcelProperty();
+        fisclaCode.setName("Importo Totale");
+        fisclaCode.setValue(String.valueOf(lib.getImportoTot()));
+        fisclaCode.setPriority(3);
+        props.addExcelProperty(fisclaCode);
+
+
+        return props;
+    }
 
     private FenealgestUtils createFenealgestUtilsService() {
 
