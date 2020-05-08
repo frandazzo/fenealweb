@@ -55,13 +55,13 @@ public class DocumentiRepositoryWrapper implements Repository<Documento> {
     public void save(Documento entity) {
         aziendeRepository.save(entity);
 
-        if (((User) sec.getLoggedUser()).getCompany().containProvince("Bolzano")){
-            try {
-                sendFileToUilWebBolzano(entity);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (((User) sec.getLoggedUser()).getCompany().containProvince("Bolzano")){
+//            try {
+//                sendFileToUilWebBolzano(entity);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
 
     }
@@ -80,7 +80,7 @@ public class DocumentiRepositoryWrapper implements Repository<Documento> {
 
     private String sendFileToUilWebBolzano(Documento documento) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPost uploadFile = new HttpPost("http://localhost:8080/import/archiviodocumentale");
+        HttpPost uploadFile = new HttpPost("https://www.uilsgk.com/import/archiviodocumentale");
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
 
