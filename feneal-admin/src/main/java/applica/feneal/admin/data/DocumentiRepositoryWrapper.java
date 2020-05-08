@@ -55,13 +55,13 @@ public class DocumentiRepositoryWrapper implements Repository<Documento> {
     public void save(Documento entity) {
         aziendeRepository.save(entity);
 
-//        if (((User) sec.getLoggedUser()).getCompany().containProvince("Bolzano")){
-//            try {
-//                sendFileToUilWebBolzano(entity);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        if (((User) sec.getLoggedUser()).getCompany().containProvince("Bolzano")){
+            try {
+                sendFileToUilWebBolzano(entity);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
 
     }
