@@ -55,6 +55,15 @@ public class UIDelega {
     private String paritethic;
     //azienda del lavoratore
     private String workerCompany;
+    private String workerCompanyId;
+
+    public String getWorkerCompanyId() {
+        return workerCompanyId;
+    }
+
+    public void setWorkerCompanyId(String workerCompanyId) {
+        this.workerCompanyId = workerCompanyId;
+    }
 
     //stato della delega
     private int state;
@@ -74,6 +83,7 @@ public class UIDelega {
     private String cancelReason;
     private String notes;
     private String firstAziendaEdile;
+
 
     public String getId() {
         return id;

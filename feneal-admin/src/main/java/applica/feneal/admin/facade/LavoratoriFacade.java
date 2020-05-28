@@ -873,6 +873,7 @@ public class LavoratoriFacade {
             a.setSettore(aa.getSector());
             a.setEnte(aa.getParitethic());
             a.setAzienda(aa.getWorkerCompany());
+            a.setAziendaId(aa.getWorkerCompanyId() != null ? aa.getWorkerCompanyId() : "");
             a.setCausale(aa.getSubscribeReason());
             a.setCausaleAnnullamento(aa.getCancelReason());
             a.setCausaleRevoca(aa.getRevokeReason());

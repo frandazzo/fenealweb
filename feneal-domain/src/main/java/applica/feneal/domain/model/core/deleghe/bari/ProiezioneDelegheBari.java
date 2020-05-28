@@ -46,6 +46,7 @@ public class ProiezioneDelegheBari {
     private String prevAction;
 
 
+
     private String lastMovement;
     private String prevMovement;
 

@@ -208,7 +208,7 @@ define([
                     { dataField:"state", visible : true, caption:"Stato"},
                     { dataField:"numDeleghe", visible : false, caption:"Num. deleghe"},
                     { dataField:"lastEffectDate", visible : true, dataType:'date', caption:"Decorrenza"},
-
+                    { dataField:"referente", visible : true, caption:"Referente comunale"},
 
                     { dataField:"lastMovement", visible : true, caption:"Ult. mov."},
                     { dataField:"contributeToBalace", visible : false, caption:"Contributo"},

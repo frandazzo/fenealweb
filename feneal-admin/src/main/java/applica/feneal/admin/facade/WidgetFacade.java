@@ -709,7 +709,8 @@ public class WidgetFacade {
 
         if (riepilogoIscriziones.size() > 0)
             ui.setProvincia(riepilogoIscriziones.get(0).getTerritorio());
-
+        else
+            ui.setProvincia(province);
 
         return ui;
     }
@@ -773,6 +774,8 @@ public class WidgetFacade {
 
         if (riepilogoIscriziones.size()>0)
             ui.setProvincia(riepilogoIscriziones.get(0).getTerritorio());
+        else
+            ui.setProvincia(province);
 
         return ui;
     }

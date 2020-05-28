@@ -75,6 +75,12 @@ public class StatoDelega {
         return retrieveDelegaBianca;
     }
 
+    public String getReferente(){
+        if (added)
+            recalculateLastState();
+        return referente;
+    }
+
 
     public String getState() {
         if (added)
@@ -109,6 +115,7 @@ public class StatoDelega {
             lastMovement = d.getLastMovement();
             retrieveDelegaBianca = d.checkIfCanBePresentedUntilSemesterEnd();
             contributeToBalace = d.calculateContribute();
+            referente = d.getManagementContact() != null ? d.getManagementContact().getCompleteName(): "";
         }
         added = false;
     }
@@ -128,7 +135,7 @@ public class StatoDelega {
     private String state;
     private String lastMovement;
     private boolean added = false;
-
+    private String referente;
 
 
     private boolean retrieveDelegaBianca;

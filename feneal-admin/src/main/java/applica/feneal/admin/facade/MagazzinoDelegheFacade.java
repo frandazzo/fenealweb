@@ -180,7 +180,12 @@ public class MagazzinoDelegheFacade {
         d.setLavoratore(lavRep.get(delega.getIdLavoratore()).orElse(null));
         d.setProvince(geoSvc.getProvinceByName(delega.getProvincia()));
         d.setParitethic(parRep.find(LoadRequest.build().filter("type", delega.getEnte(), Filter.EQ)).findFirst().orElse(null));
-        d.setCollaboratore(collabRep.get(delega.getCollaboratore()).orElse(null));
+        if(delega.getCollaboratore().isEmpty() || delega.getCollaboratore() == null){
+            d.setCollaboratore(null);
+        }else {
+            d.setCollaboratore(collabRep.get(delega.getCollaboratore()).orElse(null));
+        }
+
 
         if (d.getLavoratore() == null)
             throw new Exception("Lavoratore nullo");

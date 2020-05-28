@@ -110,6 +110,7 @@ public class DelegheFacade {
         }
 
         uiDelega.setWorkerCompany(delega.getWorkerCompany() != null? delega.getWorkerCompany().toString() : null);
+        uiDelega.setWorkerCompanyId(delega.getWorkerCompany() != null? Long.toString(delega.getWorkerCompany().getLid()) : null);
         uiDelega.setFirstAziendaEdile(delega.getFirstAziendaEdile() != null? delega.getFirstAziendaEdile().toString() : null);
         uiDelega.setProvince(delega.getProvince() != null? delega.getProvince().toString() : null);
         uiDelega.setSubscribeReason(delega.getSubscribeReason() != null? delega.getSubscribeReason().toString() : null);

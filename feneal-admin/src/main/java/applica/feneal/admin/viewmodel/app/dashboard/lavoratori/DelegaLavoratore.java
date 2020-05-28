@@ -13,6 +13,7 @@ public class DelegaLavoratore {
     private String settore;
     private String ente;
     private String azienda;
+    private String aziendaId;
     private String data;
     private String causale;
     private String causaleAnnullamento;
@@ -28,6 +29,14 @@ public class DelegaLavoratore {
     private String cancelDate;
     private String revokeData;
     private String id;
+
+    public String getAziendaId() {
+        return aziendaId;
+    }
+
+    public void setAziendaId(String aziendaId) {
+        this.aziendaId = aziendaId;
+    }
 
     public String getId() {
         return id;
