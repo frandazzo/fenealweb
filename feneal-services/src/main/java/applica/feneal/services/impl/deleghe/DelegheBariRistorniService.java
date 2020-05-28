@@ -138,6 +138,7 @@ public class DelegheBariRistorniService {
                         newRef.setNominativo(ref.getCompleteName());
                         newRef.setListQuote(d);
                         newRef.setComune(ref.getCity());
+                        newRef.setProRataShare(ref.getProRataShare());
                         newRef.setImportoTot(getNewImport(ref,quotaAssoc));
                         listReferenti.add(newRef);
                     }

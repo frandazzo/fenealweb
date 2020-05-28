@@ -6,8 +6,17 @@ public class UiReferenti {
     private String nominativo;
     private String comune;
     private float importoTot;
+    private int proRataShare;
     private List<QuotaAssociativaBari> listQuote;
 
+
+    public int getProRataShare() {
+        return proRataShare;
+    }
+
+    public void setProRataShare(int proRataShare) {
+        this.proRataShare = proRataShare;
+    }
 
     public List<QuotaAssociativaBari> getListQuote() {
         return listQuote;

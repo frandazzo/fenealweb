@@ -55,6 +55,7 @@ public class StoricoRistorniBariFacade {
         for(RistornoItem i : items){
             UiReferenti r = new UiReferenti();
             r.setNominativo(i.getReferente().getCompleteName());
+            r.setProRataShare(i.getReferente().getProRataShare());
             r.setComune(i.getReferente().getCity());
             r.setImportoTot(i.getImportoTot());
             ObjectMapper mapper = new ObjectMapper();

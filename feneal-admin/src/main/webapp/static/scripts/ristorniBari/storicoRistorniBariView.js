@@ -330,7 +330,8 @@ define([
                 columns:[
                     { dataField:"nominativo",  caption: "Nominativo referente",visible : true,visibleIndex: 1},
                     { dataField:"comune", caption: "Comune referente",visible : true,visibleIndex: 2},
-                    { dataField:"importoTot",  caption: "Importo Totale",visible : true,visibleIndex: 3}
+                    { dataField:"proRataShare", caption: "Percentuale referente",visible : true,visibleIndex: 3},
+                    { dataField:"importoTot",  caption: "Importo Totale",visible : true,visibleIndex: 4}
                 ],
 
                 summary: {

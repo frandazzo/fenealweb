@@ -1627,7 +1627,8 @@ define([
                 columns:[
                     { dataField:"nominativo",  caption: "Nominativo referente",visible : true,visibleIndex: 1},
                     { dataField:"comune", caption: "Comune referente",visible : true,visibleIndex: 2},
-                    { dataField:"importoTot",  caption: "Importo Totale",visible : true,visibleIndex: 3}
+                    { dataField:"proRataShare", caption: "Percentuale referente",visible : true,visibleIndex: 3},
+                    { dataField:"importoTot",  caption: "Importo Totale",visible : true,visibleIndex: 4}
                 ],
 
                 summary: {
@@ -1694,7 +1695,7 @@ define([
                                 columns: [
                                     { dataField:"lavoratore.surname",caption:"Cognome",  visible : true, visibleIndex: 0},
                                     { dataField:"lavoratore.name", caption:"Nome", visible : true, visibleIndex: 1},
-                                    { dataField:"ultimaDelega.protocolDate", caption:"Data protocollo", visible : true, visibleIndex: 2},
+                                    { dataField:"ultimaDelega.protocolDate", caption:"Data protocollo",dataType:'date', visible : true, visibleIndex: 2},
                                     { dataField:"ultimaDelega.protocolNumber", caption:"Numero protocollo", visible : true, visibleIndex: 3},
                                     { dataField:"ultimaDelega.workerCompany.description", caption:"Azienda", visible : true, visibleIndex: 4},
                                     { dataField:"quotaAssoc", caption:"Quota", visible : true, visibleIndex: 9}
