@@ -350,9 +350,8 @@ public class RistroniBariExcelExporter {
     private ArrayOfExcelProperty createReferentiProperties(UiReferenti lib) {
         ArrayOfExcelProperty props = new ArrayOfExcelProperty();
 
-
         ExcelProperty name = new ExcelProperty();
-        name.setName("Nominativo referente");
+        name.setName("Nominativo Referente");
         name.setValue(lib.getNominativo());
         name.setPriority(1);
         props.addExcelProperty(name);
@@ -363,8 +362,9 @@ public class RistroniBariExcelExporter {
         name1.setPriority(2);
         props.addExcelProperty(name1);
 
+
         ExcelProperty proRata = new ExcelProperty();
-        proRata.setName("Percentuale referente");
+        proRata.setName("Percentuale Referente");
         proRata.setValue(Integer.toString(lib.getProRataShare()));
         proRata.setPriority(3);
         props.addExcelProperty(proRata);
