@@ -72,6 +72,8 @@
             <param-value>class</param-value>
         </init-param>
     </filter>
+    <!--ciao-->
+
     <filter-mapping>
         <filter-name>framework-resources</filter-name>
         <url-pattern>/framework-resources/*</url-pattern>
