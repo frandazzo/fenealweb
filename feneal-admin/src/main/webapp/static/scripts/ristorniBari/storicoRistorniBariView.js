@@ -263,7 +263,7 @@ define([
 
                                         params = {
                                             listQuote: listQuote,
-                                            listRefrenti: listReferenti,
+                                            listReferenti: listReferenti,
                                             type: v
                                         }
 

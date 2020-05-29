@@ -7,7 +7,7 @@ import java.util.List;
 
 public class StampaRistorniBariParams {
     private List<QuotaAssociativaBari> listQuote;
-    private List<UiReferenti> listRefrenti;
+    private List<UiReferenti> listReferenti;
     private String type;
 
     public String getType() {
@@ -18,12 +18,12 @@ public class StampaRistorniBariParams {
         this.type = type;
     }
 
-    public List<UiReferenti> getListRefrenti() {
-        return listRefrenti;
+    public List<UiReferenti> getListReferenti() {
+        return listReferenti;
     }
 
-    public void setListRefrenti(List<UiReferenti> listRefrenti) {
-        this.listRefrenti = listRefrenti;
+    public void setListReferenti(List<UiReferenti> listReferenti) {
+        this.listReferenti = listReferenti;
     }
 
     public List<QuotaAssociativaBari> getListQuote() {

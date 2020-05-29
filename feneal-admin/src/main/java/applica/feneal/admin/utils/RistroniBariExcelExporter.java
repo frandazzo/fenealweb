@@ -113,7 +113,7 @@ public class RistroniBariExcelExporter {
         }
 
         if(params.getType().equals("Riepilogo Referenti")){
-            for (UiReferenti q : params.getListRefrenti()) {
+            for (UiReferenti q : params.getListReferenti()) {
 
                 ExcelRow row = new ExcelRow();
                 row.setProperties(createReferentiProperties(q));
@@ -363,11 +363,17 @@ public class RistroniBariExcelExporter {
         name1.setPriority(2);
         props.addExcelProperty(name1);
 
+        ExcelProperty proRata = new ExcelProperty();
+        proRata.setName("Percentuale referente");
+        proRata.setValue(Integer.toString(lib.getProRataShare()));
+        proRata.setPriority(3);
+        props.addExcelProperty(proRata);
+
 
         ExcelProperty fisclaCode = new ExcelProperty();
         fisclaCode.setName("Importo Totale");
         fisclaCode.setValue(String.valueOf(lib.getImportoTot()));
-        fisclaCode.setPriority(3);
+        fisclaCode.setPriority(4);
         props.addExcelProperty(fisclaCode);
 
 
