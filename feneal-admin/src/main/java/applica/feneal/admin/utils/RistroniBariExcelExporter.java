@@ -276,17 +276,29 @@ public class RistroniBariExcelExporter {
         name.setPriority(2);
         props.addExcelProperty(name);
 
+        ExcelProperty fiscale = new ExcelProperty();
+        fiscale.setName("Fiscale");
+        fiscale.setValue(l.getLavoratore().getFiscalcode());
+        fiscale.setPriority(3);
+        props.addExcelProperty(fiscale);
+
+        ExcelProperty dateBirth = new ExcelProperty();
+        dateBirth.setName("Data Nascita");
+        dateBirth.setValue(ff.format(l.getLavoratore().getBirthDate()));
+        dateBirth.setPriority(4);
+        props.addExcelProperty(dateBirth);
+
         ExcelProperty dateProtocol = new ExcelProperty();
         dateProtocol.setName("Data protocollo");
         dateProtocol.setValue(l.getUltimaDelega().getProtocolDate() != null ? ff.format(l.getUltimaDelega().getProtocolDate()) : "");
-        dateProtocol.setPriority(3);
+        dateProtocol.setPriority(5);
         props.addExcelProperty(dateProtocol);
 
 
         ExcelProperty numProtocollo = new ExcelProperty();
         numProtocollo.setName("Num. Protocollo");
         numProtocollo.setValue(l.getUltimaDelega().getProtocolNumber());
-        numProtocollo.setPriority(4);
+        numProtocollo.setPriority(6);
         props.addExcelProperty(numProtocollo);
 
 
@@ -296,14 +308,14 @@ public class RistroniBariExcelExporter {
         ExcelProperty ultMov = new ExcelProperty();
         ultMov.setName("Azienda");
         ultMov.setValue(l.getUltimaDelega().getWorkerCompany() != null ? l.getUltimaDelega().getWorkerCompany().getDescription() : "" );
-        ultMov.setPriority(5);
+        ultMov.setPriority(7);
         props.addExcelProperty(ultMov);
 
 
         ExcelProperty referente = new ExcelProperty();
         referente.setName("Quota");
         referente.setValue(String.valueOf(l.getQuotaAssoc()));
-        referente.setPriority(6);
+        referente.setPriority(8);
         props.addExcelProperty(referente);
 
 
@@ -362,20 +374,17 @@ public class RistroniBariExcelExporter {
         name1.setPriority(2);
         props.addExcelProperty(name1);
 
-
         ExcelProperty proRata = new ExcelProperty();
         proRata.setName("Percentuale Referente");
-        proRata.setValue(Integer.toString(lib.getProRataShare()));
+        proRata.setValue(Integer.toString(lib.getProRataShare()) + "%");
         proRata.setPriority(3);
         props.addExcelProperty(proRata);
-
 
         ExcelProperty fisclaCode = new ExcelProperty();
         fisclaCode.setName("Importo Totale");
         fisclaCode.setValue(String.valueOf(lib.getImportoTot()));
         fisclaCode.setPriority(4);
         props.addExcelProperty(fisclaCode);
-
 
         return props;
     }
