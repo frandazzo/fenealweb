@@ -243,6 +243,31 @@ define([
 
                         var params = {};
 
+                        var selectedrows = grid.getSelectedRowsData();
+
+                        var filterExpression =  grid.getCombinedFilter(true);
+                        if(selectedrows.length) {
+                            var dataSource = new DevExpress.data.DataSource({
+                                filter:filterExpression,
+                                paginate: false,
+                                store: new DevExpress.data.ArrayStore({
+                                    data: selectedrows,
+                                    key: "nominativo"
+                                })
+                            })
+                            dataSource.load().done(function(r){
+                                selectedrows = r;
+
+                            })
+                        }
+
+                        var v = $('[aria-selected="true"]').find('span.dx-tab-text').text();
+
+                        if (v == "Riepilogo Referenti" && selectedrows.length == 0) {
+                            $.notify.error("Selezionare almeno un elemento");
+                            return false;
+                        }
+
 
                         var dialog = container2.modalDialog({
                             autoOpen: true,
@@ -259,7 +284,8 @@ define([
                                         var v = $('[aria-selected="true"]').find('span.dx-tab-text').text();
 
                                         var listQuote = self.quoteDetails;
-                                        var listReferenti = self.ristornoDetails;
+                                        // var listReferenti = self.ristornoDetails;
+                                        var listReferenti = selectedrows;
 
                                         params = {
                                             listQuote: listQuote,
@@ -383,7 +409,10 @@ define([
                 allowColumnResizing:true,
                 columnAutoWidth: true,
                 hoverStateEnabled: true,
-
+                selection:{
+                    mode:"multiple",
+                    showCheckBoxesMode: "always"
+                },
                 masterDetail: {
                     enabled: true,
                     template: function(container, options) {

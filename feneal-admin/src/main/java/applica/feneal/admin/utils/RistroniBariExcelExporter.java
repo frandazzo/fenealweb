@@ -98,9 +98,6 @@ public class RistroniBariExcelExporter {
     private ArrayOfExcelRow createRows(StampaRistorniBariParams params) {
         ArrayOfExcelRow rows = new ArrayOfExcelRow();
 
-
-
-
         if(params.getType().equals("Riepilogo Quote Associative")){
             for (QuotaAssociativaBari q : params.getListQuote()) {
 
@@ -122,11 +119,6 @@ public class RistroniBariExcelExporter {
 
             }
         }
-
-
-
-
-
         return rows;
     }
 
@@ -141,7 +133,6 @@ public class RistroniBariExcelExporter {
         document.setRows(createRowsForDettaglioRistorno(quota));
         return  document;
 
-
     }
     private ExcelDocument createReferentiSubDocument(UiReferenti dett) {
         if (dett.getListQuote() == null)
@@ -153,7 +144,6 @@ public class RistroniBariExcelExporter {
         ExcelDocument document = new ExcelDocument();
         document.setRows(createRowsForDettaglioReferente(dett));
         return  document;
-
 
     }
 

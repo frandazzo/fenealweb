@@ -1525,6 +1525,31 @@ define([
                         $(".print-tessera").parent().tooltip();
                         $(".print-tessera").click(function() {
 
+                            var selectedrows = grid.getSelectedRowsData();
+
+                            var filterExpression =  grid.getCombinedFilter(true);
+                            if(selectedrows.length) {
+                                var dataSource = new DevExpress.data.DataSource({
+                                    filter:filterExpression,
+                                    paginate: false,
+                                    store: new DevExpress.data.ArrayStore({
+                                        data: selectedrows,
+                                        key: "nominativo"
+                                    })
+                                })
+                                dataSource.load().done(function(r){
+                                    selectedrows = r;
+
+                                })
+                            }
+
+                            var v = $('[aria-selected="true"]').find('span.dx-tab-text').text();
+
+                            if (v == "Riepilogo Referenti" && selectedrows.length == 0) {
+                                $.notify.error("Selezionare almeno un elemento");
+                                return false;
+                            }
+
                             var container2 = $('<div class="save-ristorno-ctn"><span>Stampare il ristorno?</span></div>');
 
                             var params = {};
@@ -1542,7 +1567,8 @@ define([
 
                                             dialog.modalDialog("close");
                                             var listQuote = response.listaQuote;
-                                            var listReferenti = response.listaReferenti;
+                                            // var listReferenti = self.ristornoDetails;
+                                            var listReferenti = selectedrows;
                                             var v = $('[aria-selected="true"]').find('span.dx-tab-text').text();
 
                                             params = {
