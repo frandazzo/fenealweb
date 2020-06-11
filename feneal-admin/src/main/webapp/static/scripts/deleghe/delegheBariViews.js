@@ -1685,6 +1685,10 @@ define([
                 paging:{
                     pageSize: 35
                 },
+                selection:{
+                    mode:"multiple",
+                    showCheckBoxesMode: "always"
+                },
                 sorting:{
                     mode:"multiple"
                 },
