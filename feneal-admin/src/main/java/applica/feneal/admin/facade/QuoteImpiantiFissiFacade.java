@@ -72,7 +72,8 @@ public class QuoteImpiantiFissiFacade {
             if (del.getWorkerCompany()!= null)
                 q.setAzienda(del.getWorkerCompany().getDescription());
 
-            q.setContratto(params.getContract());
+            if (del.getContract() != null)
+                q.setContratto(del.getContract().getDescription());
 
             try {
                 String importoStr = df.format(params.getAmount() / numResults).replace(",", ".");

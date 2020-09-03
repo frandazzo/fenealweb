@@ -181,10 +181,7 @@ public class QuoteImpiantiFissiController {
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody
     SimpleResponse doRenewQuoteImpiantiFissi(@RequestBody UiQuoteImpiantiFissiSearchParams params){
-
         try{
-
-
             return new ValueResponse(quoteImpiantiFissiFac.exportToDBNazionaleForAll(params));
         }catch(Exception ex){
             return new ErrorResponse(ex.getMessage());

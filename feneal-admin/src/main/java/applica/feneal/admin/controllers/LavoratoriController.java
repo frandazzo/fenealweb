@@ -181,6 +181,13 @@ public class LavoratoriController {
                                                             @RequestParam(value="cell", required=false, defaultValue="") String cell){
 
 
+//        if (((User)security.getLoggedUser()).getDefaultProvince().getDescription().equals("Bolzano")){
+//            Random r = new Random();
+//            int f = r.nextInt(10);
+//            if (f <= 5)
+//                return new ValueResponse(new  ArrayList<Lavoratore>());
+//        }
+
         ApplicationOptions opt = appRep.find(null).findFirst().orElse(null);
         if (opt != null && opt.getFenealwebRegionale() != null && opt.getFenealwebRegionale() == true)
             return findLocalLavoratorinew(name, surname, fiscalcode,namesurname, page ,company,cell);
