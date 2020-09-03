@@ -108,6 +108,8 @@ public class ActivateState implements DelegaState {
     public void updateDelega(Delega delegaToUpdate, Delega data) {
         //posso soloe le note e il collaaboratore
 
+        delegaToUpdate.setContract(data.getContract());
+
         delegaToUpdate.setCollaborator(data.getCollaborator());
         delegaToUpdate.setNotes(data.getNotes());
         delegaToUpdate.setValidityDate(data.getValidityDate());

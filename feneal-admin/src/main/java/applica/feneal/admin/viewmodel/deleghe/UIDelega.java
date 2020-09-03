@@ -75,6 +75,15 @@ public class UIDelega {
     private String worker;
     private String workerId;
 
+    private String contract;
+
+    public String getContract() {
+        return contract;
+    }
+
+    public void setContract(String contract) {
+        this.contract = contract;
+    }
 
     private String province;
 

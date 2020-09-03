@@ -513,6 +513,25 @@
                 if (window.appcontext.provinces.includes("lecce"))
                     $("li.genera-deleghe").show();
 
+                // if (window.appcontext.provinces.includes("varese") ||
+                //     window.appcontext.provinces.includes("como") ||
+                //     window.appcontext.provinces.includes("sondrio") ||
+                //     window.appcontext.provinces.includes("milano") ||
+                //     window.appcontext.provinces.includes("bergamo") ||
+                //     window.appcontext.provinces.includes("brescia")  ||
+                //     window.appcontext.provinces.includes("pavia") ||
+                //     window.appcontext.provinces.includes("cremona") ||
+                //     window.appcontext.provinces.includes("mantova") ||
+                //     window.appcontext.provinces.includes("lecco") ||
+                //     window.appcontext.provinces.includes("lodi") ||
+                //     window.appcontext.provinces.includes("monza e brianza"))
+                // {
+                //         $("li.contratti").show();
+                // }
+
+
+
+
                 if (window.appcontext.provinces.includes("lecce") ||
                         window.appcontext.provinces.includes("bari"))
                     $("li.inps-puglia").show();

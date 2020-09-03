@@ -129,6 +129,7 @@ public class AcceptState implements DelegaState {
     @Override
     public void updateDelega(Delega delegaToUpdate, Delega data) {
 
+        delegaToUpdate.setContract(data.getContract());
         delegaToUpdate.setCollaborator(data.getCollaborator());
         delegaToUpdate.setNotes(data.getNotes());
         delegaToUpdate.setValidityDate(data.getValidityDate());

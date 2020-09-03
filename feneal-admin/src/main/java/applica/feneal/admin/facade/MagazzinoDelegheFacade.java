@@ -176,6 +176,7 @@ public class MagazzinoDelegheFacade {
     public String saveDelegaForApp(UiAppDelega delega) throws Exception {
 
         MagazzinoDelega d = new MagazzinoDelega();
+        d.setId(delega.getId());
         d.setData(new Date());
         d.setLavoratore(lavRep.get(delega.getIdLavoratore()).orElse(null));
         d.setProvince(geoSvc.getProvinceByName(delega.getProvincia()));

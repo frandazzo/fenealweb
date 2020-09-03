@@ -5,6 +5,7 @@ package applica.feneal.admin.viewmodel.app.dashboard.lavoratori;
  */
 public class UiAppDelega {
 
+    private long id;
     private String provincia;
     private String causaleIscrizione;
     private String settore;
@@ -13,6 +14,14 @@ public class UiAppDelega {
     private String collaboratore;
     private String idLavoratore;
     private String note;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getProvincia() {
         return provincia;

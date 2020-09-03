@@ -234,6 +234,14 @@
 
             #if ($roleid == 3 || $roleid == 4 || $roleid == 5) ##segretario feneal o i due funzionari
                 <li class="sidebar-label pt15">CAUSALI</li>
+                #if($regionId == 30)
+                    <li class="contratti">
+                        <a href="#/crud?e=contract" class="framework-navigation">
+                            <span class="glyphicon glyphicon-list-alt"></span>
+                            <span class="sidebar-title">Contratti</span>
+                        </a>
+                    </li>
+                #end
                 <li>
                     <a href="#/crud?e=signupdelegationreason" class="framework-navigation">
                         <span class="fa fa-flag-o"></span>

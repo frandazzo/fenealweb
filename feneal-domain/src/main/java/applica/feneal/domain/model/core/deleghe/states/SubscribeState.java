@@ -98,6 +98,8 @@ public class SubscribeState implements DelegaState {
         delegaToUpdate.setSubscribeReason(data.getSubscribeReason());
         delegaToUpdate.setCollaborator(data.getCollaborator());
         delegaToUpdate.setNotes(data.getNotes());
+        delegaToUpdate.setContract(data.getContract());
+
         delegaToUpdate.setValidityDate(data.getValidityDate());
         delegaToUpdate.setNomeattachment(data.getNomeattachment());
         delegaToUpdate.setAttachment(data.getAttachment());

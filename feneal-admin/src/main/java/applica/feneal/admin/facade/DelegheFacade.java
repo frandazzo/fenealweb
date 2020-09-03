@@ -63,6 +63,9 @@ public class DelegheFacade {
     private CollaboratorRepository collaboratorRepository;
 
     @Autowired
+    private ContractRepository contractRepository;
+
+    @Autowired
     private SignupDelegationReasonRepository subscribeReason;
 
     @Autowired
@@ -309,6 +312,18 @@ public class DelegheFacade {
                 e.printStackTrace();
             }
         }
+
+
+        if (StringUtils.hasLength(uiDelega.getContract())) {
+            try {
+                long contractId = Long.parseLong(uiDelega.getContract());
+                delega.setContract(contractRepository.get(contractId).orElse(null));
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
         if (StringUtils.hasLength(uiDelega.getWorkerCompany())) {
             try {
                 long aziendaId = Long.parseLong(uiDelega.getWorkerCompany());
@@ -521,6 +536,7 @@ public class DelegheFacade {
     private Delega convertUIAppDelegaToModelEntity(UiAppDelega uiDelega) {
         Delega delega = new Delega();
 
+        delega.setId(uiDelega.getId());
         delega.setNotes(uiDelega.getNote());
 
         delega.setDocumentDate(new Date());

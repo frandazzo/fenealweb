@@ -251,6 +251,7 @@ public class DelegheController {
                 data.put("collaborator", d.getCollaborator());
                 data.put("sector", d.getSector());
                 data.put("workerCompany", d.getWorkerCompany());
+                data.put("contract",d.getContract());
                 data.put("paritethic", d.getParitethic());
                 if(!StringUtils.isEmpty(d.getAttachment())){
                     data.put("attachment", d.getAttachment());

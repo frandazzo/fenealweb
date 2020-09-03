@@ -7,7 +7,6 @@ import applica.feneal.domain.model.core.Notification;
 import applica.feneal.domain.model.core.deleghe.Delega;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.dbnazionale.UtenteDbNazionale;
-import applica.feneal.services.DelegheService;
 import applica.feneal.services.NotificationService;
 import applica.framework.LoadRequest;
 import fr.opensagres.xdocreport.core.utils.StringUtils;

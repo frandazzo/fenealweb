@@ -1,5 +1,6 @@
 package applica.feneal.domain.model.core.deleghe;
 
+import applica.feneal.domain.model.core.Contract;
 import applica.feneal.domain.model.core.Paritethic;
 import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.aziende.Azienda;
@@ -109,6 +110,15 @@ public class Delega extends SecuredDomainEntity{
     //utente che hA sottoscritto la delega
     private Lavoratore worker;
 
+    private Contract contract;
+
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
 
     private Province province;
 

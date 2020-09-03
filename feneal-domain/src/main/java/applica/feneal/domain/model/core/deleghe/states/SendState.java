@@ -112,6 +112,8 @@ public class SendState implements DelegaState {
         //posso solo cambiare le note e il collaaboratore
 
         delegaToUpdate.setCollaborator(data.getCollaborator());
+        delegaToUpdate.setContract(data.getContract());
+
         delegaToUpdate.setNotes(data.getNotes());
         delegaToUpdate.setValidityDate(data.getValidityDate());
         delegaToUpdate.setNomeattachment(data.getNomeattachment());

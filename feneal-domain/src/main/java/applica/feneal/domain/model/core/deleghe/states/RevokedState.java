@@ -89,6 +89,8 @@ public class RevokedState implements DelegaState {
     @Override
     public void updateDelega(Delega delegaToUpdate, Delega data) {
         delegaToUpdate.setCollaborator(data.getCollaborator());
+        delegaToUpdate.setContract(data.getContract());
+
         delegaToUpdate.setNotes(data.getNotes());
         delegaToUpdate.setValidityDate(data.getValidityDate());
         delegaToUpdate.setNomeattachment(data.getNomeattachment());

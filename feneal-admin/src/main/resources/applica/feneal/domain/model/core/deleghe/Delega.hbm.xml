@@ -34,6 +34,7 @@
 		<property name="companyId" type="long" />
 		<property name="validityDate"/>
 
+		<many-to-one name="contract" class="applica.feneal.domain.model.core.Contract" column="contractId" lazy="false" />
 		<many-to-one name="firstAziendaEdile" class="applica.feneal.domain.model.core.aziende.Azienda" column="firstAziendaEdileId" lazy="false" />
 
 		<property name="attachment" />

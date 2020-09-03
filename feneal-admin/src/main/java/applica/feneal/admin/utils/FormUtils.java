@@ -3,11 +3,13 @@ package applica.feneal.admin.utils;
 import applica.feneal.admin.crudconfig.DelegaFileRenderer;
 import applica.feneal.admin.fields.renderers.*;
 import applica.feneal.admin.fields.renderers.geo.OptionalCityFieldRenderer;
+import applica.feneal.admin.fields.renderers.geo.OptionalContinentFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalProvinceFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalStateFieldRenderer;
 import applica.feneal.admin.fields.renderers.readonly.ReadOnlyTextFieldRenderer;
 import applica.feneal.admin.form.renderers.MulticolumnFormRenderer;
 import applica.feneal.domain.model.FenealEntities;
+import applica.feneal.domain.model.core.Contract;
 import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.domain.model.core.deleghe.Delega;
@@ -85,6 +87,7 @@ public class FormUtils {
         formDescriptor.addField("firstAziendaEdile", Azienda.class, "Azienda edile", "ATTENZIONE: SOLO come riferimento all'azienda per il settore edile. Non sarà inclusa in eventuali ricerche", applicationContext.getBean(AziendeSingleSearchFieldRenderer.class));
         formDescriptor.addField("validityDate", Date.class, "Data validità (impianti fissi)", "Dati generali", applicationContext.getBean(DatePickerRenderer.class));
 
+        formDescriptor.addField("contract", Contract.class, "Contratto", "Dati generali", applicationContext.getBean(OptionalContractFieldRenderer.class));
 
 
         return form;
@@ -164,6 +167,8 @@ public class FormUtils {
         if (d.getSector().getDescription().equals(Sector.sector_edile))
             formDescriptor.addField("firstAziendaEdile", Azienda.class, "Azienda edile", "ATTENZIONE: SOLO come riferimento all'azienda per il settore edile. Non sarà inclusa in eventuali ricerche", applicationContext.getBean(AziendeSingleSearchFieldRenderer.class));
         formDescriptor.addField("validityDate", String.class, "Data validità (impianti fissi)", "Dati generali", applicationContext.getBean(DefaultFieldRenderer.class));
+
+        formDescriptor.addField("contract", Contract.class, "Contratto", "Dati generali", applicationContext.getBean(OptionalContractFieldRenderer.class));
 
 
         return form;
