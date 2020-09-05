@@ -313,6 +313,18 @@ public class ReportNonIscrittiController {
         }
     }
 
+    @RequestMapping(value = "/importlibericfcompleto",method = RequestMethod.POST)
+    public @ResponseBody
+    SimpleResponse executeincrocio(@RequestBody ImportData file) {
+
+        try{
+
+            return new ValueResponse(liberiReportFac.incrociaCodiciFiscaliConDatiCompleti(file));
+        }catch(Exception ex){
+            return new ErrorResponse(ex.getMessage());
+        }
+    }
+
     @RequestMapping(value = "/importlibericfCre",method = RequestMethod.POST)
     public @ResponseBody
     SimpleResponse executeimportanagrafichePrevediCre(@RequestBody ImportData file) {

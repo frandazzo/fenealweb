@@ -537,6 +537,12 @@ public class LiberiFacade {
         return convertLiberiToUiLiberi(lib);
     }
 
+    public List<UiLibero> incrociaCodiciFiscaliConDatiCompleti(ImportData file) throws Exception {
+        List<LiberoDbNazionale> lib = libServicenew.incrociaCodiciFiscali(file, false);
+
+        return convertLiberiToUiLiberi(lib);
+    }
+
     public List<UiLibero> incrociaCodiciFiscaliWithLiberi(ImportData file) throws Exception {
         List<LiberoDbNazionale> lib =  libServicenew.incrociaCodiciFiscaliPerTerritorioEdEnte(file,true);
         return convertLiberiToUiLiberi(lib);

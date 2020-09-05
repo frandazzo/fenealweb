@@ -38,6 +38,7 @@ public interface LavoratoreService {
 
     Lavoratore findLavoratoreForProvince(String provinceName, String fiscalcode);
     Lavoratore findLavoratoreByFiscalCode(String fiscalcode);
+    Lavoratore findLavoratoreByFiscalCodeEveryWhere(String fiscalcode);
 
     UtenteDbNazionale findRemoteLavoratoreByFiscalCode(String fiscalCode);
     LiberoDbNazionale findRemoteLavoratoreLiberoByFiscalCodeAndProvince(String fiscalCode, String province);

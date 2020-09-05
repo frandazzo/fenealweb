@@ -845,6 +845,12 @@ public class LavoratoriServiceImpl implements LavoratoreService {
     }
 
     @Override
+    public Lavoratore findLavoratoreByFiscalCodeEveryWhere(String fiscalcode) {
+        LoadRequest req = LoadRequest.build().disableOwnershipQuery().filter("fiscalcode", fiscalcode);
+        return lavRep.find(req).findFirst().orElse(null);
+    }
+
+    @Override
     public UtenteDbNazionale findRemoteLavoratoreByFiscalCode(String fiscalCode) {
 
         return utBRep.findUtenteByFiscalCode(fiscalCode);

@@ -22,6 +22,7 @@ import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.deleghe.Delega;
 import applica.feneal.domain.model.core.importData.ImportAnagraficaPrevediValidator;
 import applica.feneal.domain.model.core.importData.ImportCfValidator;
+import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.dbnazionale.*;
 import applica.feneal.domain.model.dbnazionale.search.LiberoReportSearchParams;
 import applica.feneal.domain.model.geo.City;
@@ -421,30 +422,80 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
                 .addScalar("Telefono");
     }
 
-    private List<LiberoDbNazionale> incrociaListaCodiciFiscali(List<String> listaCf, boolean isOldStyleReport) {
+    private List<LiberoDbNazionale> incrociaListaCodiciFiscali(List<String> listaCf, boolean isOldStyleReport) throws Exception {
         List<LiberoDbNazionale> result = new ArrayList<>();
 
         for (String s : listaCf) {
 
             //per ogni codice fiscale recupero il lavoratore sul db nazionale
-            UtenteDbNazionale d = dbnazRep.findUtenteByFiscalCode(s);
-            if (d != null){
-                LiberoDbNazionale ff = analyzeFiscaleCodeData(s, isOldStyleReport);
-                ff.setCognome(d.getCognome());
-                ff.setNome(d.getNome());
-                ff.setDataNascita(d.getDataNascita());
-                ff.setTelefono(d.getTelefono());
-                ff.setCap(d.getCap());
-                ff.setIndirizzo(d.getIndirizzo());
-                ff.setNomeComune(d.getNomeComune());
-                ff.setNomeComuneResidenza(d.getNomeComuneResidenza());
-                ff.setNomeNazione(d.getNomeNazione());
-                ff.setNomeProvincia(d.getNomeProvincia());
-                ff.setNomeProvinciaResidenza(d.getNomeProvinciaResidenza());
-                ff.setSesso("M");
-                ff.setUltimaProvinciaAdAggiornare(d.getUltimaProvinciaAdAggiornare());
-                result.add(ff);
+            if (isOldStyleReport) {
+                UtenteDbNazionale d = dbnazRep.findUtenteByFiscalCode(s);
+                if (d != null) {
+                    LiberoDbNazionale ff = analyzeFiscaleCodeData(s, isOldStyleReport);
+                    ff.setCognome(d.getCognome());
+                    ff.setNome(d.getNome());
+                    ff.setDataNascita(d.getDataNascita());
+                    ff.setTelefono(d.getTelefono());
+                    ff.setCap(d.getCap());
+                    ff.setIndirizzo(d.getIndirizzo());
+                    ff.setNomeComune(d.getNomeComune());
+                    ff.setNomeComuneResidenza(d.getNomeComuneResidenza());
+                    ff.setNomeNazione(d.getNomeNazione());
+                    ff.setNomeProvincia(d.getNomeProvincia());
+                    ff.setNomeProvinciaResidenza(d.getNomeProvinciaResidenza());
+                    ff.setSesso("M");
+                    ff.setUltimaProvinciaAdAggiornare(d.getUltimaProvinciaAdAggiornare());
+                    result.add(ff);
+                }
+            }else{
+                //invece di cercarlo nel db nazionaòle lo cerco all'interno delle anagrafiche
+                Lavoratore lav = lavSvc.findLavoratoreByFiscalCode(s);
+                if (lav == null){
+                    //provo a vedere se esiste nel mondo
+                    lav = lavSvc.findLavoratoreByFiscalCodeEveryWhere(s);
+                    if (lav != null){
+                       Lavoratore  d =  lavSvc.getLavoratoreOfOtherCompanyAndCreateItIfNotExistForCurrentCompany(lav.getSid());
+                        //a questo punto posso procedere
+                        LiberoDbNazionale ff = analyzeFiscaleCodeData(s, isOldStyleReport);
+                        ff.setCognome(d.getSurname());
+                        ff.setNome(d.getName());
+                        ff.setDataNascita(d.getBirthDate());
+                        ff.setTelefono(d.getPhone());
+                        ff.setCap(d.getCap());
+                        ff.setIndirizzo(d.getAddress());
+                        ff.setNomeComune(d.getBirthPlace());
+                        ff.setNomeComuneResidenza(d.getLivingCity());
+                        ff.setNomeNazione(d.getNationality());
+                        ff.setNomeProvincia(d.getBirthProvince());
+                        ff.setNomeProvinciaResidenza(d.getLivingProvince());
+                        ff.setSesso("M");
+                        ff.setUltimaProvinciaAdAggiornare("");
+                        result.add(ff);
+
+                    }
+                }else{
+                    Lavoratore  d =  lav;
+                    //a questo punto posso procedere
+                    LiberoDbNazionale ff = analyzeFiscaleCodeData(s, isOldStyleReport);
+                    ff.setCognome(d.getSurname());
+                    ff.setNome(d.getName());
+                    ff.setDataNascita(d.getBirthDate());
+                    ff.setTelefono(d.getPhone());
+                    ff.setCap(d.getCap());
+                    ff.setIndirizzo(d.getAddress());
+                    ff.setNomeComune(d.getBirthPlace());
+                    ff.setNomeComuneResidenza(d.getLivingCity());
+                    ff.setNomeNazione(d.getNationality());
+                    ff.setNomeProvincia(d.getBirthProvince());
+                    ff.setNomeProvinciaResidenza(d.getLivingProvince());
+                    ff.setSesso("M");
+                    ff.setUltimaProvinciaAdAggiornare("");
+                    result.add(ff);
+                }
+
+
             }
+
 
 
         }
