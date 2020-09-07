@@ -144,6 +144,16 @@
                         <span class="sidebar-title">Report non iscritti per C.F.</span>
                     </a>
                 </li>
+                #if($regionid == 30)
+                <li>
+                    <a href="#/reportlibericfcomplete" class="framework-navigation">
+                        <span class="fa fa-bar-chart-o"></span>
+                        <span class="sidebar-title">Rpt liberi C.F. COMPLETO</span>
+                    </a>
+                </li>
+                #end
+
+
                #if($provinces.contains("milano") || $provinces.contains("brescia"))
                     <li>
                         <a href="#/reportlibericfcre" class="framework-navigation">
@@ -234,7 +244,7 @@
 
             #if ($roleid == 3 || $roleid == 4 || $roleid == 5) ##segretario feneal o i due funzionari
                 <li class="sidebar-label pt15">CAUSALI</li>
-                #if($regionId == 30)
+                #if($regionid == 30)
                     <li class="contratti">
                         <a href="#/crud?e=contract" class="framework-navigation">
                             <span class="glyphicon glyphicon-list-alt"></span>

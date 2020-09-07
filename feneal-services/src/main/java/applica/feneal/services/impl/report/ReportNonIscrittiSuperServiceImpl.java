@@ -302,6 +302,8 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
     public List<LiberoDbNazionale> incrociaCodiciFiscali(ImportData file, boolean isOldStyleReport) throws Exception {
 
         List<String> listaCf = getFiscalCodeList(file);
+        if(isOldStyleReport == false && listaCf.size() > 500)
+            throw new Exception("Limitare il file a 500 codici fiscali");
 
         return incrociaListaCodiciFiscali(listaCf, isOldStyleReport);
 

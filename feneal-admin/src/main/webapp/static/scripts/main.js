@@ -125,6 +125,8 @@ require([
         //percorso per i reports
         ui.Navigation.instance().registerController("reportiscritti", function() { return new iscrittiReportController.IscrittiReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportlibericf", function() { return new liberiReportController.LiberiReportcfController(); }, "singleton");
+        ui.Navigation.instance().registerController("reportlibericfcomplete", function() { return new liberiReportController.LiberiReportcfCompleteController(); }, "singleton");
+
         ui.Navigation.instance().registerController("reportlibericfcre", function() { return new liberiReportController.LiberiReportcfCreController(); }, "singleton");
 
         ui.Navigation.instance().registerController("reportliberi", function() { return new liberiReportController.LiberiReportController(); }, "singleton");

@@ -254,6 +254,39 @@ public class ReportNonIscrittiController {
         }
     }
 
+    @RequestMapping(value = "/libericfcompleto",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse searchviewcfcompleto(HttpServletRequest request) {
+        try{
+            Form form = new Form();
+            form.setRenderer(applicationContext.getBean(ReportsSearchFormRenderer.class));
+            form.setIdentifier("liberireportcf");
+
+            FormDescriptor formDescriptor = new FormDescriptor(form);
+
+
+            formDescriptor.addField("file1", String.class, "File codici fiscali", null,applicationContext.getBean(DocumetPrevediFieldRenderer.class))
+                    .putParam(Params.COLS, Values.COLS_12)
+                    .putParam(Params.ROW, "dt1")
+                    .putParam(Params.FORM_COLUMN, " ");
+
+
+            FormResponse response = new FormResponse();
+
+            response.setContent(form.writeToString());
+            response.setTitle("Report liberi per codice fiscale COMPLETO");
+
+            return response;
+        } catch (FormCreationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        } catch (CrudConfigurationException e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
     @RequestMapping(value = "/libericfcre",method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody

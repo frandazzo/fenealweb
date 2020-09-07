@@ -34,6 +34,29 @@ define([
 
     });
 
+    var LiberiReportcfCompleteController = fcontrollers.Controller.extend({
+        ctor: function(){
+            LiberiReportcfController.super.ctor.call(this);
+        },
+        index: function(params) {
+
+            var service = new fmodel.FormService();
+            service.set({
+                method: "GET",
+                url: BASE + "libericfcompleto",
+                data: {}
+            });
+
+
+
+            var view = new views.ReportLibericfCompleteAppView(service);
+            // view.set("title", "Ricerca lavoratori");
+
+            return view;
+        }
+
+    });
+
     var LiberiReportcfCreController = fcontrollers.Controller.extend({
         ctor: function(){
             LiberiReportcfCreController.super.ctor.call(this);
@@ -136,6 +159,7 @@ define([
     exports.NewLiberiReportController = NewLiberiReportController;
     exports.LiberiReportController = LiberiReportController;
     exports.LiberiReportcfController = LiberiReportcfController;
+    exports.LiberiReportcfCompleteController = LiberiReportcfCompleteController;
     exports.LiberiReportcfCreController = LiberiReportcfCreController;
     return exports;
 });
