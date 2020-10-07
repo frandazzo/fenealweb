@@ -144,6 +144,7 @@ define([
                     { dataField:"delegaDataAnnullamento", visible : false, dataType:'date'},
                     { dataField:"delegaDataRevoca", visible : false, dataType:'date'},
                     { dataField:"delegaProvincia",  visible : true, visibleIndex: 1},
+                    { dataField:"contract",  visible : true, caption: "Contratto" ,visibleIndex: 7},
                     { dataField:"delegaSettore", visible : true, visibleIndex: 2},
                     { dataField:"delegaEnteBilaterale", visible : true, visibleIndex: 3},
                     { dataField:"delegaStato", visible : true, visibleIndex: 5,

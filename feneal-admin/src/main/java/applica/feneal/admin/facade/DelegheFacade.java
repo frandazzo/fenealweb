@@ -120,6 +120,7 @@ public class DelegheFacade {
         uiDelega.setRevokeReason(delega.getRevokeReason() != null? delega.getRevokeReason().toString() : null);
         uiDelega.setNotes(delega.getNotes());
         uiDelega.setCollaborator(delega.getCollaborator() != null? delega.getCollaborator().getDescription():"");
+        uiDelega.setContract(delega.getContract() != null ? delega.getContract().getDescription() : "");
         return uiDelega;
     }
 
