@@ -138,6 +138,9 @@ public class DelegheFacade {
         for (Delega delega : del) {
             UiDelega d = new UiDelega();
 
+
+            d.setContract(delega.getContract() != null ? delega.getContract().getDescription() : "");
+
             d.setDelegaProvincia(delega.getProvince().getDescription());
             if (delega.getSubscribeReason() != null)
                 d.setDelegaCausaleSottoscrizione(delega.getSubscribeReason().getDescription());
@@ -173,10 +176,6 @@ public class DelegheFacade {
             d.setDelegaStato(getDelegaStateString(delega.getState()));
             d.setDelegaId(delega.getLid());
             d.setDelegaNote(delega.getNotes());
-
-
-
-
             d.setLavoratoreId(delega.getWorker().getLid());
             d.setLavoratoreCap(delega.getWorker().getCap());
             d.setLavoratoreCellulare(delega.getWorker().getCellphone());

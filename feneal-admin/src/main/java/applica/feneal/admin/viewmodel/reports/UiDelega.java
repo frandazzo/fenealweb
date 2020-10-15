@@ -27,6 +27,15 @@ public class UiDelega {
     private String delegaStato;
     //collaboratore che ha fatto la delega
     private String delegaCollaboratore;
+    private String contract;
+
+    public String getContract() {
+        return contract;
+    }
+
+    public void setContract(String contract) {
+        this.contract = contract;
+    }
 
     //territorio della dleega
     private String delegaProvincia;
