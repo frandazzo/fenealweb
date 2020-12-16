@@ -17,9 +17,11 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.SimpleFormatter;
 
 @Service
 public class ReportIncrocioServiceImpl implements ReportIncrocioService {
@@ -47,7 +49,8 @@ public class ReportIncrocioServiceImpl implements ReportIncrocioService {
                     Calendar c = Calendar.getInstance();
                     c.setTime(new Date());
                     c.add(Calendar.MONTH, -2);
-                    params.setData(c.getTime().toString());
+                    SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd");
+                    params.setData(g.format(c.getTime()));
                 }
 
 
@@ -72,10 +75,11 @@ public class ReportIncrocioServiceImpl implements ReportIncrocioService {
                     whereclause = " l.NomeProvinciaResidenza = "+ provincia + " ";
                 }
 
-                whereclause = whereclause + "and i.anno='" + params.getDatefromYearReport() + "' and DataEsportazione > '" + params.getData()+"'";
+
+                whereclause = whereclause + "and i.anno='" + params.getDatefromYearReport() + "' and DataEsportazione > '" +params.getData()+"' ";
 
                 if(params.getIncludeIscrittiProvincia().equals("0") && !StringUtils.isEmpty(provincia)){
-                    whereclause = whereclause + "and i.NomeProvincia <> '"+ provincia+"'";
+                    whereclause = whereclause + "and i.NomeProvincia <> '"+ provincia+"' ";
                 }
 
                 try {
@@ -84,9 +88,9 @@ public class ReportIncrocioServiceImpl implements ReportIncrocioService {
                             "l.DataNascita, l.NomeComuneResidenza, l.NomeProvinciaResidenza, l.Indirizzo,\n" +
                             "l.Cap, l.Telefono, i.NomeProvincia as TerritorioFeneal, i.NomeRegione as Regioneterritorio,\n" +
                             "i.Settore, i.Ente, i.Azienda, i.Anno, i.Periodo , im.DataEsportazione\n" +
-                            "from feneal.lavoratori l \n" +
-                            "inner join feneal.iscrizioni i on l.id = i.id_lavoratore \n" +
-                            "inner join feneal.importazioni im on im.ID = i.Id_Importazione\n" +
+                            "from lavoratori l \n" +
+                            "inner join iscrizioni i on l.id = i.id_lavoratore \n" +
+                            "inner join importazioni im on im.ID = i.Id_Importazione\n" +
                             "where " + whereclause;
 
 
@@ -123,7 +127,8 @@ public class ReportIncrocioServiceImpl implements ReportIncrocioService {
                     Calendar c = Calendar.getInstance();
                     c.setTime(new Date());
                     c.add(Calendar.MONTH, -2);
-                    params.setData(c.getTime().toString());
+                    SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd");
+                    params.setData(g.format(c.getTime()));
                 }
 
 
@@ -137,7 +142,7 @@ public class ReportIncrocioServiceImpl implements ReportIncrocioService {
                 Transaction tx = s.beginTransaction();
 
 
-                String whereclause = " l.NomeProvinciaResidenza = '"+ provincia + "' and NomeProvinciaFeneal <> '"+ provincia +"'  and liberoal > '"+ params.getData() +"'";
+                String whereclause = " l.NomeProvinciaResidenza = ' "+ provincia + "' and NomeProvinciaFeneal <> ' "+ provincia +"'  and liberoal > '"+ params.getData() +"'";
 
 
                 try {
@@ -147,7 +152,7 @@ public class ReportIncrocioServiceImpl implements ReportIncrocioService {
                             "l.Indirizzo,\n" +
                             "l.Cap, l.Telefono, i.NomeProvinciaFeneal as TerritorioFeneal, \n" +
                             "i.Ente, i.CurrentAzienda, i.IscrittoA , i.LiberoAl\n" +
-                            "from feneal.lavoratori l inner join feneal.lavoratori_liberi i on l.CodiceFiscale = i.CodiceFiscale where" + whereclause;
+                            "from lavoratori l inner join lavoratori_liberi i on l.CodiceFiscale = i.CodiceFiscale where " + whereclause;
 
 
                     SQLQuery q = s.createSQLQuery(query);
