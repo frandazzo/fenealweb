@@ -8,7 +8,7 @@ import applica.framework.library.SimpleItem;
 import applica.framework.widgets.fields.renderers.OptionalSelectFieldRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sun.java2d.pipe.SpanShapeRenderer;
+
 
 import java.text.SimpleDateFormat;
 import java.util.List;

@@ -14,6 +14,7 @@ import applica.feneal.domain.model.core.servizi.Comunicazione;
 import applica.feneal.domain.model.core.servizi.Documento;
 import applica.feneal.domain.model.core.servizi.MagazzinoDelega;
 import applica.feneal.domain.model.core.servizi.RichiestaInfo;
+import applica.feneal.domain.model.dbnazionale.LavoratoreIncrocio;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 import applica.feneal.services.LavoratoreService;
 import applica.feneal.services.ListaLavoroService;
@@ -385,6 +386,21 @@ public class ListaLavoroServiceImpl implements ListaLavoroService {
                 liRep.save(listaLavoro);
             }
         }
+    }
+
+    @Override
+    public ListaLavoro createListaFromIncrocio(List<LavoratoreIncrocio> incrocio, String description) throws Exception {
+        HashMap<Long, Lavoratore> workers = new HashMap<>();
+        for (LavoratoreIncrocio dettaglioQuotaAssociativa : incrocio) {
+            if (!workers.containsKey(dettaglioQuotaAssociativa.getCodiceFiscale())){
+                Lavoratore l = lavSvc.getLavoratoreByFiscalCodeOrCreateItIfNotexist(dettaglioQuotaAssociativa.getCodiceFiscale());
+                if (l != null)
+                    workers.put(l.getLid(), l);
+            }
+        }
+
+
+        return createListFromWorkersHashMap(workers, description);
     }
 
     private ListaLavoroFromNotifications retrieveWorkers(String[] fiscalCodes, String type) throws Exception {

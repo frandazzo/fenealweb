@@ -192,6 +192,18 @@
                         <span class="sidebar-title">Report deleghe</span>
                     </a>
                 </li>
+                <li>
+                    <a href="#/reportincroci" class="framework-navigation">
+                        <span class="fa fa-bar-chart-o"></span>
+                        <span class="sidebar-title">Rpt incroci iscritti per prov.</span>
+                    </a>
+                </li>
+##                <li>
+##                    <a href="#/reportincrocinoniscritti" class="framework-navigation">
+##                        <span class="fa fa-bar-chart-o"></span>
+##                        <span class="sidebar-title">Rpt incroci non iscritti</span>
+##                    </a>
+##                </li>
 
 
 ##                <li>

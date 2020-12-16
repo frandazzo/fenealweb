@@ -9,6 +9,7 @@ import applica.feneal.domain.model.core.servizi.Comunicazione;
 import applica.feneal.domain.model.core.servizi.Documento;
 import applica.feneal.domain.model.core.servizi.MagazzinoDelega;
 import applica.feneal.domain.model.core.servizi.RichiestaInfo;
+import applica.feneal.domain.model.dbnazionale.LavoratoreIncrocio;
 import applica.feneal.domain.model.dbnazionale.LiberoDbNazionale;
 
 import java.util.List;
@@ -43,4 +44,6 @@ public interface ListaLavoroService {
     void deleteWorkerFromLista(long listaId, long lavId);
 
     void addWorker(long listaId, long workerId);
+
+    ListaLavoro createListaFromIncrocio(List<LavoratoreIncrocio> incrocio, String description) throws Exception;
 }

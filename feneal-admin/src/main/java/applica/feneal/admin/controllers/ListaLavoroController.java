@@ -11,6 +11,7 @@ import applica.feneal.admin.viewmodel.reports.*;
 import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.lavoratori.ListaLavoro;
 import applica.feneal.domain.model.core.lavoratori.ListeLavoroComparison;
+import applica.feneal.domain.model.dbnazionale.LavoratoreIncrocio;
 import applica.framework.library.responses.ErrorResponse;
 import applica.framework.library.responses.FormResponse;
 import applica.framework.library.responses.SimpleResponse;
@@ -166,6 +167,21 @@ public class ListaLavoroController {
 
         try {
             ListaLavoro l1 = delegheFac.createListalavoro(deleghe, description);
+            return new ValueResponse(l1.getLid());
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+    @RequestMapping(value = "/incrocio/{description}", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody
+    SimpleResponse viewListaIncrocio(@RequestBody List<LavoratoreIncrocio> incrocio, @PathVariable String description) {
+
+        try {
+            ListaLavoro l1 = iscrittiFac.createListalavoroIncrocio(incrocio, description);
             return new ValueResponse(l1.getLid());
         } catch(Exception e) {
             e.printStackTrace();

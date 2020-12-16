@@ -58,8 +58,6 @@ public class ReportPrevediController {
         }catch(Exception ex){
             return new ErrorResponse(ex.getMessage());
         }
-
-
     }
 
 

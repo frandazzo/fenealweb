@@ -37,18 +37,20 @@ require([
     "framework/widgets",
     "importData/importDataController",
     "trace/traceController",
-        "deleghe/delegheBariController",
+    "deleghe/delegheBariController",
     "deleghe/delegheLecceController",
     "inps/inpsLecceController",
     "reportnazionali/reportInviiDBNazionaleController",
     "reportnazionali/stampaIscrittiController",
-        "analisi/analisiController",
-        "prevedi/importPrevediController",
-        "reports/reportQuoteVareseController",
+    "analisi/analisiController",
+    "prevedi/importPrevediController",
+    "reports/reportQuoteVareseController",
     "importDeleghe/importDelegheMilController",
     "comunicazioni/comunicazioniController",
     "reports/reportRisorseController",
-    "ristorniBari/storicoRistorniBariController"],
+    "ristorniBari/storicoRistorniBariController",
+    "reports/reportIncrociResidenzaProvinciaController",
+    "reports/reportIncrociNonIscrittiController"],
     function(fmodel,_p, core, ui, fviews, fcontrollers, fhelpers,
                                                  controllers, usercontroller, 
                                                  lavController, listeLavoroController, azController, azDocController,
@@ -73,7 +75,9 @@ require([
              delegheMilController,
              comunicazioniController,
              risorseController,
-             storicoRistorniBariController
+             storicoRistorniBariController,
+             IncrocioIscrittiProvRes,
+             IncrocioNonIscritti
              ) {
 
     $.datepicker.setDefaults( $.datepicker.regional[ "IT" ] );
@@ -152,6 +156,9 @@ require([
         ui.Navigation.instance().registerController("reportcomunicazioni", function() { return new commReportController.ComunicazioniReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportrichieste", function() { return new richiesteReportController.RichiesteReportController(); }, "singleton");
         ui.Navigation.instance().registerController("reportprevedi", function() { return new importPrevediController.ReportController(); }, "singleton");
+        ui.Navigation.instance().registerController("reportincroci", function() { return new IncrocioIscrittiProvRes.IncrociResidenzaProvinciaReportController(); }, "singleton");
+        ui.Navigation.instance().registerController("reportincrocinoniscritti", function() { return new IncrocioNonIscritti.IncrociNonIscrittiReportController(); }, "singleton");
+
 
 
         // Percorsi report nazionali

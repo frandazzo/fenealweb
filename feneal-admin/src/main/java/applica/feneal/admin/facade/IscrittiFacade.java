@@ -10,6 +10,7 @@ import applica.feneal.domain.model.core.lavoratori.Lavoratore;
 import applica.feneal.domain.model.core.lavoratori.ListaLavoro;
 import applica.feneal.domain.model.core.quote.DettaglioQuotaAssociativa;
 import applica.feneal.domain.model.core.servizi.search.UiIscrittoReportSearchParams;
+import applica.feneal.domain.model.dbnazionale.LavoratoreIncrocio;
 import applica.feneal.domain.model.geo.City;
 import applica.feneal.domain.model.geo.Country;
 import applica.feneal.domain.model.geo.Province;
@@ -410,5 +411,9 @@ public class IscrittiFacade {
             return statsService.statsGetStatisticsResult(p.getDescription(), filenames);
 
         return null;
+    }
+
+    public ListaLavoro createListalavoroIncrocio(List<LavoratoreIncrocio> incrocio, String description) throws Exception {
+        return lSrv.createListaFromIncrocio(incrocio, description);
     }
 }
