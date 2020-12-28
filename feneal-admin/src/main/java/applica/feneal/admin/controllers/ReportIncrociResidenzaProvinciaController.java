@@ -72,14 +72,18 @@ public class ReportIncrociResidenzaProvinciaController {
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt2")
                     .putParam(Params.FORM_COLUMN, "  ");
+//            formDescriptor.addField("period", String.class, "Periodo","Filtri", applicationContext.getBean(OptionalSemestreSelectFieldRenderer.class))
+//                    .putParam(Params.COLS, Values.COLS_12)
+//                    .putParam(Params.ROW, "dt2")
+//                    .putParam(Params.FORM_COLUMN, "  ");
             formDescriptor.addField("data", String.class, "Data esportazione","Filtri", applicationContext.getBean(DatePickerRenderer.class))
                     .putParam(Params.COLS, Values.COLS_12)
                     .putParam(Params.ROW, "dt3")
                     .putParam(Params.FORM_COLUMN, "  ");
-            formDescriptor.addField("includeIscrittiProvincia", Boolean.class, "Includi iscr. prov.", "Filtri", applicationContext.getBean(DefaultFieldRenderer.class))
-                    .putParam(Params.COLS, Values.COLS_12)
-                    .putParam(Params.ROW, "dt3")
-                    .putParam(Params.FORM_COLUMN, "  ");
+//            formDescriptor.addField("includeIscrittiProvincia", Boolean.class, "Includi iscr. prov.", "Filtri", applicationContext.getBean(DefaultFieldRenderer.class))
+//                    .putParam(Params.COLS, Values.COLS_12)
+//                    .putParam(Params.ROW, "dt3")
+//                    .putParam(Params.FORM_COLUMN, "  ");
 
 
             FormResponse response = new FormResponse();
@@ -127,20 +131,14 @@ public class ReportIncrociResidenzaProvinciaController {
                 params.setData(c.getTime().toString());
             }
 
-            String desc;
-            if(params.getIncludeIscrittiProvincia().equals("1")) {
-                desc = "SI";
-            }else {
-                desc = "NO";
-            }
 
             traceFacade.traceActivity(user, activityName, createDetailForReportIncrocio(lavs),
-                    String.format("Parametri di ricerca: Provincia: %s; Anno: %s;Settore: %s;Data esportazione: %s;Rimuovi iscrizione provincia: %s",
+                    String.format("Parametri di ricerca: Provincia: %s; Anno: %s;Settore: %s;Periodo: %s;Data esportazione: %s",
                             params.getProvince(),
                             params.getDatefromYearReport(),
                             params.getSector(),
-                            params.getData(),
-                            desc));
+                            StringUtils.isEmpty(params.getPeriod()) ? "" : params.getPeriod(),
+                            params.getData()));
 
         } catch(Exception ex) {
             System.out.println(ex.getMessage());

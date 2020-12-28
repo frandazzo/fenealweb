@@ -72,15 +72,17 @@ public class ReportIncrocioServiceImpl implements ReportIncrocioService {
                 }else if (!StringUtils.isEmpty(settore) && StringUtils.isEmpty(provincia)){
                     whereclause = " i.Settore = '" + settore +"'" ;
                 }else{
-                    whereclause = " l.NomeProvinciaResidenza = "+ provincia + " ";
+                    whereclause = " l.NomeProvinciaResidenza = '"+ provincia + "' ";
                 }
 
 
-                whereclause = whereclause + "and i.anno='" + params.getDatefromYearReport() + "' and DataEsportazione > '" +params.getData()+"' ";
+                whereclause = whereclause + "and i.anno='" + params.getDatefromYearReport() + "' and DataEsportazione > '" +params.getData()+"' " +
+                        "and i.NomeProvincia <> '"+ provincia + "' and l.CodiceFiscale not in(select distinct l.CodiceFiscale \n" +
+                        "from lavoratori l \n" +
+                        "inner join iscrizioni i on l.id = i.id_lavoratore \n" +
+                        "where l.NomeProvinciaResidenza = '" + provincia + "' and i.anno='" + params.getDatefromYearReport() + "' " +
+                        "and i.Settore = '" + settore +"' and i.NomeProvincia = '"+ provincia +"');";
 
-                if(params.getIncludeIscrittiProvincia().equals("0") && !StringUtils.isEmpty(provincia)){
-                    whereclause = whereclause + "and i.NomeProvincia <> '"+ provincia+"' ";
-                }
 
                 try {
                     //rimuovo tutti i dettagli per una determinata quota

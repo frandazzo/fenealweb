@@ -4,8 +4,16 @@ public class ReportIncrocioSearchParams {
     private String province;
     private String sector;
     private String data;
-    private String includeIscrittiProvincia;
     private String datefromYearReport;
+    private String period;
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
 
     public String getProvince() {
         return province;
@@ -40,11 +48,4 @@ public class ReportIncrocioSearchParams {
         this.datefromYearReport = datefromYearReport;
     }
 
-    public String getIncludeIscrittiProvincia() {
-        return includeIscrittiProvincia;
-    }
-
-    public void setIncludeIscrittiProvincia(String includeIscrittiProvincia) {
-        this.includeIscrittiProvincia = includeIscrittiProvincia;
-    }
 }
