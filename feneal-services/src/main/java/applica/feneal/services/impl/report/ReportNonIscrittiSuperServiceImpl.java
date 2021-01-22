@@ -777,7 +777,7 @@ public class ReportNonIscrittiSuperServiceImpl implements ReportNonIscrittiSuper
 //                (select descrizione as provincia from tb_provincie where ID_TB_REGIONI = 150)
 //        and iscrittoa <> "" and CodiceFiscale = "CPLMRZ71T23B872M"
         String query =  String.format("select CodiceFiscale, nomeprovinciafeneal, currentAzienda, liberoAl, ente, IscrittoA " +
-                        "from lavoratori_liberi " +
+                        "from lavoratori_liberi_copy " +
                         "where NomeProvinciaFeneal in" +
                         "  (select descrizione as provincia from tb_provincie where ID_TB_REGIONI = %s)" +
                         "        and iscrittoa <> \"\" and  CodiceFiscale = \"%s\"",
