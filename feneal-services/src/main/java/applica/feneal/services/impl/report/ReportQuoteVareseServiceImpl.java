@@ -125,7 +125,7 @@ public class ReportQuoteVareseServiceImpl implements ReportQuoteVareseService {
 
         SimpleDateFormat ff = new SimpleDateFormat("dd/MM/yyyy");
         dateParam data = new dateParam();
-        data.setDataYear(Integer.parseInt(ll.getUltimaComunicazione()));
+        data.setDataYear(Calendar.getInstance().get(Calendar.YEAR));//Integer.parseInt(ll.getUltimaComunicazione()));
         data.setDataDay(ff.format(new Date()));
 
         //inserisco tutto nella mappa delle proprietà con i nomi specificati nel documento(vedi file documentazione nei campi merge field)
