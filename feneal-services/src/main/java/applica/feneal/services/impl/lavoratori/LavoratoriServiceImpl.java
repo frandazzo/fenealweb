@@ -739,7 +739,7 @@ public class LavoratoriServiceImpl implements LavoratoreService {
 
         String result = p.stream()
                 .map(n -> String.format(
-                        "'%s'", n.getDescription().replace("'","\'")))
+                        "'%s'", n.getDescription().replace("'","''")))
                 .collect(Collectors.joining(","));
 
         List<TelefonoCodiceFiscaleDto> listOfTelfono = rptNonIsc.retrieveTelefoniNonIscrittPerAzienda(result,a.getDescription());
