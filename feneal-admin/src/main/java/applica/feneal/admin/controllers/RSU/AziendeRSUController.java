@@ -245,7 +245,7 @@ public class AziendeRSUController {
 
     }
 
-    @RequestMapping(value = "remotefirmrsu/summary/{firmId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/remotefirmrsu/summary/{firmId}", method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public
     @ResponseBody
@@ -253,7 +253,7 @@ public class AziendeRSUController {
 
         try {
 
-            UiCompleteAziendaSummary azienda =  aziendeRsuFacade.getRemoteAziendaRsu(firmId);
+            UiAziendaAnagraficaSummary azienda =  aziendeRsuFacade.getRemoteAziendaRsu(firmId);
 
             return new ValueResponse(azienda);
         } catch (Exception e) {

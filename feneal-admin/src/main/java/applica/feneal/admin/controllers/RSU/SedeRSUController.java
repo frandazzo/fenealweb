@@ -216,7 +216,7 @@ public class SedeRSUController {
         }
     }
 
-    @RequestMapping(value = "remotesedirsusearchforapp/{firmId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/remotesedirsusearchforapp/{firmId}", method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public
     @ResponseBody
@@ -233,7 +233,7 @@ public class SedeRSUController {
         }
     }
 
-    @RequestMapping(value = "remotesedirsu/summary/{sedeId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/remotesedirsu/summary/{sedeId}", method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public
     @ResponseBody

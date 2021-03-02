@@ -181,9 +181,9 @@ public class AziendeRsuFacade {
     }
 
 
-    public UiCompleteAziendaSummary getRemoteAziendaRsu(long firmId) {
+    public UiAziendaAnagraficaSummary getRemoteAziendaRsu(long firmId) {
         UiCompleteAziendaSummary ui = getFirmById(firmId);
-        return ui;
+        return ui.getData();
     }
 
     public List<UiAziendaAnagraficaSummary> findAziendeRsu(String description) {
