@@ -1,16 +1,20 @@
 package applica.feneal.admin.facade.RSU;
 
 import applica.feneal.admin.viewmodel.RSU.UiAnagraficaAziendaRsu;
+import applica.feneal.admin.viewmodel.app.dashboard.aziende.AppAzienda;
 import applica.feneal.admin.viewmodel.aziende.UiAziendaAnagraficaSummary;
 import applica.feneal.admin.viewmodel.aziende.UiCompleteAziendaSummary;
 import applica.feneal.domain.data.core.RSU.AziendeRSURepository;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.RSU.AziendaRSU;
 import applica.feneal.domain.model.core.RSU.SedeRSU;
+import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.domain.model.geo.City;
 import applica.feneal.domain.model.geo.Province;
 import applica.feneal.services.GeoService;
 import applica.feneal.services.RSU.AziendaRsuService;
+import applica.framework.Filter;
+import applica.framework.LoadRequest;
 import applica.framework.security.Security;
 import fr.opensagres.xdocreport.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,10 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 /**
@@ -174,4 +181,41 @@ public class AziendeRsuFacade {
     }
 
 
+    public UiCompleteAziendaSummary getRemoteAziendaRsu(long firmId) {
+        UiCompleteAziendaSummary ui = getFirmById(firmId);
+        return ui;
+    }
+
+    public List<UiAziendaAnagraficaSummary> findAziendeRsu(String description) {
+        LoadRequest req = LoadRequest.build().disableOwnershipQuery();
+
+        if (!org.springframework.util.StringUtils.isEmpty(description.trim())){
+            Filter f1 = new Filter();
+            f1.setProperty("description");
+            f1.setType(Filter.LIKE);
+            f1.setValue(description.trim());
+            req.getFilters().add(f1);
+        }
+        req.setPage(1);
+        req.setRowsPerPage(200);
+
+        List<AziendaRSU> l = azRep.find(req).getRows();
+
+        List<UiAziendaAnagraficaSummary> result = new ArrayList<>();
+        for (AziendaRSU a: l) {
+            UiAziendaAnagraficaSummary ui = convertAziendaRsuToUiAzienda(a);
+            result.add(ui);
+        }
+
+        if (result.size() > 0){
+            Collections.sort(result, new Comparator<UiAziendaAnagraficaSummary>() {
+                @Override
+                public int compare(final UiAziendaAnagraficaSummary object1, final UiAziendaAnagraficaSummary object2) {
+                    return object1.getDescription().compareTo(object2.getDescription());
+                }
+            } );
+        }
+
+        return result;
+    }
 }

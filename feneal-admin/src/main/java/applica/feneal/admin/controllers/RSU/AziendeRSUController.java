@@ -5,6 +5,9 @@ import applica.feneal.admin.fields.renderers.geo.OptionalCityFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalProvinceFieldRenderer;
 import applica.feneal.admin.form.renderers.MulticolumnFormRenderer;
 import applica.feneal.admin.viewmodel.RSU.UiAnagraficaAziendaRsu;
+import applica.feneal.admin.viewmodel.RSU.UiAnagraficaSedeRsu;
+import applica.feneal.admin.viewmodel.app.dashboard.aziende.AppAzienda;
+import applica.feneal.admin.viewmodel.aziende.UiAziendaAnagraficaSummary;
 import applica.feneal.admin.viewmodel.aziende.UiCompleteAziendaSummary;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.RSU.AziendaRSU;
@@ -38,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -223,6 +227,39 @@ public class AziendeRSUController {
             return new ErrorResponse(e.getMessage());
         }
 
+    }
+
+    @RequestMapping(value = "/remotefirmrsusearchforapp",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody SimpleResponse remoteFirmsSearch(HttpServletRequest request, @RequestParam(value="description", required=false, defaultValue="") String description)throws Exception {
+
+
+        try {
+            List<UiAziendaAnagraficaSummary> appAziendaList = aziendeRsuFacade.findAziendeRsu(description);
+
+            return new ValueResponse(appAziendaList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+    @RequestMapping(value = "remotefirmrsu/summary/{firmId}", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse remoteSedeSummary(HttpServletRequest request, @PathVariable long firmId) {
+
+        try {
+
+            UiCompleteAziendaSummary azienda =  aziendeRsuFacade.getRemoteAziendaRsu(firmId);
+
+            return new ValueResponse(azienda);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/firmrsu/remote",method = RequestMethod.GET)

@@ -1,7 +1,6 @@
 package applica.feneal.admin.facade.RSU;
 
 import applica.feneal.domain.model.RSU.Dto.ElezioneDto;
-import applica.feneal.domain.model.RSU.Dto.UiElezioneDtoForDatiGenerali;
 import applica.feneal.domain.model.RSU.Dto.UiElezioneDtoForListe;
 import applica.feneal.domain.model.RSU.Election.ElezioneRSU;
 import applica.feneal.domain.model.User;
@@ -25,18 +24,13 @@ public class ReportElezioniRsuFacade {
     @Autowired
     private Security sec;
 
-    public ElezioneDto setDatiGeneraliElezioneRsu(UiElezioneDtoForDatiGenerali uiElezione) {
-
+    public ElezioneDto setDatiGeneraliElezioneRsu(Long firmRsu, Long sedeRsu, int anno) {
         ElezioneDto dto = new ElezioneDto();
-
-        if(uiElezione.getDto() != null)
-            dto = uiElezione.getDto();
-
         ElezioneRSU e = new ElezioneRSU();
 
         //importo i dati nel dto
-        AziendaRSU a = aziendaRsuService.getAziendaRsuById(((User) sec.getLoggedUser()).getLid(),uiElezione.getFirmRsu());
-        SedeRSU s = sedeRsuService.getSedeRsuById(((User) sec.getLoggedUser()).getLid(),uiElezione.getSedeRsu());
+        AziendaRSU a = aziendaRsuService.getAziendaRsuById(((User) sec.getLoggedUser()).getLid(),firmRsu);
+        SedeRSU s = sedeRsuService.getSedeRsuById(((User) sec.getLoggedUser()).getLid(),sedeRsu);
         if(a != null)
             dto.setAzienda(a.getDescription());
 
@@ -46,7 +40,7 @@ public class ReportElezioniRsuFacade {
             dto.setDivisione("");
         }
 
-        dto.setAnno(uiElezione.getAnno());
+        dto.setAnno(anno);
 
         //estraggo l'entita ElezioneRSU dal dto
         e.Initialize(dto);

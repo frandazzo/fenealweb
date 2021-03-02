@@ -10,7 +10,6 @@ import java.util.List;
  */
 public interface AziendaRsuService {
     AziendaRSU getAziendaRsuById(long loggedUserId, Long firmId);
-
     void saveOrUpdate(long loggedUserId, AziendaRSU az) throws Exception;
 
     AziendaRSU getAziendaRsuByDescriptionorCreateIfNotExist(String description) throws Exception;

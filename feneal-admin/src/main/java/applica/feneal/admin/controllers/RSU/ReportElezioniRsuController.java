@@ -5,7 +5,6 @@ import applica.feneal.admin.fields.renderers.CustomCheckboxFieldRenderer;
 import applica.feneal.admin.fields.renderers.DateFromYearFieldRenderer;
 import applica.feneal.domain.model.RSU.Dto.ElezioneDto;
 
-import applica.feneal.domain.model.RSU.Dto.UiElezioneDtoForDatiGenerali;
 import applica.feneal.domain.model.RSU.Dto.UiElezioneDtoForListe;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.RSU.SedeRSU;
@@ -110,26 +109,11 @@ public class ReportElezioniRsuController {
     @PreAuthorize("isAuthenticated()")
     public
     @ResponseBody
-    SimpleResponse setdatiGenerali(@RequestBody UiElezioneDtoForDatiGenerali uiElezione) {
+    SimpleResponse setdatiGenerali(HttpServletRequest request, Long firmRsu, Long sedeRsu, int anno) {
 
         try {
-            ElezioneDto dto = facade.setDatiGeneraliElezioneRsu(uiElezione);
+            ElezioneDto dto = facade.setDatiGeneraliElezioneRsu(firmRsu,sedeRsu,anno);
             return new ValueResponse(dto);
-        } catch(Exception e) {
-            e.printStackTrace();
-            return new ErrorResponse(e.getMessage());
-        }
-    }
-
-    @RequestMapping(value = "/reportrsu/createlista",method = RequestMethod.POST)
-    @PreAuthorize("isAuthenticated()")
-    public
-    @ResponseBody
-    SimpleResponse addListToCalcoloAttribuzione(@RequestBody UiElezioneDtoForListe uiElezione) {
-
-        try {
-            ElezioneDto newDto = facade.createAndAddListToElezioneRsu(uiElezione);
-            return new ValueResponse(newDto);
         } catch(Exception e) {
             e.printStackTrace();
             return new ErrorResponse(e.getMessage());
@@ -156,7 +140,20 @@ public class ReportElezioniRsuController {
         }
     }
 
+    @RequestMapping(value = "/reportrsu/createlista",method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse addListToCalcoloAttribuzione(@RequestBody UiElezioneDtoForListe dto) {
 
+        try {
+            ElezioneDto newDto = facade.createAndAddListToElezioneRsu(dto);
+            return new ValueResponse(newDto);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
 
     @RequestMapping(value = "/reportrsu/createlista",method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")

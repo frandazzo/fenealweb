@@ -139,4 +139,10 @@ public class SedeRsuFacade {
 
         return az;
     }
+
+    public UiAnagraficaSedeRsu getRemoteSedeAziendaRsu(long sedeId) {
+        SedeRSU s = svc.getSedeRsuById(((User) sec.getLoggedUser()).getLid(),sedeId);
+        UiAnagraficaSedeRsu sede = getUiAnagraficaSedeRsuFormSedeRsuEntity(s);
+        return sede;
+    }
 }

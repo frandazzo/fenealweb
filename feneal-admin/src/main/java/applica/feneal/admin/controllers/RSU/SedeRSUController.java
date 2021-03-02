@@ -41,6 +41,7 @@ import org.springframework.web.servlet.ViewResolver;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -201,9 +202,7 @@ public class SedeRSUController {
     public
     @ResponseBody
     SimpleResponse view(HttpServletRequest request, @PathVariable long firmId) {
-
         try {
-
 
             HashMap<String, Object> model = new HashMap<String, Object>();
             model.put("deleghe", sedeRsuFacade.getAllSediAziendaRsu(firmId));
@@ -211,6 +210,40 @@ public class SedeRSUController {
             PartialViewRenderer renderer = new PartialViewRenderer();
             String content = renderer.render(viewResolver, "RSU/sedeRsuHome", model, LocaleContextHolder.getLocale(), request);
             return new ValueResponse(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "remotesedirsusearchforapp/{firmId}", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse remoteSediView(HttpServletRequest request, @PathVariable long firmId) {
+
+        try {
+
+            List<UiAnagraficaSedeRsu> list =  sedeRsuFacade.getAllSediAziendaRsu(firmId);
+
+            return new ValueResponse(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "remotesedirsu/summary/{sedeId}", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse remoteSedeSummary(HttpServletRequest request, @PathVariable long sedeId) {
+
+        try {
+
+            UiAnagraficaSedeRsu sede =  sedeRsuFacade.getRemoteSedeAziendaRsu(sedeId);
+
+            return new ValueResponse(sede);
         } catch (Exception e) {
             e.printStackTrace();
             return new ErrorResponse(e.getMessage());

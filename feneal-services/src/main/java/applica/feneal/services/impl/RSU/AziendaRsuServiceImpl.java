@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -47,6 +48,7 @@ public class AziendaRsuServiceImpl implements AziendaRsuService {
     }
 
 
+
     @Override
     public void saveOrUpdate(long loggedUserId, AziendaRSU az) throws Exception {
         String error = azRsuValidator.validate(az);
@@ -72,7 +74,7 @@ public class AziendaRsuServiceImpl implements AziendaRsuService {
         if (StringUtils.isEmpty(description))
             throw new Exception("Ragione sociale azienda nulla");
 
-        AziendaRSU az = azRsuRep.find(LoadRequest.build().filter("description", description)).findFirst().orElse(null);
+        AziendaRSU az = azRsuRep.find(LoadRequest.build().disableOwnershipQuery().filter("description", description)).findFirst().orElse(null);
         if (az != null)
             return az;
 

@@ -36,7 +36,7 @@ public class SedeRsuServiceImpl implements SedeRsuService {
 
     @Override
     public List<SedeRSU> getAllSediAziendaRsu(long firmId){
-        return sedeRSURepository.find(LoadRequest.build().filter("aziendaRSU", firmId)).getRows();
+        return sedeRSURepository.find(LoadRequest.build().disableOwnershipQuery().filter("aziendaRSU", firmId)).getRows();
     }
 
 //    @Override

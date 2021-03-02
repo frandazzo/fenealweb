@@ -11,7 +11,7 @@ define([
             ReportRsuHomeRemoteView.super.ctor.call(this, service);
 
             var self = this;
-            this.saveResponse;
+
             this.on("load", function(){
 
 
@@ -34,20 +34,15 @@ define([
 
                 formView.show();
 
-                formView.on("load", function () {
+                formView.on("load", function (response) {
 
-                    // //qui attacco levento on change della select delle aziende per la visualizzazione delle sedi
-                    // $('input[name="firmrsu"]').change(function(){
-                    //     var selectedVal = $(this).val();
-                    //     self.loadSediRsu(selectedVal, "", $('select[name="sedersu"]'));
-                    // });
+
                 });
 
 
                 $("#avanti-datigenerali").click(function () {
 
                         var data = {
-                            dto: this.saveResponse,
                             firmRsu: firmId,
                             sedeRsu: sedeId,
                             anno: $('select[name="annofromYearReport"]').val()
