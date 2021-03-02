@@ -36,6 +36,9 @@ public class PermissionsSetup implements AppSetup {
         registerPermissions("company");
         configureCrudSecurityConfigurer("company", PermissionMap.staticPermissions("company"));
 
+        registerPermissions("firmrsu");
+        configureCrudSecurityConfigurer("firmrsu", PermissionMap.staticPermissions("firmrsu"));
+
         registerPermissions("documento");
         configureCrudSecurityConfigurer("documento", PermissionMap.staticPermissions("documento"));
 

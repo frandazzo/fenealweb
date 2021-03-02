@@ -69,7 +69,6 @@ public abstract class AbstractContestoAttribuzione {
 
     public abstract CalcolatoreParametriAttribuzione.TipoParziale getTipo();
 
-
     public int getRSUAttribuite()
     {
 

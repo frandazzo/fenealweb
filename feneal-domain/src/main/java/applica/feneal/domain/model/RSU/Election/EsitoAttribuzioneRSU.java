@@ -13,6 +13,10 @@ public class EsitoAttribuzioneRSU {
         return this.contesti;
     }
 
+    public void setContesti(List<AbstractContestoAttribuzione> contesti) {
+        this.contesti = contesti;
+    }
+
     public List<Attribuzione> getRiepilogoAttribuzioni(ElezioneRSU elezione)
     {
         List<Attribuzione> attribuzioneList = new ArrayList<Attribuzione>();

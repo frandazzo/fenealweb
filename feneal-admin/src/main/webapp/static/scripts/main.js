@@ -50,7 +50,10 @@ require([
     "reports/reportRisorseController",
     "ristorniBari/storicoRistorniBariController",
     "reports/reportIncrociResidenzaProvinciaController",
-    "reports/reportIncrociNonIscrittiController"],
+    "reports/reportIncrociNonIscrittiController",
+        "RSU/azienda/aziendeRSUController",
+        "RSU/sede/sedeRsuController",
+        "RSU/calcolaattribuzione/calcolaRsuController"],
     function(fmodel,_p, core, ui, fviews, fcontrollers, fhelpers,
                                                  controllers, usercontroller, 
                                                  lavController, listeLavoroController, azController, azDocController,
@@ -77,7 +80,10 @@ require([
              risorseController,
              storicoRistorniBariController,
              IncrocioIscrittiProvRes,
-             IncrocioNonIscritti
+             IncrocioNonIscritti,
+             aziendeRSUController,
+             sedeRSUController,
+             calcolaRsuController
              ) {
 
     $.datepicker.setDefaults( $.datepicker.regional[ "IT" ] );
@@ -120,6 +126,19 @@ require([
         ui.Navigation.instance().registerController("summaryfirm", function() { return new azController.AziendaSummaryController(); }, "singleton");
         ui.Navigation.instance().registerController("searchfirms", function() { return new azController.SearchFirmController(); }, "singleton");
         ui.Navigation.instance().registerController("firmdocscrud", function() { return new azDocController.AziendaDocumentiController(); }, "singleton");
+
+        //percorsi aziendeRSU
+        ui.Navigation.instance().registerController("editfirmrsu", function() { return new aziendeRSUController.AziendaRsuEditController(); }, "singleton");
+        ui.Navigation.instance().registerController("searchfirmsrsu", function() { return new aziendeRSUController.SearchFirmRsuController(); }, "singleton");
+        ui.Navigation.instance().registerController("summaryfirmrsu", function() { return new aziendeRSUController.AziendaRsuSummaryController(); }, "singleton");
+
+        ui.Navigation.instance().registerController("sedersu", function() { return new sedeRSUController.SedeRsuController(); }, "singleton");
+        ui.Navigation.instance().registerController("editsedersu", function() { return new sedeRSUController.SedeRsuEditController(); }, "singleton");
+        ui.Navigation.instance().registerController("deletesedersu", function() { return new sedeRSUController.DeleteSedeRsuController(); }, "singleton");
+
+        ui.Navigation.instance().registerController("calcolaattribuzionersu", function() { return new calcolaRsuController.calcolaRsuController(); }, "singleton");
+
+
 
         //percorso per liste di lavoro
         ui.Navigation.instance().registerController("searchlistelavoro", function() { return new listeLavoroController.ListeLavoroSearchController(); }, "singleton");

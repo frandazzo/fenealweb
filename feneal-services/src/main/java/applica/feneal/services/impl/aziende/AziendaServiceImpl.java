@@ -9,7 +9,7 @@ import applica.feneal.services.AziendaService;
 import applica.framework.LoadRequest;
 import applica.framework.security.Security;
 import fr.opensagres.xdocreport.core.utils.StringUtils;
-import org.apache.poi.util.StringUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -136,7 +136,7 @@
 
 
 
-            #if ($roleid == 3 || $roleid == 4 || $roleid == 5) ##segretario feneal o i due funzionari
+            #if ($roleid == 4 || $roleid == 5) ##segretario feneal o i due funzionari
                 <li>
                     <a href="#/searchworkers" class="framework-navigation">
                         <span class="glyphicons glyphicons-group"></span>
@@ -162,6 +162,37 @@
                     </a>
                 </li>
 
+            #elseif ($roleid == 3)##regionale feneal
+                <li>
+                    <a href="#/searchworkers" class="framework-navigation">
+                        <span class="glyphicons glyphicons-group"></span>
+                        <span class="sidebar-title">Lavoratori</span>
+                    </a>
+                </li>
+            ##                <li>
+            ##                    <a href="#/searchworkersnew" class="framework-navigation">
+            ##                        <span class="glyphicons glyphicons-group"></span>
+            ##                        <span class="sidebar-title">Lavoratori (new))</span>
+            ##                    </a>
+            ##                </li>
+                <li>
+                    <a href="#/searchfirms" class="framework-navigation">
+                        <span class="glyphicons glyphicons-building"></span>
+                        <span class="sidebar-title">Aziende</span>
+                    </a>
+                </li>
+##                <li>
+##                    <a href="#/searchfirmsrsu" class="framework-navigation">
+##                        <span class="glyphicons glyphicons-building"></span>
+##                        <span class="sidebar-title">Aziende RSU</span>
+##                    </a>
+##                </li>
+                <li>
+                    <a href="#/searchlistelavoro" class="framework-navigation">
+                        <span class="glyphicons glyphicons-notes"></span>
+                        <span class="sidebar-title">Liste di lavoro</span>
+                    </a>
+                </li>
 
             #elseif ($roleid == 6)##regionale feneal
                 <li>
@@ -191,6 +222,12 @@
                         <span class="sidebar-title">Aziende</span>
                     </a>
                 </li>
+##                <li>
+##                    <a href="#/searchfirmsrsu" class="framework-navigation">
+##                        <span class="glyphicons glyphicons-building"></span>
+##                        <span class="sidebar-title">Aziende RSU</span>
+##                    </a>
+##                </li>
 
             #end
 

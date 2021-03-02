@@ -1,0 +1,79 @@
+#parse("/shared/framework.vm")
+
+<div class="panel">
+    <div class="panel-menu admin-form theme-primary">
+
+    </div>
+    <div class="panel-body pn">
+        <div>
+            <div class="content-header pb10">
+                <h2 style="text-align: center; font-size: 24px; font-weight: 600;">
+                    <span class="text-primary" data-component="title">Dati generali elezione</span>
+                </h2>
+                <h4 style="text-align: center; font-weight: 600;">
+                    <span class="text-primary" data-component="title">In questa sezione viene indicata l'azienda e l'unità produttiva in cui avviene la votazione.</span>
+                </h4>
+            </div>
+            <div id="datigenerali" class="dati-generali-elezione">
+
+            </div>
+            <div>
+                <button id="avanti-datigenerali" class="btn btn-primary mrn" type="submit" data-component="submit_button">Avanti<i class="glyphicon glyphicon-chevron-right pr5"></i></button>
+            </div>
+        </div>
+
+
+
+        <div id="listepresentate" class="liste-presentate-elezione" style="display: none">
+            <div class="content-header pb20">
+                <h2 style="text-align: center; font-size: 24px; font-weight: 600;">
+                    <span class="text-primary" data-component="title">Liste presentate</span>
+                </h2>
+                <h4 style="text-align: center; font-weight: 600;">
+                    <span class="text-primary" data-component="title">Selezionare le liste che partecipano all'elezione.</span>
+                </h4>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="col-md-12 p20" style="background-color: white; margin-top:10px">
+                        <div id="gridListe">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="col-md-12 p20" style="background-color: white; margin-top:10px">
+                        <button id="add_list" class="btn btn-primary mrn" type="submit" data-component="submit_button"><i class="glyphicon glyphicon-plus-sign pr5"></i>Aggiungi lista</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="liste-presentate-elezione">
+                        <button id="indietro-liste" class="btn btn-primary mrn" type="submit" data-component="submit_button"><i class="glyphicon glyphicon-chevron-left pr5"></i> Indietro</button>
+                        <button id="avanti-liste" class="btn btn-primary mrn" type="submit" data-component="submit_button">Avanti<i class="glyphicon glyphicon-chevron-right pr5"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div id="div3" style="display: none">
+            <div>
+                <h1>titolo div 3</h1>
+            </div>
+            <div>
+                <button id="avanti3">
+                    Avanti
+                </button>
+                <button id="indietro3">
+                    indietro
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>

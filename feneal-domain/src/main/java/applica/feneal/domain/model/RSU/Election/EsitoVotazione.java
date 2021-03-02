@@ -27,7 +27,7 @@ public class EsitoVotazione {
     public int getRSUElegibili(){
         return this.rSUElegibili;
     }
-    public void getRSUElegibili(int rsuEleggibili){
+    public void setrSUElegibili(int rsuEleggibili){
             this.rSUElegibili = rsuEleggibili;
     }
 

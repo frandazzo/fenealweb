@@ -75,6 +75,9 @@ public class CrudConfSetup implements AppSetup {
     private FundCrudConfig fundCrudConfig;
 
     @Autowired
+    private AziendaRSUCrudConfig aziendaRSUCrudConfig;
+
+    @Autowired
     private CommunicationTypeCrudConfig communicationTypeConfig;
 
     @Autowired
@@ -150,6 +153,7 @@ public class CrudConfSetup implements AppSetup {
         magazzDelConf.setup();
         magSDelLecceCrud.setup();
         compUsrcrudConf1.setup();
+        aziendaRSUCrudConfig.setup();
         referentiComunaliCrudConfig.setup();
 
 

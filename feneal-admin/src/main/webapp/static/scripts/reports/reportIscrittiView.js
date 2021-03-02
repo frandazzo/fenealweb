@@ -78,6 +78,10 @@ define([
                         $(this).val(false);
                 }).change();
 
+                $('input[name="firm"]').change(function() {
+                    alert( "Handler for .change() called." );
+                });
+
             });
 
             self.formView.on("submit", function(){

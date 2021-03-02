@@ -46,7 +46,7 @@ public class HelperAttribuzioneIndirettaContext {
     public int GetOccorrenza(double numChiave)
     {
         double num = numChiave;
-        return this.occorrenze.contains(num) ? (int)this.occorrenze.get(num) : 0;
+        return this.occorrenze.containsKey(num) ? (int)this.occorrenze.get(num) : 0;
     }
 
     public List<HelperAttribuzioneIndirettaItem> GetItems(

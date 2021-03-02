@@ -27,7 +27,7 @@
     #end
 
 
-            #if ($roleid == 3 || $roleid == 4 || $roleid == 5) ##segretario feneal o i due funzionari
+            #if ($roleid == 4 || $roleid == 5) ##segretario feneal o i due funzionari
                 <li>
                     <a href="#/searchworkers" class="framework-navigation">
                         <span class="glyphicons glyphicons-group"></span>
@@ -40,6 +40,49 @@
                         <span class="sidebar-title">Aziende</span>
                     </a>
                 </li>
+                <li>
+                    <a href="#/searchlistelavoro" class="framework-navigation">
+                        <span class="glyphicons glyphicons-notes"></span>
+                        <span class="sidebar-title">Liste di lavoro</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-label pt20">Deleghe</li>
+
+                <li class="">
+                    <a href="#/inoltradeleghe" class="framework-navigation">
+                        <span class="fa fa-reply"></span>
+                        <span class="sidebar-title">Inoltra deleghe</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="#/accettdeleghe" class="framework-navigation">
+                        <span class="fa fa-check-square-o"></span>
+                        <span class="sidebar-title">Accredita deleghe</span>
+                    </a>
+                </li>
+
+            #end
+
+            #if ($roleid == 3) ##segretario feneal o i due funzionari
+                <li>
+                    <a href="#/searchworkers" class="framework-navigation">
+                        <span class="glyphicons glyphicons-group"></span>
+                        <span class="sidebar-title">Lavoratori</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/searchfirms" class="framework-navigation">
+                        <span class="glyphicons glyphicons-building"></span>
+                        <span class="sidebar-title">Aziende</span>
+                    </a>
+                </li>
+##                <li>
+##                    <a href="#/searchfirmsrsu" class="framework-navigation">
+##                        <span class="glyphicons glyphicons-building"></span>
+##                        <span class="sidebar-title">Aziende RSU</span>
+##                    </a>
+##                </li>
                 <li>
                     <a href="#/searchlistelavoro" class="framework-navigation">
                         <span class="glyphicons glyphicons-notes"></span>

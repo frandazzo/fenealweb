@@ -466,7 +466,6 @@ public class LavoratoriController {
                 content = renderer.render(viewResolver, "lavoratori/workerSummaryTimelineLombardia", model, LocaleContextHolder.getLocale(), request);
             }else if(((User) security.getLoggedUser()).getCompany().getRegionId() == 200){
                 content = renderer.render(viewResolver, "lavoratori/workerSummaryTimelineSardegna", model, LocaleContextHolder.getLocale(), request);
-
             }
             else{
                 content = renderer.render(viewResolver, "lavoratori/workerSummaryTimeline", model, LocaleContextHolder.getLocale(), request);

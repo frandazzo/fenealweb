@@ -34,8 +34,8 @@ public class CalcolatoreParametriAttribuzione {
     {
         int num1 = solidarieta.getAccordoSolidarieta() == PattoSolidarieta.TipoAccordoSolidarieta.Categoria ? solidarieta.getPercentualeSogliaCategoria() : solidarieta.getPercentualeSogliaInterconfederale();
         int num2 = solidarieta.getAccordoSolidarieta() == PattoSolidarieta.TipoAccordoSolidarieta.Categoria ? solidarieta.getPercentualeSogliaInCasoListaDominante() : 0;
-        p.setSogliaDiSbarramento(Math.round(p.getQuozienteElettorale()) / 100d * (double) num1);
-        p.setSogliaDiSbarramentoListaDominante(Math.round(p.getQuozienteElettorale()) / 100d * (double) num2);
+        p.setSogliaDiSbarramento(Math.round(p.getQuozienteElettorale() / 100d * (double) num1)*100.0/100.0);
+        p.setSogliaDiSbarramentoListaDominante(Math.round(p.getQuozienteElettorale() / 100d * (double) num2)*100.0/100.0);
     }
 
     private static void CalcolaElegibilitàParziale(
@@ -44,8 +44,8 @@ public class CalcolatoreParametriAttribuzione {
     {
 
         RsuEleggibili dd = CalcolatoreParametriAttribuzione.CalcolaRsuEleggibili(votazione);
-        p.setrSUElegibili1_3(Integer.parseInt(String.valueOf(dd.rsueleggibili1_3)));
-        p.setrSUElegibili2_3(Integer.parseInt(String.valueOf(dd.rsueleggibili2_3)));
+        p.setrSUElegibili1_3((int)(dd.rsueleggibili1_3));
+        p.setrSUElegibili2_3((int)(dd.rsueleggibili2_3));
     }
 
     private static double CalcolaQuoziente(
@@ -57,13 +57,13 @@ public class CalcolatoreParametriAttribuzione {
         RsuEleggibili dd = CalcolatoreParametriAttribuzione.CalcolaRsuEleggibili(votazione);
 
             if (tipoParziale== TipoParziale.AttribuzioneProporzionale)
-                return Math.round(schedeValide / rsuElegibili);
+                return Math.round((schedeValide / rsuElegibili)*100.0)/100.0;
         if (tipoParziale==  TipoParziale.AttribuzioneProporzionale1_3)
-                return Math.round(schedeValide / dd.rsueleggibili1_3);
+                return Math.round((schedeValide / dd.rsueleggibili1_3) * 100.0)/100.0;
         if (tipoParziale==  TipoParziale.AttribuzioneSolidarieta)
                 throw new Exception("Operazione non consentita");
         if (tipoParziale==  TipoParziale.AttribuzioneProporzionale2_3)
-                return Math.round(schedeValide / dd.rsueleggibili2_3);
+                return Math.round((schedeValide / dd.rsueleggibili2_3) * 100.0)/100.0;
 //            default:
                 throw new Exception("Tipo parziale sconosciuto");
 
@@ -75,7 +75,7 @@ public class CalcolatoreParametriAttribuzione {
         double schedeValide = (double) votazione.getSchedeValide();
         double rsuElegibili = (double) votazione.getRSUElegibili();
         RsuEleggibili dd = new RsuEleggibili();
-        dd.rsueleggibili2_3 = (double) (Math.round(rsuElegibili * 2d / 3d));
+        dd.rsueleggibili2_3 = Math.floor(Math.round((rsuElegibili * 2d / 3d) * 100.0)/100.0);
         dd.rsueleggibili1_3 = rsuElegibili - dd.rsueleggibili2_3;
         return dd;
     }

@@ -8,7 +8,7 @@ public class DivisioneDecimaleConQuozienteInteroEResto {
     private double resto;
 
     public DivisioneDecimaleConQuozienteInteroEResto(double dividendo, double divisore) throws Exception {
-        if (divisore == 0)
+        if (divisore == 0d)
             throw new Exception("Il divisore non può essere nullo");
         this.dividendo = dividendo;
         this.divisore = divisore;
@@ -31,7 +31,7 @@ public class DivisioneDecimaleConQuozienteInteroEResto {
 
     public void Dividi()
     {
-        this.quoziente = Math.floor(Math.round(this.dividendo / this.divisore));
+        this.quoziente = Math.floor(Math.round((this.dividendo / this.divisore)*100.0)/100.0);
         this.resto = Math.round(this.dividendo % this.divisore);
     }
 

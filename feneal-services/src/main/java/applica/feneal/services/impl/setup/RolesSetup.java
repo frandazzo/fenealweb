@@ -101,6 +101,9 @@ public class RolesSetup implements AppSetup {
         secretaryPermissions.addAll(PermissionMap.staticPermissions("contract"));
         secretaryPermissions.addAll(PermissionMap.staticPermissions("applicationoption"));
         secretaryPermissions.addAll(PermissionMap.staticPermissions("referenti"));
+        secretaryPermissions.addAll(PermissionMap.staticPermissions("firmrsu"));
+
+
 
         long secretaryId = 3;
         setPermissionsToRole(secretaryPermissions, secretaryId);
@@ -182,6 +185,7 @@ public class RolesSetup implements AppSetup {
         nationalPermissions.addAll(PermissionMap.staticPermissions("notmembersreport"));
         nationalPermissions.addAll(PermissionMap.staticPermissions("quotereport"));
         nationalPermissions.addAll(PermissionMap.staticPermissions("importationsreport"));
+        nationalPermissions.addAll(PermissionMap.staticPermissions("firmrsu"));
 
         long nationalId = 7;
         setPermissionsToRole(nationalPermissions, nationalId);

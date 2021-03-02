@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.core.RSU.SedeRSU" table="fenealweb_sede_rsu" >
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        <property name="description" />
+        <property name="city" />
+        <property name="province" />
+        <many-to-one name="aziendaRSU" class="applica.feneal.domain.model.core.RSU.AziendaRSU" column="aziendaId" lazy="false" />
+        <property name="address" />
+        <property name="companyId" type="long" />
+    </class>
+</hibernate-mapping>

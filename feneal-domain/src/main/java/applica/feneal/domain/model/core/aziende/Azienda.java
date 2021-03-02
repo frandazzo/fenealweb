@@ -2,6 +2,8 @@ package applica.feneal.domain.model.core.aziende;
 
 import applica.feneal.domain.model.utils.SecuredDomainEntity;
 
+
+
 /**
  * Created by fgran on 05/04/2016.
  */
@@ -15,6 +17,8 @@ public class Azienda extends SecuredDomainEntity {
     private String phone;
     private String piva;
     private String notes;
+
+
 
     public String getPhone() {
         return phone;
@@ -84,4 +88,6 @@ public class Azienda extends SecuredDomainEntity {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
+
 }

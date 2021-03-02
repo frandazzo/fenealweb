@@ -227,6 +227,7 @@ define([
                             $("<a />")
                                 .text(completeName)
                                 .attr("href", "javascript:;")
+                                .attr("target", "_blank")
                                 .on('click', function(){
                                     ui.Navigation.instance().navigate("summaryworker", "remoteIndex", {
                                         fiscalCode:fiscalCode

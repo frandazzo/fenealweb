@@ -1,0 +1,68 @@
+#parse("/shared/framework.vm")
+
+<div class="panel">
+    <div class="panel-menu admin-form theme-primary">
+
+    </div>
+    <div class="panel-body pn">
+        <div class="table-responsive">
+            #if($deleghe.size() > 0)
+                <table class="table admin-form theme-warning tc-checkbox-1 fs13">
+                    <thead>
+                    <tr class="bg-light">
+                        <th>Descrizione</th>
+                        <th>Provincia</th>
+                        <th class="">Città</th>
+                        <th class="">Indirizzo</th>
+                        <th class="">Operazioni</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        #foreach($delega in $deleghe)
+                        <tr data-delega-id="$delega.id">
+                            <td class="">
+                               $delega.description
+                            </td>
+                            <td class="">
+                                $delega.province
+                            </td>
+                            <td class="">
+                                $delega.city
+                            </td>
+                            <td class="">
+                                $delega.address
+                            </td>
+                            <td>
+                                <div class="btn-group text-right">
+                                <button type="button" class="btn $buttonStateClass br2 btn-xs fs12 dropdown-toggle" data-toggle="dropdown" aria-expanded="false">SELEZIONA AZIONE
+                                    <span class="caret ml5"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#/calcolaattribuzionersu?id=$delega.id&firmId=$delega.firmId"><i class="glyphicon glyphicon-signal"></i>Calcola Attribuzione RSU</a>
+                                    </li>
+                                    <li>
+                                        <a href="#/editsedersu?id=$delega.id&firmId=$delega.firmId"><i class="glyphicon glyphicon-pencil"></i>Modifica</a>
+                                    </li>
+                                    <li>
+                                        <a href="#/deletesedersu?id=$delega.id&firmId=$delega.firmId"><i class="glyphicon glyphicon-trash"></i>Elimina</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        #end
+
+                    </tbody>
+                </table>
+            #else
+                <div class="alert alert-system alert-border-left alert-dismissable mv30">
+                    <b>Nessuna sede presente:</b>
+                </div>
+
+            #end
+
+        </div>
+    </div>
+</div>

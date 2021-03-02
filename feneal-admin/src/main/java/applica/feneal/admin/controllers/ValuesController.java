@@ -5,6 +5,8 @@ import applica.feneal.domain.data.UsersRepository;
 import applica.feneal.domain.data.core.CollaboratorRepository;
 import applica.feneal.domain.data.core.CompanyRepository;
 import applica.feneal.domain.data.core.ParitheticRepository;
+import applica.feneal.domain.data.core.RSU.AziendeRSURepository;
+import applica.feneal.domain.data.core.RSU.SedeRSURepository;
 import applica.feneal.domain.data.core.SectorRepository;
 import applica.feneal.domain.data.core.VisibleFunctionRepository;
 import applica.feneal.domain.data.core.*;
@@ -17,6 +19,8 @@ import applica.feneal.domain.model.Filters;
 import applica.feneal.domain.model.Role;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.Paritethic;
+import applica.feneal.domain.model.core.RSU.AziendaRSU;
+import applica.feneal.domain.model.core.RSU.SedeRSU;
 import applica.feneal.domain.model.core.Sector;
 import applica.feneal.domain.model.core.VisibleFunction;
 import applica.feneal.domain.model.core.aziende.Azienda;
@@ -67,6 +71,9 @@ public class ValuesController {
     private Security security;
 
     @Autowired
+    private SedeRSURepository sedeRSURepository;
+
+    @Autowired
     private CollaboratorRepository collaboratorRepository;
 
     @Autowired
@@ -83,6 +90,9 @@ public class ValuesController {
 
     @Autowired
     AziendeRepository aziendeRepository;
+
+    @Autowired
+    AziendeRSURepository aziendeRSURepository;
 
     @Autowired
     CountriesRepository countryRepository;
@@ -161,6 +171,27 @@ public class ValuesController {
         ).getRows();
 
         return new ValueResponse(SimpleItem.createList(cities, "description", "id"));
+    }
+
+    @RequestMapping("/sedirsu")
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody ValueResponse sedirsu(@RequestParam(required = false, defaultValue = "") String keyword) {
+        if (keyword.equals(""))
+            return new ValueResponse(new ArrayList<SimpleItem>());
+
+        if (!StringUtils.isNumeric(keyword)){
+            //allora sto inviando il testgo di una provincia
+            //pertanto recupero la provincia per nome...
+            AziendaRSU az = aziendeRSURepository.find(LoadRequest.build().filter("description", keyword, Filter.EQ)).findFirst().orElse(null);
+            if (az == null)
+                return new ValueResponse(new ArrayList<SimpleItem>());
+
+            keyword = String.valueOf(az.getIid());
+        }
+
+        List<SedeRSU> sedi = sedeRSURepository.find(LoadRequest.build().eq("aziendaRSU", keyword)).getRows();
+
+        return new ValueResponse(SimpleItem.createList(sedi, "description", "id"));
     }
 
 
@@ -264,6 +295,19 @@ public class ValuesController {
             return new ValueResponse(new ArrayList<SimpleItem>());
 
         List<Azienda> aziende = aziendeRepository.find(
+                LoadRequest.build().sort("description", false).like(Filters.DESCRIPTION,keyword)).getRows();
+
+        return new ValueResponse(SimpleItem.createList(aziende, "description", "id"));
+    }
+
+    @RequestMapping("/aziendersu")
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody ValueResponse firmRsu(String keyword) {
+
+        if (keyword.length() < 3)
+            return new ValueResponse(new ArrayList<SimpleItem>());
+
+        List<AziendaRSU> aziende = aziendeRSURepository.find(
                 LoadRequest.build().sort("description", false).like(Filters.DESCRIPTION,keyword)).getRows();
 
         return new ValueResponse(SimpleItem.createList(aziende, "description", "id"));
