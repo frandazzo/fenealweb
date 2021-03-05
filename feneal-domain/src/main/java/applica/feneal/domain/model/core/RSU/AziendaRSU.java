@@ -17,6 +17,7 @@ public class AziendaRSU extends SecuredDomainEntity {
     private String address;
     private String phone;
     private String piva;
+    private String cf;
     private String notes;
 
     private String companyCreator;
@@ -25,6 +26,14 @@ public class AziendaRSU extends SecuredDomainEntity {
     private String companyLastModification;
     private String usernameLastModification;
     private Date lastModificationDate;
+
+    public String getCf() {
+        return cf;
+    }
+
+    public void setCf(String cf) {
+        this.cf = cf;
+    }
 
     public String getDescription() {
         return description;

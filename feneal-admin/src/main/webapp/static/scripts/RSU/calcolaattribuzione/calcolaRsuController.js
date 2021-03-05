@@ -15,9 +15,6 @@ var calcolaRsuController = fcontrollers.Controller.extend({
 
     index: function(params) {
 
-        if(params.id)
-            var sedeId = params.id;
-
         if(params.firmId)
             var firmId = params.firmId;
 
@@ -26,7 +23,7 @@ var calcolaRsuController = fcontrollers.Controller.extend({
         service.set({
             url: url
         });
-        return new views.ReportRsuHomeRemoteView(service,sedeId,firmId);
+        return new views.ReportRsuHomeRemoteView(service,firmId);
     }
 });
 

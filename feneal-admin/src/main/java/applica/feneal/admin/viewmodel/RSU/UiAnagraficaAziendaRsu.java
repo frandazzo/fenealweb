@@ -16,6 +16,7 @@ public class UiAnagraficaAziendaRsu {
 
     private String phone;
     private String piva;
+    private String cf;
 
     private String companyCreator;
     private String usernameCreator;
@@ -23,6 +24,14 @@ public class UiAnagraficaAziendaRsu {
     private String companyLastModification;
     private String usernameLastModification;
     private String lastModificationDate;
+
+    public String getCf() {
+        return cf;
+    }
+
+    public void setCf(String cf) {
+        this.cf = cf;
+    }
 
     public String getCompanyCreator() {
         return companyCreator;

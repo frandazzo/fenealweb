@@ -28,8 +28,8 @@ public class AziendaRsuValidator implements DomainClassValidator {
         StringBuilder b = new StringBuilder();
 
 
-        if (StringUtils.isEmpty(l.getPiva()) || l.getPiva().length() < 11 || l.getPiva().length() > 11){
-            b.append("P.Iva nulla");
+        if (StringUtils.isEmpty(l.getCf()) || l.getCf().length() < 16 || l.getCf().length() > 16){
+            b.append("Cod.Fiscale non valido");
             return b.toString();
         }
 
@@ -51,15 +51,15 @@ public class AziendaRsuValidator implements DomainClassValidator {
 
 
         //adesso devo verificare che la p.iva dell'azienda sia unica per tutto il territorio
-        AziendaRSU a = azRep.find(LoadRequest.build().filter("piva", l.getPiva())).findFirst().orElse(null);
+        AziendaRSU a = azRep.find(LoadRequest.build().filter("cf", l.getCf())).findFirst().orElse(null);
         if (l.getLid() == 0){
             if (a != null)
-                b.append("ATTENZIONE! P.Iva gi&#224; esistente");
+                b.append("ATTENZIONE! Cod.Fiscale gi&#224; esistente");
 
         }else{
             if (a != null){
                 if (l.getLid() != a.getLid())
-                    b.append("ATTENZIONE! P.Iva gi&#224; esistente");
+                    b.append("ATTENZIONE! Cod.Fiscale gi&#224; esistente");
             }
 
         }

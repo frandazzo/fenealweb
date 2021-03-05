@@ -38,9 +38,9 @@
                                     <span class="caret ml5"></span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="#/calcolaattribuzionersu?id=$delega.id&firmId=$delega.firmId"><i class="glyphicon glyphicon-signal"></i>Calcola Attribuzione RSU</a>
-                                    </li>
+##                                    <li>
+##                                        <a href="#/calcolaattribuzionersu?id=$delega.id&firmId=$delega.firmId"><i class="glyphicon glyphicon-signal"></i>Calcola Attribuzione RSU</a>
+##                                    </li>
                                     <li>
                                         <a href="#/editsedersu?id=$delega.id&firmId=$delega.firmId"><i class="glyphicon glyphicon-pencil"></i>Modifica</a>
                                     </li>

@@ -76,6 +76,15 @@
 
                     <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
                         <div class="col-md-6 col-xs-6 zero-padding">
+                            <span>Cod.Fiscale:</span>
+                        </div>
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span class="pull-right">#if($summary.data.cf)$summary.data.cf#end</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
+                        <div class="col-md-6 col-xs-6 zero-padding">
                             <span>P. Iva:</span>
                         </div>
                         <div class="col-md-6 col-xs-6 zero-padding">
@@ -102,59 +111,28 @@
     <div class="col-md-7 zero-padding">
         <div class="col-md-12 col-xs-12  main-chart" style="margin-top: 10px">
 
-
-
             <div class="panel">
-
                 <div class="panel-heading">
-                    <span class="panel-title">Iscritti azienda</span>
+                    <span class="panel-title">Sedi azienda</span>
                 </div>
-
                 <div class="panel-body pn" style="border-right: 0px">
-
-                    <div id="containerIscritti" >
+                    <div id="containerSedi" >
 
                     </div>
-
                 </div>
-
             </div>
 
             <div class="panel">
-
                 <div class="panel-heading">
-                    <span class="panel-title">Non Iscritti azienda</span>
+                    <span class="panel-title">Votazioni azienda</span>
                 </div>
-
                 <div class="panel-body pn" style="border-right: 0px">
 
-                    <div id="containerNonIscritti" >
+                    <div id="containerVotazioni" >
 
                     </div>
-
                 </div>
-
             </div>
-
-            <div class="panel panelDelegheEdili">
-
-                <div class="panel-heading">
-                    <span class="panel-title">Deleghe edili</span>
-                </div>
-
-                <div class="panel-body pn" style="border-right: 0px">
-
-                    <div id="containerDelegheEdili" >
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-
         </div>
     </div>
 
@@ -162,7 +140,10 @@
     <!-- Sezione pulsanti -->
     <div class="col-md-2 zero-padding p10">
         <button type="button" class="btn btn-summary btn-primary sedi-rsu">Sedi Azienda RSU</button>
+    </div>
 
+    <div class="col-md-2 zero-padding p10">
+        <button type="button" class="btn btn-summary btn-primary attr-rsu"><i class="glyphicon glyphicon-signal"></i> Calcola Attribuzione RSU</button>
     </div>
 
 </div>

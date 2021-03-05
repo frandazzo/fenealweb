@@ -6,6 +6,24 @@ public class UiElezioneDtoForListe {
     private ElezioneDto dto;
     private String nome;
     private Boolean firmataria;
+    private String oldnome;
+    private Boolean oldfirmataria;
+
+    public String getOldnome() {
+        return oldnome;
+    }
+
+    public void setOldnome(String oldnome) {
+        this.oldnome = oldnome;
+    }
+
+    public Boolean getOldfirmataria() {
+        return oldfirmataria;
+    }
+
+    public void setOldfirmataria(Boolean oldfirmataria) {
+        this.oldfirmataria = oldfirmataria;
+    }
 
     public ElezioneDto getDto() {
         return dto;

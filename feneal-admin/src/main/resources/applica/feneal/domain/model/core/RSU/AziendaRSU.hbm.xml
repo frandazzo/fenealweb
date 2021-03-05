@@ -12,6 +12,7 @@
         <property name="address" />
         <property name="phone" />
         <property name="piva" />
+        <property name="cf" />
         <property name="notes" />
         <property name="companyCreator" />
         <property name="usernameCreator" />

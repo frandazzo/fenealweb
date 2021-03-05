@@ -238,11 +238,11 @@ define([
                     }
                 );
 
-            if (!data.piva)
+            if (!data.cf)
                 result.errors.push(
                     {
-                        property: "piva",
-                        message: "P.Iva mancante"
+                        property: "cf",
+                        message: "Cod.Fiscale obbligatorio"
                     }
                 );
 
@@ -404,6 +404,12 @@ define([
 
                 $("button.sedi-rsu").click(function(){
                     ui.Navigation.instance().navigate("sedersu", "index", {
+                        firmId: self.firmId
+                    })
+                });
+
+                $("button.attr-rsu").click(function(){
+                    ui.Navigation.instance().navigate("calcolaattribuzionersu", "index", {
                         firmId: self.firmId
                     })
                 });

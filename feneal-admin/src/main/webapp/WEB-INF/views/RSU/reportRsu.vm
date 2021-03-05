@@ -22,9 +22,7 @@
             </div>
         </div>
 
-
-
-        <div id="listepresentate" class="liste-presentate-elezione" style="display: none">
+        <div id="listepresentate" class="liste-presentate-elezione">
             <div class="content-header pb20">
                 <h2 style="text-align: center; font-size: 24px; font-weight: 600;">
                     <span class="text-primary" data-component="title">Liste presentate</span>
@@ -43,37 +41,104 @@
                     </div>
                 </div>
                 <div class="col-md-3">
+                    <div class="col-md-12 p10" style="background-color: white; margin-top:10px">
+                        <button id="add_list" class="btn btn-secondary mrn" type="submit" data-component="submit_button" data-toggle="tooltip" data-placement="right" title="Clicca per aggiungere una lista"><i class="glyphicon glyphicon-plus-sign pr5"></i>Aggiungi lista</button>
+                    </div>
+##                    <div class="col-md-12 p10" style="background-color: white; margin-top:10px">
+##                        <button id="remove_list" class="btn btn-secondary mrn" type="submit" data-component="submit_button" data-toggle="tooltip" data-placement="right" title="Seleziona una lista per cancellare"><i class="glyphicon glyphicon-trash pr5"></i>Cancella lista</button>
+##                    </div>
+##                    <div class="col-md-12 p10" style="background-color: white; margin-top:10px">
+##                        <button id="edit_list" class="btn btn-secondary mrn" type="submit" data-component="submit_button" data-toggle="tooltip" data-placement="right" title="Seleziona una lista per modificare"><i class="glyphicon glyphicon-pencil pr5"></i>Modifica lista</button>
+##                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button id="avanti-liste" class="btn btn-primary mrn avanti-liste" type="submit" data-component="submit_button">Avanti<i class="glyphicon glyphicon-chevron-right pr5"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="esitovotazione">
+            <div class="content-header pb20">
+                <h2 style="text-align: center; font-size: 24px; font-weight: 600;">
+                    <span class="text-primary" data-component="title">Esito votazione</span>
+                </h2>
+                <h4 style="text-align: center; font-weight: 600;">
+                    <span class="text-primary" data-component="title">Specificare tutti i dati salienti sull'esito della votazione.</span>
+                </h4>
+            </div>
+            <div class="row" id="esitovotazioneform">
+
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="col-md-12 pl20" style="background-color: white; margin-top:10px">
+                        <button class="btn btn-info mrn" data-toggle="tooltip" data-placement="right" title="Ricordati di SALVARE le modifiche alle votazioni nelle liste per calcolare l'esito!"><i class="glyphicon glyphicon-exclamation-sign"></i></button>
+                    </div>
                     <div class="col-md-12 p20" style="background-color: white; margin-top:10px">
-                        <button id="add_list" class="btn btn-primary mrn" type="submit" data-component="submit_button"><i class="glyphicon glyphicon-plus-sign pr5"></i>Aggiungi lista</button>
+                        <div id="gridVotazioni">
+
+                        </div>
+                        <span style="font-size: 16px;font-weight: 700;">
+                            Totale schede ottenute dalle liste: <p id="tot_sc_list">0</p>
+                        </span>
+                        <span style="font-size: 16px;font-weight: 700;">
+                            Totale schede valide per il calcolo del quoziente elettorale:  <p id="tot_sc_vali">0</p>
+                        </span>
+                        <span style="font-size: 16px;font-weight: 700;">
+                            Totale votanti:  <p id="tot_voti">0</p>
+                        </span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="liste-presentate-elezione">
-                        <button id="indietro-liste" class="btn btn-primary mrn" type="submit" data-component="submit_button"><i class="glyphicon glyphicon-chevron-left pr5"></i> Indietro</button>
-                        <button id="avanti-liste" class="btn btn-primary mrn" type="submit" data-component="submit_button">Avanti<i class="glyphicon glyphicon-chevron-right pr5"></i></button>
-                    </div>
+                    <button id="indietro-esito" class="btn btn-primary mrn" type="submit" data-component="submit_button">Indietro<i class="glyphicon glyphicon-chevron-left pr5"></i></button>
+                    <button id="avanti-esito" class="btn btn-primary mrn" type="submit" data-component="submit_button">Avanti<i class="glyphicon glyphicon-chevron-right pr5"></i></button>
                 </div>
             </div>
         </div>
 
-
-
-
-        <div id="div3" style="display: none">
-            <div>
-                <h1>titolo div 3</h1>
+        <div id="proceduracompletata">
+            <div class="content-header pb10">
+                <h2 style="text-align: center; font-size: 24px; font-weight: 600;">
+                    <span class="text-primary" data-component="title">Procedura guidata completata</span>
+                </h2>
+                <h4 style="text-align: center; font-weight: 600;">
+                    <span class="text-primary" data-component="title">La procedura guidata è ternìminata. Cliccando "Termina" verrà avviata una stampa cn l'esito della elezione delle RSU.</span>
+                </h4>
             </div>
+
             <div>
-                <button id="avanti3">
-                    Avanti
-                </button>
-                <button id="indietro3">
-                    indietro
-                </button>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="col-md-12 p20" style="background-color: white; margin-top:10px">
+                            <span style="font-size: 16px;font-weight: 700;">
+                            Totale schede ottenute dalle liste: <p id="tot_sc_list"></p>
+                        </span>
+                            <span style="font-size: 16px;font-weight: 700;">
+                            Totale schede valide per il calcolo del quoziente elettorale:  <p id="tot_sc_vali"></p>
+                        </span>
+                            <span style="font-size: 16px;font-weight: 700;">
+                            Totale votanti:  <p id="tot_voti"></p>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id="indietro-procedura" class="btn btn-primary mrn" type="submit" data-component="submit_button">Indietro<i class="glyphicon glyphicon-chevron-left pr5"></i></button>
+                        <button id="avanti-procedura" class="btn btn-primary mrn" type="submit" data-component="submit_button">Termina<i class="glyphicon glyphicon-chevron-right pr5"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>

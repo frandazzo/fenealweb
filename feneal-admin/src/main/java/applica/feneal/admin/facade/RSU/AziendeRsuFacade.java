@@ -1,14 +1,12 @@
 package applica.feneal.admin.facade.RSU;
 
 import applica.feneal.admin.viewmodel.RSU.UiAnagraficaAziendaRsu;
-import applica.feneal.admin.viewmodel.app.dashboard.aziende.AppAzienda;
-import applica.feneal.admin.viewmodel.aziende.UiAziendaAnagraficaSummary;
-import applica.feneal.admin.viewmodel.aziende.UiCompleteAziendaSummary;
+import applica.feneal.admin.viewmodel.RSU.UiAziendaRsuAnagraficaSummary;
+
 import applica.feneal.domain.data.core.RSU.AziendeRSURepository;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.RSU.AziendaRSU;
-import applica.feneal.domain.model.core.RSU.SedeRSU;
-import applica.feneal.domain.model.core.aziende.Azienda;
+
 import applica.feneal.domain.model.geo.City;
 import applica.feneal.domain.model.geo.Province;
 import applica.feneal.services.GeoService;
@@ -65,6 +63,7 @@ public class AziendeRsuFacade {
         az.setNotes(anag.getNotes());
         az.setPhone(anag.getPhone());
         az.setPiva(anag.getPiva());
+        az.setCf(anag.getCf());
 
 
 
@@ -129,24 +128,21 @@ public class AziendeRsuFacade {
         return az;
     }
 
-    public UiCompleteAziendaSummary getFirmById(long id) {
+    public UiAziendaRsuAnagraficaSummary getFirmById(long id) {
         AziendaRSU az = svc.getAziendaRsuById(((User) sec.getLoggedUser()).getLid(),id);
 
-        UiCompleteAziendaSummary s = new UiCompleteAziendaSummary();
+        UiAziendaRsuAnagraficaSummary anag = convertAziendaRsuToUiAzienda(az);
 
-        UiAziendaAnagraficaSummary anag = convertAziendaRsuToUiAzienda(az);
-
-        s.setData(anag);
-
-        return s;
+        return anag;
     }
 
-    private UiAziendaAnagraficaSummary convertAziendaRsuToUiAzienda(AziendaRSU az) {
-        UiAziendaAnagraficaSummary s = new UiAziendaAnagraficaSummary();
+    private UiAziendaRsuAnagraficaSummary convertAziendaRsuToUiAzienda(AziendaRSU az) {
+        UiAziendaRsuAnagraficaSummary s = new UiAziendaRsuAnagraficaSummary();
 
         s.setId(az.getLid());
         s.setDescription(az.getDescription());
         s.setCity(az.getCity());
+        s.setCf(az.getCf());
         s.setProvince(az.getProvince());
         s.setCap(az.getCap());
         s.setAddress(az.getAddress());
@@ -181,12 +177,12 @@ public class AziendeRsuFacade {
     }
 
 
-    public UiAziendaAnagraficaSummary getRemoteAziendaRsu(long firmId) {
-        UiCompleteAziendaSummary ui = getFirmById(firmId);
-        return ui.getData();
+    public UiAziendaRsuAnagraficaSummary getRemoteAziendaRsu(long firmId) {
+        UiAziendaRsuAnagraficaSummary ui = getFirmById(firmId);
+        return ui;
     }
 
-    public List<UiAziendaAnagraficaSummary> findAziendeRsu(String description) {
+    public List<UiAziendaRsuAnagraficaSummary> findAziendeRsu(String description) {
         LoadRequest req = LoadRequest.build().disableOwnershipQuery();
 
         if (!org.springframework.util.StringUtils.isEmpty(description.trim())){
@@ -201,16 +197,16 @@ public class AziendeRsuFacade {
 
         List<AziendaRSU> l = azRep.find(req).getRows();
 
-        List<UiAziendaAnagraficaSummary> result = new ArrayList<>();
+        List<UiAziendaRsuAnagraficaSummary> result = new ArrayList<>();
         for (AziendaRSU a: l) {
-            UiAziendaAnagraficaSummary ui = convertAziendaRsuToUiAzienda(a);
+            UiAziendaRsuAnagraficaSummary ui = convertAziendaRsuToUiAzienda(a);
             result.add(ui);
         }
 
         if (result.size() > 0){
-            Collections.sort(result, new Comparator<UiAziendaAnagraficaSummary>() {
+            Collections.sort(result, new Comparator<UiAziendaRsuAnagraficaSummary>() {
                 @Override
-                public int compare(final UiAziendaAnagraficaSummary object1, final UiAziendaAnagraficaSummary object2) {
+                public int compare(final UiAziendaRsuAnagraficaSummary object1, final UiAziendaRsuAnagraficaSummary object2) {
                     return object1.getDescription().compareTo(object2.getDescription());
                 }
             } );

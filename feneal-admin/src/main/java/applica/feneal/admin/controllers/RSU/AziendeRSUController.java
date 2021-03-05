@@ -5,10 +5,8 @@ import applica.feneal.admin.fields.renderers.geo.OptionalCityFieldRenderer;
 import applica.feneal.admin.fields.renderers.geo.OptionalProvinceFieldRenderer;
 import applica.feneal.admin.form.renderers.MulticolumnFormRenderer;
 import applica.feneal.admin.viewmodel.RSU.UiAnagraficaAziendaRsu;
-import applica.feneal.admin.viewmodel.RSU.UiAnagraficaSedeRsu;
-import applica.feneal.admin.viewmodel.app.dashboard.aziende.AppAzienda;
-import applica.feneal.admin.viewmodel.aziende.UiAziendaAnagraficaSummary;
-import applica.feneal.admin.viewmodel.aziende.UiCompleteAziendaSummary;
+
+import applica.feneal.admin.viewmodel.RSU.UiAziendaRsuAnagraficaSummary;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.RSU.AziendaRSU;
 import applica.feneal.services.GeoService;
@@ -83,25 +81,23 @@ public class AziendeRSUController {
 
             FormDescriptor formDescriptor = new FormDescriptor(form);
             formDescriptor.addField("id", String.class, "id", null, applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("description", String.class, "Ragione sociale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("province", String.class, "Provincia", "", applicationContext.getBean(OptionalProvinceFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt1").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("city", String.class, "Città", "", applicationContext.getBean(OptionalCityFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt8").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("address", String.class, "Indir.", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt2").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("cap", String.class, "CAP", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt4").putParam(Params.FORM_COLUMN, "  ");
-            formDescriptor.addField("phone", String.class, "Telefono", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt5").putParam(Params.FORM_COLUMN, "  ");
-            formDescriptor.addField("piva", String.class, "P. Iva", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt6").putParam(Params.FORM_COLUMN, "  ");
+            formDescriptor.addField("description", String.class, "Ragione sociale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("province", String.class, "Provincia", "", applicationContext.getBean(OptionalProvinceFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt1").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("city", String.class, "Città", "", applicationContext.getBean(OptionalCityFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt2").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("address", String.class, "Indir.", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt3").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("cap", String.class, "CAP", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt4").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("phone", String.class, "Telefono", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt5").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("piva", String.class, "P. Iva", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt6").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("cf", String.class, "Cod.Fiscale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt7").putParam(Params.FORM_COLUMN, " ");
 
-            formDescriptor.addField("companyCreator", String.class, "companyCreator", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt1").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("usernameCreator", String.class, "usernameCreator", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt8").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("createDate", String.class, "createDate", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt2").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("companyLastModification", String.class, "companyLastModification", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt4").putParam(Params.FORM_COLUMN, "  ");
-            formDescriptor.addField("usernameLastModification", String.class, "usernameLastModification", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt5").putParam(Params.FORM_COLUMN, "  ");
-            formDescriptor.addField("lastModificationDate", String.class, "lastModificationDate", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt6").putParam(Params.FORM_COLUMN, "  ");
+            formDescriptor.addField("notes", String.class, "Note", "", applicationContext.getBean(TextAreaFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt8").putParam(Params.FORM_COLUMN, " ");
 
-
-
-            formDescriptor.addField("notes", String.class, "Note", "", applicationContext.getBean(TextAreaFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt7").putParam(Params.FORM_COLUMN, "  ");
-
+            formDescriptor.addField("companyCreator", String.class, "companyCreator", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("usernameCreator", String.class, "usernameCreator", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("createDate", String.class, "createDate", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("companyLastModification", String.class, "companyLastModification", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("usernameLastModification", String.class, "usernameLastModification", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("lastModificationDate", String.class, "lastModificationDate", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
 
             FormResponse response = new FormResponse();
 
@@ -136,24 +132,23 @@ public class AziendeRSUController {
 
             FormDescriptor formDescriptor = new FormDescriptor(form);
             formDescriptor.addField("id", String.class, "id", null, applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("description", String.class, "Ragione sociale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("province", String.class, "Provincia", "", applicationContext.getBean(OptionalProvinceFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt1").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("city", String.class, "Città", "", applicationContext.getBean(OptionalCityFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt8").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("address", String.class, "Indir.", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt2").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("cap", String.class, "CAP", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt4").putParam(Params.FORM_COLUMN, "  ");
-            formDescriptor.addField("phone", String.class, "Telefono", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt5").putParam(Params.FORM_COLUMN, "  ");
-            formDescriptor.addField("piva", String.class, "P. Iva", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt6").putParam(Params.FORM_COLUMN, "  ");
+            formDescriptor.addField("description", String.class, "Ragione sociale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("province", String.class, "Provincia", "", applicationContext.getBean(OptionalProvinceFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt1").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("city", String.class, "Città", "", applicationContext.getBean(OptionalCityFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt2").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("address", String.class, "Indir.", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt3").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("cap", String.class, "CAP", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt4").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("phone", String.class, "Telefono", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt5").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("piva", String.class, "P. Iva", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt6").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("cf", String.class, "Cod.Fiscale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt7").putParam(Params.FORM_COLUMN, " ");
 
-            formDescriptor.addField("companyCreator", String.class, "companyCreator", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt1").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("usernameCreator", String.class, "usernameCreator", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt8").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("createDate", String.class, "createDate", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt2").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("companyLastModification", String.class, "companyLastModification", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_6).putParam(Params.ROW, "dt4").putParam(Params.FORM_COLUMN, "  ");
-            formDescriptor.addField("usernameLastModification", String.class, "usernameLastModification", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt5").putParam(Params.FORM_COLUMN, "  ");
-            formDescriptor.addField("lastModificationDate", String.class, "lastModificationDate", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt6").putParam(Params.FORM_COLUMN, "  ");
+            formDescriptor.addField("notes", String.class, "Note", "", applicationContext.getBean(TextAreaFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt8").putParam(Params.FORM_COLUMN, " ");
 
-
-
-            formDescriptor.addField("notes", String.class, "Note", "", applicationContext.getBean(TextAreaFieldRenderer.class)).putParam(Params.COLS, Values.COLS_12).putParam(Params.ROW, "dt7").putParam(Params.FORM_COLUMN, "  ");
+            formDescriptor.addField("companyCreator", String.class, "companyCreator", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("usernameCreator", String.class, "usernameCreator", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("createDate", String.class, "createDate", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("companyLastModification", String.class, "companyLastModification", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("usernameLastModification", String.class, "usernameLastModification", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("lastModificationDate", String.class, "lastModificationDate", "", applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.COLS, Values.COLS_1).putParam(Params.ROW, "dt9").putParam(Params.FORM_COLUMN, " ");
 
             AziendaRSU d = svc.getAziendaRsuById(((User) sec.getLoggedUser()).getLid(),id);
 
@@ -176,6 +171,7 @@ public class AziendeRSUController {
                 data.put("address", d.getAddress());
                 data.put("notes", d.getNotes());
                 data.put("piva", d.getPiva());
+                data.put("cf", d.getCf());
                 data.put("phone", d.getPhone());
 
                 DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -215,7 +211,7 @@ public class AziendeRSUController {
 
         try {
 
-            UiCompleteAziendaSummary c = aziendeRsuFacade.getFirmById(id);
+            UiAziendaRsuAnagraficaSummary c = aziendeRsuFacade.getFirmById(id);
             HashMap<String, Object> model = new HashMap<String, Object>();
             model.put("summary", c);
 
@@ -235,7 +231,7 @@ public class AziendeRSUController {
 
 
         try {
-            List<UiAziendaAnagraficaSummary> appAziendaList = aziendeRsuFacade.findAziendeRsu(description);
+            List<UiAziendaRsuAnagraficaSummary> appAziendaList = aziendeRsuFacade.findAziendeRsu(description);
 
             return new ValueResponse(appAziendaList);
         } catch (Exception e) {
@@ -253,7 +249,7 @@ public class AziendeRSUController {
 
         try {
 
-            UiAziendaAnagraficaSummary azienda =  aziendeRsuFacade.getRemoteAziendaRsu(firmId);
+            UiAziendaRsuAnagraficaSummary azienda =  aziendeRsuFacade.getRemoteAziendaRsu(firmId);
 
             return new ValueResponse(azienda);
         } catch (Exception e) {
