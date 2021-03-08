@@ -80,15 +80,6 @@
                         <div id="gridVotazioni">
 
                         </div>
-                        <span style="font-size: 16px;font-weight: 700;">
-                            Totale schede ottenute dalle liste: <p id="tot_sc_list">0</p>
-                        </span>
-                        <span style="font-size: 16px;font-weight: 700;">
-                            Totale schede valide per il calcolo del quoziente elettorale:  <p id="tot_sc_vali">0</p>
-                        </span>
-                        <span style="font-size: 16px;font-weight: 700;">
-                            Totale votanti:  <p id="tot_voti">0</p>
-                        </span>
                     </div>
                 </div>
             </div>
@@ -115,13 +106,13 @@
                     <div class="col-md-8">
                         <div class="col-md-12 p20" style="background-color: white; margin-top:10px">
                             <span style="font-size: 16px;font-weight: 700;">
-                            Totale schede ottenute dalle liste: <p id="tot_sc_list"></p>
+                            Totale schede ottenute dalle liste: <p id="tot_sc_list">0</p>
                         </span>
                             <span style="font-size: 16px;font-weight: 700;">
-                            Totale schede valide per il calcolo del quoziente elettorale:  <p id="tot_sc_vali"></p>
+                            Totale schede valide per il calcolo del quoziente elettorale:  <p id="tot_sc_vali">0</p>
                         </span>
                             <span style="font-size: 16px;font-weight: 700;">
-                            Totale votanti:  <p id="tot_voti"></p>
+                            Totale votanti:  <p id="tot_voti">0</p>
                         </span>
                         </div>
                     </div>

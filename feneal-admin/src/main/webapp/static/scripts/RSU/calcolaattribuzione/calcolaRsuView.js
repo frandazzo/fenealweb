@@ -1,10 +1,7 @@
 define([
     "framework/core",
     "framework/model",
-    "framework/views",
-    "framework/ui",
-    "framework/plugins",
-    "framework/webparts"], function(core, fmodel, fviews, ui, plugins, webparts) {
+    "framework/views"], function(core, fmodel, fviews) {
     var exports = {};
     var ReportRsuHomeRemoteView = fviews.RemoteContentView.extend({
         ctor: function(service,firmId){
@@ -28,6 +25,7 @@ define([
                 formService.set("url", BASE + "reportrsu/datigenerali/"+firmId);
 
 
+                //-------FORM DATI GENERALI------------
                 var formView = new fviews.FormView(formService);
                 formView.container = container;
 
@@ -45,8 +43,7 @@ define([
 
                 formView.show();
 
-//---------------CLICK SU AVANTI GENRALI---------------------------------
-
+                //---------------CLICK SU AVANTI GENRALI---------------------------------
                 $("#avanti-datigenerali").click(function () {
 
                         var data = {
@@ -55,17 +52,17 @@ define([
                             anno: $('select[name="annofromYearReport"]').val()
                         };
 
-                    //---------------CONTROLLO LA VALIDITà DEI DATI GENERALI---------------------------------
+                    //-----------CONTROLLO LA VALIDITà DEI DATI GENERALI----------
+                    //-----------GRID LISTE---------------------------------------
+                        var svcDatiGenerali = new fmodel.AjaxService();
+                        svcDatiGenerali.set("method", "POST");
+                        svcDatiGenerali.set("data", data);
+                        svcDatiGenerali.set("url", BASE + "reportrsu/datigenerali");
 
-                    var svc = new fmodel.AjaxService();
-                        svc.set("method", "POST");
-                        svc.set("data", data);
-                        svc.set("url", BASE + "reportrsu/datigenerali");
-
-                        svc.on("load", function(response){
+                        svcDatiGenerali.on("load", function(responseDatiGenerali){
                             $.loader.hide({parent:'body'});
 
-                            var errors = self.validateDto(response);
+                            var errors = self.validateDto(responseDatiGenerali);
 
                             if (errors.errors.length){
                                 formView.form.handleValidationErrors(errors);
@@ -76,104 +73,101 @@ define([
 
                             $("#avanti-datigenerali").hide();
 
-                            //---------------MOSTRO LA GRIGLIA PER LA CRAZIONE DELLE LISTE---------------------------------
+                            //---------------MOSTRO LA GRIGLIA PER LA CREAZIONE DELLE LISTE---------------------------------
 
                             $("#listepresentate").show();
 
-                            var grid = self.initGridListe(response,self,false);
+                            var grid = self.initGridListe(responseDatiGenerali,self,false);
 
-                                $("#add_list").click(function () {
-                                    var formService = new fmodel.FormService();
-                                    formService.set("method", "GET");
-                                    formService.set("data", {});
-                                    formService.set("url", BASE + "reportrsu/createlista");
+                            //----------BOTTONE PER AGGIUNGERE UNA LISTA---------------------------
+                            $("#add_list").click(function () {
+                                var formService = new fmodel.FormService();
+                                formService.set("method", "GET");
+                                formService.set("data", {});
+                                formService.set("url", BASE + "reportrsu/createlista");
 
-                                    var container = $('<div class="create-list"></div>');
+                                var container = $('<div class="create-list"></div>');
 
-                                    var formView = new fviews.FormView(formService);
-                                    formView.container = container;
+                                var formView = new fviews.FormView(formService);
+                                formView.container = container;
 
-                                    formView.on("render", function() {
-                                        $(".create-list").find(".panel-footer, .panel-heading").hide();
-                                        $(".panel-body").css("overflow", "hidden");
-                                    });
+                                formView.on("render", function() {
+                                    $(".create-list").find(".panel-footer, .panel-heading").hide();
+                                    $(".panel-body").css("overflow", "hidden");
+                                });
 
-                                    formView.show();
+                                formView.show();
 
-                                    var dialog = container.modalDialog({
-                                        autoOpen: true,
-                                        title: "Crea lista",
-                                        destroyOnClose: true,
-                                        height: 250,
-                                        width: 550,
-                                        buttons: {
-                                            Aggiungi: {
-                                                primary: true,
-                                                command: function() {
-                                                    $.loader.show({parent:'body'});
+                                var dialog = container.modalDialog({
+                                    autoOpen: true,
+                                    title: "Crea lista",
+                                    destroyOnClose: true,
+                                    height: 250,
+                                    width: 550,
+                                    buttons: {
+                                        Aggiungi: {
+                                            primary: true,
+                                            command: function() {
+                                                $.loader.show({parent:'body'});
 
-                                                    var nome = $(".create-list").find("input[name=name]").val();
-                                                    var firmataria = $(".create-list").find("input[name=firmataria]").is(":checked");
+                                                var nome = $(".create-list").find("input[name=name]").val();
+                                                var firmataria = $(".create-list").find("input[name=firmataria]").is(":checked");
 
-                                                    if(nome == ""){
-                                                        $.notify.warn("Il nome della lista non pu&ograve; essere nullo");
-                                                        $.loader.hide({parent:'body'});
+                                                if(nome == ""){
+                                                    $.notify.warn("Il nome della lista non pu&ograve; essere nullo");
+                                                    $.loader.hide({parent:'body'});
+                                                    return;
+                                                }
+
+                                                var data = {
+                                                    dto: responseDatiGenerali,
+                                                    nome: nome,
+                                                    firmataria: firmataria
+                                                };
+
+                                                var svcCreateLista = new fmodel.AjaxService();
+                                                svcCreateLista.set("url", BASE + "reportrsu/createlista");
+                                                svcCreateLista.set("data", JSON.stringify(data));
+                                                svcCreateLista.set("contentType", "application/json");
+                                                svcCreateLista.set("method", "POST");
+
+                                                svcCreateLista.on("load", function(responseAddList){
+                                                    $.loader.hide({parent:'body'});
+
+
+
+                                                    responseDatiGenerali.liste = responseAddList.liste;
+                                                    responseDatiGenerali.validationError = responseAddList.validationError;
+                                                    console.log(responseDatiGenerali);
+                                                    var errors = self.validateDto(responseDatiGenerali);
+
+                                                    if (errors.errors.length){
+                                                        formView.form.handleValidationErrors(errors);
                                                         return;
                                                     }
 
-
-                                                    var svc = new  fmodel.AjaxService();
-
-                                                    var data = {
-                                                        dto: response,
-                                                        nome: nome,
-                                                        firmataria:firmataria
-                                                    };
-
-                                                    var svc = new fmodel.AjaxService();
-                                                    svc.set("url", BASE + "reportrsu/createlista");
-                                                    svc.set("data", JSON.stringify(data));
-                                                    svc.set("contentType", "application/json");
-                                                    svc.set("method", "POST");
-
-                                                    svc.on("load", function(responseFromList){
-                                                        $.loader.hide({parent:'body'});
+                                                    $("#gridListe")
+                                                        .dxDataGrid("instance")
+                                                        .option("dataSource", responseAddList.liste);
 
 
+                                                    dialog.modalDialog("close");
+                                                    $.loader.hide({parent:'body'});
+                                                });
+                                                svcCreateLista.on("error", function(error){
+                                                    $.loader.hide({parent:'body'});
+                                                    $.notify.error(error);
+                                                });
 
-                                                        response.liste = responseFromList.liste;
-                                                        response.validationError = responseFromList.validationError;
-                                                        console.log(response);
-                                                        var errors = self.validateDto(response);
-
-                                                        if (errors.errors.length){
-                                                            formView.form.handleValidationErrors(errors);
-                                                            return;
-                                                        }
-
-                                                            $("#gridListe")
-                                                                .dxDataGrid("instance")
-                                                                .option("dataSource", responseFromList.liste);
-
-
-                                                        dialog.modalDialog("close");
-                                                        $.loader.hide({parent:'body'});
-                                                    });
-                                                    svc.on("error", function(error){
-                                                        $.loader.hide({parent:'body'});
-                                                        $.notify.error(error);
-                                                    });
-
-                                                    svc.load();
-
-                                                    $(dialog).modalDialog("close");
-                                                }
+                                                svcCreateLista.load();
                                             }
                                         }
-                                    });
+                                    }
                                 });
+                            });
 
-                                $("#remove_list").click(function () {
+                            //----------BOTTONE PER RIMUOVERE UNA LISTA-------------------------
+                            /*--DISABLITATO-----*/$("#remove_list").click(function () {
                                     var selectedrows = grid.getSelectedRowsData();
 
                                     var filterExpression =  grid.getCombinedFilter(true);
@@ -208,22 +202,19 @@ define([
                                                 label: "OK",
                                                 primary: true,
                                                 command: function () {
-
-                                                    var svc = new fmodel.AjaxService();
-
                                                     var data = {
                                                         dto: response,
                                                         nome: selectedrows[0].name,
                                                         firmataria: selectedrows[0].firmataria
                                                     };
 
-                                                    var svc = new fmodel.AjaxService();
-                                                    svc.set("url", BASE + "reportrsu/deletelista");
-                                                    svc.set("data", JSON.stringify(data));
-                                                    svc.set("contentType", "application/json");
-                                                    svc.set("method", "POST");
+                                                    var svcDeleteLista = new fmodel.AjaxService();
+                                                    svcDeleteLista.set("url", BASE + "reportrsu/deletelista");
+                                                    svcDeleteLista.set("data", JSON.stringify(data));
+                                                    svcDeleteLista.set("contentType", "application/json");
+                                                    svcDeleteLista.set("method", "POST");
 
-                                                    svc.on("load", function (responseFromList) {
+                                                    svcDeleteLista.on("load", function (responseFromList) {
                                                         $.loader.hide({parent: 'body'});
 
                                                         this.saveResponse = responseFromList;
@@ -246,12 +237,12 @@ define([
                                                         dialog.modalDialog("close");
                                                         $.loader.hide({parent: 'body'});
                                                     });
-                                                    svc.on("error", function (error) {
+                                                    svcDeleteLista.on("error", function (error) {
                                                         $.loader.hide({parent: 'body'});
                                                         $.notify.error(error);
                                                     });
 
-                                                    svc.load();
+                                                    svcDeleteLista.load();
 
                                                     $(dialog).modalDialog("close");
                                                 }
@@ -261,7 +252,8 @@ define([
 
                                 });
 
-                                $("#edit_list").click(function () {
+                            //----------BOTTONE PER MODIFICARE UNA LISTA------------------------
+                            /*--DISABLITATO-----*/$("#edit_list").click(function () {
 
                                     var selectedrows = grid.getSelectedRowsData();
 
@@ -346,9 +338,6 @@ define([
                                                         return;
                                                     }
 
-
-                                                    var svc = new  fmodel.AjaxService();
-
                                                     var data = {
                                                         dto: response,
                                                         nome: nome,
@@ -358,13 +347,13 @@ define([
 
                                                     };
 
-                                                    var svc = new fmodel.AjaxService();
-                                                    svc.set("url", BASE + "reportrsu/editlista");
-                                                    svc.set("data", JSON.stringify(data));
-                                                    svc.set("contentType", "application/json");
-                                                    svc.set("method", "POST");
+                                                    var svcEditLista = new fmodel.AjaxService();
+                                                    svcEditLista.set("url", BASE + "reportrsu/editlista");
+                                                    svcEditLista.set("data", JSON.stringify(data));
+                                                    svcEditLista.set("contentType", "application/json");
+                                                    svcEditLista.set("method", "POST");
 
-                                                    svc.on("load", function(responseFromList){
+                                                    svcEditLista.on("load", function(responseFromList){
                                                         $.loader.hide({parent:'body'});
 
                                                         response.liste = responseFromList.liste;
@@ -383,12 +372,12 @@ define([
                                                         dialog.modalDialog("close");
                                                         $.loader.hide({parent:'body'});
                                                     });
-                                                    svc.on("error", function(error){
+                                                    svcEditLista.on("error", function(error){
                                                         $.loader.hide({parent:'body'});
                                                         $.notify.error(error);
                                                     });
 
-                                                    svc.load();
+                                                    svcEditLista.load();
 
                                                     $(dialog).modalDialog("close");
                                                 }
@@ -397,49 +386,56 @@ define([
                                     });
                                 });
 
-                            $("#avanti-liste").on("click", function() {
 
+                            //--------------INVIO LE LISTE E CONTROLLO LA VALIDITà----------
+                            $("#avanti-liste").on("click", function() {
+                                //--------CHIAMATA PER CONTROLLARE LA VALIDITà DELLA LISTA----------
+                                //--------SE NON CI SONO ERRORI POSSO MOSTRARE IL FORM--------------
+                                //--------E LA GRIGLIA PER INSERIRE I DATI PER CALCOLARE L'ESITO-----
                                 var data = {
-                                    dto: response,
+                                    dto: responseDatiGenerali,
                                     firmRsu: firmId,
                                     sedeRsu: $('select[name="sedersu"]').val(),
                                     anno: $('select[name="annofromYearReport"]').val()
                                 }
 
-                                var svc = new fmodel.AjaxService();
-                                svc.set("url", BASE + "reportrsu/checklistdata");
-                                svc.set("data", JSON.stringify(data));
-                                svc.set("contentType", "application/json");
-                                svc.set("method", "POST");
+                                var svcCheckLista = new fmodel.AjaxService();
+                                svcCheckLista.set("url", BASE + "reportrsu/checklistdata");
+                                svcCheckLista.set("data", JSON.stringify(data));
+                                svcCheckLista.set("contentType", "application/json");
+                                svcCheckLista.set("method", "POST");
 
-                                svc.on("load", function(response) {
+                                svcCheckLista.on("load", function(responseFromListe) {
                                     $.loader.hide({parent: 'body'});
 
-                                    var errors = self.validateDto(response);
+                                    var errors = self.validateDto(responseFromListe);
 
                                     var formService = new fmodel.FormService();
                                     var formView = new fviews.FormView(formService);
-                                    //
+
                                     if (errors.errors.length){
                                         formView.form.handleValidationErrors(errors);
                                         return;
                                     }
 
+                                    //----------SE NON CI SONO ERRORI DISABILITO LA GRIGLIA DELLE LISTE-----
+                                    //----------E DI MOSTRO IL FORM E LA GRIGLIA PER INSERIRE I DATI------
+                                    //----------PER CALCOLARE GLI ESITI -------------
                                         $("#esitovotazione").show();
 
                                         $.notify.success("Operazione completata");
-                                        console.log(response);
+                                        console.log(responseFromListe);
                                         $("#avanti-liste").attr("disabled", "disabled");
                                         $("#add_list").attr("disabled", "disabled");
-                                        var grid = self.initGridListe(response,self,true);
+                                        var grid = self.initGridListe(responseFromListe,self,true);
 
-                                    //costruisco il form per le votazioni
+
+                                        //-------FORM ESITO VOTAZIONE------------
                                         var container = document.getElementById("esitovotazioneform");
                                         var formService = new fmodel.FormService();
                                         formService.set("method", "GET");
                                         formService.set("data", {});
                                         formService.set("url", BASE + "reportrsu/esitovotazioni");
-
 
                                         var formView = new fviews.FormView(formService);
                                         formView.container = container;
@@ -454,170 +450,242 @@ define([
 
                                         formView.show();
 
-                                    //costruisco la grigli per le votazioni
-
+                                        //-------GRID ESITO VOTAZIONE------------
                                         var data = {
-                                            dto: response,
-                                        }
-                                        //
-                                        var svc = new fmodel.AjaxService();
-                                        svc.set("url", BASE + "reportrsu/esitovotazione/listvotazioni");
-                                        svc.set("data", JSON.stringify(data));
-                                        svc.set("contentType", "application/json");
-                                        svc.set("method", "POST");
+                                            dto: responseFromListe
+                                        };
 
-                                        svc.on("load", function(listesiti){
-                                            $.loader.hide({parent:'body'});
+                                        var svcEsitoGrid = new fmodel.AjaxService();
+                                        svcEsitoGrid.set("url", BASE + "reportrsu/esitovotazione/listvotazioni");
+                                        svcEsitoGrid.set("data", JSON.stringify(data));
+                                        svcEsitoGrid.set("contentType", "application/json");
+                                        svcEsitoGrid.set("method", "POST");
 
-                                            var gridEsitiList = self.initGridListEsitoVotazione(listesiti,self,false);
-
-
-                                            $(document).ready(function() {
-                                                $("#esitovotazione").find("input[name=addschedenulle]").change(function () {
-                                                    var source = gridEsitiList.getDataSource();
-                                                    var listeVotazione = source._store._array;
-                                                    self.upgradeDatiVotantiInfo(listeVotazione);
-                                                });
-
-                                                $("#esitovotazione").find("input[name=schedebianche]").change(function () {
-                                                    var source = gridEsitiList.getDataSource();
-                                                    var listeVotazione = source._store._array;
-                                                    self.upgradeDatiVotantiInfo(listeVotazione);
-                                                });
-
-                                                $("#esitovotazione").find("input[name=schedenulle]").change(function () {
-                                                    var source = gridEsitiList.getDataSource();
-                                                    var listeVotazione = source._store._array;
-                                                    self.upgradeDatiVotantiInfo(listeVotazione);
-                                                });
-                                            });
-
-
-                                            //chiamata per inserei l'esito votazione
-                                            $("#avanti-esito").on("click", function() {
-
-                                                console.log(gridEsitiList.getDataSource());
-
-                                                var source = gridEsitiList.getDataSource();
-
-                                                var listeVotazione = source._store._array;
-                                                console.log(listeVotazione);
-
-                                                var aventiDiritto = parseInt($("#esitovotazione").find("input[name=aventidiritto]").val(),10);
-                                                var rsuEleggibili = parseInt($("#esitovotazione").find("input[name=rsueleggibili]").val(),10);
-                                                var addSchedeNulle = $("#esitovotazione").find("input[name=addschedenulle]").is(":checked");
-                                                var schedeBianche =parseInt( $("#esitovotazione").find("input[name=schedebianche]").val(),10);
-                                                var schedeNulle = parseInt($("#esitovotazione").find("input[name=schedenulle]").val(),10);
-
-                                                var data ={
-                                                    firmRsu: firmId,
-                                                    sedeRsu: $('select[name="sedersu"]').val(),
-                                                    anno: $("#datigenerali").find('select[name="annofromYearReport"]').val(),
-                                                    aventiDiritto: aventiDiritto,
-                                                    rsuEleggibili: rsuEleggibili,
-                                                    addSchedeNulle: addSchedeNulle,
-                                                    schedeBianche: schedeBianche,
-                                                    schedeNulle: schedeNulle,
-                                                    listeVotazione: listeVotazione
-                                                }
-
-                                                var errors = self.validateEditiDto(data);
-
-                                                if (errors.errors.length){
-                                                    formView.form.handleValidationErrors(errors);
-
-                                                    setTimeout(function(){ formView.form.resetValidation(); }, 10000);
-                                                    return;
-                                                }else {
-                                                    formView.form.resetValidation();
-                                                }
-
-                                                var svc = new fmodel.AjaxService();
-                                                svc.set("url", BASE + "reportrsu/esitovotazione");
-                                                svc.set("data", JSON.stringify(data));
-                                                svc.set("contentType", "application/json");
-                                                svc.set("method", "POST");
-
-                                                svc.on("load", function(response){
-                                                    var errors = self.validateDto(response);
-
-                                                    var formService = new fmodel.FormService();
-                                                    var formView = new fviews.FormView(formService);
-                                                    //
-                                                    if (errors.errors.length){
-                                                        formView.form.handleValidationErrors(errors);
-                                                        $.loader.hide({parent:'body'});
-                                                        return;
-                                                    }
-
-                                                    var gridEsitiList = self.initGridListEsitoVotazione(response.liste,self,true);
-
-                                                    $("#esitovotazione").find("input[name=aventidiritto]").attr("disabled", "disabled");
-                                                    $("#esitovotazione").find("input[name=rsueleggibili]").attr("disabled", "disabled");
-                                                    $("#esitovotazione").find("input[name=addschedenulle]").attr("disabled", "disabled");
-                                                    $("#esitovotazione").find("input[name=schedebianche]").attr("disabled", "disabled");
-                                                    $("#esitovotazione").find("input[name=schedenulle]").attr("disabled", "disabled");
-
-                                                    $("#proceduracompletata").show();
-
-
-
-
-                                                    $.loader.hide({parent:'body'});
-                                                });
-
-                                                svc.on("error", function(error){
-                                                    $.loader.hide({parent:'body'});
-                                                    alert("Errore: "  + error);
-                                                });
-
-                                                svc.load();
-                                                $.loader.show({parent:'body'});
-
-                                            });
-
-
-                                            $("#indietro-esito").click(function () {
-                                                $.loader.show({parent:'body'});
-                                                $("#proceduracompletata").hide();
-                                                var gridEsitiList = self.initGridListEsitoVotazione(listesiti,self,false);
-                                                $("#avanti-liste").prop("disabled", false);
-                                                $("#add_list").prop("disabled", false);
-                                                $("#esitovotazione").find("input[name=aventidiritto]").prop("disabled", false);
-                                                $("#esitovotazione").find("input[name=rsueleggibili]").prop("disabled", false);
-                                                $("#esitovotazione").find("input[name=addschedenulle]").prop("disabled", false);
-                                                $("#esitovotazione").find("input[name=schedebianche]").prop("disabled", false);
-                                                $("#esitovotazione").find("input[name=schedenulle]").prop("disabled", false);
-
+                                        svcEsitoGrid.on("load", function(responseListaForEsiti){
                                                 $.loader.hide({parent:'body'});
 
+                                                var gridEsitiList = self.initGridListEsitoVotazione(responseListaForEsiti,self,false);
+
+                                                //-------BOTTONE PER INSERIRE E CALCOLARE LESITO DELLA VOTAZIONE----
+                                                //-------SE NON CI SONO ERRORI DISABILITO IL FORM E LA GRIGLIA PRECEDENTE----
+                                                //-------E MOSTRO UN RIEPILOGO CON LA POSSIBILITà DI STAMPARE L'ESITO-----
+                                                $("#avanti-esito").on("click", function() {
+
+                                                    console.log(gridEsitiList.getDataSource());
+
+                                                    var source = gridEsitiList.getDataSource();
+
+                                                    var listeVotazione = source._store._array;
+                                                    console.log(listeVotazione);
+
+                                                    var aventiDiritto = parseInt($("#esitovotazione").find("input[name=aventidiritto]").val(),10);
+                                                    var rsuEleggibili = parseInt($("#esitovotazione").find("input[name=rsueleggibili]").val(),10);
+                                                    var addSchedeNulle = $("#esitovotazione").find("input[name=addschedenulle]").is(":checked");
+                                                    var schedeBianche =parseInt( $("#esitovotazione").find("input[name=schedebianche]").val(),10);
+                                                    var schedeNulle = parseInt($("#esitovotazione").find("input[name=schedenulle]").val(),10);
+
+                                                    var data ={
+                                                        firmRsu: firmId,
+                                                        sedeRsu: $('select[name="sedersu"]').val(),
+                                                        anno: $("#datigenerali").find('select[name="annofromYearReport"]').val(),
+                                                        aventiDiritto: aventiDiritto,
+                                                        rsuEleggibili: rsuEleggibili,
+                                                        addSchedeNulle: addSchedeNulle,
+                                                        schedeBianche: schedeBianche,
+                                                        schedeNulle: schedeNulle,
+                                                        listeVotazione: listeVotazione
+                                                    }
+
+                                                    var errors = self.validateEditiDto(data);
+
+                                                    if (errors.errors.length){
+                                                        formView.form.handleValidationErrors(errors);
+
+                                                        setTimeout(function(){ formView.form.resetValidation(); }, 10000);
+                                                        return;
+                                                    }else {
+                                                        formView.form.resetValidation();
+                                                    }
+
+                                                    //---------CHIAMATA PER CONTROLLARE LA VALIDITà-----
+                                                    //---------E PER CALCOLARE GLI ESITI----------------
+                                                    var svcEsito = new fmodel.AjaxService();
+                                                    svcEsito.set("url", BASE + "reportrsu/esitovotazione");
+                                                    svcEsito.set("data", JSON.stringify(data));
+                                                    svcEsito.set("contentType", "application/json");
+                                                    svcEsito.set("method", "POST");
+
+                                                    svcEsito.on("load", function(responseFromCalcoloEsito){
+
+                                                        var formService = new fmodel.FormService();
+                                                        var formView = new fviews.FormView(formService);
+
+                                                        var errorsDto = self.validateDto(responseFromCalcoloEsito);
+
+                                                        if (errorsDto.errors.length){
+                                                            formView.form.handleValidationErrors(errorsDto);
+                                                            $.loader.hide({parent:'body'});
+                                                            return;
+                                                        }
+
+                                                        var errorsEsitoVotazione = self.validateEsitoVotazioneDto(responseFromCalcoloEsito);
+
+                                                        if (errorsEsitoVotazione.errors.length){
+                                                            formView.form.handleValidationErrors(errorsEsitoVotazione);
+                                                            $.loader.hide({parent:'body'});
+                                                            return;
+                                                        }
+
+                                                        $("#avanti-esito").attr("disabled", "disabled");
+                                                        $("#indietro-esito").attr("disabled", "disabled");
+
+                                                        //------MI COSTRUISCO IL DTO PER INSERIRE I DATI NELLA GRIGLIA DISABILITATA
+                                                        var dtoForDisabledEsitiGrid = [];
+
+                                                        responseFromCalcoloEsito.esiti.esitoVotazione.votazioni.forEach(function (item) {
+                                                            var element = {
+                                                                name: item.lista.name,
+                                                                firmataria: item.lista.firmataria,
+                                                                validationError: item.lista.validationError,
+                                                                voti: item.voti
+                                                            }
+
+                                                            dtoForDisabledEsitiGrid.push(element);
+                                                        });
+
+                                                        var gridEsitiList = self.initGridListEsitoVotazione(dtoForDisabledEsitiGrid,self,true);
+
+                                                        $("#esitovotazione").find("input[name=aventidiritto]").attr("disabled", "disabled");
+                                                        $("#esitovotazione").find("input[name=rsueleggibili]").attr("disabled", "disabled");
+                                                        $("#esitovotazione").find("input[name=addschedenulle]").attr("disabled", "disabled");
+                                                        $("#esitovotazione").find("input[name=schedebianche]").attr("disabled", "disabled");
+                                                        $("#esitovotazione").find("input[name=schedenulle]").attr("disabled", "disabled");
+
+                                                        var source = gridEsitiList.getDataSource();
+                                                        var listeVotazione = source._store._array;
+
+                                                        self.upgradeDatiVotantiInfo(listeVotazione);
+
+                                                        $("#proceduracompletata").show();
+
+
+                                                        //-------BOTTONE PER TERMINARE LA PROCEDURA GUIDATA----------
+                                                        //-------LA STAMPARE IL RISULTATO----------------------------
+                                                        $("#avanti-procedura").on("click", function() {
+
+                                                            var data = {
+                                                                firmRsu: firmId,
+                                                                sedeRsu: $('select[name="sedersu"]').val(),
+                                                                anno: $("#datigenerali").find('select[name="annofromYearReport"]').val(),
+                                                                dto: responseFromCalcoloEsito
+                                                            }
+
+                                                            var svcStampa = new fmodel.AjaxService();
+                                                            svcStampa.set("url", BASE + "reportrsu/esitovotazione/stampa");
+                                                            svcStampa.set("data", JSON.stringify(data));
+                                                            svcStampa.set("contentType", "application/json");
+                                                            svcStampa.set("method", "POST");
+
+
+                                                            svcStampa.on("load", function(response){
+                                                                var formService = new fmodel.FormService();
+                                                                var formView = new fviews.FormView(formService);
+
+                                                                var errorsDto = self.validateDto(response);
+
+                                                                if (errorsDto.errors.length){
+                                                                    formView.form.handleValidationErrors(errorsDto);
+                                                                    $.loader.hide({parent:'body'});
+                                                                    return;
+                                                                }
+                                                                var errorsEsitoVotazione = self.validateEsitoVotazioneDto(responseFromCalcoloEsito);
+
+                                                                if (errorsEsitoVotazione.errors.length){
+                                                                    formView.form.handleValidationErrors(errorsEsitoVotazione);
+                                                                    $.loader.hide({parent:'body'});
+                                                                    return;
+                                                                }
+
+                                                                $.notify.success("Operazione completata");
+                                                                $.loader.hide({parent:'body'});
+
+                                                            });
+
+                                                            svcStampa.on("error", function(error){
+                                                                $.loader.hide({parent:'body'});
+                                                                alert("Errore: "  + error);
+                                                                return;
+                                                            });
+
+                                                            svcStampa.load();
+                                                            $.loader.show({parent:'body'});
+                                                        });
+                                                        $.loader.hide({parent:'body'});
+                                                    });
+
+                                                    svcEsito.on("error", function(error){
+                                                        $.loader.hide({parent:'body'});
+                                                        alert("Errore: "  + error);
+                                                    });
+
+                                                    svcEsito.load();
+                                                    $.loader.show({parent:'body'});
+
+
+                                                    //-------BOTTONE PER TORNARE INDIETRO------------------------------------
+                                                    //-------E MODIFICARE EVENTUALMENTE I DATI PER CALCOLARE L'ESITO----------
+                                                    $("#indietro-procedura").click(function () {
+                                                        $.loader.show({parent:'body'});
+                                                        $("#proceduracompletata").hide();
+
+                                                        var source = gridEsitiList.getDataSource();
+
+                                                        var listeVotazione = source._store._array;
+
+                                                        var gridBack = self.initGridListEsitoVotazione(listeVotazione,self,false);
+                                                        $("#avanti-liste").prop("disabled", false);
+                                                        $("#add_list").prop("disabled", false);
+                                                        $("#avanti-esito").prop("disabled", false);
+                                                        $("#indietro-esito").prop("disabled", false);
+                                                        $("#esitovotazione").find("input[name=aventidiritto]").prop("disabled", false);
+                                                        $("#esitovotazione").find("input[name=rsueleggibili]").prop("disabled", false);
+                                                        $("#esitovotazione").find("input[name=addschedenulle]").prop("disabled", false);
+                                                        $("#esitovotazione").find("input[name=schedebianche]").prop("disabled", false);
+                                                        $("#esitovotazione").find("input[name=schedenulle]").prop("disabled", false);
+
+                                                        $.loader.hide({parent:'body'});
+
+                                                    });
+
+                                                });
                                             });
 
+                                        svcEsitoGrid.on("error", function(error){
+                                                $.loader.hide({parent:'body'});
+                                                alert("Errore: "  + error);
+                                            });
 
-                                        });
-
-                                        svc.on("error", function(error){
-                                            $.loader.hide({parent:'body'});
-                                            alert("Errore: "  + error);
-                                        });
-
-                                        svc.load();
+                                        svcEsitoGrid.load();
                                         $.loader.show({parent:'body'});
                                 });
 
-                                svc.on("error", function(error){
+                                svcCheckLista.on("error", function(error){
                                     $.loader.hide({parent:'body'});
                                     alert("Errore: "  + error);
                                 });
 
-                                svc.load();
+                                svcCheckLista.load();
                                 $.loader.show({parent:'body'});
                             });
 
+
+
+                            //---------------ANNULLA ESITO INSERITO-------
+                            // ------RIABLITO LA GRIGLIA DELLE LISTE-----
                             $("#indietro-esito").click(function () {
                                 $.loader.show({parent:'body'});
                                 $("#esitovotazione").hide();
-                                var grid = self.initGridListe(response,self,false);
+                                var grid = self.initGridListe(responseDatiGenerali,self,false);
                                 $("#avanti-liste").prop("disabled", false);
                                 $("#add_list").prop("disabled", false);
                                 $.loader.hide({parent:'body'});
@@ -627,19 +695,14 @@ define([
 
                         });
 
-                        svc.on("error", function(error){
-                            $.loader.hide({parent:'body'});
-                            alert("Errore: "  + error);
-                        });
+                        svcDatiGenerali.on("error", function(error){
+                                $.loader.hide({parent:'body'});
+                                alert("Errore: "  + error);
+                            });
 
-                        svc.load();
+                        svcDatiGenerali.load();
                         $.loader.show({parent:'body'});
                 });
-
-
-
-
-
                 self.createToolbar();
                 self.createBreadcrumbs();
             });
@@ -698,6 +761,35 @@ define([
 
             return result;
         },
+        validateEsitoVotazioneDto: function(response){
+            var self = this;
+
+            var result = {};
+            result.errors = [];
+
+            response.esiti.esitoVotazione.votazioni.forEach(function (item) {
+                if (item.lista.validationError != null && item.lista.validationError != ""){
+                    result.errors.push(
+                        {
+                            property: "errore",
+                            message: "Errore trovato"
+                        }
+                    );
+                    $.notify.error("Errore: "+item.lista.validationError);
+                }
+            });
+
+            if (response.esiti.esitoVotazione.validationError != null && response.esiti.esitoVotazione.validationError != ""){
+                result.errors.push(
+                    {
+                        property: "errore",
+                        message: "Errore trovato"
+                    }
+                );
+                $.notify.error("Errore: "+response.esiti.esitoVotazione.validationError);
+            }
+            return result;
+        },
         validateEditiDto: function(data){
             var result = {};
             result.errors = [];
@@ -718,7 +810,7 @@ define([
                     }
                 );
 
-            if (!data.schedeBianche  || Number.isInteger(data.schedeBianche) == false)
+            if (data.schedeBianche < 0  || Number.isInteger(data.schedeBianche) == false)
                 result.errors.push(
                     {
                         property: "schedebianche",
@@ -726,7 +818,7 @@ define([
                     }
                 );
 
-            if (!data.schedeNulle || Number.isInteger(data.schedeNulle) == false)
+            if (data.schedeNulle < 0 || Number.isInteger(data.schedeNulle) == false)
                 result.errors.push(
                     {
                         property: "schedenulle",
@@ -744,14 +836,14 @@ define([
 
             data.listeVotazione.forEach(function(item){
                 var votoInt = parseInt(item.voti,10);
-            if (!votoInt || Number.isInteger(votoInt) == false){
+            if (data.schedeBianche < 0 || Number.isInteger(votoInt) == false){
                 result.errors.push(
                     {
                         property: "voti",
                         message: "Il numero di voti inserito non &egrave; valido"
                     }
                 )
-                $.notify.error("Errore: Il numero di voti inserito non &egrave; valido");
+                $.notify.error("Errore: Il numero di voti inserito nella lista non &egrave; valido");
             }
             });
 
@@ -821,12 +913,6 @@ define([
                 disabled: isDisabled,
                 sorting:{
                     mode:"multiple"
-                },
-                onRowUpdated: function(e) {
-                    console.log(e);
-                    var source = e.component.getDataSource();
-                    var listeVotazione = source._store._array;
-                    self.upgradeDatiVotantiInfo(listeVotazione);
                 },
                 onContentReady: function (e) {
                     var columnChooserView = e.component.getView("columnChooserView");
@@ -963,11 +1049,7 @@ define([
                         newname = oldname;
                     }
 
-                    if(e.newData.firmataria){
-                        newfirmataria = e.newData.firmataria
-                    }else{
-                        newfirmataria = oldfirmataria;
-                    }
+                    newfirmataria = e.newData.firmataria;
 
                     var data = {
                         dto: responseData,

@@ -247,6 +247,7 @@ public class ElezioneRSU {
         elezione.setAnno(elezioneRSU.getAnno());
         elezione.setDivisione(elezioneRSU.getDivisione());
         elezione.setSolidarieta(elezioneRSU.getSolidarieta());
+        elezione.setValidationError(elezioneRSU.getValidationError());
 
         if(elezioneRSU.getListe() != null && elezioneRSU.getListe().size() > 0){
             elezione.setListe(setListeElettoraliToDto(elezioneRSU.getListe()));
@@ -272,6 +273,7 @@ public class ElezioneRSU {
         dto.setSchedeBianche(esitoVotazione.getSchedeBianche());
         dto.setAventiDiritto(esitoVotazione.getAventiDiritto());
         dto.setrSUElegibili(esitoVotazione.getRSUElegibili());
+        dto.setValidationError(esitoVotazione.getValidationError());
         dto.setCalcoloQuozienteElettoraleConSchedeNulle(esitoVotazione.getCalcoloQuozienteElettoraleConSchedeNulle());
 
         e.setEsitoVotazione(dto);

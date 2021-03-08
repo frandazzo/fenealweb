@@ -224,15 +224,17 @@ define([
                             var completeName = options.data.lavoratoreNomeCompleto;//surname + " " + name + " (" + datanas + ")";
                             var fiscalCode = options.data.lavoratoreCodiceFiscale;
 
+                            var uri = encodeURI(BASE + "#/summaryworker/remoteIndex?fiscalCode=" + fiscalCode );
+
                             $("<a />")
                                 .text(completeName)
-                                .attr("href", "javascript:;")
+                                .attr("href", uri)
                                 .attr("target", "_blank")
-                                .on('click', function(){
-                                    ui.Navigation.instance().navigate("summaryworker", "remoteIndex", {
-                                        fiscalCode:fiscalCode
-                                    });
-                                })
+                                // .on('click', function(){
+                                //     ui.Navigation.instance().navigate("summaryworker", "remoteIndex", {
+                                //         fiscalCode:fiscalCode
+                                //     });
+                                // })
                                 .appendTo(container);
                         }
                        

@@ -231,6 +231,20 @@ public class ReportElezioniRsuController {
         }
     }
 
+    @RequestMapping(value = "/reportrsu/esitovotazione/stampa",method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse stampaAttribuzioneRsu(@RequestBody UiElezioeDtoCheckListeData dto) {
+        try {
+            ElezioneDto newDto = facade.stampaAttribuzioneRSU(dto);
+            return new ValueResponse(newDto);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
     @RequestMapping(value = "/reportrsu/createlista",method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public @ResponseBody

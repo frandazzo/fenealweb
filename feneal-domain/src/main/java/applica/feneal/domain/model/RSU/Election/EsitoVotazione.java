@@ -88,6 +88,15 @@ public class EsitoVotazione {
             stringBuilder.append("Il numero dei votanti deve essere superiore alla metà più uno degli aventi diritto di voto");
         if (this.getRSUElegibili() <= 0)
             stringBuilder.append("Il numero delle RSU da eleggere non può essere inferiore o uguale a zero");
+
+        for (Votazione v : this.votazioni
+             ) {
+            if(v.getVoti() < 0)
+                stringBuilder.append("Il numero dei votanti non può essere negativo");
+        }
+
+
+
         this.validationError = stringBuilder.toString();
         if (StringUtils.isEmpty(this.validationError))
             return true;

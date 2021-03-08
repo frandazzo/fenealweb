@@ -18,6 +18,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.rmi.server.ExportException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -150,14 +151,7 @@ public class ReportElezioniRsuFacade {
         e.Initialize(dto);
 
         //controllo  sui dati dell'esito votazione
-        if(e.CheckEsitoVotazioneData() == true){
-            e.CalcolaEsitoAttribuzioneRSU();
-
-            if(e.getEsiti().getAttribuzioneRSU() != null)
-                stampaAttribuzioneRsu(e);
-        }
-
-
+        e.CheckEsitoVotazioneData();
         dto = e.toDto(e);
 
         return dto;
@@ -165,47 +159,53 @@ public class ReportElezioniRsuFacade {
 
     private void stampaAttribuzioneRsu(ElezioneRSU e) throws IOException {
         SimpleDateFormat fr = new SimpleDateFormat("dd/MM/yyyy");
-
-        File f = new File("esito.htm");
-        BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-        bw.write("<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n                    <head>\r\n                    <title>\r\n                    Elezione RSU  </title>\r\n                    </head>\r\n                    <body>");
-        bw.write(String.format("<h1>Elezione RSU (Eleborato dalla Feneal UIL: %s)</h1></br>", fr.format(new Date())));
-        bw.write("<p>");
-        bw.write(String.format("Azienda <strong>%s</strong>;", e.getAzienda()));
-        if(!StringUtils.isEmpty(e.getDivisione())){
-            bw.write(String.format("Unit&agrave produttiva  <strong>%s</strong>;", e.getDivisione()));
-        }
-        bw.write("</p>");
-        bw.write("<h2>Dati solidariet&agrave</h2>");
-        bw.write(DocumentSolidarietaData(
-                e.getSolidarieta().isCriterioSolidarietaApplicabile(),
-                e.getSolidarieta().getAccordoSolidarieta().toString(),
-                e.getSolidarieta().getPercentualeSogliaInCasoListaDominante(),
-                e.getSolidarieta().getPercentualeSogliaCategoria(),
-                e.getSolidarieta().getPercentualeSogliaInterconfederale()));
-        bw.write( "<h2>Liste presentate</h2>");
-        bw.write(DocumentPresentedListTable(e.getListe()));
-        bw.write( "<h2>Esito votazioni</h2>");
-        bw.write( "<h3>Preliminari votazioni</h3>");
-        bw.write(DocumentElectionPreliminaryData(
-                e.getEsiti().getEsitoVotazione().getAventiDiritto(),
-                e.getEsiti().getEsitoVotazione().getRSUElegibili(),
-                e.getEsiti().getEsitoVotazione().getCalcoloQuozienteElettoraleConSchedeNulle()));
-        bw.write("<h3>Risultati votazione</h3>");
-        bw.write(DocumentElectionDataTable(e.getEsiti().getEsitoVotazione()));
-        bw.write("</br>");
-        bw.write("</br>");
-        for(AbstractContestoAttribuzione c : e.getEsiti().getAttribuzioneRSU().getContesti()){
-            bw.write(DocumentContextDataTable(c,e));
+        try{
+            File f = new File("esito.htm");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+            bw.write("<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n                    <head>\r\n                    <title>\r\n                    Elezione RSU  </title>\r\n                    </head>\r\n                    <body>");
+            bw.write(String.format("<h1>Elezione RSU (Eleborato dalla Feneal UIL: %s)</h1></br>", fr.format(new Date())));
+            bw.write("<p>");
+            bw.write(String.format("Azienda <strong>%s</strong>;", e.getAzienda()));
+            if(!StringUtils.isEmpty(e.getDivisione())){
+                bw.write(String.format("Unit&agrave produttiva  <strong>%s</strong>;", e.getDivisione()));
+            }
+            bw.write("</p>");
+            bw.write("<h2>Dati solidariet&agrave</h2>");
+            bw.write(DocumentSolidarietaData(
+                    e.getSolidarieta().isCriterioSolidarietaApplicabile(),
+                    e.getSolidarieta().getAccordoSolidarieta().toString(),
+                    e.getSolidarieta().getPercentualeSogliaInCasoListaDominante(),
+                    e.getSolidarieta().getPercentualeSogliaCategoria(),
+                    e.getSolidarieta().getPercentualeSogliaInterconfederale()));
+            bw.write( "<h2>Liste presentate</h2>");
+            bw.write(DocumentPresentedListTable(e.getListe()));
+            bw.write( "<h2>Esito votazioni</h2>");
+            bw.write( "<h3>Preliminari votazioni</h3>");
+            bw.write(DocumentElectionPreliminaryData(
+                    e.getEsiti().getEsitoVotazione().getAventiDiritto(),
+                    e.getEsiti().getEsitoVotazione().getRSUElegibili(),
+                    e.getEsiti().getEsitoVotazione().getCalcoloQuozienteElettoraleConSchedeNulle()));
+            bw.write("<h3>Risultati votazione</h3>");
+            bw.write(DocumentElectionDataTable(e.getEsiti().getEsitoVotazione()));
             bw.write("</br>");
-        }
-        bw.write("</br>");
-        bw.write("</br>");
-        bw.write(DocumentSummaryTable(e.getEsiti().getAttribuzioneRSU().getRiepilogoAttribuzioni(e)));
-        bw.write("</body>\r\n                    </html>");
-        bw.close();
+            bw.write("</br>");
+            for(AbstractContestoAttribuzione c : e.getEsiti().getAttribuzioneRSU().getContesti()){
+                bw.write(DocumentContextDataTable(c,e));
+                bw.write("</br>");
+            }
+            bw.write("</br>");
+            bw.write("</br>");
+            bw.write(DocumentSummaryTable(e.getEsiti().getAttribuzioneRSU().getRiepilogoAttribuzioni(e)));
+            bw.write("</body>\r\n                    </html>");
+            bw.close();
 
-        Desktop.getDesktop().browse(f.toURI());
+            Desktop.getDesktop().browse(f.toURI());
+        }catch (Exception ex){
+            StringBuilder s = new StringBuilder();
+            s.append(e.getValidationError()+"</br>");
+            s.append(ex.getMessage());
+            e.setValidationError(s.toString());
+        }
     }
 
     private String DocumentSummaryTable(List<Attribuzione> riepilogoAttribuzioni) {
@@ -504,6 +504,46 @@ public class ReportElezioniRsuFacade {
 
 
         dto.setListe(list);
+
+        return dto;
+    }
+
+    public ElezioneDto stampaAttribuzioneRSU(UiElezioeDtoCheckListeData uiEsito) throws Exception {
+        ElezioneRSU e = new ElezioneRSU();
+        ElezioneDto dto = new ElezioneDto();
+
+        SedeRSU s = sedeRsuService.getSedeRsuById(((User) sec.getLoggedUser()).getLid(),uiEsito.getSedeRsu());
+
+        if(s != null) {
+            uiEsito.getDto().setDivisione(s.getDescription());
+        }else{
+            uiEsito.getDto().setDivisione("");
+        }
+
+        uiEsito.getDto().setAnno(uiEsito.getAnno());
+
+
+
+        //estraggo l'entita ElezioneRSU dal dto
+        e.Initialize(uiEsito.getDto());
+        if(e.CheckEsitoVotazioneData()){
+            e.CalcolaEsitoAttribuzioneRSU();
+            if(e.getEsiti().getAttribuzioneRSU() != null){
+                stampaAttribuzioneRsu(e);
+            }else {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(e.getValidationError()+"</br>");
+                stringBuilder.append("Errore: errore nel processo di stampa");
+                e.setValidationError(s.toString());
+            }
+        }else{
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(e.getValidationError() + "</br>");
+            stringBuilder.append("Errore nel calolare l'attribuzione RSU");
+        }
+
+        dto = e.toDto(e);
+
 
         return dto;
     }
