@@ -12,11 +12,11 @@ import applica.framework.widgets.forms.renderers.SearchFormRenderer;
  * Created by felicegramegna on 03/03/2021.
  */
 
-@Form(AziendeSearchForm.EID)
+@Form(AziendeRsuSearchForm.EID)
 @FormRenderer(SearchFormRenderer.class)
 @IgnoreMapping
 public class AziendeRsuSearchForm  implements Entity {
-        public static final String EID = "aziendesearchform";
+        public static final String EID = "aziendersusearchform";
 
         private Object id;
 
