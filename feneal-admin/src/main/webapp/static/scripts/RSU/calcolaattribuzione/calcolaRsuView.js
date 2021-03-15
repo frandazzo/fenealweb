@@ -1,7 +1,8 @@
 define([
     "framework/core",
     "framework/model",
-    "framework/views"], function(core, fmodel, fviews) {
+    "framework/views",
+    "framework/ui"], function(core, fmodel, fviews,ui) {
     var exports = {};
     var ReportRsuHomeRemoteView = fviews.RemoteContentView.extend({
         ctor: function(service,firmId){
@@ -22,7 +23,7 @@ define([
                 var formService = new fmodel.FormService();
                 formService.set("method", "GET");
                 formService.set("data", {});
-                formService.set("url", BASE + "reportrsu/datigenerali/"+firmId);
+                formService.set("url", BASE + "calcattrsu/datigenerali/"+firmId);
 
 
                 //-------FORM DATI GENERALI------------
@@ -57,7 +58,7 @@ define([
                         var svcDatiGenerali = new fmodel.AjaxService();
                         svcDatiGenerali.set("method", "POST");
                         svcDatiGenerali.set("data", data);
-                        svcDatiGenerali.set("url", BASE + "reportrsu/datigenerali");
+                        svcDatiGenerali.set("url", BASE + "calcattrsu/datigenerali");
 
                         svcDatiGenerali.on("load", function(responseDatiGenerali){
                             $.loader.hide({parent:'body'});
@@ -84,7 +85,7 @@ define([
                                 var formService = new fmodel.FormService();
                                 formService.set("method", "GET");
                                 formService.set("data", {});
-                                formService.set("url", BASE + "reportrsu/createlista");
+                                formService.set("url", BASE + "calcattrsu/createlista");
 
                                 var container = $('<div class="create-list"></div>');
 
@@ -126,7 +127,7 @@ define([
                                                 };
 
                                                 var svcCreateLista = new fmodel.AjaxService();
-                                                svcCreateLista.set("url", BASE + "reportrsu/createlista");
+                                                svcCreateLista.set("url", BASE + "calcattrsu/createlista");
                                                 svcCreateLista.set("data", JSON.stringify(data));
                                                 svcCreateLista.set("contentType", "application/json");
                                                 svcCreateLista.set("method", "POST");
@@ -209,7 +210,7 @@ define([
                                                     };
 
                                                     var svcDeleteLista = new fmodel.AjaxService();
-                                                    svcDeleteLista.set("url", BASE + "reportrsu/deletelista");
+                                                    svcDeleteLista.set("url", BASE + "calcattrsu/deletelista");
                                                     svcDeleteLista.set("data", JSON.stringify(data));
                                                     svcDeleteLista.set("contentType", "application/json");
                                                     svcDeleteLista.set("method", "POST");
@@ -288,7 +289,7 @@ define([
                                     var formService = new fmodel.FormService();
                                     formService.set("method", "GET");
                                     formService.set("data", olddata);
-                                    formService.set("url", BASE + "reportrsu/editlista");
+                                    formService.set("url", BASE + "calcattrsu/editlista");
 
                                     var container = $('<div class="edit-list"></div>');
 
@@ -348,7 +349,7 @@ define([
                                                     };
 
                                                     var svcEditLista = new fmodel.AjaxService();
-                                                    svcEditLista.set("url", BASE + "reportrsu/editlista");
+                                                    svcEditLista.set("url", BASE + "calcattrsu/editlista");
                                                     svcEditLista.set("data", JSON.stringify(data));
                                                     svcEditLista.set("contentType", "application/json");
                                                     svcEditLista.set("method", "POST");
@@ -388,7 +389,8 @@ define([
 
 
                             //--------------INVIO LE LISTE E CONTROLLO LA VALIDITà----------
-                            $("#avanti-liste").on("click", function() {
+                            $("#avanti-liste").off('click');
+                            $("#avanti-liste").click(function () {
                                 //--------CHIAMATA PER CONTROLLARE LA VALIDITà DELLA LISTA----------
                                 //--------SE NON CI SONO ERRORI POSSO MOSTRARE IL FORM--------------
                                 //--------E LA GRIGLIA PER INSERIRE I DATI PER CALCOLARE L'ESITO-----
@@ -400,7 +402,7 @@ define([
                                 }
 
                                 var svcCheckLista = new fmodel.AjaxService();
-                                svcCheckLista.set("url", BASE + "reportrsu/checklistdata");
+                                svcCheckLista.set("url", BASE + "calcattrsu/checklistdata");
                                 svcCheckLista.set("data", JSON.stringify(data));
                                 svcCheckLista.set("contentType", "application/json");
                                 svcCheckLista.set("method", "POST");
@@ -425,6 +427,7 @@ define([
 
                                         $.notify.success("Operazione completata");
                                         console.log(responseFromListe);
+                                        $("#datigenerali").find("select[name=contratto]").attr("disabled", "disabled");
                                         $("#avanti-liste").attr("disabled", "disabled");
                                         $("#add_list").attr("disabled", "disabled");
                                         var grid = self.initGridListe(responseFromListe,self,true);
@@ -435,7 +438,7 @@ define([
                                         var formService = new fmodel.FormService();
                                         formService.set("method", "GET");
                                         formService.set("data", {});
-                                        formService.set("url", BASE + "reportrsu/esitovotazioni");
+                                        formService.set("url", BASE + "calcattrsu/esitovotazioni");
 
                                         var formView = new fviews.FormView(formService);
                                         formView.container = container;
@@ -456,7 +459,7 @@ define([
                                         };
 
                                         var svcEsitoGrid = new fmodel.AjaxService();
-                                        svcEsitoGrid.set("url", BASE + "reportrsu/esitovotazione/listvotazioni");
+                                        svcEsitoGrid.set("url", BASE + "calcattrsu/esitovotazione/listvotazioni");
                                         svcEsitoGrid.set("data", JSON.stringify(data));
                                         svcEsitoGrid.set("contentType", "application/json");
                                         svcEsitoGrid.set("method", "POST");
@@ -469,7 +472,8 @@ define([
                                                 //-------BOTTONE PER INSERIRE E CALCOLARE LESITO DELLA VOTAZIONE----
                                                 //-------SE NON CI SONO ERRORI DISABILITO IL FORM E LA GRIGLIA PRECEDENTE----
                                                 //-------E MOSTRO UN RIEPILOGO CON LA POSSIBILITà DI STAMPARE L'ESITO-----
-                                                $("#avanti-esito").on("click", function() {
+                                                $("#avanti-esito").off('click');
+                                                $("#avanti-esito").click(function () {
 
                                                     console.log(gridEsitiList.getDataSource());
 
@@ -488,6 +492,7 @@ define([
                                                         firmRsu: firmId,
                                                         sedeRsu: $('select[name="sedersu"]').val(),
                                                         anno: $("#datigenerali").find('select[name="annofromYearReport"]').val(),
+                                                        contrattoRsu: $("#datigenerali").find("select[name=contratto]").val(),
                                                         aventiDiritto: aventiDiritto,
                                                         rsuEleggibili: rsuEleggibili,
                                                         addSchedeNulle: addSchedeNulle,
@@ -500,7 +505,7 @@ define([
 
                                                     if (errors.errors.length){
                                                         formView.form.handleValidationErrors(errors);
-
+                                                        $.loader.hide({parent:'body'});
                                                         setTimeout(function(){ formView.form.resetValidation(); }, 10000);
                                                         return;
                                                     }else {
@@ -510,13 +515,12 @@ define([
                                                     //---------CHIAMATA PER CONTROLLARE LA VALIDITà-----
                                                     //---------E PER CALCOLARE GLI ESITI----------------
                                                     var svcEsito = new fmodel.AjaxService();
-                                                    svcEsito.set("url", BASE + "reportrsu/esitovotazione");
+                                                    svcEsito.set("url", BASE + "calcattrsu/esitovotazione");
                                                     svcEsito.set("data", JSON.stringify(data));
                                                     svcEsito.set("contentType", "application/json");
                                                     svcEsito.set("method", "POST");
 
                                                     svcEsito.on("load", function(responseFromCalcoloEsito){
-
                                                         var formService = new fmodel.FormService();
                                                         var formView = new fviews.FormView(formService);
 
@@ -536,6 +540,7 @@ define([
                                                             return;
                                                         }
 
+                                                        $.loader.hide({parent:'body'});
                                                         $("#avanti-esito").attr("disabled", "disabled");
                                                         $("#indietro-esito").attr("disabled", "disabled");
 
@@ -568,59 +573,157 @@ define([
 
                                                         $("#proceduracompletata").show();
 
-
                                                         //-------BOTTONE PER TERMINARE LA PROCEDURA GUIDATA----------
-                                                        //-------LA STAMPARE IL RISULTATO----------------------------
-                                                        $("#avanti-procedura").on("click", function() {
+                                                        //-------FORM PER IL RIEPILOGO----------------------------
+                                                        $("#avanti-procedura").off('click');
+                                                        $("#avanti-procedura").click(function () {
 
-                                                            var data = {
+                                                            var dataFormDialog = {
                                                                 firmRsu: firmId,
-                                                                sedeRsu: $('select[name="sedersu"]').val(),
-                                                                anno: $("#datigenerali").find('select[name="annofromYearReport"]').val(),
-                                                                dto: responseFromCalcoloEsito
+                                                                contrattoRsu: $("#datigenerali").find("select[name=contratto]").val(),
+                                                                sedeRsu:  $("#datigenerali").find('select[name="sedersu"]').val(),
+                                                                anno: $("#datigenerali").find('select[name="annofromYearReport"]').val()
                                                             }
 
-                                                            var svcStampa = new fmodel.AjaxService();
-                                                            svcStampa.set("url", BASE + "reportrsu/esitovotazione/stampa");
-                                                            svcStampa.set("data", JSON.stringify(data));
-                                                            svcStampa.set("contentType", "application/json");
-                                                            svcStampa.set("method", "POST");
+                                                            var formService = new fmodel.FormService();
+                                                            formService.set("method", "GET");
+                                                            formService.set("data", dataFormDialog);
+                                                            formService.set("url", BASE + "calcattrsu/verbalizza");
 
+                                                            var container = $('<div class="verbalizza-votazione"></div>');
 
-                                                            svcStampa.on("load", function(response){
-                                                                var formService = new fmodel.FormService();
-                                                                var formView = new fviews.FormView(formService);
+                                                            var formView = new fviews.FormView(formService);
+                                                            formView.container = container;
 
-                                                                var errorsDto = self.validateDto(response);
-
-                                                                if (errorsDto.errors.length){
-                                                                    formView.form.handleValidationErrors(errorsDto);
-                                                                    $.loader.hide({parent:'body'});
-                                                                    return;
-                                                                }
-                                                                var errorsEsitoVotazione = self.validateEsitoVotazioneDto(responseFromCalcoloEsito);
-
-                                                                if (errorsEsitoVotazione.errors.length){
-                                                                    formView.form.handleValidationErrors(errorsEsitoVotazione);
-                                                                    $.loader.hide({parent:'body'});
-                                                                    return;
-                                                                }
-
-                                                                $.notify.success("Operazione completata");
-                                                                $.loader.hide({parent:'body'});
-
+                                                            formView.on("render", function() {
+                                                                $(".verbalizza-votazione").find(".panel-footer, .panel-heading").hide();
+                                                                $(".panel-body").css("overflow", "hidden");
                                                             });
 
-                                                            svcStampa.on("error", function(error){
-                                                                $.loader.hide({parent:'body'});
-                                                                alert("Errore: "  + error);
-                                                                return;
-                                                            });
+                                                            formView.show();
 
-                                                            svcStampa.load();
-                                                            $.loader.show({parent:'body'});
+                                                            var dialog = container.modalDialog({
+                                                                autoOpen: true,
+                                                                title: "Verbalizza Votazione",
+                                                                destroyOnClose: true,
+                                                                height: 450,
+                                                                width: 650,
+                                                                buttons: {
+                                                                    Stampa: {
+                                                                        primary: true,
+                                                                        command: function() {
+
+                                                                            var data = {
+                                                                                firmRsu: firmId,
+                                                                                contrattoRsu: $("#datigenerali").find("select[name=contratto]").val(),
+                                                                                sedeRsu:  $("#datigenerali").find('select[name="sedersu"]').val(),
+                                                                                anno: $("#datigenerali").find('select[name="annofromYearReport"]').val(),
+                                                                                dto: responseFromCalcoloEsito
+                                                                            };
+
+                                                                            var svcStampa = new fmodel.AjaxService();
+                                                                            svcStampa.set("url", BASE + "calcattrsu/verbalizza/stampa");
+                                                                            svcStampa.set("data", JSON.stringify(data));
+                                                                            svcStampa.set("contentType", "application/json");
+                                                                            svcStampa.set("method", "POST");
+
+
+                                                                            svcStampa.on("load", function(response){
+                                                                                var formService = new fmodel.FormService();
+                                                                                var formView = new fviews.FormView(formService);
+
+                                                                                var errorsDto = self.validateDto(response);
+
+                                                                                if (errorsDto.errors.length){
+                                                                                    formView.form.handleValidationErrors(errorsDto);
+                                                                                    $.loader.hide({parent:'body'});
+                                                                                    return;
+                                                                                }
+                                                                                var errorsEsitoVotazione = self.validateEsitoVotazioneDto(responseFromCalcoloEsito);
+
+                                                                                if (errorsEsitoVotazione.errors.length){
+                                                                                    formView.form.handleValidationErrors(errorsEsitoVotazione);
+                                                                                    $.loader.hide({parent:'body'});
+                                                                                    return;
+                                                                                }
+
+                                                                                $.notify.success("Operazione completata");
+                                                                                $.loader.hide({parent:'body'});
+                                                                            });
+
+                                                                            svcStampa.on("error", function(error){
+                                                                                $.loader.hide({parent:'body'});
+                                                                                alert("Errore: "  + error);
+                                                                                return;
+                                                                            });
+
+                                                                            svcStampa.load();
+                                                                            $.loader.show({parent:'body'});
+                                                                        }
+                                                                    },
+                                                                    Salva: {
+                                                                        primary: true,
+                                                                        command: function() {
+
+                                                                                var data = {
+                                                                                    firmRsu: firmId,
+                                                                                    note: $("textarea[name=note]").val(),
+                                                                                    nomeverbalizzazione:$("input[name=nomeverbalizzazione]").val(),
+                                                                                    verbalizzazione:$("input[name=verbalizzazione]").val(),
+                                                                                    contrattoRsu: $("#datigenerali").find("select[name=contratto]").val(),
+                                                                                    sedeRsu:  $("#datigenerali").find('select[name="sedersu"]').val(),
+                                                                                    anno: $("#datigenerali").find('select[name="annofromYearReport"]').val(),
+                                                                                    dto: responseFromCalcoloEsito
+                                                                                };
+
+                                                                                var svcSalva = new fmodel.AjaxService();
+                                                                                svcSalva.set("url", BASE + "calcattrsu/verbalizza/salva");
+                                                                                svcSalva.set("data", JSON.stringify(data));
+                                                                                svcSalva.set("contentType", "application/json");
+                                                                                svcSalva.set("method", "POST");
+                                                                                svcSalva.on("load", function(response){
+                                                                                        var formService = new fmodel.FormService();
+                                                                                        var formView = new fviews.FormView(formService);
+
+                                                                                        var errorsDto = self.validateDto(response);
+
+                                                                                        if (errorsDto.errors.length){
+                                                                                            formView.form.handleValidationErrors(errorsDto);
+                                                                                            $.loader.hide({parent:'body'});
+                                                                                            return;
+                                                                                        }
+                                                                                        var errorsEsitoVotazione = self.validateEsitoVotazioneDto(responseFromCalcoloEsito);
+
+                                                                                        if (errorsEsitoVotazione.errors.length){
+                                                                                            formView.form.handleValidationErrors(errorsEsitoVotazione);
+                                                                                            $.loader.hide({parent:'body'});
+                                                                                            return;
+                                                                                        }
+
+                                                                                        $(dialog).modalDialog("close");
+
+                                                                                        $.notify.success("Operazione completata");
+
+                                                                                        ui.Navigation.instance().navigate("summaryfirmrsu", "index", {
+                                                                                            id: firmId
+                                                                                        })
+                                                                                        $.loader.hide({parent:'body'});
+                                                                                    });
+                                                                                svcSalva.on("error", function(error){
+                                                                                        $.loader.hide({parent:'body'});
+                                                                                        alert("Errore: "  + error);
+                                                                                        return;
+                                                                                    });
+                                                                                svcSalva.load();
+                                                                                $.loader.show({parent:'body'});
+
+
+                                                                                $(dialog).modalDialog("close");
+                                                                            }
+                                                                    }
+                                                                }
+                                                            });
                                                         });
-                                                        $.loader.hide({parent:'body'});
                                                     });
 
                                                     svcEsito.on("error", function(error){
@@ -687,6 +790,8 @@ define([
                                 $("#esitovotazione").hide();
                                 var grid = self.initGridListe(responseDatiGenerali,self,false);
                                 $("#avanti-liste").prop("disabled", false);
+                                $("#datigenerali").find("select[name=contratto]").prop("disabled", false);
+
                                 $("#add_list").prop("disabled", false);
                                 $.loader.hide({parent:'body'});
 
@@ -706,7 +811,6 @@ define([
                 self.createToolbar();
                 self.createBreadcrumbs();
             });
-
         },
         upgradeDatiVotantiInfo: function(gridresponse){
 
@@ -847,7 +951,33 @@ define([
             }
             });
 
+            var data2 = {
+                id: $("#datigenerali").find("select[name=contratto]").val()
+            };
 
+            var svcDatiGenerali = new fmodel.AjaxService();
+            svcDatiGenerali.set("method", "POST");
+            svcDatiGenerali.set("data",data2);
+            svcDatiGenerali.set("url", BASE + "contractrsu/details");
+
+            svcDatiGenerali.on("load", function(response){
+                if (parseInt(data.rsuEleggibili,10) < parseInt(response.rsuMin,10) || parseInt(response.rsuEleggibili,10) > parseInt(response.rsuMax,10)) {
+                    result.errors.push(
+                        {
+                            property: "rsueleggibili",
+                            message: "Il numero di RSU eleggibili non &egrave; valido"
+                        }
+                    );
+                    $.notify.warn("Attenzione! Rispettare i parametri del contratto selezionato <br>Rsu Min: "+ response.rsuMin +"<br>Rsu Max: "+response.rsuMax);
+
+                }
+            });
+
+            svcDatiGenerali.on("error", function(error){
+                alert("Errore: "  + error);
+            });
+
+            svcDatiGenerali.load();
             return result;
         },
         initGridListEsitoVotazione: function(responseData,self,isDisabled){
@@ -1049,7 +1179,12 @@ define([
                         newname = oldname;
                     }
 
-                    newfirmataria = e.newData.firmataria;
+                    if(e.newData.firmataria != null || e.newData.firmataria != undefined){
+                        newfirmataria = e.newData.firmataria;
+                    }else{
+                        newfirmataria = oldfirmataria;
+                    }
+
 
                     var data = {
                         dto: responseData,
@@ -1060,7 +1195,7 @@ define([
                     };
 
                     var svc = new fmodel.AjaxService();
-                    svc.set("url", BASE + "reportrsu/editlista");
+                    svc.set("url", BASE + "calcattrsu/editlista");
                     svc.set("data", JSON.stringify(data));
                     svc.set("contentType", "application/json");
                     svc.set("method", "POST");
@@ -1104,7 +1239,7 @@ define([
                     };
 
                     var svc = new fmodel.AjaxService();
-                    svc.set("url", BASE + "reportrsu/deletelista");
+                    svc.set("url", BASE + "calcattrsu/deletelista");
                     svc.set("data", JSON.stringify(data));
                     svc.set("contentType", "application/json");
                     svc.set("method", "POST");

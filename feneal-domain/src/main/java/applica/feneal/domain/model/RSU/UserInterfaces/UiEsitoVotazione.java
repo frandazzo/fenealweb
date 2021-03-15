@@ -1,4 +1,6 @@
-package applica.feneal.domain.model.RSU.Dto;
+package applica.feneal.domain.model.RSU.UserInterfaces;
+
+import applica.feneal.domain.model.RSU.UserInterfaces.UiEsitoVotazioneListe;
 
 import java.util.List;
 
@@ -7,11 +9,20 @@ public class UiEsitoVotazione{
     private int anno;
     private Long sedeRsu;
     private Long firmRsu;
+    private Long contrattoRsu;
     private int aventiDiritto;
     private int rsuEleggibili;
     private boolean addSchedeNulle;
     private int schedeBianche;
     private int schedeNulle;
+
+    public Long getContrattoRsu() {
+        return contrattoRsu;
+    }
+
+    public void setContrattoRsu(Long contrattoRsu) {
+        this.contrattoRsu = contrattoRsu;
+    }
 
     public List<UiEsitoVotazioneListe> getListeVotazione() {
         return listeVotazione;

@@ -77,12 +77,6 @@
                         <span class="sidebar-title">Aziende</span>
                     </a>
                 </li>
-##                <li>
-##                    <a href="#/searchfirmsrsu" class="framework-navigation">
-##                        <span class="glyphicons glyphicons-building"></span>
-##                        <span class="sidebar-title">Aziende RSU</span>
-##                    </a>
-##                </li>
                 <li>
                     <a href="#/searchlistelavoro" class="framework-navigation">
                         <span class="glyphicons glyphicons-notes"></span>
@@ -333,6 +327,24 @@
                 </li>
 
             #end
+
+##            #if($roleid == 3 || $roleid == 1)
+##                <li class="sidebar-label pt15">MENU RSU</li>
+##                <li>
+##                    <a href="#/searchfirmsrsu" class="framework-navigation">
+##                        <span class="glyphicons glyphicons-building"></span>
+##                        <span class="sidebar-title">Aziende RSU</span>
+##                    </a>
+##                </li>
+##                #if($roleid == 1)
+##                    <li>
+##                        <a href="#/contrattorsu" class="framework-navigation">
+##                            <span class="glyphicon glyphicon-list-alt"></span>
+##                            <span class="sidebar-title">Contratto RSU</span>
+##                        </a>
+##                    </li>
+##                #end
+##            #end
         </ul>
 
         <div class="sidebar-toggle-mini">

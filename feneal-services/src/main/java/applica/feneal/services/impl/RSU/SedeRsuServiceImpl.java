@@ -27,10 +27,6 @@ public class SedeRsuServiceImpl implements SedeRsuService {
 
     @Override
     public SedeRSU getSedeRsuById(long loggedUserId, Long firmId) {
-
-        if(firmId == null)
-            return null;
-
         return sedeRSURepository.get(firmId).orElse(null);
     }
 

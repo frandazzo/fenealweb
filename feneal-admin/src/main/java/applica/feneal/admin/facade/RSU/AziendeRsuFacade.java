@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,7 +47,6 @@ public class AziendeRsuFacade {
 
     public long saveAnagrafica(UiAnagraficaAziendaRsu anag) throws Exception {
         AziendaRSU a = convertUiAnagraficaToAziendaRsu(anag);
-
         svc.saveOrUpdate(((User) sec.getLoggedUser()).getLid(),a);
 
         return a.getLid();
@@ -64,8 +63,6 @@ public class AziendeRsuFacade {
         az.setPhone(anag.getPhone());
         az.setPiva(anag.getPiva());
         az.setCf(anag.getCf());
-
-
 
         //per la provincia se il valore inviato dal client è un numero >0 allora rappresenta l'id della provincia
         try {
@@ -88,11 +85,6 @@ public class AziendeRsuFacade {
             }catch(Exception e1){
                 az.setProvince(null);
             }
-
-
-
-
-
         }
 
         //per la città se il valore inviato dal client è un numero >0 allora rappresenta l'id della città
@@ -119,10 +111,12 @@ public class AziendeRsuFacade {
 
         }
 
-        if(anag.getId() != 0){
-            az.setCompanyCreator(anag.getCompanyCreator());
-            az.setCreateDate(new SimpleDateFormat("dd/MM/yyyy").parse(anag.getCreateDate()));
-            az.setUsernameCreator(anag.getUsernameCreator());
+        AziendaRSU alreadyExist = svc.getAziendaRsuById(((User) sec.getLoggedUser()).getLid(),az.getLid());
+
+        if(alreadyExist != null){
+            az.setUsernameCreator(alreadyExist.getUsernameCreator());
+            az.setCompanyCreator(alreadyExist.getCompanyCreator());
+            az.setCreateDate(alreadyExist.getCreateDate());
         }
 
         return az;
@@ -141,14 +135,14 @@ public class AziendeRsuFacade {
 
         s.setId(az.getLid());
         s.setDescription(az.getDescription());
-        s.setCity(az.getCity());
-        s.setCf(az.getCf());
-        s.setProvince(az.getProvince());
-        s.setCap(az.getCap());
         s.setAddress(az.getAddress());
         s.setNotes(az.getNotes());
         s.setPhone(az.getPhone());
         s.setPiva(az.getPiva());
+        s.setCity(az.getCity());
+        s.setCf(az.getCf());
+        s.setProvince(az.getProvince());
+        s.setCap(az.getCap());
 
         return s;
     }

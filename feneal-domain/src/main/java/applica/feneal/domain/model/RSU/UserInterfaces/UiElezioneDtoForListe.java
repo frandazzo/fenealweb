@@ -1,6 +1,7 @@
-package applica.feneal.domain.model.RSU.Dto;
+package applica.feneal.domain.model.RSU.UserInterfaces;
 
 
+import applica.feneal.domain.model.RSU.Dto.ElezioneDto;
 
 public class UiElezioneDtoForListe {
     private ElezioneDto dto;

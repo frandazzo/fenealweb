@@ -53,7 +53,9 @@ require([
     "reports/reportIncrociNonIscrittiController",
         "RSU/azienda/aziendeRSUController",
         "RSU/sede/sedeRsuController",
-        "RSU/calcolaattribuzione/calcolaRsuController"],
+        "RSU/calcolaattribuzione/calcolaRsuController",
+        "RSU/contratto/contrattoRsuController",
+        "RSU/verba/verbVotazioneController"],
     function(fmodel,_p, core, ui, fviews, fcontrollers, fhelpers,
                                                  controllers, usercontroller, 
                                                  lavController, listeLavoroController, azController, azDocController,
@@ -83,7 +85,9 @@ require([
              IncrocioNonIscritti,
              aziendeRSUController,
              sedeRSUController,
-             calcolaRsuController
+             calcolaRsuController,
+             contrattoRsuController,
+             verbVotController
              ) {
 
     $.datepicker.setDefaults( $.datepicker.regional[ "IT" ] );
@@ -131,11 +135,21 @@ require([
         ui.Navigation.instance().registerController("editfirmrsu", function() { return new aziendeRSUController.AziendaRsuEditController(); }, "singleton");
         ui.Navigation.instance().registerController("searchfirmsrsu", function() { return new aziendeRSUController.SearchFirmRsuController(); }, "singleton");
         ui.Navigation.instance().registerController("summaryfirmrsu", function() { return new aziendeRSUController.AziendaRsuSummaryController(); }, "singleton");
+        ui.Navigation.instance().registerController("verbvote", function() { return new verbVotController.verbVotazioneController(); }, "singleton");
 
+
+        //percorsi sedeRsu
         ui.Navigation.instance().registerController("sedersu", function() { return new sedeRSUController.SedeRsuController(); }, "singleton");
         ui.Navigation.instance().registerController("editsedersu", function() { return new sedeRSUController.SedeRsuEditController(); }, "singleton");
         ui.Navigation.instance().registerController("deletesedersu", function() { return new sedeRSUController.DeleteSedeRsuController(); }, "singleton");
 
+        //percorsi contrattoRsu
+        ui.Navigation.instance().registerController("editcontrattorsu", function() { return new contrattoRsuController.ContrattoRsuEditController(); }, "singleton");
+        ui.Navigation.instance().registerController("contrattorsu", function() { return new contrattoRsuController.ContrattoRsuController(); }, "singleton");
+        ui.Navigation.instance().registerController("deletecontrattorsu", function() { return new contrattoRsuController.DeleteContrattoRsuController(); }, "singleton");
+
+
+        //percorso calcolo attribuzione rsu
         ui.Navigation.instance().registerController("calcolaattribuzionersu", function() { return new calcolaRsuController.calcolaRsuController(); }, "singleton");
 
 

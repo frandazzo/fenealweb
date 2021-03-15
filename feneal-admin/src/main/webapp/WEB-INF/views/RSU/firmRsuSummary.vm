@@ -22,55 +22,14 @@
 
 
                 <div class="va-m mt10">
-                    <input type="hidden" name="id" id="id" value="$summary.data.id"/>
+                    <input type="hidden" name="id" id="id" value="$summary.id"/>
 
                     <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
                         <div class="col-md-6 col-xs-6 zero-padding">
                             <span>Descrizione:</span>
                         </div>
                         <div class="col-md-6 col-xs-6 zero-padding">
-                            <span class="pull-right">#if($summary.data.description)$summary.data.description#end</span>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
-                        <div class="col-md-6 col-xs-6 zero-padding">
-                            <span>Indirizzo:</span>
-                        </div>
-                        <div class="col-md-6 col-xs-6 zero-padding">
-                            <span class="pull-right">#if($summary.data.address)$summary.data.address#end</span>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
-                        <div class="col-md-6 col-xs-6 zero-padding">
-                            <span>Città:</span>
-                        </div>
-                        <div class="col-md-6 col-xs-6 zero-padding">
-                            <span class="pull-right">#if($summary.data.city)$summary.data.city#end</span>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
-                        <div class="col-md-6 col-xs-6 zero-padding">
-                            <span>Provincia:</span>
-                        </div>
-                        <div class="col-md-6 col-xs-6 zero-padding">
-                            <span class="pull-right">#if($summary.data.province)$summary.data.province#end</span>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
-                        <div class="col-md-6 col-xs-6 zero-padding">
-                            <span>CAP:</span>
-                        </div>
-                        <div class="col-md-6 col-xs-6 zero-padding">
-                            <span class="pull-right">#if($summary.data.cap)$summary.data.cap#end</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
-                        <div class="col-md-6 col-xs-6 zero-padding">
-                            <span>Telefono:</span>
-                        </div>
-                        <div class="col-md-6 col-xs-6 zero-padding">
-                            <span class="pull-right">#if($summary.data.phone)$summary.data.phone#end</span>
+                            <span class="pull-right">#if($summary.description)$summary.description#end</span>
                         </div>
                     </div>
 
@@ -79,7 +38,7 @@
                             <span>Cod.Fiscale:</span>
                         </div>
                         <div class="col-md-6 col-xs-6 zero-padding">
-                            <span class="pull-right">#if($summary.data.cf)$summary.data.cf#end</span>
+                            <span class="pull-right">#if($summary.cf)$summary.cf#end</span>
                         </div>
                     </div>
 
@@ -88,9 +47,52 @@
                             <span>P. Iva:</span>
                         </div>
                         <div class="col-md-6 col-xs-6 zero-padding">
-                            <span class="pull-right">#if($summary.data.piva)$summary.data.piva#end</span>
+                            <span class="pull-right">#if($summary.piva)$summary.piva#end</span>
                         </div>
                     </div>
+                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span>Indirizzo:</span>
+                        </div>
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span class="pull-right">#if($summary.address)$summary.address#end</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span>Città:</span>
+                        </div>
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span class="pull-right">#if($summary.city)$summary.city#end</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span>Provincia:</span>
+                        </div>
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span class="pull-right">#if($summary.province)$summary.province#end</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span>CAP:</span>
+                        </div>
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span class="pull-right">#if($summary.cap)$summary.cap#end</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span>Telefono:</span>
+                        </div>
+                        <div class="col-md-6 col-xs-6 zero-padding">
+                            <span class="pull-right">#if($summary.phone)$summary.phone#end</span>
+                        </div>
+                    </div>
+
+
 
 
                     <div class="col-md-12 col-xs-12 p5 pt20 border-bottom-light-gray">
@@ -98,7 +100,7 @@
                             <span>Note:</span>
                         </div>
                         <div class="col-md-6 col-xs-6 zero-padding">
-                            <span class="pull-right">#if($summary.data.notes)$summary.data.notes#end</span>
+                            <span class="pull-right">#if($summary.notes)$summary.notes#end</span>
                         </div>
                     </div>
 
@@ -124,7 +126,7 @@
 
             <div class="panel">
                 <div class="panel-heading">
-                    <span class="panel-title">Votazioni azienda</span>
+                    <span class="panel-title">Votazioni Verbalizzate</span>
                 </div>
                 <div class="panel-body pn" style="border-right: 0px">
 
@@ -140,10 +142,10 @@
     <!-- Sezione pulsanti -->
     <div class="col-md-2 zero-padding p10">
         <button type="button" class="btn btn-summary btn-primary sedi-rsu">Sedi Azienda RSU</button>
-    </div>
 
-    <div class="col-md-2 zero-padding p10">
-        <button type="button" class="btn btn-summary btn-primary attr-rsu"><i class="glyphicon glyphicon-signal"></i> Calcola Attribuzione RSU</button>
+        <button type="button" class="btn btn-summary btn-primary attr-rsu"><i class="glyphicon glyphicon-signal"></i>Calcola Attribuzione RSU</button>
+
+        <button type="button" class="btn btn-summary btn-primary verb-vot">Verbalizzazioni</button>
     </div>
 
 </div>
@@ -151,10 +153,10 @@
 
 <script type="text/javascript">
 
-    ## require([ "widget/real/iscrittiAzienda", "aziende/firmSummaryManager"], function(manager, summary){
-    ##
-    ##     var matrice = new manager.Iscritti('$summary.data.id');
-    ##     matrice.init();
-    ## });
+     require([ "widget/real/RSU/detailsAziendaRsuSummary", "RSU/azienda/aziendeRSUView"], function(manager, summary){
+
+         var matrice = new manager.DetailsAzienda('$summary.id');
+         matrice.init();
+     });
 
 </script>

@@ -34,16 +34,10 @@ public class AziendaRsuServiceImpl implements AziendaRsuService {
     private AziendeRSURepository azRsuRep;
 
     @Autowired
-    private SedeRSURepository sedeRSURepository;
-
-    @Autowired
     private AziendaRsuValidator azRsuValidator;
 
     @Override
     public AziendaRSU getAziendaRsuById(long loggedUserId, Long firmId) {
-        if(firmId == null)
-            return null;
-
         return azRsuRep.get(firmId).orElse(null);
     }
 
@@ -56,7 +50,6 @@ public class AziendaRsuServiceImpl implements AziendaRsuService {
         {
             if(az.getIid() == 0){
                 setCreator(az);
-                updateLastModification(az);
                 azRsuRep.save(az);
                 return;
             }else{

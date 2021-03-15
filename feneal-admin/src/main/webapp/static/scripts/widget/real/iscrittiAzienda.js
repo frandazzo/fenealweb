@@ -180,9 +180,6 @@ define([
             service.load();
         },
         initGrid : function(responseData){
-
-
-
             var grid = $('#containerIscritti').dxDataGrid({
                 dataSource:responseData,
                 columns:[
@@ -263,7 +260,6 @@ define([
             }).dxDataGrid("instance");
 
             return grid;
-
         },
         initGridNonIscritti : function(responseData){
 

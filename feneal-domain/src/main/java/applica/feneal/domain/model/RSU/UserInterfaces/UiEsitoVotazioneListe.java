@@ -1,4 +1,4 @@
-package applica.feneal.domain.model.RSU.Dto;
+package applica.feneal.domain.model.RSU.UserInterfaces;
 
 public class UiEsitoVotazioneListe {
     private String name;

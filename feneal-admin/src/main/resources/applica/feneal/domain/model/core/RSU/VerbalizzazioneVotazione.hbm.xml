@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="applica.feneal.domain.model.core.RSU.VerbalizzazioneVotazione" table="fenealweb_verbalization_vote" >
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        <many-to-one name="aziendaRsu" class="applica.feneal.domain.model.core.RSU.AziendaRSU" column="aziendaId" lazy="false" />
+        <many-to-one name="sedeRsu" class="applica.feneal.domain.model.core.RSU.SedeRSU" column="sedeId" lazy="false" />
+        <many-to-one name="contrattoRSU" class="applica.feneal.domain.model.core.RSU.ContrattoRSU" column="contrattoId" lazy="false" />
+        <property name="note" />
+        <property name="dataVotazione" />
+        <property name="verbalizzazione" />
+        <property name="nomeverbalizzazione" />
+        <property name="risultatoVotazione" />
+        <property name="nomerisultatoVotazione" />
+        <property name="companyId" type="long" />
+    </class>
+</hibernate-mapping>

@@ -7,6 +7,7 @@ import applica.feneal.admin.form.renderers.MulticolumnFormRenderer;
 import applica.feneal.admin.viewmodel.RSU.UiAnagraficaAziendaRsu;
 
 import applica.feneal.admin.viewmodel.RSU.UiAziendaRsuAnagraficaSummary;
+import applica.feneal.admin.viewmodel.RSU.UiContrattoRsu;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.RSU.AziendaRSU;
 import applica.feneal.services.GeoService;
@@ -82,13 +83,13 @@ public class AziendeRSUController {
             FormDescriptor formDescriptor = new FormDescriptor(form);
             formDescriptor.addField("id", String.class, "id", null, applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("description", String.class, "Ragione sociale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("piva", String.class, "P. Iva", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt6").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("cf", String.class, "Cod.Fiscale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt7").putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("province", String.class, "Provincia", "", applicationContext.getBean(OptionalProvinceFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt1").putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("city", String.class, "Città", "", applicationContext.getBean(OptionalCityFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt2").putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("address", String.class, "Indir.", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt3").putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("cap", String.class, "CAP", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt4").putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("phone", String.class, "Telefono", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt5").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("piva", String.class, "P. Iva", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt6").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("cf", String.class, "Cod.Fiscale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt7").putParam(Params.FORM_COLUMN, " ");
 
             formDescriptor.addField("notes", String.class, "Note", "", applicationContext.getBean(TextAreaFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt8").putParam(Params.FORM_COLUMN, " ");
 
@@ -133,13 +134,13 @@ public class AziendeRSUController {
             FormDescriptor formDescriptor = new FormDescriptor(form);
             formDescriptor.addField("id", String.class, "id", null, applicationContext.getBean(HiddenFieldRenderer.class)).putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("description", String.class, "Ragione sociale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("piva", String.class, "P. Iva", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt6").putParam(Params.FORM_COLUMN, " ");
+            formDescriptor.addField("cf", String.class, "Cod.Fiscale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt7").putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("province", String.class, "Provincia", "", applicationContext.getBean(OptionalProvinceFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt1").putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("city", String.class, "Città", "", applicationContext.getBean(OptionalCityFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt2").putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("address", String.class, "Indir.", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt3").putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("cap", String.class, "CAP", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt4").putParam(Params.FORM_COLUMN, " ");
             formDescriptor.addField("phone", String.class, "Telefono", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt5").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("piva", String.class, "P. Iva", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt6").putParam(Params.FORM_COLUMN, " ");
-            formDescriptor.addField("cf", String.class, "Cod.Fiscale", "", applicationContext.getBean(DefaultFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt7").putParam(Params.FORM_COLUMN, " ");
 
             formDescriptor.addField("notes", String.class, "Note", "", applicationContext.getBean(TextAreaFieldRenderer.class)).putParam(Params.COLS, Values.COLS_8).putParam(Params.ROW, "dt8").putParam(Params.FORM_COLUMN, " ");
 
@@ -225,38 +226,7 @@ public class AziendeRSUController {
 
     }
 
-    @RequestMapping(value = "/remotefirmrsusearchforapp",method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated()")
-    public @ResponseBody SimpleResponse remoteFirmsSearch(HttpServletRequest request, @RequestParam(value="description", required=false, defaultValue="") String description)throws Exception {
 
-
-        try {
-            List<UiAziendaRsuAnagraficaSummary> appAziendaList = aziendeRsuFacade.findAziendeRsu(description);
-
-            return new ValueResponse(appAziendaList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ErrorResponse(e.getMessage());
-        }
-
-    }
-
-    @RequestMapping(value = "/remotefirmrsu/summary/{firmId}", method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated()")
-    public
-    @ResponseBody
-    SimpleResponse remoteSedeSummary(HttpServletRequest request, @PathVariable long firmId) {
-
-        try {
-
-            UiAziendaRsuAnagraficaSummary azienda =  aziendeRsuFacade.getRemoteAziendaRsu(firmId);
-
-            return new ValueResponse(azienda);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ErrorResponse(e.getMessage());
-        }
-    }
 
     @RequestMapping(value = "/firmrsu/remote",method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
@@ -309,4 +279,38 @@ public class AziendeRSUController {
         }
 
     }
+
+    @RequestMapping(value = "/remotefirmrsusearchforapp",method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public @ResponseBody SimpleResponse remoteFirmsSearch(HttpServletRequest request, @RequestParam(value="description", required=false, defaultValue="") String description)throws Exception {
+
+
+        try {
+            List<UiAziendaRsuAnagraficaSummary> appAziendaList = aziendeRsuFacade.findAziendeRsu(description);
+            return new ValueResponse(appAziendaList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+
+    }
+
+    @RequestMapping(value = "/remotefirmrsu/summary/{firmId}", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public
+    @ResponseBody
+    SimpleResponse remoteSedeSummary(HttpServletRequest request, @PathVariable long firmId) {
+
+        try {
+
+            UiAziendaRsuAnagraficaSummary azienda =  aziendeRsuFacade.getRemoteAziendaRsu(firmId);
+
+            return new ValueResponse(azienda);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ErrorResponse(e.getMessage());
+        }
+    }
+
+
 }

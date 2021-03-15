@@ -54,7 +54,6 @@ define([
 
     });
 
-
     var SearchFirmRsuViewGridView = fviews.GridAppView.extend({
         ctor: function(gridService) {
             SearchFirmRsuViewGridView.super.ctor.call(this, gridService);
@@ -411,6 +410,13 @@ define([
                 $("button.attr-rsu").click(function(){
                     ui.Navigation.instance().navigate("calcolaattribuzionersu", "index", {
                         firmId: self.firmId
+                    })
+                });
+
+                $("button.verb-vot").click(function(){
+                    ui.Navigation.instance().navigate("verbvote", "list", {
+                        firmId: self.firmId,
+                        e : "verbvot"
                     })
                 });
 

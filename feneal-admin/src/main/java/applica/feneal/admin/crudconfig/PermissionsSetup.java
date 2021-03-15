@@ -36,6 +36,9 @@ public class PermissionsSetup implements AppSetup {
         registerPermissions("company");
         configureCrudSecurityConfigurer("company", PermissionMap.staticPermissions("company"));
 
+        registerPermissions("verbvot");
+        configureCrudSecurityConfigurer("verbvot", PermissionMap.staticPermissions("verbvot"));
+
         registerPermissions("firmrsu");
         configureCrudSecurityConfigurer("firmrsu", PermissionMap.staticPermissions("firmrsu"));
 
@@ -51,11 +54,11 @@ public class PermissionsSetup implements AppSetup {
         registerPermissions("magazzinodeleghelecce");
         configureCrudSecurityConfigurer("magazzinodeleghelecce", PermissionMap.staticPermissions("magazzinodeleghe"));
 
-
-
-
         registerPermissions("richiesta");
         configureCrudSecurityConfigurer("richiesta", PermissionMap.staticPermissions("richiesta"));
+
+        registerPermissions("contractrsu");
+        configureCrudSecurityConfigurer("contractrsu", PermissionMap.staticPermissions("contractrsu"));
 
         registerPermissions("comunicazione");
         configureCrudSecurityConfigurer("comunicazione", PermissionMap.staticPermissions("comunicazione"));

@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="col-md-12 p10" style="background-color: white; margin-top:10px">
+                    <div class="col-md-12 p20" style="background-color: white; margin-top:10px">
                         <button id="add_list" class="btn btn-secondary mrn" type="submit" data-component="submit_button" data-toggle="tooltip" data-placement="right" title="Clicca per aggiungere una lista"><i class="glyphicon glyphicon-plus-sign pr5"></i>Aggiungi lista</button>
                     </div>
 ##                    <div class="col-md-12 p10" style="background-color: white; margin-top:10px">
@@ -85,7 +85,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <button id="indietro-esito" class="btn btn-primary mrn" type="submit" data-component="submit_button">Indietro<i class="glyphicon glyphicon-chevron-left pr5"></i></button>
+                    <button id="indietro-esito" class="btn btn-primary mrn" type="submit" data-component="submit_button"><i class="glyphicon glyphicon-chevron-left pr5"></i>Indietro</button>
                     <button id="avanti-esito" class="btn btn-primary mrn" type="submit" data-component="submit_button">Avanti<i class="glyphicon glyphicon-chevron-right pr5"></i></button>
                 </div>
             </div>
@@ -119,8 +119,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <button id="indietro-procedura" class="btn btn-primary mrn" type="submit" data-component="submit_button">Indietro<i class="glyphicon glyphicon-chevron-left pr5"></i></button>
-                        <button id="avanti-procedura" class="btn btn-primary mrn" type="submit" data-component="submit_button">Termina<i class="glyphicon glyphicon-chevron-right pr5"></i></button>
+                        <button id="indietro-procedura" class="btn btn-primary mrn" type="submit" data-component="submit_button"><i class="glyphicon glyphicon-chevron-left pr5"></i>Indietro</button>
+                        <button id="avanti-procedura" class="btn btn-primary mrn" type="submit" data-component="submit_button">Verbalizza Votazione<i class="glyphicon glyphicon-chevron-right pr5"></i></button>
                     </div>
                 </div>
             </div>

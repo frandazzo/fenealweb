@@ -1,4 +1,4 @@
-package applica.feneal.admin.data;
+package applica.feneal.admin.data.RSU;
 
 import applica.feneal.admin.facade.TraceFacade;
 import applica.feneal.domain.data.core.RSU.AziendeRSURepository;

@@ -1,12 +1,12 @@
 package applica.feneal.domain.model.core.RSU;
 
-import applica.feneal.domain.model.utils.SecuredDomainEntity;
+import applica.framework.AEntity;
 
 /**
  * Created by felicegramegna on 24/02/2021.
  */
 
-public class SedeRSU extends SecuredDomainEntity {
+public class SedeRSU extends AEntity {
     private String description;
     private String city;
     private String province;
@@ -14,6 +14,11 @@ public class SedeRSU extends SecuredDomainEntity {
     private String address;
 
     public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public String toString() {
         return description;
     }
 

@@ -18,7 +18,7 @@ var calcolaRsuController = fcontrollers.Controller.extend({
         if(params.firmId)
             var firmId = params.firmId;
 
-        var url = BASE + "reportelezionirsu";
+        var url = BASE + "calcolaattribuzionersu";
         var service = new fmodel.AjaxService();
         service.set({
             url: url

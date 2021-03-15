@@ -1,6 +1,6 @@
 package applica.feneal.domain.model.core.RSU;
 
-import applica.feneal.domain.model.utils.SecuredDomainEntity;
+import applica.framework.AEntity;
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by felicegramegna on 22/02/2021.
  */
 
-public class AziendaRSU extends SecuredDomainEntity {
+public class AziendaRSU extends AEntity {
 
     private String description;
     private String city;

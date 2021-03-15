@@ -1,5 +1,5 @@
 /**
- * Created by felicegramegna on 22/02/2021.
+ * Created by felicegramegna on 09/03/2021.
  */
 define([
     "framework/core",
@@ -9,16 +9,16 @@ define([
     "framework/widgets",
     "framework/plugins",
     "framework/webparts",
-    "geoUtils"], function(core, fmodel, fviews, ui, widgets, plugins, webparts,geoUtils) {
+    "geoUtils"], function(core, fmodel, fviews, ui, widgets, plugins, webparts, geoUtils) {
+
     var exports = {};
 
     var RepositoryServiceFactory = core.AObject.extend({
         ctor: function() {
             RepositoryServiceFactory.super.ctor.call(this);
         },
-        saveSedeRsu: function(worker){
-            var route = BASE + "sedersu" ;
-
+        saveContractRsu: function(worker){
+            var route = BASE + "contractrsu" ;
             return this.__createService(true, route, worker);
         },
         __createService: function (isJsonContentType, route, data){
@@ -48,82 +48,115 @@ define([
             service.set("method", "POST");
             return service;
         }
-
-
-
     });
 
-    var SedeRsuHomeRemoteView = fviews.RemoteContentView.extend({
-        ctor: function(service, firmId){
-            SedeRsuHomeRemoteView.super.ctor.call(this, service);
+    var ContrattoRsuViewGridView = fviews.GridAppView.extend({
+        ctor: function(gridService) {
+            ContrattoRsuViewGridView.super.ctor.call(this, gridService);
 
+            this.geoUtils = new geoUtils.GeoUtils();
             var self = this;
-            this.firmId = firmId;
 
-            this.on("load", function(){
+            self.on("complete", function(){
+                self.get("grid").showSearchForm();
+                $(".panel-title").text("Lista contratto RSU");
 
-                // alert("data loaded");
-                //qui inserisco tutto il codice di inizializzazione della vista
-                self.createToolbar();
-                self.createBreadcrumbs();
+            })
 
+        },
+        edit: function(id){
+            //alert("edit discussion number :" + id);
+            ui.Navigation.instance().navigate("editcontrattorsu", "index", {
+                fs: this.fullScreenForm,
+                id: id
             });
-
         },
-        onServiceLoad: function(html) {
-            $.loader.hide({ parent: this.container });
-            this.content = _E("div").html(html);
-            this.container.empty().append(this.content);
-            this.invoke("load");
-
-        },
-        createToolbar: function() {
-            var buttons = this.getToolbarButtons();
-
-            var $t = $("#toolbar");
-            if(!$t.toolbar("isToolbar")) {
-                $t.toolbar();
-            }
-
-            $t.toolbar("clear");
-            var size = buttons.length;
-            for(var i = 0; i < size; i++) {
-                var button = buttons[i];
-                $t.toolbar("add", button);
-            }
-        },
-        createBreadcrumbs: function() {
-            var items = this.getBreadcrumbItems();
-
-            var $b = $("#breadcrumbs");
-            if(!$b.breadcrumbs("isBreadcrumbs")) {
-                $b.breadcrumbs();
-            }
-
-            $b.breadcrumbs('clear');
-            $b.breadcrumbs('addAll', items);
-        },
-
-
         getToolbarButtons: function() {
             var self = this;
-
-            return [
+            var buttons = [];
+            buttons.push(
                 {
-                    text: "Nuova sede",
-                    command: function() {
+                    text: "Crea nuovo contratto RSU",
+                    command: function () {
+                        ui.Navigation.instance().navigate("editcontrattorsu", "index", {
+                            fs: this.fullScreenForm
 
-                        ui.Navigation.instance().navigate("editsedersu", "index", {
-                            fs: this.fullScreenForm,
-                            firmId : self.firmId
                         });
                     },
                     icon: "plus"
-                },
-            ];
+                }
+            );
+            buttons.push(
+                {
+                    text: msg.TOOLBAR_REFRESH,
+                    command: function() {
+                        self.gridService.reload();
+                    },
+                    icon: "refresh"
+                }
+            );
+
+            buttons.push(
+                {
+                    text: msg.TOOLBAR_ACTIONS,
+                    group: 'selected',
+                    type: "menu",
+                    alignRight: true,
+                    items: [
+                        {
+                            label: msg.TOOLBAR_SELECT_ALL,
+                            command: function() {
+                                self.grid.selectAll();
+                            }
+                        },
+                        {
+                            label: msg.TOOLBAR_UNSELECT_ALL,
+                            command: function() {
+                                self.grid.unselectAll();
+                            }
+                        },
+                        { separator: true },
+                        {
+                            label: msg.TOOLBAR_DELETE_SELECTION,
+                            command: function() {
+                                var ids = self.grid.getSelection();
+                                if(ids.length == 0) {
+                                    $.notify.warn(msg.MSG_PLEASE_SELECT_ROW);
+                                } else {
+
+                                    ids.forEach(function (item) {
+                                        var svc = new fmodel.AjaxService();
+                                        svc.url = BASE + "contractrsu/" + item;
+                                        svc.set("method", "DELETE");
+                                        svc.on({
+                                            load: function(response){
+
+                                                $.notify.success("Operazione completata");
+
+                                                //ritonrno alla modalità di ricerca
+                                                self.gridService.reload();
+                                            },
+                                            error: function (error){
+                                                $.notify.error(error);
+                                            }
+                                        });
+                                        svc.load();
+                                    });
+
+
+                                }
+                            },
+                            important: true
+                        }
+                    ],
+                    icon: "asterisk"
+                }
+            );
+
+            return buttons;
         },
+
         getBreadcrumbItems: function() {
-            var self = this;
             return [
                 {
                     pageTitle: "Fenealweb"
@@ -133,68 +166,27 @@ define([
                     href: BASE
                 },
                 {
-                    label: "Ricerca lavoratore",
-                    //vado alla ricerca dei lavoratori
-                    href: ui.Navigation.instance().navigateUrl("searchfirmsrsu", "index", {})
-                },
-                {
-                    label: "Anagrafica azienda",
-                    href: ui.Navigation.instance().navigateUrl("summaryfirmrsu", "index", {
-                        id: self.firmId
-                    })
-                },
-                {
-                    label: "Sede RSU"
-                    //href: ui.Navigation.instance().navigateUrl("editworker", "index", {})
+                    label: "Lista contratti RSU"
                 }
             ];
         }
-
     });
 
-
-
-    var EditSedeRsuAppView = fviews.FormAppView.extend({
-        ctor: function(formService, firmId) {
-            EditSedeRsuAppView.super.ctor.call(this, formService);
+    var EditContrattoRsuAppView = fviews.FormAppView.extend({
+        ctor: function(formService, contrId) {
+            EditContrattoRsuAppView.super.ctor.call(this, formService);
 
             this.geoUtils = new geoUtils.GeoUtils();
             var self = this;
-            self.firmId = firmId;
 
             self.formView.on("load", function(){
                 self.createToolbar();
                 self.createBreadcrumbs();
-
-                var nationalityItalianId = 100;
-
-                var provinceVal = $('select[name="province"]').data("value");
-
-                // Carico la lista delle province
-                self.geoUtils.loadProvinces(nationalityItalianId, provinceVal, $('select[name="province"]'));
-
-                //qui attacco levento on change della select delle province
-                $('select[name="province"]').change(function(){
-
-                    var selectedVal = $(this).val();
-
-                    //carico la lista delle città
-                    if (selectedVal){
-                        self.geoUtils.loadCities(selectedVal, "", $('select[name="city"]'));
-                    }
-                    else
-                        $('select[name="city"]').empty().append("<option selected='selected' value=''>Select</option>");
-                });
-                if(self.firmId)
-                    self.geoUtils.loadCities($('select[name="province"]').data("value"), $('select[name="city"]').data("value"), $('select[name="city"]'));
-
-
             });
 
             self.formView.form.on("cancel", function() {
                 self.close();
             });
-
 
             self.formView.on("submit", function(){
                 //al click del pulsante submint rimuovo le validazioni
@@ -214,15 +206,12 @@ define([
                 }
 
                 var factory = new RepositoryServiceFactory();
-                var svc = factory.saveSedeRsu(data);
-
+                var svc = factory.saveContractRsu(data);
 
                 svc.on("load", function(response){
                     //imposto l'handler per la navigazione verso l'utente selezionato
                     $.loader.hide({parent:'body'});
-                    ui.Navigation.instance().navigate("sedersu", "index", {
-                        firmId: self.firmId
-                    })
+                    ui.Navigation.instance().navigate("contrattorsu", "index", {});
                 });
                 svc.on("error", function(response){
                     $.loader.hide({parent:'body'});
@@ -231,43 +220,49 @@ define([
 
                 svc.load();
                 $.loader.show({parent:'body'});
-
-
-
             });
-
-
-
         },
         validate: function(data){
             var result = {};
             result.errors = [];
 
 
-            if (!data.description){
+            if (!data.description)
                 result.errors.push(
                     {
                         property: "description",
                         message: "Descrizione mancante"
                     }
                 );
-            }
 
-
-            if(!data.firmId){
+            if (!data.rsuMin || parseInt(data.rsuMin,10) < 1)
                 result.errors.push(
                     {
-                        property: "firmId",
-                        message: "Azienda mancante"
+                        property: "rsuMin",
+                        message: "Rsu Min. non valido"
                     }
                 );
-            }
+
+            if (!data.rsuMax || parseInt(data.rsuMax,10) < parseInt(data.rsuMin,10))
+                result.errors.push(
+                    {
+                        property: "rsuMax",
+                        message: "Rsu Max. non valido"
+                    }
+                );
+
+            if (parseInt(data.rsuMax,10) < 1)
+                result.errors.push(
+                    {
+                        property: "rsuMax",
+                        message: "Rsu Max. non valido"
+                    }
+                );
+
 
             return result;
         },
         submit: function(e){
-
-
         },
         normalizeSubmitResult: function(form){
 
@@ -329,22 +324,17 @@ define([
             var self = this;
             if (self.firmId){
                 //se sto in modifica vado alla anagrafica dell'utente
-                ui.Navigation.instance().navigate("summaryfirmrsu", "index", {
-                    id:self.firmId
-                })
+                ui.Navigation.instance().navigate("contrattorsu", "index", {});
             }else{
                 //vado alla ricerca dell'utente
-                ui.Navigation.instance().navigate("searchfirmsrsu", "index", {
-
-                });
-
+                ui.Navigation.instance().navigate("contrattorsu", "index", {});
             }
         },
         getBreadcrumbItems: function() {
             var self = this;
-            var title = "Crea anagrafica sede RSU";
+            var title = "Crea anagrafica contratto RSU";
             if (self.firmId)
-                title = "Modfica anagrafica  sede RSU";
+                title = "Modfica anagrafica contratto RSU";
             return [
                 {
                     pageTitle: "Fenealweb"
@@ -405,9 +395,8 @@ define([
         }
     });
 
-
-    exports.EditSedeRsuAppView = EditSedeRsuAppView;
-    exports.SedeRsuHomeRemoteView = SedeRsuHomeRemoteView;
+    exports.EditContrattoRsuAppView = EditContrattoRsuAppView;
+    exports.ContrattoRsuViewGridView = ContrattoRsuViewGridView;
     return exports;
 
 });

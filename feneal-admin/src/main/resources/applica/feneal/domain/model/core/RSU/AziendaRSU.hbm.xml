@@ -20,6 +20,5 @@
         <property name="companyLastModification" />
         <property name="usernameLastModification" />
         <property name="lastModificationDate" />
-        <property name="companyId" type="long" />
     </class>
 </hibernate-mapping>

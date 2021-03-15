@@ -1,31 +1,38 @@
 package applica.feneal.admin.facade.RSU;
 
+import applica.feneal.domain.data.core.RSU.VerbalizzazioneVotazioneRepository;
 import applica.feneal.domain.model.RSU.Dto.*;
 import applica.feneal.domain.model.RSU.Election.*;
 import applica.feneal.domain.model.RSU.Election.Math.CalcolatoreParametriAttribuzione;
+import applica.feneal.domain.model.RSU.UserInterfaces.*;
 import applica.feneal.domain.model.User;
 import applica.feneal.domain.model.core.RSU.AziendaRSU;
+import applica.feneal.domain.model.core.RSU.ContrattoRSU;
 import applica.feneal.domain.model.core.RSU.SedeRSU;
+import applica.feneal.domain.model.core.RSU.VerbalizzazioneVotazione;
 import applica.feneal.services.RSU.AziendaRsuService;
+import applica.feneal.services.RSU.ContrattoRsuService;
 import applica.feneal.services.RSU.SedeRsuService;
+import applica.framework.library.options.OptionsManager;
 import applica.framework.security.Security;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.rmi.server.ExportException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Component
-public class ReportElezioniRsuFacade {
+public class CalcoloAttribuzioneRsuFacade {
 
     @Autowired
     private AziendaRsuService aziendaRsuService;
@@ -34,7 +41,16 @@ public class ReportElezioniRsuFacade {
     private SedeRsuService sedeRsuService;
 
     @Autowired
+    private ContrattoRsuService contrattoRsuService;
+
+    @Autowired
+    private VerbalizzazioneVotazioneRepository verVotrep;
+
+    @Autowired
     private Security sec;
+
+    @Autowired
+    private OptionsManager options;
 
     public ElezioneDto setDatiGeneraliElezioneRsu(Long firmRsu, Long sedeRsu, int anno) throws Exception {
         ElezioneDto dto = new ElezioneDto();
@@ -152,15 +168,31 @@ public class ReportElezioniRsuFacade {
 
         //controllo  sui dati dell'esito votazione
         e.CheckEsitoVotazioneData();
+
+        //controllo dei contratti
+        ContrattoRSU c = contrattoRsuService.getContrattoRsuById(((User) sec.getLoggedUser()).getLid(),uiEsito.getContrattoRsu());
+        if(e.getEsiti().getEsitoVotazione().getRSUElegibili() < c.getRsuMin() || e.getEsiti().getEsitoVotazione().getRSUElegibili() > c.getRsuMax()){
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(e.getValidationError()+"</br>");
+            stringBuilder.append("Attenzione! Rispettare i parametri del contratto selezionato <br>Rsu Min: "+ c.getRsuMin() +"<br>Rsu Max: "+c.getRsuMax());
+            e.setValidationError(stringBuilder.toString());
+        }
+
         dto = e.toDto(e);
 
         return dto;
     }
 
-    private void stampaAttribuzioneRsu(ElezioneRSU e) throws IOException {
+
+
+    private File createDocumentForVerbalization(String pathFile,ElezioneRSU e){
         SimpleDateFormat fr = new SimpleDateFormat("dd/MM/yyyy");
+        File f = new File(pathFile);
         try{
-            File f = new File("esito.htm");
+            if(f.getParentFile() != null)
+                f.getParentFile().mkdirs();
+
+            f.createNewFile();
             BufferedWriter bw = new BufferedWriter(new FileWriter(f));
             bw.write("<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n                    <head>\r\n                    <title>\r\n                    Elezione RSU  </title>\r\n                    </head>\r\n                    <body>");
             bw.write(String.format("<h1>Elezione RSU (Eleborato dalla Feneal UIL: %s)</h1></br>", fr.format(new Date())));
@@ -170,7 +202,7 @@ public class ReportElezioniRsuFacade {
                 bw.write(String.format("Unit&agrave produttiva  <strong>%s</strong>;", e.getDivisione()));
             }
             bw.write("</p>");
-            bw.write("<h2>Dati solidariet&agrave</h2>");
+            bw.write("<h2>Dati solidariet&agrave;</h2>");
             bw.write(DocumentSolidarietaData(
                     e.getSolidarieta().isCriterioSolidarietaApplicabile(),
                     e.getSolidarieta().getAccordoSolidarieta().toString(),
@@ -199,13 +231,14 @@ public class ReportElezioniRsuFacade {
             bw.write("</body>\r\n                    </html>");
             bw.close();
 
-            Desktop.getDesktop().browse(f.toURI());
         }catch (Exception ex){
             StringBuilder s = new StringBuilder();
             s.append(e.getValidationError()+"</br>");
             s.append(ex.getMessage());
             e.setValidationError(s.toString());
         }
+
+        return f;
     }
 
     private String DocumentSummaryTable(List<Attribuzione> riepilogoAttribuzioni) {
@@ -415,7 +448,7 @@ public class ReportElezioniRsuFacade {
     }
 
     private String DocumentElectionPreliminaryData(int aventiDiritto, int rsuElegibili, boolean calcoloQuozienteElettoraleConSchedeNulle) {
-        String s1 = String.format("<p>Aventi diritto: <strong> %s </strong>; RSU da eleggere: <strong> %s </strong></p>", Integer.toString(aventiDiritto), Integer.toString(rsuElegibili));
+        String s1 = String.format("<p>Aventi diritto: <strong>%s</strong>; RSU da eleggere: <strong>%s</strong>;</p>", Integer.toString(aventiDiritto), Integer.toString(rsuElegibili));
         String s2 = String.format("Ai fini del calcolo dei quoziozienti elettorali le schede nulle %s saranno tenute in conto", calcoloQuozienteElettoraleConSchedeNulle ? " " : "non");
         return  s1 + s2;
     }
@@ -508,7 +541,7 @@ public class ReportElezioniRsuFacade {
         return dto;
     }
 
-    public ElezioneDto stampaAttribuzioneRSU(UiElezioeDtoCheckListeData uiEsito) throws Exception {
+    public ElezioneDto stampaAttribuzioneRSU(UiVerbalizzaVotazioneDto uiEsito) throws Exception {
         ElezioneRSU e = new ElezioneRSU();
         ElezioneDto dto = new ElezioneDto();
 
@@ -522,14 +555,57 @@ public class ReportElezioniRsuFacade {
 
         uiEsito.getDto().setAnno(uiEsito.getAnno());
 
-
-
         //estraggo l'entita ElezioneRSU dal dto
         e.Initialize(uiEsito.getDto());
         if(e.CheckEsitoVotazioneData()){
             e.CalcolaEsitoAttribuzioneRSU();
             if(e.getEsiti().getAttribuzioneRSU() != null){
                 stampaAttribuzioneRsu(e);
+            }else {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(e.getValidationError()+"</br>");
+                stringBuilder.append("Errore: errore nel processo di stampa");
+                e.setValidationError(stringBuilder.toString());
+            }
+        }else{
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(e.getValidationError() + "</br>");
+            stringBuilder.append("Errore nel calolare l'attribuzione RSU");
+        }
+
+        dto = e.toDto(e);
+
+
+        return dto;
+    }
+
+    public ElezioneDto saveAttribuzioneRsu(UiVerbalizzaVotazioneDto uiVerb) throws Exception {
+        //controllo che tutti i dati siano
+        //corretti
+
+        //procedura per il creare e calcolare l'esito
+        ElezioneRSU e = new ElezioneRSU();
+        ElezioneDto dto;
+
+        uiVerb.getDto().setAnno(uiVerb.getAnno());
+        SedeRSU s = sedeRsuService.getSedeRsuById(((User) sec.getLoggedUser()).getLid(),uiVerb.getSedeRsu());
+        uiVerb.getDto().setDivisione( s != null ? s.getDescription() : "");
+
+        //estraggo l'entita ElezioneRSU dal dto
+        e.Initialize(uiVerb.getDto());
+        if(e.CheckEsitoVotazioneData()){
+            e.CalcolaEsitoAttribuzioneRSU();
+            if(e.getEsiti().getAttribuzioneRSU() != null){
+                //arrivato a questo punto mi creo tutto cio che mi servirebbe per salvare la varbalizzazione
+                //quindi mi vado a creare il file dell'esito e lo salvo da qualche parte;
+
+
+                File verbalizzazione = createAndSaveVerbDocumento(e);
+
+                VerbalizzazioneVotazione verb = createAndSaveVerbVotazione(verbalizzazione,uiVerb);
+
+                if(verb != null)
+                    verVotrep.save(verb);
             }else {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(e.getValidationError()+"</br>");
@@ -543,8 +619,58 @@ public class ReportElezioniRsuFacade {
         }
 
         dto = e.toDto(e);
-
-
         return dto;
+
+    }
+
+    private VerbalizzazioneVotazione createAndSaveVerbVotazione(File f, UiVerbalizzaVotazioneDto uiVerb) {
+        VerbalizzazioneVotazione v = new VerbalizzazioneVotazione();
+
+
+        AziendaRSU a = aziendaRsuService.getAziendaRsuById(((User) sec.getLoggedUser()).getLid(),uiVerb.getFirmRsu());
+        SedeRSU s = sedeRsuService.getSedeRsuById(((User) sec.getLoggedUser()).getLid(),uiVerb.getSedeRsu());
+        ContrattoRSU c = contrattoRsuService.getContrattoRsuById(((User) sec.getLoggedUser()).getLid(),uiVerb.getContrattoRsu());
+
+        v.setDataVotazione(new Date());
+        v.setAziendaRsu(a);
+        v.setSedeRsu(s);
+        v.setContrattoRSU(c);
+        v.setNote(uiVerb.getNote() != null? uiVerb.getNote() : "");
+
+        if(f.exists()){
+            v.setRisultatoVotazione("files/verbalizzazioniEsito/documenti/"+f.getName());
+            v.setNomerisultatoVotazione(f.getName());
+        }
+        if(!StringUtils.isEmpty(uiVerb.getVerbalizzazione())){
+            v.setNomeverbalizzazione(uiVerb.getNomeverbalizzazione());
+            v.setVerbalizzazione(uiVerb.getVerbalizzazione());
+        }
+        return v;
+    }
+
+    private File createAndSaveVerbDocumento(ElezioneRSU e) {
+        SimpleDateFormat fr = new SimpleDateFormat("dd_MM_yyyy");
+
+        String sector = !StringUtils.isEmpty(e.getDivisione()) ? e.getDivisione()+"_" : "";
+
+        String pathFile = options.get("applica.fenealquote.logfolder")+
+                "/files/verbalizzazioniEsito/documenti/verb_"+
+                e.getAzienda()+"_"+ sector +
+                fr.format(new Date())+".html";
+
+        File f = new File(pathFile);
+
+        if(f.exists() && !f.isDirectory()){
+            pathFile=options.get("applica.fenealquote.logfolder")+"/files/verbalizzazioniEsito/documenti/verb_"+e.getAzienda()+"_"+fr.format(new Date())+"_"+ UUID.randomUUID().toString()+".html";
+        }
+
+        f = createDocumentForVerbalization(pathFile,e);
+        return f;
+    }
+
+    private void stampaAttribuzioneRsu(ElezioneRSU e) throws IOException {
+        String pathFile = "esito.html";
+        File f = createDocumentForVerbalization(pathFile,e);
+        Desktop.getDesktop().browse(f.toURI());
     }
 }

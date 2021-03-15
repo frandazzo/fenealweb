@@ -1,11 +1,8 @@
 package applica.feneal.admin.crudconfig;
 
-import applica.feneal.admin.data.AziendeRSURepositoryWrapper;
-import applica.feneal.admin.data.AziendeRepositoryWrapper;
+import applica.feneal.admin.data.RSU.AziendeRSURepositoryWrapper;
 import applica.feneal.admin.search.AziendeRsuSearchForm;
-import applica.feneal.admin.search.AziendeSearchForm;
 import applica.feneal.domain.model.core.RSU.AziendaRSU;
-import applica.feneal.domain.model.core.aziende.Azienda;
 import applica.feneal.services.impl.setup.AppSetup;
 import applica.framework.widgets.builders.GridConfigurator;
 import org.springframework.stereotype.Component;

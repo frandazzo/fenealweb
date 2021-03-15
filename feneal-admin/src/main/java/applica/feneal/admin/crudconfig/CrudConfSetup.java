@@ -122,6 +122,12 @@ public class CrudConfSetup implements AppSetup {
     @Autowired
     private ReferentiComunaliCrudConfig referentiComunaliCrudConfig;
 
+    @Autowired
+    private ContrattoRsuCrudConfig contrattoRsuCrudConfig;
+
+    @Autowired
+    private VerbVotazioneCrudConfig verbVotazioneCrudConfig;
+
     @Override
     public void setup() {
 
@@ -155,6 +161,8 @@ public class CrudConfSetup implements AppSetup {
         compUsrcrudConf1.setup();
         aziendaRSUCrudConfig.setup();
         referentiComunaliCrudConfig.setup();
+        contrattoRsuCrudConfig.setup();
+        verbVotazioneCrudConfig.setup();
 
 
         permisisonSetup.setup();
